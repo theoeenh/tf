@@ -1,0 +1,48 @@
+"""Entry signals for the three candidate strategies.
+
+Each strategy returns a boolean Series: True at bar t means "go long at the
+open of bar t+1". Exits (stop / target) are handled by the engine so the
+strategies can be compared under the same risk-reward rules.
+
+Strategy parameters are fixed at textbook defaults on purpose: only the exit
+rule is tuned, which keeps the number of knobs (and the overfitting risk) low.
+"""
+from __future__ import annotations
+
+from typing import Callable
+
+import pandas as pd
+
+from .indicators import bollinger, rsi, sma
+
+
+def donchian_breakout(df: pd.DataFrame, n: int = 55, trend_ma: int = 200) -> pd.Series:
+    """Trend following: close breaks above the highest high of the previous n bars,
+    while price is above its long-term moving average."""
+    prior_high = df["High"].rolling(n).max().shift(1)
+    return (df["Close"] > prior_high) & (df["Close"] > sma(df["Close"], trend_ma))
+
+
+def squeeze_breakout(
+    df: pd.DataFrame, n: int = 20, k: float = 2.0, lookback: int = 120, pct: float = 0.2, memory: int = 5
+) -> pd.Series:
+    """Volatility breakout: after a quiet period (Bollinger width in the bottom
+    `pct` of the last `lookback` bars, within the last `memory` bars), close
+    breaks above the upper band."""
+    lower, mid, upper = bollinger(df["Close"], n, k)
+    width = (upper - lower) / mid
+    squeezed = width <= width.rolling(lookback).quantile(pct)
+    recently_squeezed = squeezed.astype(float).rolling(memory).max().shift(1) == 1
+    return (df["Close"] > upper) & recently_squeezed
+
+
+def rsi2_reversion(df: pd.DataFrame, rsi_n: int = 2, threshold: float = 10.0, trend_ma: int = 200) -> pd.Series:
+    """Mean reversion (Connors RSI-2): buy a sharp short-term dip inside a long-term uptrend."""
+    return (rsi(df["Close"], rsi_n) < threshold) & (df["Close"] > sma(df["Close"], trend_ma))
+
+
+STRATEGIES: dict[str, Callable[[pd.DataFrame], pd.Series]] = {
+    "donchian_trend": donchian_breakout,
+    "squeeze_breakout": squeeze_breakout,
+    "rsi2_reversion": rsi2_reversion,
+}
