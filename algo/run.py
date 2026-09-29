@@ -71,7 +71,7 @@ def plot_equity(curves: dict[str, tuple[pd.Series, str]], title: str, path: Path
         ax.plot(eq.index, eq.values, color=COLORS[role], lw=1.5, label=label)
     ax.set_yscale("log")
     ax.yaxis.set_major_locator(LogLocator(subs=(1, 2, 5)))
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"${v / 1000:,.0f}k" if v >= 1000 else f"${v:,.0f}"))
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"${v / 1e6:,.0f}M" if v >= 1e6 else f"${v / 1e3:,.0f}k" if v >= 1e3 else f"${v:,.0f}"))
     ax.yaxis.set_minor_formatter(FuncFormatter(lambda v, _: ""))
     # End-of-line labels, pushed apart so they never overlap (log space).
     ends = sorted(((np.log10(eq.iloc[-1]), label, eq) for label, (eq, _) in curves.items()), key=lambda t: t[0])
