@@ -30,15 +30,19 @@ def equity_stats(equity: pd.Series, periods_per_year: int) -> dict[str, float]:
 
 def trade_stats(result: Result) -> dict[str, float]:
     t = result.trades_df
+    exposure = result.exposure.abs().mean() if result.exposure is not None else np.nan
     if t.empty:
-        return {"trades": 0, "win_rate": np.nan, "avg_r": np.nan, "profit_factor": np.nan, "exposure": 0.0}
+        return {"trades": 0, "shorts": 0, "win_rate": np.nan, "avg_r": np.nan, "profit_factor": np.nan,
+                "fees": 0.0, "exposure": exposure}
     wins, losses = t.loc[t.pnl > 0, "pnl"], t.loc[t.pnl <= 0, "pnl"]
     return {
         "trades": len(t),
+        "shorts": int((t.side < 0).sum()),
         "win_rate": len(wins) / len(t),
-        "avg_r": t.r_multiple.mean(),  # expectancy per trade, in units of risk
+        "avg_r": t.r_multiple.mean(),  # expectancy per trade, in units of risk, after costs
         "profit_factor": wins.sum() / -losses.sum() if losses.sum() < 0 else np.inf,
-        "exposure": result.exposure.mean() if result.exposure is not None else np.nan,
+        "fees": t.fees.sum(),  # exchange fees + short borrow, in $
+        "exposure": exposure,
     }
 
 

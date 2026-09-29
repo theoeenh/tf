@@ -32,3 +32,19 @@ def bollinger(s: pd.Series, n: int = 20, k: float = 2.0) -> tuple[pd.Series, pd.
     mid = s.rolling(n).mean()
     sd = s.rolling(n).std(ddof=0)
     return mid - k * sd, mid, mid + k * sd
+
+
+def adx(df: pd.DataFrame, n: int = 14) -> pd.Series:
+    """Wilder's Average Directional Index: trend strength, 0-100, direction-free.
+    Above ~25 is usually read as a trending market."""
+    up = df["High"].diff()
+    down = -df["Low"].diff()
+    plus_dm = up.where((up > down) & (up > 0), 0.0)
+    minus_dm = down.where((down > up) & (down > 0), 0.0)
+    tr = atr(df, 1)  # true range
+    smooth = dict(alpha=1 / n, adjust=False, min_periods=n)
+    tr_s = tr.ewm(**smooth).mean()
+    plus_di = 100 * plus_dm.ewm(**smooth).mean() / tr_s
+    minus_di = 100 * minus_dm.ewm(**smooth).mean() / tr_s
+    dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, np.nan)
+    return dx.ewm(**smooth).mean()

@@ -109,3 +109,74 @@ def test_strategies_do_not_use_future_data(name):
 
 def test_atr_constant_range():
     assert atr(flat_bars(rng=2.0)).iloc[-1] == pytest.approx(2.0)
+
+
+def short_signal_at(df, i):
+    s = pd.Series(0, index=df.index)
+    s.iloc[i] = -1
+    return s
+
+
+def test_short_target_and_stop():
+    df = flat_bars()
+    df.iloc[21, df.columns.get_loc("Low")] = 50.0
+    (t,) = backtest(df, short_signal_at(df, 19), ExitRule(1.0, 3.0)).trades
+    assert t.side == -1 and t.reason == "target" and t.r_multiple == pytest.approx(3.0)
+
+    df = flat_bars()
+    df.iloc[21, df.columns.get_loc("High")] = 150.0
+    res = backtest(df, short_signal_at(df, 19), ExitRule(1.0, 3.0))
+    (t,) = res.trades
+    assert t.reason == "stop" and t.r_multiple == pytest.approx(-1.0)
+    assert res.equity.iloc[-1] == pytest.approx(99_000.0)
+
+
+def test_shorts_ignored_when_not_allowed():
+    df = flat_bars()
+    assert backtest(df, short_signal_at(df, 19), allow_short=False).trades == []
+
+
+def test_short_pays_borrow_cost():
+    df = flat_bars()
+    free = backtest(df, short_signal_at(df, 19), ExitRule(10.0, 10.0))
+    paid = backtest(df, short_signal_at(df, 19), ExitRule(10.0, 10.0), Costs(short_borrow_apr=0.365))
+    days_held = (df.index[-1] - df.index[20]).days
+    notional = paid.trades[0].qty * 100.0
+    assert free.equity.iloc[-1] - paid.equity.iloc[-1] == pytest.approx(notional * 0.001 * days_held)
+    assert paid.trades[0].fees == pytest.approx(notional * 0.001 * days_held)
+
+
+def test_trailing_stop_locks_in_profit():
+    df = flat_bars(n=40)
+    # steady rally after entry, then a drop
+    for k, i in enumerate(range(21, 30)):
+        px = 100.0 + 3 * (k + 1)
+        df.iloc[i, :4] = [px - 1, px + 1, px - 1, px]
+    df.iloc[30, :4] = [127.0, 127.0, 90.0, 95.0]
+    (t,) = backtest(df, signal_at(df, 19), ExitRule(2.0, None, trail_atr=2.0)).trades
+    assert t.reason == "trail" and t.pnl > 0 and t.exit > t.entry
+
+
+def test_opposite_signal_reverses():
+    df = flat_bars(n=40)
+    sig = pd.Series(0, index=df.index)
+    sig.iloc[19], sig.iloc[25] = 1, -1
+    trades = backtest(df, sig, ExitRule(10.0, 10.0)).trades
+    assert [t.side for t in trades] == [1, -1]
+    assert trades[0].reason == "reverse" and trades[0].exit_date == trades[1].entry_date == df.index[26]
+
+
+def test_adaptive_uses_wider_target_in_strong_trend():
+    df = flat_bars(n=60)
+    df[["Open", "High", "Low", "Close"]] = df[["Open", "High", "Low", "Close"]].add(np.arange(60) * 2.0, axis=0)
+    rule = ExitRule(1.0, rr=2.0, rr_strong=4.0, adaptive=True)
+    (t,) = backtest(df, signal_at(df, 45), rule).trades[:1]
+    dist = t.entry - t.initial_stop
+    assert t.target == pytest.approx(t.entry + 4.0 * dist)  # steady rise -> ADX high -> 4:1
+
+
+def test_fees_are_recorded_per_trade():
+    df = flat_bars()
+    df.iloc[21, df.columns.get_loc("High")] = 200.0
+    (t,) = backtest(df, signal_at(df, 19), ExitRule(1.0, 3.0), Costs(fee_bps=10)).trades
+    assert t.fees == pytest.approx(t.qty * (t.entry + t.exit) * 0.001)

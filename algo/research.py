@@ -1,7 +1,6 @@
 """Test plan: in-sample tuning, out-of-sample tests and walk-forward analysis."""
 from __future__ import annotations
 
-import itertools
 from dataclasses import dataclass
 
 import numpy as np
@@ -10,18 +9,33 @@ import pandas as pd
 from .engine import Costs, ExitRule, Result, backtest
 from .metrics import summarize
 
-# Transaction costs per asset, per side.
-# BTC: typical exchange taker fee + spread. GLD: low commission + tight spread.
+# Transaction costs per asset, per side. Fees are charged on every fill.
+# BTC: typical exchange taker fee + spread; shorts pay ~10%/yr borrow/funding
+# (conservative: perpetual funding often pays shorts instead).
+# GLD: low commission + tight spread (held long only).
 COSTS = {
-    "BTC": Costs(fee_bps=10, slippage_bps=5),
-    "GOLD": Costs(fee_bps=1, slippage_bps=2),
+    "BTC": Costs(fee_bps=10, slippage_bps=5, short_borrow_apr=0.10),
+    "GOLD": Costs(fee_bps=1, slippage_bps=2, short_borrow_apr=0.01),
     "SPY": Costs(fee_bps=1, slippage_bps=1),
 }
 
-# Exit rules searched on the training period only. 6:2 is the same ratio as
-# 3:1; what differs between assets is how wide the stop is (in ATRs).
-STOP_ATR_GRID = (1.5, 2.0, 2.5, 3.0)
-RR_GRID = (1.5, 2.0, 3.0, 4.0)
+# Which directions are tested per asset.
+DIRECTIONS = {"BTC": ("long", "long_short"), "GOLD": ("long",)}
+
+# Exit families. Each is a small grid searched on training data only.
+# "fixed":    one reward:risk for every trade (2 ATR stop + 3:1 is "6:2").
+# "trailing": no target, a trailing stop lets winners run.
+# "adaptive": 2:1-ish in normal markets, bigger (or no target + trailing) when
+#             ADX says the market is trending strongly.
+EXIT_MODES: dict[str, list[ExitRule]] = {
+    "fixed": [ExitRule(s, rr) for s in (1.5, 2.0, 2.5, 3.0) for rr in (1.5, 2.0, 3.0, 4.0)],
+    "trailing": [ExitRule(s, None, trail_atr=t) for s in (2.0, 3.0) for t in (2.0, 3.0, 4.0, 5.0)],
+    "adaptive": [
+        ExitRule(s, rr, rr_strong=rr_strong, trail_atr=trail, adaptive=True)
+        for s in (1.5, 2.0, 2.5, 3.0)
+        for rr, rr_strong, trail in ((2.0, 3.0, None), (2.0, 4.0, None), (1.5, 3.0, None), (2.0, None, 3.0))
+    ],
+}
 BASELINE_EXIT = ExitRule(stop_atr=2.0, rr=3.0)
 
 MIN_TRADES = 10  # a parameter set with fewer trades in training is not trusted
@@ -47,31 +61,29 @@ def periods(last_date: pd.Timestamp) -> dict[str, Period]:
     }
 
 
-def run(df, entries, exit_rule, asset, start, end) -> Result:
-    return backtest(
-        df, entries, exit_rule, COSTS[asset], INITIAL_CAPITAL, RISK_PCT, start=start, end=end
-    )
+def run(df, signals, exit_rule, asset, start, end, direction="long", capital=INITIAL_CAPITAL) -> Result:
+    return backtest(df, signals, exit_rule, COSTS[asset], capital, RISK_PCT, start=start, end=end,
+                    allow_short=direction == "long_short")
 
 
-def grid_search(df, entries, asset, ppy, start, end) -> pd.DataFrame:
-    """Sharpe, CAGR, max DD and trade count for every exit rule on one window."""
+def grid_search(df, signals, asset, ppy, start, end, mode, direction) -> pd.DataFrame:
+    """Stats for every exit rule of one exit family on one window."""
     rows = []
-    for stop_atr, rr in itertools.product(STOP_ATR_GRID, RR_GRID):
-        rule = ExitRule(stop_atr, rr)
-        s = summarize(run(df, entries, rule, asset, start, end), ppy)
-        rows.append({"stop_atr": stop_atr, "rr": rr, **s})
+    for rule in EXIT_MODES[mode]:
+        s = summarize(run(df, signals, rule, asset, start, end, direction), ppy)
+        rows.append({"rule": rule, **s})
     return pd.DataFrame(rows)
 
 
 def pick_best(grid: pd.DataFrame) -> ExitRule:
     ok = grid[(grid.trades >= MIN_TRADES) & grid.sharpe.notna()]
     if ok.empty:
-        return BASELINE_EXIT
-    best = ok.loc[ok.sharpe.idxmax()]
-    return ExitRule(float(best.stop_atr), float(best.rr))
+        return grid.rule.iloc[0]
+    return ok.loc[ok.sharpe.idxmax(), "rule"]
 
 
-def walk_forward(df, entries, asset, ppy, first_test_year: int, train_years: int = 4) -> tuple[pd.Series, pd.DataFrame]:
+def walk_forward(df, signals, asset, ppy, mode, direction, first_test_year: int = 2020,
+                 train_years: int = 4) -> tuple[pd.Series, pd.DataFrame]:
     """Each calendar year, re-tune the exit rule on the previous `train_years`
     years, then trade the year out-of-sample. Returns the chained OOS equity
     curve and the rule chosen each year."""
@@ -82,14 +94,14 @@ def walk_forward(df, entries, asset, ppy, first_test_year: int, train_years: int
         tr_start, tr_end = f"{year - train_years}-01-01", f"{year - 1}-12-31"
         if pd.Timestamp(tr_start) < df.index[0] + pd.Timedelta(days=250):
             continue  # not enough warm-up history
-        rule = pick_best(grid_search(df, entries, asset, ppy, tr_start, tr_end))
-        res = run(df, entries, rule, asset, f"{year}-01-01", f"{year}-12-31")
+        rule = pick_best(grid_search(df, signals, asset, ppy, tr_start, tr_end, mode, direction))
+        res = run(df, signals, rule, asset, f"{year}-01-01", f"{year}-12-31", direction)
         scaled = res.equity / res.equity.iloc[0] * equity_level
         equity_level = scaled.iloc[-1]
         chunks.append(scaled)
         s = summarize(res, ppy)
-        chosen.append({"year": year, "stop_atr": rule.stop_atr, "rr": rule.rr,
-                       "return": s["total_return"], "trades": s["trades"]})
+        chosen.append({"year": year, "rule": rule.label(), "return": s["total_return"],
+                       "trades": s["trades"], "fees": s["fees"]})
     if not chunks:
         return pd.Series(dtype=float), pd.DataFrame(chosen)
     eq = pd.concat(chunks)
