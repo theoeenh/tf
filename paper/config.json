@@ -1,0 +1,17 @@
+{
+  "start": "2026-09-29 19:00:00",
+  "capital": 100000.0,
+  "variant": "long/short + learner",
+  "interval": "1d",
+  "risk_pct": 0.007182133309374882,
+  "target_vol": 0.2,
+  "universe": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "NVDA",
+    "TSLA",
+    "GOLD",
+    "SILVER"
+  ]
+}

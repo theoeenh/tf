@@ -48,6 +48,40 @@ portfolio, and the S&P 500 (`SPY`). Alpha is Jensen's alpha vs buy & hold.
 2. **squeeze_breakout** – Bollinger band breakout (up or down) after a volatility squeeze.
 3. **rsi2_reversion** – RSI(2) < 10 in an uptrend (buy) / > 90 in a downtrend (sell).
 
+## Multi-asset system (`algo/system.py`, `algo/portfolio.py`)
+
+```bash
+python -m algo.portfolio_run   # daily (10 years) + hourly (2 years) study -> reports/<date>-portfolio/
+```
+
+- Universe: BTC, ETH, SOL, NVDA, TSLA, gold (GLD), silver (SLV).
+- One shared account; every asset runs all three strategies at once (21 "sleeves"), and on
+  hourly bars a strategy can trade many times a day.
+- Sized for ~20% yearly volatility (calibrated on training data), up to 2x leverage
+  (6%/yr on borrowed cash), max 15% of equity at risk across open trades.
+- **Skill test:** every result is compared with the same system using *random* entries.
+  Beating buy & hold in a bull market proves nothing; beating the random twin does.
+
+## Journal and learning (`algo/journal.py`)
+
+- Every trade records its **thinking** at entry (setup, trend, ADX regime, volatility, plan, $ at risk)
+  and a **diagnosis** at exit: `wrong_immediately`, `gave_back_profit`, `choppy_market`,
+  `counter_trend`, `gap_through_stop`, `fees_ate_edge`, `stop_too_tight`, `normal_loss`, or `none`.
+- The **learner** files each result under its setup (strategy, direction, regime, volatility,
+  trend alignment). If a setup's recent trades average below -0.1R, new trades with that setup
+  are skipped, but still followed without money, so a setup that starts working again is unblocked.
+  It only ever uses trades that had already closed: no look-ahead.
+
+## Paper trading (`algo/paper.py`)
+
+```bash
+python -m algo.paper init      # start a $100k paper account now (--interval 1h for hourly)
+python -m algo.paper update    # fetch new bars, trade them -> paper/status.md, trades.csv, orders.json
+```
+
+Deterministic replay from the start date on complete bars only, with the learner pre-trained on
+history. `paper/orders.json` holds the wanted positions with stops and targets, for a broker adapter.
+
 ## Layout
 
 ```
@@ -57,7 +91,12 @@ algo/strategies.py  entry signals
 algo/engine.py      backtester (bracket exits, costs, sizing)
 algo/metrics.py     Sharpe, Sortino, drawdown, alpha/beta, trade stats
 algo/research.py    periods, exit-rule grid search, walk-forward
-algo/run.py         runs everything and writes the report
+algo/run.py         single-asset study (BTC & gold) and its report
+algo/portfolio.py   multi-asset, multi-strategy portfolio engine
+algo/journal.py     trade reasoning, error diagnosis, learner
+algo/system.py      universe, costs, exit rules, risk settings
+algo/portfolio_run.py  multi-asset study and its report
+algo/paper.py       paper trading
 tests/              engine & no-look-ahead tests
 ```
 

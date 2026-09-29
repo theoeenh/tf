@@ -21,11 +21,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-import numpy as np
 import pandas as pd
 
-from .indicators import adx as adx_indicator
-from .indicators import atr as atr_indicator
 
 
 @dataclass(frozen=True)
@@ -70,6 +67,18 @@ class Trade:
     fees: float  # exchange fees + borrow cost (slippage is already in the prices)
     r_multiple: float  # pnl / initial risk
     reason: str  # "stop", "trail", "target", "reverse", "time", "end"
+    # Journal fields (filled by the portfolio engine).
+    asset: str = ""
+    strategy: str = ""
+    mfe_r: float = float("nan")  # best unrealised profit during the trade, in R
+    mae_r: float = float("nan")  # worst unrealised loss during the trade, in R
+    regime: str = ""  # chop / trend / strong (ADX at entry)
+    vol: str = ""  # low / mid / high volatility at entry
+    aligned: bool = True  # traded with the 200-bar trend
+    error: str = ""  # diagnosis, see journal.ERRORS
+    rationale: str = ""  # reasoning at entry
+    lesson: str = ""  # what the trade taught
+    shadow: bool = False  # skipped by the learner, followed without money
 
 
 @dataclass
@@ -95,116 +104,22 @@ def backtest(
     allow_short: bool = True,
     atr_n: int = 14,
 ) -> Result:
-    """Run the strategy on df between start and end.
+    """Run one strategy on one asset between start and end.
 
     Indicators and signals may use data before `start` (warm-up); trading and
-    the equity curve start at `start`.
+    the equity curve start at `start`. This is the portfolio engine with a
+    single sleeve and no leverage.
     """
-    atr = atr_indicator(df, atr_n).to_numpy()
-    adx = adx_indicator(df).to_numpy() if exit_rule.adaptive else None
-    sig = signals.reindex(df.index).fillna(0).astype(int).to_numpy()
-    if not allow_short:
-        sig = np.where(sig < 0, 0, sig)
-    o, h, l, c = (df[k].to_numpy(dtype=float) for k in ("Open", "High", "Low", "Close"))
-    dates = df.index
-    days = dates.to_numpy().astype("datetime64[D]").astype(np.int64)
+    from .portfolio import PortfolioConfig, Sleeve, run_portfolio
 
-    i0 = 0 if start is None else int(dates.searchsorted(pd.Timestamp(start)))
-    i1 = len(df) if end is None else int(dates.searchsorted(pd.Timestamp(end), side="right"))
-    if i1 - i0 < 2:
-        raise ValueError("backtest window has fewer than 2 bars")
-
-    slip = costs.slippage_bps / 1e4
-    fee = costs.fee_bps / 1e4
-
-    cash = initial_capital
-    q = 0.0  # signed quantity
-    side = 0
-    entry_px = stop = initial_stop = risk_usd = extreme = 0.0
-    target: float | None = None
-    entry_i = -1
-    trade_fees = 0.0
-    trades: list[Trade] = []
-    equity = np.empty(i1 - i0)
-    exposure = np.zeros(i1 - i0)
-
-    def fill(raw: float, direction: int) -> float:
-        """Price paid (+1 buy) or received (-1 sell) after slippage."""
-        return raw * (1 + direction * slip)
-
-    def close_position(i: int, raw_px: float, reason: str) -> None:
-        nonlocal cash, q, side, trade_fees
-        px = fill(raw_px, -side)
-        exit_fee = abs(q) * px * fee
-        cash += q * px - exit_fee
-        trade_fees += exit_fee
-        pnl = q * (px - entry_px) - trade_fees
-        trades.append(Trade(side, dates[entry_i], dates[i], entry_px, px, abs(q), initial_stop, target,
-                            pnl, trade_fees, pnl / risk_usd, reason))
-        q, side = 0.0, 0
-
-    def open_position(i: int, direction: int) -> None:
-        nonlocal cash, q, side, entry_px, stop, initial_stop, target, risk_usd, extreme, entry_i, trade_fees
-        px = fill(o[i], direction)
-        dist = exit_rule.stop_atr * atr[i - 1]
-        size = min(risk_pct * cash / dist, cash / (px * (1 + fee)))
-        if size <= 0:
-            return
-        strong = exit_rule.adaptive and adx[i - 1] >= exit_rule.adx_threshold
-        rr = exit_rule.rr_strong if strong else exit_rule.rr
-        side, q = direction, direction * size
-        entry_px, entry_i, extreme = px, i, px
-        stop = initial_stop = px - direction * dist
-        target = None if rr is None else px + direction * rr * dist
-        risk_usd = size * dist
-        trade_fees = size * px * fee
-        cash -= q * px + trade_fees
-
-    for i in range(i0, i1):
-        # Borrow cost of a short held overnight (calendar days, so weekends count).
-        if side < 0 and i > i0:
-            cost = abs(q) * c[i - 1] * costs.short_borrow_apr * (days[i] - days[i - 1]) / 365
-            cash -= cost
-            trade_fees += cost
-
-        want = sig[i - 1] if i > i0 else 0
-        opened_today = False
-        if side != 0 and want == -side:
-            close_position(i, o[i], "reverse")
-        if side == 0 and want != 0 and np.isfinite(atr[i - 1]) and atr[i - 1] > 0 \
-                and (not exit_rule.adaptive or np.isfinite(adx[i - 1])):
-            open_position(i, want)
-            opened_today = side != 0
-
-        if side != 0:
-            s = side
-            adverse, favorable = (l[i], h[i]) if s > 0 else (h[i], l[i])
-            stop_reason = "stop" if stop == initial_stop else "trail"
-            if not opened_today and s * (o[i] - stop) <= 0:
-                close_position(i, o[i], stop_reason)
-            elif not opened_today and target is not None and s * (o[i] - target) >= 0:
-                close_position(i, o[i], "target")
-            elif s * (adverse - stop) <= 0:
-                close_position(i, stop, stop_reason)
-            elif target is not None and s * (favorable - target) >= 0:
-                close_position(i, target, "target")
-            elif exit_rule.max_bars is not None and i - entry_i + 1 >= exit_rule.max_bars:
-                close_position(i, c[i], "time")
-
-        # Trail the stop on the close, for use from the next bar.
-        if side != 0 and exit_rule.trail_atr is not None and np.isfinite(atr[i]):
-            extreme = max(extreme, c[i]) if side > 0 else min(extreme, c[i])
-            new_stop = extreme - side * exit_rule.trail_atr * atr[i]
-            stop = max(stop, new_stop) if side > 0 else min(stop, new_stop)
-
-        if side != 0 and i == i1 - 1:
-            close_position(i, c[i], "end")
-
-        equity[i - i0] = cash + q * c[i]
-        exposure[i - i0] = side
-
-    idx = dates[i0:i1]
-    return Result(pd.Series(equity, idx, name="equity"), trades, pd.Series(exposure, idx, name="exposure"))
+    res = run_portfolio(
+        {"asset": df},
+        [Sleeve("asset", "", signals, exit_rule, allow_short)],
+        {"asset": costs},
+        PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=1.0),
+        start=start, end=end, atr_n=atr_n,
+    )
+    return Result(res.equity, res.trades, res.net_side.rename("exposure"))
 
 
 def buy_and_hold(

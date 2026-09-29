@@ -1,0 +1,163 @@
+"""Paper trading: run the system forward on live data, without real money.
+
+    python -m algo.paper init                 # start a $100k paper account now
+    python -m algo.paper init --interval 1h   # hourly version (many trades a day)
+    python -m algo.paper update               # fetch new bars, trade them, write paper/status.md
+
+`update` is deterministic: it replays the system from the paper start date on
+the latest bars, so running it once an hour or once a day gives the same
+result as a backtest of the same period. Before the start date the learner is
+trained on history, so the paper account starts with everything it has
+learned so far. Only complete bars are used: a bar that is still forming
+(today's daily candle, the current hour) is ignored until it closes.
+
+Broker connection: `orders.json` lists the positions the system wants, with
+their stops and targets. A broker adapter (for your paper account's API)
+turns that into orders; see `Broker` below.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Protocol
+
+import pandas as pd
+
+from . import data, journal
+from .metrics import equity_stats
+from .system import TARGET_VOL, UNIVERSE, VARIANTS, bars_per_year, calibrate_risk, load_prices, run_system
+
+log = logging.getLogger(__name__)
+PAPER_DIR = Path(__file__).resolve().parent.parent / "paper"
+
+# Calibration windows, same as the backtest report.
+DAILY_TRAIN = ("2016-09-29", "2022-12-31")
+
+
+class Broker(Protocol):
+    """What a broker adapter must provide to mirror the paper account."""
+
+    def positions(self) -> dict[str, float]: ...  # asset -> signed quantity
+
+    def submit(self, asset: str, qty: float, stop: float | None, target: float | None) -> None: ...
+
+
+def now_utc() -> pd.Timestamp:
+    return pd.Timestamp(datetime.now(timezone.utc)).tz_convert(None)
+
+
+def complete_bars(df: pd.DataFrame, asset: str, interval: str, now: pd.Timestamp) -> pd.DataFrame:
+    """Drop bars that have not closed yet."""
+    if interval == "1h":
+        length = pd.Timedelta(hours=1)
+    elif asset in data.CRYPTO:
+        length = pd.Timedelta(days=1)  # UTC day
+    else:
+        length = pd.Timedelta(hours=21)  # US close is 20:00-21:00 UTC
+    return df[df.index + length <= now]
+
+
+def init(capital: float, variant: str, interval: str, start: str | None = None) -> dict:
+    v = VARIANTS[variant]
+    prices = load_prices("auto", interval)
+    if interval == "1d":
+        train = DAILY_TRAIN
+    else:
+        idx = prices["BTC"].index
+        train = (idx[0] + pd.Timedelta(days=10), idx[0] + (idx[-1] - idx[0]) * 0.6)
+    risk = calibrate_risk(prices, v["allow_short"], v["learn"], *train)
+    cfg = {"start": str(pd.Timestamp(start) if start else now_utc().floor("h")), "capital": capital, "variant": variant, "interval": interval,
+           "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSE)}
+    PAPER_DIR.mkdir(exist_ok=True)
+    (PAPER_DIR / "config.json").write_text(json.dumps(cfg, indent=2))
+    return cfg
+
+
+def update(source: str = "auto") -> Path:
+    cfg = json.loads((PAPER_DIR / "config.json").read_text())
+    v, interval = VARIANTS[cfg["variant"]], cfg["interval"]
+    start, now = pd.Timestamp(cfg["start"]), now_utc()
+    prices = {a: complete_bars(df, a, interval, now) for a, df in load_prices(source, interval).items()}
+
+    # 1) Learn from history up to the start date.
+    learner = journal.Learner() if v["learn"] else None
+    if learner is not None:
+        hist_start = min(df.index[0] for df in prices.values())
+        run_system(prices, v["allow_short"], True, cfg["risk_pct"], hist_start, start - pd.Timedelta(seconds=1),
+                   learner=learner)
+
+    # 2) Trade from the start date with the paper capital, keep positions open.
+    lines = [f"# Paper account – {cfg['variant']}, {interval} bars", "",
+             f"Started {start} UTC with ${cfg['capital']:,.0f}; risk {cfg['risk_pct']:.2%} per trade "
+             f"(sized for ~{cfg['target_vol']:.0%} yearly volatility). Updated {now:%Y-%m-%d %H:%M} UTC.", ""]
+    after = {a: df[df.index >= start] for a, df in prices.items()}
+    if sum(len(df) for df in after.values()) < 2:
+        lines += ["No complete bar since the start yet. Nothing to do."]
+        res = None
+    else:
+        res = run_system(prices, v["allow_short"], v["learn"], cfg["risk_pct"], start, None,
+                         initial_capital=cfg["capital"], close_at_end=False, learner=learner)
+        eq = res.equity
+        st = equity_stats(eq, bars_per_year(eq.index)) if len(eq) > 2 else {}
+        lines += [f"**Equity ${eq.iloc[-1]:,.0f}** ({eq.iloc[-1] / cfg['capital'] - 1:+.2%}) · "
+                  f"max drawdown {st.get('max_drawdown', 0):.1%} · {len(res.trades)} closed trades · "
+                  f"{len([p for p in res.open_positions if not p['shadow']])} open", ""]
+
+    orders = []
+    if res is not None:
+        lines += ["## Open positions", ""]
+        live = [p for p in res.open_positions if not p["shadow"]]
+        if not live:
+            lines += ["None.", ""]
+        for p in live:
+            tgt = "none (trailing)" if p["target"] is None else f"{p['target']:,.2f}"
+            lines += [f"- **{'LONG' if p['side'] > 0 else 'SHORT'} {p['qty']:.4f} {p['asset']}** "
+                      f"({p['strategy']}) since {p['entry_time']:%Y-%m-%d %H:%M}, entry {p['entry']:,.2f}, "
+                      f"stop {p['stop']:,.2f}, target {tgt}, now {p['unrealised_r']:+.2f}R  \n"
+                      f"  *Thinking:* {p['rationale']}"]
+            orders.append({"asset": p["asset"], "ticker": data.TICKERS[p["asset"]], "strategy": p["strategy"],
+                           "qty": p["side"] * p["qty"], "stop": p["stop"], "target": p["target"]})
+        lines += ["", "## Closed trades (newest first)", ""]
+        for t in reversed(res.trades):
+            lines += [f"- **{t.exit_date:%Y-%m-%d %H:%M} · {'LONG' if t.side > 0 else 'SHORT'} {t.asset} · "
+                      f"{t.strategy} · {t.r_multiple:+.2f}R · ${t.pnl:+,.0f}** (fees ${t.fees:,.0f}, {t.reason})  \n"
+                      f"  *Thinking:* {t.rationale}  \n  *Lesson:* {t.lesson}"]
+        skipped = [p for p in res.open_positions if p["shadow"]] + list(res.shadow_trades)
+        if skipped:
+            lines += ["", f"## Skipped by the learner ({len(skipped)})", ""]
+            for s in res.shadow_trades[-10:]:
+                lines += [f"- {s.entry_date:%Y-%m-%d %H:%M} {s.asset} {s.strategy}: would have made "
+                          f"{s.r_multiple:+.2f}R. {s.rationale.split(' Would have been')[0]}"]
+        if res.trades:
+            res.trades_df.to_csv(PAPER_DIR / "trades.csv", index=False)
+        res.equity.to_csv(PAPER_DIR / "equity.csv")
+    (PAPER_DIR / "orders.json").write_text(json.dumps(orders, indent=2, default=str))
+    out = PAPER_DIR / "status.md"
+    out.write_text("\n".join(lines) + "\n")
+    return out
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    p_init = sub.add_parser("init", help="start a new paper account now")
+    p_init.add_argument("--capital", type=float, default=100_000.0)
+    p_init.add_argument("--variant", default="long/short + learner", choices=list(VARIANTS))
+    p_init.add_argument("--interval", default="1d", choices=["1d", "1h"])
+    p_init.add_argument("--start", default=None, help="backdate the start (replay), e.g. 2026-09-01")
+    p_up = sub.add_parser("update", help="trade new bars and write paper/status.md")
+    p_up.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv"])
+    args = ap.parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    if args.cmd == "init":
+        cfg = init(args.capital, args.variant, args.interval, args.start)
+        print(f"Paper account started: {json.dumps(cfg)}")
+    else:
+        print(f"Status written to {update(args.source)}")
+
+
+if __name__ == "__main__":
+    main()
