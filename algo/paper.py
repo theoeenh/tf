@@ -115,7 +115,8 @@ def update(source: str | None = None) -> Path:
     ctx = news_context(prices, v, interval)
 
     # 1) Learn from history up to the start date.
-    learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False))
+    learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False),
+                          prices=prices, context=ctx)
     if learner is not None:
         hist_start = min(df.index[0] for df in prices.values())
         run_variant(prices, v, cfg["risk_pct"], hist_start, start - pd.Timedelta(seconds=1), ctx, learner=learner)

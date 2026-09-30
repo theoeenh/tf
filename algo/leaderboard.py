@@ -35,7 +35,8 @@ def run_race(prices: dict, cfg: dict, variants: dict = ALL_VARIANTS) -> tuple[pd
     rows, results = [], {}
     ctx_all = news_context(prices, {"news": True}, cfg["interval"])
     for name, v in variants.items():
-        learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False))
+        learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False),
+                              prices=prices, context=ctx_all)
         if learner is not None:
             run_variant(prices, v, cfg["risk_pct"], hist_start, start - pd.Timedelta(seconds=1), ctx_all,
                         learner=learner)

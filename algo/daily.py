@@ -7,8 +7,9 @@
 3. Write the daily brief with events ahead, news and signals (paper/brief.md).
 4. Race every version of the system side by side and rank the strategies
    (paper/leaderboard.md, see algo/leaderboard.py).
+5. The shared learner's report: what it learned, what changed (paper/learner/).
 
-Step 5 is done by the AI analyst: read paper/brief.md and write
+Step 6 is done by the AI analyst: read paper/brief.md and write
 paper/ai_views/<date>.json (see algo/analyst.py). The next run uses those
 views in the learner and scores them once their horizon has passed.
 """
@@ -16,7 +17,7 @@ from __future__ import annotations
 
 import logging
 
-from . import brief, leaderboard, paper
+from . import brief, leaderboard, learner_report, paper
 
 
 def main() -> None:
@@ -24,6 +25,7 @@ def main() -> None:
     print(f"Paper account: {paper.update()}")
     print(f"Brief: {brief.write_brief('auto')}")
     print(f"Leaderboard: {leaderboard.write()}")
+    print(f"Learner report: {learner_report.write()}")
 
 
 if __name__ == "__main__":

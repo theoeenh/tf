@@ -64,6 +64,17 @@ def accounts() -> list[dict]:
     return rows
 
 
+def _learner() -> dict | None:
+    from .learner_report import OUT, PLAIN
+
+    f = OUT / "latest.json"
+    if not f.exists():
+        return None
+    rep = json.loads(f.read_text())
+    rep["importance"] = [[PLAIN.get(n, n), v] for n, v in rep.get("importance", [])]
+    return rep
+
+
 def collect() -> dict:
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
     start = pd.Timestamp(cfg["start"])
@@ -110,7 +121,8 @@ def collect() -> dict:
           if views_files else None)
     return _clean({"generated": now_utc().strftime("%Y-%m-%d %H:%M"), "config": cfg, "status": status,
                    "equity": equity, "positions": positions, "trades": trades, "race": race, "board": board,
-                   "ml": ml, "study": study, "ai_views": ai, "accounts": accounts()})
+                   "ml": ml, "study": study, "ai_views": ai, "accounts": accounts(),
+                   "learner": _learner()})
 
 
 def build(study: Path | None = None) -> Path:

@@ -91,3 +91,20 @@ def test_notifications_only_for_real_trades_and_off_without_topic(monkeypatch):
         {"symbol": "NVDA", "side": "sell", "qty": 10, "type": "stop", "stop_price": 200, "note": "x"},
     ], equity=100000)
     assert len(msgs) == 1 and msgs[0][0] == "BUY 0.42 ETH/USD" and "$100,000" in msgs[0][1]
+
+
+def test_opening_auction_window_and_order_split():
+    base = {"is_open": False, "next_open": "2026-10-01T09:30:00-04:00"}
+    assert alpaca.opening_auction(base | {"timestamp": "2026-10-01T09:12:00.000000000-04:00"})
+    assert not alpaca.opening_auction(base | {"timestamp": "2026-10-01T09:29:00.000000000-04:00"})  # too late
+    assert not alpaca.opening_auction(base | {"timestamp": "2026-09-30T17:12:00.000000000-04:00"})  # evening
+    orders = alpaca.at_the_open([
+        {"symbol": "AAPL", "side": "buy", "qty": 10.4, "type": "market", "time_in_force": "day", "note": ""},
+        {"symbol": "BTC/USD", "side": "buy", "qty": 0.1, "type": "market", "time_in_force": "gtc", "note": ""}])
+    assert [(o["symbol"], o["qty"], o["time_in_force"]) for o in orders] == [
+        ("AAPL", 10, "opg"), ("AAPL", 0.4, "day"), ("BTC/USD", 0.1, "gtc")]
+
+
+def test_clock_without_fractional_seconds():
+    assert alpaca.opening_auction({"is_open": False, "next_open": "2026-10-01T09:30:00-04:00",
+                                   "timestamp": "2026-10-01T09:10:00-04:00"})

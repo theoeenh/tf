@@ -18,6 +18,9 @@ on:
     # backup slot: GitHub's schedule is best-effort and sometimes skips runs. A second
     # run in the same hour changes nothing unless something new happened (replay).
     - cron: "50 * * * *"
+    # before the US open (9:05 and 9:12 New York, summer and winter time): stock orders go
+    # to the 9:30 opening auction; three chances with the :20 run in case GitHub skips one
+    - cron: "5,12 13,14 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

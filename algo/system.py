@@ -164,13 +164,16 @@ def bars_per_year(index: pd.DatetimeIndex) -> float:
     return len(index) / years
 
 
-def new_learner(learn: bool, news: bool = False, ml: bool = False, sizing: bool = False, **_):
+def new_learner(learn: bool, news: bool = False, ml: bool = False, sizing: bool = False, prices=None,
+                context=None, **_):
+    """The rule learner, or the ML learner trained on the shared pool of every
+    strategy's outcomes on these prices (the same pool for every account)."""
     if not learn:
         return None
     if ml:
-        from .ml import MLLearner
+        from .ml import MLLearner, build_pool
 
-        return MLLearner(sizing=sizing)
+        return MLLearner(sizing=sizing, pool=build_pool(prices, context) if prices is not None else None)
     return journal.Learner(views=NEWS_VIEWS if news else ("setup",))
 
 
@@ -186,7 +189,7 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
                trend: bool = False, blackout: bool = False, ml: bool = False,
                sizing: bool = False, intraday: bool = False, brake: float | None = None) -> PortfolioResult:
     if learner is None and learn:
-        learner = new_learner(learn, news, ml, sizing)
+        learner = new_learner(learn, news, ml, sizing, prices=prices, context=context)
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
                           max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None,
                           brake=brake or None)
@@ -207,7 +210,9 @@ def run_variant(prices, v: dict, risk_pct: float, start=None, end=None, context:
 def calibrate_risk(prices, allow_short: bool, learn: bool, start, end, target_vol: float = TARGET_VOL,
                    news: bool = False, context: dict | None = None, **opts) -> float:
     """Risk per trade that gives `target_vol` yearly volatility on the
-    calibration window (training data only)."""
+    calibration window (training data only). The brake is left out: once pulled it
+    stops trading, which would fake low volatility and inflate the risk."""
+    opts.pop("brake", None)
     risk = 0.01
     for _ in range(3):  # a few rounds because the leverage cap is not linear
         eq = run_system(prices, allow_short, learn, risk, start, end, news=news, context=context, **opts).equity

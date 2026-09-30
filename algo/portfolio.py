@@ -179,24 +179,33 @@ def run_portfolio(
             learner.record(p.key, r, when=A.index[i])
         pos[k] = None
 
-    def open_(k: int, A: _Asset, i: int, direction: int) -> None:
+    def candidate(k: int, A: _Asset, i: int, direction: int) -> dict:
+        """Everything known before a trade opens, and the learner's verdict on it."""
+        s = sleeves[k]
+        feats = {name: arr[i - 1] for name, arr in A.feats.items()}
+        ctx = journal.context(direction, A.c[i - 1], feats)
+        key = (learner.keys(s.strategy, direction, ctx, asset=s.asset, time=A.index[i], feats=feats)
+               if learner is not None else [])
+        verdict = learner.judge(key) if learner is not None else journal.Verdict(False, "")
+        pred = key.get("pred") if isinstance(key, dict) else None
+        return {"k": k, "A": A, "i": i, "dir": direction, "feats": feats, "ctx": ctx, "key": key,
+                "verdict": verdict, "score": pred[1] if pred else 0.0}
+
+    def open_(c_: dict) -> None:
         nonlocal cash
+        k, A, i, direction = c_["k"], c_["A"], c_["i"], c_["dir"]
+        feats, ctx, key, verdict = c_["feats"], c_["ctx"], c_["key"], c_["verdict"]
         s = sleeves[k]
         c, rule = costs[s.asset], s.exit_rule
         slip, fee = c.slippage_bps / 1e4, c.fee_bps / 1e4
         px = A.o[i] * (1 + direction * slip)
         dist = rule.stop_atr * A.atr[i - 1]
-        feats = {name: arr[i - 1] for name, arr in A.feats.items()}
-        ctx = journal.context(direction, A.c[i - 1], feats)
         strong = rule.adaptive and np.isfinite(feats["adx"]) and feats["adx"] >= rule.adx_threshold
         rr = rule.rr_strong if strong else rule.rr
 
         net, grs, open_risk = marked_value()
         eq = cash + net
         size = cfg.risk_pct * eq / dist
-        key = (learner.keys(s.strategy, direction, ctx, asset=s.asset, time=A.index[i], feats=feats)
-               if learner is not None else [])
-        verdict = learner.judge(key) if learner is not None else journal.Verdict(False, "")
         if not verdict.skip:
             size *= verdict.size
             size = min(size, max(0.0, cfg.max_gross * eq - grs) / (px * (1 + fee)))
@@ -224,10 +233,11 @@ def run_portfolio(
     for j in range(n):
         if j > 0 and cash < 0:
             cash += cash * cfg.financing_apr * (tsecs[j] - tsecs[j - 1]) / (365 * 86400)
-        for a, A in assets.items():
-            i = rows[a][j]
-            if i < 0:
-                continue
+        live = [(a, A, rows[a][j]) for a, A in assets.items() if rows[a][j] >= 0]
+
+        # 1) exits at the open: borrow cost, brake, events, reversals, gaps through stop / target
+        wants: dict[int, int] = {}
+        for a, A, i in live:
             for k in by_asset[a]:
                 s, p = sleeves[k], pos[k]
                 c = costs[a]
@@ -249,11 +259,26 @@ def run_portfolio(
                         p = None
                 if p is not None and want == -p.side:
                     close(k, A, i, A.o[i], "reverse")
-                opened = False
-                if pos[k] is None and want != 0 and np.isfinite(A.atr[i - 1]) and A.atr[i - 1] > 0:
-                    open_(k, A, i, want)
-                    opened = pos[k] is not None
-                p = pos[k]
+                    p = None
+                if p is not None:
+                    stop_reason = "stop" if p.stop == p.initial_stop else "trail"
+                    if p.side * (A.o[i] - p.stop) <= 0:
+                        close(k, A, i, A.o[i], stop_reason)
+                    elif p.target is not None and p.side * (A.o[i] - p.target) >= 0:
+                        close(k, A, i, A.o[i], "target")
+                wants[k] = want
+
+        # 2) entries: every candidate of this bar, best expected result first (a quant fund
+        #    ranks its opportunities; the risk budget goes to the best ones)
+        cands = [candidate(k, A, i, wants[k]) for a, A, i in live for k in by_asset[a]
+                 if pos[k] is None and wants.get(k, 0) != 0 and np.isfinite(A.atr[i - 1]) and A.atr[i - 1] > 0]
+        for c_ in sorted(cands, key=lambda c_: (c_["verdict"].skip, -c_["score"])):
+            open_(c_)
+
+        # 3) during the bar: stops, targets, time stops; then trailing stops on the close
+        for a, A, i in live:
+            for k in by_asset[a]:
+                s, p = sleeves[k], pos[k]
                 if p is not None:
                     sd = p.side
                     p.best = max(p.best, A.h[i]) if sd > 0 else min(p.best, A.l[i])
@@ -261,11 +286,7 @@ def run_portfolio(
                     adverse, favorable = (A.l[i], A.h[i]) if sd > 0 else (A.h[i], A.l[i])
                     stop_reason = "stop" if p.stop == p.initial_stop else "trail"
                     rule = s.exit_rule
-                    if not opened and sd * (A.o[i] - p.stop) <= 0:
-                        close(k, A, i, A.o[i], stop_reason)
-                    elif not opened and p.target is not None and sd * (A.o[i] - p.target) >= 0:
-                        close(k, A, i, A.o[i], "target")
-                    elif sd * (adverse - p.stop) <= 0:
+                    if sd * (adverse - p.stop) <= 0:
                         close(k, A, i, p.stop, stop_reason)
                     elif p.target is not None and sd * (favorable - p.target) >= 0:
                         close(k, A, i, p.target, "target")
@@ -276,6 +297,7 @@ def run_portfolio(
                     p.extreme = max(p.extreme, A.c[i]) if p.side > 0 else min(p.extreme, A.c[i])
                     new_stop = p.extreme - p.side * s.exit_rule.trail_atr * A.atr[i]
                     p.stop = max(p.stop, new_stop) if p.side > 0 else min(p.stop, new_stop)
+        for a, A, i in live:
             A.mark = A.c[i]
             A.seen = True
         if j == n - 1 and close_at_end:  # close everything at the end of the window

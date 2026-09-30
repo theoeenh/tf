@@ -55,7 +55,8 @@ class MLLearner:
     """Drop-in replacement for journal.Learner (same keys / judge / record calls)."""
 
     def __init__(self, min_trades: int = 300, refit_days: int = 30, threshold: float = 0.0,
-                 max_train: int = 20000, seed: int = 0, sizing: bool = False):
+                 max_train: int = 20000, seed: int = 0, sizing: bool = False, pool: "Pool | None" = None):
+        self.pool = pool  # shared experience of every strategy on every asset (see Pool)
         self.min_trades, self.refit_days, self.threshold = min_trades, refit_days, threshold
         self.sizing = sizing  # scale the position with the expected result
         self.max_train, self.seed = max_train, seed
@@ -93,9 +94,10 @@ class MLLearner:
             "news_tone": s * _num(f.get("news_tone")),
             "hour": float(time.hour) if time is not None else np.nan,
             "weekday": float(time.weekday()) if time is not None else np.nan,
-            "sleeve_recent_r": np.mean(self.sleeve_r[sleeve]) if self.sleeve_r[sleeve] else np.nan,
-            "sleeve_trades": float(self.sleeve_n[sleeve]),
-            "strategy_recent_r": np.mean(self.strategy_r[strategy]) if self.strategy_r[strategy] else np.nan,
+            **(self.pool.recent(asset, strategy, time) if self.pool is not None and time is not None else {
+                "sleeve_recent_r": np.mean(self.sleeve_r[sleeve]) if self.sleeve_r[sleeve] else np.nan,
+                "sleeve_trades": float(self.sleeve_n[sleeve]),
+                "strategy_recent_r": np.mean(self.strategy_r[strategy]) if self.strategy_r[strategy] else np.nan}),
         }
         return {"x": [row[k] for k in FEATURES], "strategy": strategy, "sleeve": sleeve,
                 "time": pd.Timestamp(time) if time is not None else None, "pred": None}
@@ -103,7 +105,7 @@ class MLLearner:
     def judge(self, key: dict) -> Verdict:
         t = key["time"]
         if t is not None and (self.next_fit is None or t >= self.next_fit):
-            self._fit()
+            self._fit(t)
             self.next_fit = t + pd.Timedelta(days=self.refit_days)
         if self.model is None:
             return Verdict(False, "")
@@ -131,13 +133,17 @@ class MLLearner:
                                    "taken": ev >= self.threshold, "r": float(r)})
 
     # ------------------------------------------------------------ model
-    def _fit(self) -> None:
-        if len(self.y) < self.min_trades:
+    def _fit(self, t: pd.Timestamp | None = None) -> None:
+        if self.pool is not None and t is not None:
+            X, r, strat = self.pool.before(t, self.max_train)  # every trade closed before t
+        else:
+            X = np.array(self.X[-self.max_train:], dtype=float)
+            r = np.array(self.y[-self.max_train:])
+            strat = np.array(self.strat[-self.max_train:])
+        if len(r) < self.min_trades:
             return
         from sklearn.ensemble import HistGradientBoostingClassifier
 
-        X = np.array(self.X[-self.max_train:], dtype=float)
-        r = np.array(self.y[-self.max_train:])
         y = (r > 0).astype(int)
         if y.min() == y.max():
             return
@@ -149,7 +155,7 @@ class MLLearner:
         model.fit(X[:, self.cols], y)
         self.model = model
         self.fits += 1
-        strat = np.array(self.strat[-self.max_train:])
+        self.trained_on = len(r)
         self.payoff = {"_all": _payoff(r)} | {s: _payoff(r[strat == s]) for s in set(strat) if (strat == s).sum() >= 30}
 
     # ------------------------------------------------------------ reporting
@@ -174,3 +180,86 @@ class MLLearner:
 def _payoff(r: np.ndarray) -> tuple[float, float]:
     wins, losses = r[r > 0], r[r <= 0]
     return (float(wins.mean()) if len(wins) else 0.0, float(-losses.mean()) if len(losses) else 1.0)
+
+
+# ---------------------------------------------------------------- shared learning pool
+
+
+class Pool:
+    """The shared experience every account learns from: the outcome of every signal of
+    every strategy on every asset, long and short, followed without money whether or
+    not an account took it (see build_pool). Rows are only ever used once the trade had
+    closed (exit time before the decision), so nothing leaks from the future."""
+
+    def __init__(self, rows: pd.DataFrame):
+        rows = rows.sort_values("exit_time").reset_index(drop=True)
+        self.rows = rows
+        self.X = rows[list(FEATURES)].to_numpy(dtype=float)
+        self.r = rows["r"].to_numpy(dtype=float)
+        self.strat = rows["strategy"].to_numpy()
+        self.exit = rows["exit_time"].to_numpy(dtype="datetime64[ns]")
+        self._sleeve = {k: (g["exit_time"].to_numpy(dtype="datetime64[ns]"), g["r"].to_numpy(dtype=float))
+                        for k, g in rows.groupby(["asset", "strategy"])}
+        self._strategy = {k: (g["exit_time"].to_numpy(dtype="datetime64[ns]"), g["r"].to_numpy(dtype=float))
+                          for k, g in rows.groupby("strategy")}
+
+    def __len__(self) -> int:
+        return len(self.r)
+
+    def before(self, t, n: int):
+        k = int(np.searchsorted(self.exit, np.datetime64(pd.Timestamp(t)), side="left"))
+        lo = max(0, k - n)
+        return self.X[lo:k], self.r[lo:k], self.strat[lo:k]
+
+    def recent(self, asset: str, strategy: str, t) -> dict:
+        t64 = np.datetime64(pd.Timestamp(t))
+
+        def last(d, key, n):
+            if key not in d:
+                return np.nan, 0
+            ex, r = d[key]
+            k = int(np.searchsorted(ex, t64, side="left"))
+            return (float(r[max(0, k - n):k].mean()) if k else np.nan), k
+
+        s_r, s_n = last(self._sleeve, (asset, strategy), 20)
+        g_r, _ = last(self._strategy, strategy, 50)
+        return {"sleeve_recent_r": s_r, "sleeve_trades": float(s_n), "strategy_recent_r": g_r}
+
+
+class _Collector(MLLearner):
+    """Follows every signal without money and writes down what happened."""
+
+    def __init__(self):
+        super().__init__()
+        self.out: list[dict] = []
+
+    def judge(self, key: dict) -> Verdict:
+        return Verdict(True, "Followed without money for the shared learning pool.")
+
+    def record(self, key: dict, r: float, when=None) -> None:
+        super().record(key, r, when)
+        self.out.append(dict(zip(FEATURES, key["x"])) | {
+            "strategy": key["strategy"], "asset": key["sleeve"][0], "entry_time": key["time"],
+            "exit_time": pd.Timestamp(when), "r": float(r)})
+
+
+_POOLS: dict = {}
+
+
+def build_pool(prices: dict, context: dict | None) -> Pool:
+    """Run every strategy (daily, hourly-native, news) on every asset, long and short,
+    all followed without money, and collect the outcomes. The same pool serves all
+    accounts, so each learns from the strategies and assets of all of them."""
+    key = (id(prices), id(context))
+    if key in _POOLS:
+        return _POOLS[key]
+    from .portfolio import PortfolioConfig, run_portfolio
+    from .system import COSTS, build_sleeves
+
+    col = _Collector()
+    sleeves = build_sleeves(prices, True, context, news=bool(context), trend=False, intraday_strats=True)
+    run_portfolio(prices, sleeves, COSTS, PortfolioConfig(learner=col), close_at_end=False, context=context)
+    pool = Pool(pd.DataFrame(col.out, columns=list(FEATURES) + ["strategy", "asset", "entry_time", "exit_time", "r"]))
+    _POOLS.clear()  # keep only the latest (the same prices are reused by calibration runs)
+    _POOLS[key] = pool
+    return pool

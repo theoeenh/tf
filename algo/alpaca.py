@@ -124,6 +124,40 @@ def plan(want: dict[str, float], have: dict[str, float], prices: dict[str, float
     return orders
 
 
+OPG_WINDOW = (30, 2)  # minutes before the open: opening-auction orders are accepted until 9:28
+
+
+def opening_auction(clock: dict) -> bool:
+    """True in the half hour before the US open (orders can join the opening auction)."""
+    import datetime as dt
+
+    if clock.get("is_open"):
+        return False
+    import re
+
+    now = dt.datetime.fromisoformat(re.sub(r"(\.\d{6})\d+", r"\1", clock["timestamp"]))  # ns -> us
+    nxt = dt.datetime.fromisoformat(clock["next_open"])
+    mins = (nxt - now).total_seconds() / 60
+    return OPG_WINDOW[1] <= mins <= OPG_WINDOW[0]
+
+
+def at_the_open(orders: list[dict]) -> list[dict]:
+    """Stock orders sent just before the open go to the opening auction (market-on-open:
+    time_in_force 'opg', whole shares only); a fractional rest fills right after the open."""
+    out = []
+    for o in orders:
+        if "/" in o["symbol"] or o["type"] != "market":
+            out.append(o)
+            continue
+        whole = math.floor(o["qty"] + 1e-9)
+        frac = round(o["qty"] - whole, 6)
+        if whole >= 1:
+            out.append(o | {"qty": whole, "time_in_force": "opg", "note": (o["note"] + " opening auction").strip()})
+        if frac > 0:
+            out.append(o | {"qty": frac, "time_in_force": "day", "note": (o["note"] + " fractional, at the open").strip()})
+    return out
+
+
 def last_prices() -> dict[str, float]:
     orders = json.loads((PAPER_DIR / "orders.json").read_text())
     status = {SYMBOLS[o["asset"]]: abs(o.get("mark") or o.get("stop") or 0.0) for o in orders}
@@ -267,8 +301,13 @@ def sync(send: bool = False) -> list[dict]:
         _wait(lambda: not request("GET", "/v2/orders?status=open"))
     have = positions()
 
-    # 2) market orders for the difference
+    # 2) market orders for the difference (just before the open: the opening auction)
     todo = plan(wanted(), have, prices)
+    try:
+        if opening_auction(request("GET", "/v2/clock")):
+            todo = at_the_open(todo)
+    except (AlpacaError, KeyError, ValueError) as e:
+        print(f"Market clock unavailable ({e}); normal orders.")
     sent = {}
     for o in todo:
         line = f"{o['side'].upper():4s} {o['qty']:>12,.6f} {o['symbol']:8s} market {o['note']}"

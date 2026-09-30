@@ -112,6 +112,11 @@ svg text { fill: var(--muted); font: 11px var(--mono); }
   </div>
 
   <section>
+    <h2>What the learner learned</h2>
+    <div class="panel" id="learner"></div>
+  </section>
+
+  <section>
     <h2>AI analyst views</h2>
     <div class="panel" id="views"></div>
   </section>
@@ -222,6 +227,11 @@ $("board").innerHTML = table([
   {h: "7 days", r: 1, f: b => R(b["R 7d"]), cls: b => cls(b["R 7d"])}, {h: "30 days", r: 1, f: b => R(b["R 30d"]), cls: b => cls(b["R 30d"])},
   {h: "Trades", r: 1, f: b => b.trades}, {h: "Skipped avg", r: 1, f: b => R(b["skipped avg R"]), cls: b => cls(b["skipped avg R"])},
 ], D.board) || `<div class="empty">Fills in as trades close. Each row is one strategy on one asset, in R.</div>`;
+
+const Lr = D.learner;
+$("learner").innerHTML = Lr ? `<p class="note">Shared brain of accounts A, B and C, report of ${esc(Lr.date)}: trained on ${Number(Lr.trained_on).toLocaleString("en-US")} closed trades of every strategy on every asset. On the most recent trades it had not seen, AUC ${fin(Lr.auc_recent) ? Lr.auc_recent.toFixed(3) : "–"} (0.50 = coin flip); average R by fifth, worst to best: ${(Lr.r_by_quintile || []).map(v => R(v)).join(" / ")}.</p>
+  <div class="grid2"><div><span class="label">What it pays attention to</span><ol>${(Lr.importance || []).slice(0, 6).map(([n]) => `<li>${esc(n)}</li>`).join("")}</ol></div>
+  <div><span class="label">Chance of profit it gives, by strategy (last 30 days)</span><table><tbody>${Object.entries((Lr.view || {}).strategy || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="r num">${Math.round(100 * v)}%</td></tr>`).join("")}</tbody></table></div></div>` : `<div class="empty">The first report is written by the 9:20 routine.</div>`;
 
 const V = D.ai_views;
 $("views").innerHTML = V && V.views && V.views.length ? `<p class="note">Written ${esc(V.date)} before the open. Bias −2 (strong sell) to +2 (strong buy); the learner decides how much weight they earn.</p><div class="views">${V.views.map(v => `<div class="view b${v.bias}"><span class="label">${esc(v.asset)} · bias ${v.bias > 0 ? "+" : ""}${v.bias} · confidence ${Math.round(100 * v.confidence)}%</span><p>${esc(v.reasoning)}</p></div>`).join("")}</div>` : `<div class="empty">No AI views yet. They are written each weekday at 9:20 New York.</div>`;
