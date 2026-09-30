@@ -65,6 +65,11 @@ def complete_bars(df: pd.DataFrame, asset: str, interval: str, now: pd.Timestamp
     return df[df.index + length <= now]
 
 
+def bars_since(prices: dict, start: pd.Timestamp) -> int:
+    """Distinct bar times at or after `start` across all assets."""
+    return len(set().union(*(df.index[df.index >= start] for df in prices.values())))
+
+
 def news_context(prices: dict, v: dict, interval: str = "1d") -> dict | None:
     """News, events, AI views (and on hourly bars the daily trend, event blackout and
     Alpaca news) for the variants that use them. Fetches only what is missing."""
@@ -111,8 +116,7 @@ def update(source: str | None = None) -> Path:
     lines = [f"# Paper account – {cfg['variant']}, {interval} bars", "",
              f"Started {start} UTC with ${cfg['capital']:,.0f}; risk {cfg['risk_pct']:.2%} per trade "
              f"(sized for ~{cfg['target_vol']:.0%} yearly volatility). Updated {now:%Y-%m-%d %H:%M} UTC.", ""]
-    after = {a: df[df.index >= start] for a, df in prices.items()}
-    if sum(len(df) for df in after.values()) < 2:
+    if bars_since(prices, start) < 2:  # the backtester needs two bar times
         lines += ["No complete bar since the start yet. Nothing to do."]
         res = None
     else:

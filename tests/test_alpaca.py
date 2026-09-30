@@ -67,3 +67,15 @@ def test_price_already_through_stop_closes_at_market():
 def test_opposite_side_trades_are_not_protected():
     trades = [{"asset": "NVDA", "strategy": "a", "qty": -2.0, "stop": 210.0, "target": None}]
     assert alpaca.protect("NVDA", 4.0, trades, price=200.0) == []
+
+
+def test_first_hour_with_one_bar_per_asset_is_not_enough_to_trade():
+    import pandas as pd
+
+    from algo.paper import bars_since
+
+    t = pd.Timestamp("2026-09-30 14:00")
+    one = {a: pd.DataFrame({"Close": [1.0, 1.0]}, index=[t - pd.Timedelta(hours=1), t]) for a in ("BTC", "NVDA")}
+    assert bars_since(one, t) == 1  # 2 assets, but a single bar time
+    two = {"BTC": pd.DataFrame({"Close": [1.0, 1.0]}, index=[t, t + pd.Timedelta(hours=1)])}
+    assert bars_since(two, t) == 2

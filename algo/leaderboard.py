@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 from .metrics import equity_stats
-from .paper import PAPER_DIR, complete_bars, news_context, now_utc
+from .paper import PAPER_DIR, bars_since, complete_bars, news_context, now_utc
 from .system import ALL_VARIANTS, bars_per_year, load_prices, new_learner, run_random, run_variant
 
 log = logging.getLogger(__name__)
@@ -116,8 +116,7 @@ def write() -> str:
           f"same ${cfg['capital']:,.0f} and {cfg['risk_pct']:.2%} risk per trade. The live account trades "
           f"**{cfg['variant']}**. Early days are noise: look for a version that stays ahead for weeks, and "
           "that beats the random-entry twins.", ""]
-    after = sum(len(df[df.index >= start]) for df in prices.values())
-    if after < 2:
+    if bars_since(prices, start) < 2:
         md += ["No complete bar since the start yet."]
     else:
         race, results = run_race(prices, cfg)
