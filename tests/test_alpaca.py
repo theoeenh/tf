@@ -79,3 +79,15 @@ def test_first_hour_with_one_bar_per_asset_is_not_enough_to_trade():
     assert bars_since(one, t) == 1  # 2 assets, but a single bar time
     two = {"BTC": pd.DataFrame({"Close": [1.0, 1.0]}, index=[t, t + pd.Timedelta(hours=1)])}
     assert bars_since(two, t) == 2
+
+
+def test_notifications_only_for_real_trades_and_off_without_topic(monkeypatch):
+    from algo import notify
+
+    monkeypatch.delenv("NTFY_TOPIC", raising=False)
+    assert notify.send("t", "b") is False  # nothing is sent without a topic
+    msgs = notify.trade_messages([
+        {"symbol": "ETH/USD", "side": "buy", "qty": 0.42, "type": "market", "note": ""},
+        {"symbol": "NVDA", "side": "sell", "qty": 10, "type": "stop", "stop_price": 200, "note": "x"},
+    ], equity=100000)
+    assert len(msgs) == 1 and msgs[0][0] == "BUY 0.42 ETH/USD" and "$100,000" in msgs[0][1]

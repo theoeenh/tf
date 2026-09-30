@@ -24,7 +24,7 @@ from .engine import buy_and_hold
 from .metrics import equity_stats
 from .run import plot_equity
 from .system import (
-    ALL_VARIANTS, COSTS, MAX_GROSS, MAX_OPEN_RISK, OPTIONS, SLEEVE_RULES, TARGET_VOL, UNIVERSE, VARIANTS,
+    ALL_VARIANTS, COSTS, MAX_GROSS, MAX_OPEN_RISK, OPTIONS, SLEEVE_RULES, TARGET_VOL, UNIVERSE, UNIVERSES, VARIANTS,
     bars_per_year, build_context, calibrate_risk, load_prices, run_random, run_variant,
 )
 
@@ -284,14 +284,19 @@ def main() -> None:
     ap.add_argument("--hourly-only", action="store_true", help="only the hourly study (no daily, no core)")
     ap.add_argument("--upgrades", action="store_true",
                     help="also test the upgrades (trend filter, event blackout, ML learner)")
+    ap.add_argument("--only", nargs="+", default=None, help="test only these versions (names from ALL_VARIANTS)")
+    ap.add_argument("--universe", default="core", choices=list(UNIVERSES))
     args = ap.parse_args()
     variants = ALL_VARIANTS if args.upgrades else VARIANTS
+    if args.only:
+        variants = {n: ALL_VARIANTS[n] for n in args.only}
+    universe = UNIVERSES[args.universe]
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     out = args.out or Path("reports") / f"{date.today()}-portfolio"
     out.mkdir(parents=True, exist_ok=True)
 
     md = [f"# Multi-asset system ({date.today()})", "",
-          f"Universe: {', '.join(UNIVERSE)}. Each asset runs all three strategies at once "
+          f"Universe: {', '.join(UNIVERSES[args.universe])}. Each asset runs all three strategies at once "
           "(" + ", ".join(f"{k}: {v.label()}" for k, v in SLEEVE_RULES.items()) + "), "
           "so up to 21 trades can be open together, and on hourly bars a strategy can trade many times a day.",
           "",
@@ -300,7 +305,7 @@ def main() -> None:
           f"at most {MAX_OPEN_RISK:.0%} of equity at risk across open trades.",
           "",
           "Costs on every fill: " + "; ".join(f"{a} {c.fee_bps:g}+{c.slippage_bps:g} bps"
-                                             for a, c in COSTS.items() if a in UNIVERSE)
+                                             for a, c in COSTS.items() if a in UNIVERSES[args.universe])
           + " (fee + slippage per side). Shorts pay 10%/yr borrow on crypto, 1%/yr on stocks and metals.",
           "",
           "Variants: long only vs long/short, each with and without the **learner** (skips setups whose "
@@ -313,7 +318,7 @@ def main() -> None:
 
     daily = load_prices(args.source, "1d") if not args.hourly_only else None
     spy = data.load("SPY", args.source) if not args.hourly_only else None
-    news_data = news.load_all(UNIVERSE)
+    news_data = news.load_all(UNIVERSE if args.universe == "core" else universe)
     md += ["News data (point-in-time, see `algo/news.py`): GDELT daily tone and coverage for "
            f"{', '.join(k for k in news_data['gdelt'] if k != 'MACRO')}; "
            f"{len(news_data['fomc'])} Fed decision dates; earnings dates for "
@@ -327,10 +332,10 @@ def main() -> None:
         core_study(args.source, res[HIGHLIGHT].equity, out, md)
 
     if not args.skip_hourly:
-        hourly = load_prices(args.source, "1h")
+        hourly = load_prices(args.source, "1h", universe)
         spy_h = data.load("SPY", args.source, interval="1h")
         if args.source == "alpaca":  # hourly headlines with exact times
-            news_data = news.load_all(UNIVERSE, alpaca_news=True)
+            news_data = news.load_all(universe, alpaca_news=True)
         idx = hourly["BTC"].index
         split = idx[0] + (idx[-1] - idx[0]) * 0.6
         span = f"{idx[0]:%Y-%m} to {idx[-1]:%Y-%m}"

@@ -314,6 +314,15 @@ def sync(send: bool = False) -> list[dict]:
         print(line)
     if unfilled:
         print(f"Not filled yet (market closed?), protected once filled, on the next run: {', '.join(unfilled)}")
+    if send and todo:  # phone notification (only when NTFY_TOPIC is set)
+        from . import notify
+
+        try:
+            eq = float(request("GET", "/v2/account").get("equity", 0))
+        except AlpacaError:
+            eq = None
+        for title, body, tags in notify.trade_messages(todo, eq):
+            notify.send(title, body, tags)
     return todo + protective
 
 

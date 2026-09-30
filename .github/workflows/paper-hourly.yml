@@ -31,6 +31,7 @@ jobs:
     env:
       ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
       ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+      NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}  # optional: phone notifications (algo/notify.py)
     steps:
       - name: Check the Alpaca keys are set
         run: |
