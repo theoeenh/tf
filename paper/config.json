@@ -1,9 +1,10 @@
 {
-  "start": "2026-09-29 19:00:00",
+  "start": "2026-09-30 14:00:00",
   "capital": 100000.0,
   "variant": "long/short + learner + news",
-  "interval": "1d",
-  "risk_pct": 0.0071750074022370845,
+  "interval": "1h",
+  "source": "alpaca",
+  "risk_pct": 0.0035169888645126264,
   "target_vol": 0.2,
   "universe": [
     "BTC",
