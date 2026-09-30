@@ -24,7 +24,7 @@ concurrency:
 jobs:
   trade:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45  # the first run after a universe change downloads its history
     defaults:
       run:
         shell: bash  # with pipefail: a failed step is not hidden by `| tee`

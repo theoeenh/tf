@@ -264,7 +264,7 @@ def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: b
     fomc = fomc_dates(refresh)
     jobs = jobs_report_dates()
     out = {"fomc": fomc, "jobs": jobs, "gdelt": {}, "earnings": {}}
-    for a in list(assets) + ["MACRO"]:
+    for a in [x for x in assets if x in QUERIES] + ["MACRO"]:  # daily tone exists for the core assets only
         try:
             out["gdelt"][a] = load_gdelt(a, refresh)
         except Exception as exc:

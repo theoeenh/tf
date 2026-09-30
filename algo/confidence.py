@@ -63,17 +63,18 @@ def describe(name: str, tb: dict, db: dict) -> str:
 
 def main() -> None:
     from . import news
-    from .system import ALL_VARIANTS, UNIVERSE, build_context, calibrate_risk, load_prices, run_random, run_variant
-    from .system import OPTIONS
+    from .system import ALL_VARIANTS, OPTIONS, UNIVERSES, build_context, calibrate_risk, load_prices, run_random
+    from .system import run_variant
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--variant", default="long + trend + blackout + ML")
     ap.add_argument("--source", default="alpaca")
     ap.add_argument("--random-seeds", type=int, default=5)
+    ap.add_argument("--universe", default="core", choices=["core", "wide"])
     args = ap.parse_args()
     logging.basicConfig(level=logging.WARNING)
-    prices = load_prices(args.source, "1h")
-    ctx = build_context(prices, news.load_all(UNIVERSE, alpaca_news=args.source == "alpaca"))
+    prices = load_prices(args.source, "1h", UNIVERSES[args.universe])
+    ctx = build_context(prices, news.load_all(list(prices), alpaca_news=args.source == "alpaca"))
     idx = prices["BTC"].index
     train = (idx[0] + pd.Timedelta(days=10), idx[0] + (idx[-1] - idx[0]) * 0.6)
     test_start = train[1] + pd.Timedelta(hours=1)
