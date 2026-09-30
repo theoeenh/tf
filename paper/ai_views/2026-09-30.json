@@ -1,0 +1,23 @@
+[
+  {"asset": "BTC", "bias": 1, "confidence": 0.35, "horizon_days": 10,
+   "key_events": ["US jobs report Fri 2 Oct"],
+   "reasoning": "Above its 200-day average with a strong trend (ADX 42) and +6.6% over the month; headlines note BTC holding up while the dollar rallies and gold falls. Trend is the only real edge here, so a small, low-confidence long bias; news tone is only mildly positive."},
+  {"asset": "ETH", "bias": 0, "confidence": 0.3, "horizon_days": 10,
+   "key_events": ["US jobs report Fri 2 Oct"],
+   "reasoning": "Trend is up (ADX 44, +7.7% month) but GDELT tone is clearly weaker than usual (-1.9 sigma) with thin coverage. Price and news disagree, so no view."},
+  {"asset": "SOL", "bias": 1, "confidence": 0.3, "horizon_days": 10,
+   "key_events": [],
+   "reasoning": "Strongest of the three cryptos (+15% month, ADX 45, above the 200-day average) and headlines are about fund buying. Momentum argues for a small long bias; confidence is low because crypto sentiment pieces like these are common near local tops."},
+  {"asset": "NVDA", "bias": 0, "confidence": 0.3, "horizon_days": 10,
+   "key_events": [],
+   "reasoning": "Above its 200-day average but no trend (ADX 14) and a flat week. Headlines are mixed: a new product on one side, Huawei/DeepSeek chip competition and a Burry warning on the other. Nothing gives an edge."},
+  {"asset": "TSLA", "bias": -1, "confidence": 0.3, "horizon_days": 5,
+   "key_events": ["Q3 deliveries update expected early October"],
+   "reasoning": "Below its 200-day average and down 6.9% on the week; headlines flag funding pressure and a $30bn credit line ahead of heavy capex. The Q3 delivery update can gap the stock either way, so only a small, short-horizon bearish lean."},
+  {"asset": "GOLD", "bias": 0, "confidence": 0.25, "horizon_days": 10,
+   "key_events": ["US jobs report Fri 2 Oct"],
+   "reasoning": "Sharp fall (-6.4% month, below the 200-day average) after a Fed rate hike and a strong dollar, but ADX 16 says no clean trend yet and ETF inflows were strong last month. Falling knife vs. support: no edge."},
+  {"asset": "SILVER", "bias": -1, "confidence": 0.25, "horizon_days": 10,
+   "key_events": ["US jobs report Fri 2 Oct"],
+   "reasoning": "Weaker than gold (-8.6% week) and below its 200-day average; rate-hike and strong-dollar headlines weigh on metals. Small bearish lean only, since silver often snaps back hard after drops this fast."}
+]

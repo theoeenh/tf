@@ -30,7 +30,7 @@ from .system import (
 log = logging.getLogger(__name__)
 
 HIGHLIGHT = "long/short + learner + news"  # the full system, shown in detail
-RANDOM_SEEDS = 5
+RANDOM_SEEDS = 20
 
 
 def equal_weight(prices: dict[str, pd.DataFrame], start, end, capital=100_000.0) -> pd.Series:
