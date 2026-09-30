@@ -36,7 +36,8 @@ def trade_messages(orders: list[dict], equity: float | None = None) -> list[tupl
             continue  # stops / targets being (re)placed each run are not news
         side = o["side"].upper()
         note = f" · {o['note']}" if o.get("note") else ""
-        title = f"{side} {o['qty']:g} {o['symbol']}"
+        acct = os.environ.get("PAPER_ACCOUNT_NAME")
+        title = (f"[{acct}] " if acct else "") + f"{side} {o['qty']:g} {o['symbol']}"
         body = f"Paper account{note}" + (f" · equity ${equity:,.0f}" if equity is not None else "")
         out.append((title, body, "green_circle" if o["side"] == "buy" else "red_circle"))
     return out

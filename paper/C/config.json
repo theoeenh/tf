@@ -1,10 +1,10 @@
 {
   "start": "2026-09-30 19:00:00",
   "capital": 100000.0,
-  "variant": "long + trend + blackout + ML",
+  "variant": "long + trend + blackout + intraday + ML",
   "interval": "1h",
   "source": "alpaca",
-  "risk_pct": 0.003992340237091766,
+  "risk_pct": 0.003597999611505949,
   "target_vol": 0.2,
   "universe": [
     "BTC",
@@ -31,6 +31,6 @@
     "USO"
   ],
   "history_start": null,
-  "alpaca_account": "PA32CKBVJRGL",
-  "name": "A \u2013 ML no brake"
+  "name": "C \u2013 ML intraday",
+  "alpaca_account": "PA36I46L8ZXT"
 }

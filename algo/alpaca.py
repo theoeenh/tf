@@ -244,7 +244,21 @@ def _wait(check, seconds: float = 20.0) -> bool:
     return check()
 
 
+def check_account() -> str:
+    """The keys must belong to the Alpaca account this folder is for (config
+    'alpaca_account'), so one account's signals never trade on another."""
+    acct = request("GET", "/v2/account").get("account_number", "?")
+    cfg = json.loads((PAPER_DIR / "config.json").read_text())
+    want = cfg.get("alpaca_account")
+    if want and acct != want:
+        raise AlpacaError(f"these keys are for Alpaca account {acct}, but {PAPER_DIR.name}/ is for {want}: "
+                          "nothing sent. Check the GitHub secrets for this account.")
+    return acct
+
+
 def sync(send: bool = False) -> list[dict]:
+    acct = check_account()
+    print(f"Alpaca account {acct}: {json.loads((PAPER_DIR / 'config.json').read_text()).get('name', '')}")
     trades = json.loads((PAPER_DIR / "orders.json").read_text())
     prices = last_prices()
     if send:  # 1) cancel the stops and targets of the last run

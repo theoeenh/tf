@@ -42,6 +42,28 @@ def _clean(x):
     return x
 
 
+ROOT_PAPER = Path(__file__).resolve().parent.parent / "paper"
+
+
+def accounts() -> list[dict]:
+    """One row per paper account folder (paper/, paper/B/, ...): name, version, equity, trades."""
+    rows = []
+    for d in [ROOT_PAPER] + sorted(x for x in ROOT_PAPER.iterdir() if x.is_dir() and (x / "config.json").exists()):
+        cfg = json.loads((d / "config.json").read_text())
+        eq_path, tr_path = d / "equity.csv", d / "trades.csv"
+        equity = cfg["capital"]
+        if eq_path.exists() and eq_path.stat().st_size:
+            e = pd.read_csv(eq_path)
+            if len(e):
+                equity = float(e.iloc[-1, 1])
+        trades = len(pd.read_csv(tr_path)) if tr_path.exists() and tr_path.stat().st_size else 0
+        opened = json.loads((d / "orders.json").read_text()) if (d / "orders.json").exists() else []
+        rows.append({"name": cfg.get("name", cfg["variant"]), "variant": cfg["variant"],
+                     "alpaca": cfg.get("alpaca_account", ""), "equity": equity,
+                     "ret": equity / cfg["capital"] - 1, "trades": trades, "open": len(opened)})
+    return rows
+
+
 def collect() -> dict:
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
     start = pd.Timestamp(cfg["start"])
@@ -88,7 +110,7 @@ def collect() -> dict:
           if views_files else None)
     return _clean({"generated": now_utc().strftime("%Y-%m-%d %H:%M"), "config": cfg, "status": status,
                    "equity": equity, "positions": positions, "trades": trades, "race": race, "board": board,
-                   "ml": ml, "study": study, "ai_views": ai})
+                   "ml": ml, "study": study, "ai_views": ai, "accounts": accounts()})
 
 
 def build(study: Path | None = None) -> Path:

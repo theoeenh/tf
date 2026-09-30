@@ -67,7 +67,13 @@ svg text { fill: var(--muted); font: 11px var(--mono); }
   <div class="kpis" id="kpis"></div>
 
   <section>
-    <h2>Equity since the start</h2>
+    <h2>The three Alpaca accounts</h2>
+    <p class="note">Same start, same $100,000. A and B trade the same signals; B stops for good after a 10% fall from its peak, so the gap between them is what the brake saves or costs.</p>
+    <div class="panel scroll" id="accounts"></div>
+  </section>
+
+  <section>
+    <h2>Equity since the start (account A)</h2>
     <div class="panel"><div id="equity"></div></div>
   </section>
 
@@ -154,6 +160,12 @@ function lineChart(el, pts, base) {
   </svg>`;
 }
 lineChart($("equity"), D.equity, C.capital);
+
+$("accounts").innerHTML = table([
+  {h: "Account", f: a => `<b>${esc(a.name)}</b>`}, {h: "Alpaca", f: a => `<span class="num">${esc(a.alpaca)}</span>`},
+  {h: "Equity", r: 1, f: a => money(a.equity)}, {h: "Return", r: 1, f: a => pct(a.ret, 2), cls: a => cls(a.ret)},
+  {h: "Closed trades", r: 1, f: a => a.trades}, {h: "Open", r: 1, f: a => a.open},
+], D.accounts || []) || `<div class="empty">No accounts yet.</div>`;
 
 const side = (s) => `<span class="tag ${s > 0 ? "long" : "short"}">${s > 0 ? "LONG" : "SHORT"}</span>`;
 $("positions").innerHTML = table([

@@ -1,9 +1,12 @@
-# Hourly paper trading: trade the hour that just closed, mirror it on the
-# Alpaca paper account with real stop / target orders, save the status.
+# Hourly paper trading: each account trades the hour that just closed and
+# mirrors it on its own Alpaca paper account with real stop / target orders.
 #
-# Setup (once): repo Settings -> Secrets and variables -> Actions ->
-#   secrets ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY (Alpaca *paper* keys);
-#   optional variable PAPER_BRANCH = the branch holding paper/ (default: the default branch).
+#   A  paper/    secrets ALPACA_API_KEY_ID,   ALPACA_API_SECRET_KEY    (PA32CKBVJRGL)
+#   B  paper/B/  secrets ALPACA_B_API_KEY_ID, ALPACA_B_API_SECRET_KEY  (PA3F9NT51E8I)
+#   C  paper/C/  secrets ALPACA_C_API_KEY_ID, ALPACA_C_API_SECRET_KEY  (PA36I46L8ZXT)
+# Each account only ever uses its own keys, and the sync refuses to send if the
+# keys belong to another Alpaca account than the folder's config says.
+# Optional: secret NTFY_TOPIC (phone notifications), variable PAPER_BRANCH.
 # Scheduled workflows only run from the repository's default branch.
 name: paper-hourly
 
@@ -17,28 +20,45 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: paper-trading
-  cancel-in-progress: false
-
 jobs:
   trade:
+    strategy:
+      fail-fast: false  # one account failing never stops the others
+      matrix:
+        include:
+          - account: A
+            folder: ""
+          - account: B
+            folder: B
+          - account: C
+            folder: C
+    concurrency:
+      group: paper-trading-${{ matrix.account }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 45  # the first run after a universe change downloads its history
     defaults:
       run:
         shell: bash  # with pipefail: a failed step is not hidden by `| tee`
     env:
-      ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
-      ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+      PAPER_ACCOUNT: ${{ matrix.folder }}
       NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}  # optional: phone notifications (algo/notify.py)
     steps:
-      - name: Check the Alpaca keys are set
+      - name: Use this account's own Alpaca keys
+        env:
+          KEY_A: ${{ secrets.ALPACA_API_KEY_ID }}
+          SECRET_A: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          KEY_B: ${{ secrets.ALPACA_B_API_KEY_ID }}
+          SECRET_B: ${{ secrets.ALPACA_B_API_SECRET_KEY }}
+          KEY_C: ${{ secrets.ALPACA_C_API_KEY_ID }}
+          SECRET_C: ${{ secrets.ALPACA_C_API_SECRET_KEY }}
         run: |
-          if [ -z "$ALPACA_API_KEY_ID" ] || [ -z "$ALPACA_API_SECRET_KEY" ]; then
-            echo "::error::Repository secrets ALPACA_API_KEY_ID / ALPACA_API_SECRET_KEY are missing or empty (Settings -> Secrets and variables -> Actions -> Repository secrets)."
+          key_var="KEY_${{ matrix.account }}"; secret_var="SECRET_${{ matrix.account }}"
+          if [ -z "${!key_var}" ] || [ -z "${!secret_var}" ]; then
+            echo "::error::Alpaca keys for account ${{ matrix.account }} are missing (see the table at the top of this file)."
             exit 1
           fi
+          { echo "ALPACA_API_KEY_ID=${!key_var}"; echo "ALPACA_API_SECRET_KEY=${!secret_var}"; } >> "$GITHUB_ENV"
 
       - uses: actions/checkout@v4
         with:
@@ -51,13 +71,16 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Account name (for notifications)
+        run: echo "PAPER_ACCOUNT_NAME=$(python -c "import json;print(json.load(open('paper/${{ matrix.folder }}/config.json'.replace('//','/'))).get('name','${{ matrix.account }}'))")" >> "$GITHUB_ENV"
+
       # Price and news caches: only the missing bars are downloaded each hour.
       - uses: actions/cache@v4
         with:
           path: |
             data/*_alpaca.csv
             data/news
-          key: market-data-${{ github.run_id }}
+          key: market-data-${{ github.run_id }}-${{ matrix.account }}
           restore-keys: market-data-
 
       - name: Paper account (trade the new bars)
@@ -69,15 +92,16 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          cat paper/status.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          cat "paper/${{ matrix.folder }}/status.md" >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
           { echo; echo '## Alpaca'; echo '```'; cat alpaca_sync.txt 2>/dev/null || echo "no sync this run"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save status to the repo
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add paper/
+          git add "paper/${{ matrix.folder }}"
           git diff --cached --quiet && exit 0
-          git commit -m "Paper account $(date -u +'%Y-%m-%d %H:%M') UTC"
-          for i in 1 2 3; do git pull --rebase -q && git push -q && exit 0; sleep 5; done
+          git commit -m "Paper account ${{ matrix.account }} $(date -u +'%Y-%m-%d %H:%M') UTC"
+          # the three accounts push at about the same time: retry with a random pause
+          for i in 1 2 3 4 5 6; do git pull --rebase -q && git push -q && exit 0; sleep $((RANDOM % 10 + 3)); done
           exit 1

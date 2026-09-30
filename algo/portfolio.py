@@ -18,6 +18,8 @@ Portfolio rules:
   `max_open_risk` x equity.
 - An optional Learner can veto trades. Vetoed trades are still followed as
   "shadow" trades (no money) so the learner keeps getting feedback.
+- Optional brake: once equity falls `brake` below its highest value, every
+  position closes at the next bar's open and nothing opens again.
 - Optional blackout bars per asset (scheduled events, known in advance): no
   position is held through them, so open trades close at the bar's open and
   no trade opens on it.
@@ -51,6 +53,7 @@ class PortfolioConfig:
     max_open_risk: float | None = None
     financing_apr: float = 0.06
     learner: journal.Learner | None = None
+    brake: float | None = None  # stop for good once equity is this far below its peak (0.10 = -10%)
 
 
 @dataclass
@@ -217,6 +220,7 @@ def run_portfolio(
             cash -= p.q * px + p.fees
         pos[k] = p
 
+    halted, peak = False, cfg.initial_capital
     for j in range(n):
         if j > 0 and cash < 0:
             cash += cash * cfg.financing_apr * (tsecs[j] - tsecs[j - 1]) / (365 * 86400)
@@ -233,6 +237,11 @@ def run_portfolio(
                         cash -= cost
                     p.fees += cost
                 want = sig[k][i - 1] if A.seen else 0
+                if halted:  # brake pulled: flat for good
+                    want = 0
+                    if p is not None:
+                        close(k, A, i, A.o[i], "brake")
+                        p = None
                 if A.blocked[i]:  # scheduled event: be flat through this bar
                     want = 0
                     if p is not None:
@@ -277,6 +286,9 @@ def run_portfolio(
                     close(k, A, i, A.c[i], "end")
         net, grs, _ = marked_value()
         equity[j] = cash + net
+        peak = max(peak, equity[j])
+        if cfg.brake is not None and equity[j] < peak * (1 - cfg.brake):
+            halted = True
         gross[j] = grs / equity[j] if equity[j] > 0 else np.nan
         net_side[j] = np.sign(sum(p.q for p in pos.values() if p is not None and not p.shadow))
 

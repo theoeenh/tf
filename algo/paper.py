@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Protocol
@@ -36,7 +37,8 @@ from .system import (
 )
 
 log = logging.getLogger(__name__)
-PAPER_DIR = Path(__file__).resolve().parent.parent / "paper"
+# One folder per paper account: paper/ (account A) or paper/<PAPER_ACCOUNT>/ (B, C...).
+PAPER_DIR = Path(__file__).resolve().parent.parent / "paper" / os.environ.get("PAPER_ACCOUNT", "")
 
 # Calibration windows, same as the backtest report.
 DAILY_TRAIN = ("2016-09-29", "2022-12-31")
@@ -81,7 +83,7 @@ def news_context(prices: dict, v: dict, interval: str = "1d") -> dict | None:
 
 
 def init(capital: float, variant: str, interval: str, start: str | None = None, source: str = "auto",
-         universe: str = "core", history_start: str | None = None) -> dict:
+         universe: str = "core", history_start: str | None = None, name: str | None = None) -> dict:
     v = ALL_VARIANTS[variant]
     prices = load_prices(source, interval, UNIVERSES[universe], history_start)
     if interval == "1d":
@@ -90,10 +92,12 @@ def init(capital: float, variant: str, interval: str, start: str | None = None, 
         idx = prices["BTC"].index
         train = (idx[0] + pd.Timedelta(days=10), idx[0] + (idx[-1] - idx[0]) * 0.6)
     risk = calibrate_risk(prices, v["allow_short"], v["learn"], *train, news=v.get("news", False),
-                          context=news_context(prices, v, interval), **{o: v.get(o, False) for o in OPTIONS})
+                          context=news_context(prices, v, interval),
+                          # sized like the same version without the brake (a pulled brake would fake low volatility)
+                          **{o: v.get(o, False) for o in OPTIONS if o != "brake"})
     cfg = {"start": str(pd.Timestamp(start) if start else now_utc().floor("h")), "capital": capital, "variant": variant, "interval": interval,
            "source": source, "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSES[universe]),
-           "history_start": history_start}
+           "history_start": history_start, "name": name or variant}
     PAPER_DIR.mkdir(exist_ok=True)
     (PAPER_DIR / "config.json").write_text(json.dumps(cfg, indent=2))
     return cfg
@@ -178,6 +182,7 @@ def main() -> None:
     p_init.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv", "alpaca"])
     p_init.add_argument("--universe", default="core", choices=list(UNIVERSES))
     p_init.add_argument("--history-start", default=None, help="first bar used (default: all cached data)")
+    p_init.add_argument("--name", default=None, help="label shown in notifications and the dashboard")
     p_up = sub.add_parser("update", help="trade new bars and write paper/status.md")
     p_up.add_argument("--source", default=None, choices=["auto", "yahoo", "csv", "alpaca"],
                       help="default: the source the account was started with")
@@ -185,7 +190,7 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     if args.cmd == "init":
         cfg = init(args.capital, args.variant, args.interval, args.start, args.source, args.universe,
-                   args.history_start)
+                   args.history_start, args.name)
         print(f"Paper account started: {json.dumps(cfg)}")
     else:
         print(f"Status written to {update(args.source)}")

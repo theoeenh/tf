@@ -71,6 +71,7 @@ VARIANTS = {
 #   blackout  intraday bars: be flat through scheduled events (earnings, Fed, jobs)
 #   ml        the machine-learning learner (algo/ml.py) instead of the rule learner
 #   sizing    ML only: bet more on trades with a higher expected result
+#   brake     stop trading for good after this drawdown from the peak (e.g. 0.10)
 #   intraday  add the hourly-native strategies (opening range breakout, VWAP reversion)
 #   universe  "wide": 22 assets instead of 7 (set per account / study, see UNIVERSES)
 UPGRADES = {
@@ -86,11 +87,13 @@ UPGRADES = {
                                                     blackout=True, intraday=True, ml=True),
     "L/S + trend + blackout + intraday + ML": dict(allow_short=True, learn=True, news=True, trend=True,
                                                    blackout=True, intraday=True, ml=True),
+    "long + trend + blackout + ML + brake 10%": dict(allow_short=False, learn=True, news=True, trend=True,
+                                                     blackout=True, ml=True, brake=0.10),
     "long + trend + blackout + ML": dict(allow_short=False, learn=True, news=True, trend=True, blackout=True,
                                          ml=True),
 }
 ALL_VARIANTS = VARIANTS | UPGRADES
-OPTIONS = ("trend", "blackout", "ml", "sizing", "intraday")
+OPTIONS = ("trend", "blackout", "ml", "sizing", "intraday", "brake")
 NEWS_VIEWS = ("setup", "news", "event", "ai")
 
 
@@ -181,11 +184,12 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
                initial_capital: float = 100_000.0, close_at_end: bool = True,
                learner=None, news: bool = False, context: dict | None = None,
                trend: bool = False, blackout: bool = False, ml: bool = False,
-               sizing: bool = False, intraday: bool = False) -> PortfolioResult:
+               sizing: bool = False, intraday: bool = False, brake: float | None = None) -> PortfolioResult:
     if learner is None and learn:
         learner = new_learner(learn, news, ml, sizing)
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
-                          max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None)
+                          max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None,
+                          brake=brake or None)
     ctx = context if (news or ml) else None  # the ML learner uses news / event features too
     return run_portfolio(prices, build_sleeves(prices, allow_short, context if news else None, news, trend,
                                                intraday),
