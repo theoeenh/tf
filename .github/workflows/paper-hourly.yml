@@ -15,6 +15,9 @@ on:
     # :20 past every hour: Alpaca's free plan serves stock data 15 minutes late,
     # so the hour that just ended is complete by then (GitHub may start a few minutes late).
     - cron: "20 * * * *"
+    # backup slot: GitHub's schedule is best-effort and sometimes skips runs. A second
+    # run in the same hour changes nothing unless something new happened (replay).
+    - cron: "50 * * * *"
   workflow_dispatch: {}
 
 permissions:
