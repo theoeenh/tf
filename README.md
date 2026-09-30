@@ -82,6 +82,27 @@ python -m algo.paper update    # fetch new bars, trade them -> paper/status.md, 
 Deterministic replay from the start date on complete bars only, with the learner pre-trained on
 history. `paper/orders.json` holds the wanted positions with stops and targets, for a broker adapter.
 
+## News, events and the AI analyst
+
+- `algo/news.py`: point-in-time news for backtests. GDELT daily news tone and coverage per asset since 2017
+  (day D only used from D+1), Fed decision dates (federalreserve.gov), earnings dates (Yahoo),
+  jobs-report dates; live Yahoo headlines for the brief.
+- The **news variant** (`long/short + learner + news`) adds a news-momentum strategy and lets the learner
+  judge news tone/coverage, upcoming events and AI views, each as its own "view".
+- `python -m algo.brief` writes `paper/brief.md`: events in the next 7 days, core holdings, per-asset
+  prices, signals, news and headlines, and the task for the AI analyst.
+- The **AI analyst** (a Claude session) reads the brief and writes `paper/ai_views/<date>.json`.
+  Views are scored against what the market did next (`algo/analyst.py`) and enter the learner.
+  They are **forward-only**: a language model already knows what happened after past headlines,
+  so a backtest of its past calls would be fake.
+- `python -m algo.daily` runs everything in order: paper update, then the brief.
+
+## Core holdings (`algo/core.py`)
+
+Momentum: each month hold the 5 strongest of a fixed list (big tech of end-2016, crypto, metals) by
+12-month return, above their 200-day average, weighted by inverse volatility. The rule-based,
+hindsight-free way of "owning NVDA in 2017". Compared with 5 random picks under the same rules.
+
 ## Layout
 
 ```
@@ -97,6 +118,11 @@ algo/journal.py     trade reasoning, error diagnosis, learner
 algo/system.py      universe, costs, exit rules, risk settings
 algo/portfolio_run.py  multi-asset study and its report
 algo/paper.py       paper trading
+algo/news.py        GDELT news, Fed / earnings / jobs calendars, headlines
+algo/analyst.py     AI analyst views: storage, scoring, learner input
+algo/brief.py       daily brief (events ahead, news, signals, AI task)
+algo/core.py        momentum core holdings
+algo/daily.py       daily routine
 tests/              engine & no-look-ahead tests
 ```
 

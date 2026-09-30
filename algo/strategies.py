@@ -55,3 +55,17 @@ STRATEGIES: dict[str, Callable[[pd.DataFrame], pd.Series]] = {
     "squeeze_breakout": squeeze_breakout,
     "rsi2_reversion": rsi2_reversion,
 }
+
+
+def news_momentum(df: pd.DataFrame, news: pd.DataFrame, buzz: float = 1.5, tone: float = 0.5,
+                  n: int = 20) -> pd.Series:
+    """Trade a burst of one-sided news once price confirms it: coverage spike
+    (attention_z > buzz) with clearly positive (negative) tone, and the close
+    above (below) its 20-bar average. `news` comes from news.news_features and
+    is already lagged, so it only holds news days that had finished."""
+    nf = news.reindex(df.index)
+    ma = sma(df["Close"], n)
+    spike = nf["attention_z"] > buzz
+    long = spike & (nf["tone_z"] > tone) & (df["Close"] > ma)
+    short = spike & (nf["tone_z"] < -tone) & (df["Close"] < ma)
+    return _combine(long, short)

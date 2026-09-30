@@ -1,0 +1,80 @@
+//@version=5
+// Same rules as algo/strategies.py + algo/system.py, for TradingView charts and its
+// paper trading / strategy tester. Add to a daily chart of BTCUSD, ETHUSD, SOLUSD,
+// NVDA, TSLA, GLD or SLV. One strategy per script instance: pick it in the settings.
+// Differences from the Python backtest: TradingView runs one position per chart, and
+// the learner / news / AI views are not available here.
+strategy("tf system", overlay = true, initial_capital = 100000, currency = currency.USD,
+     commission_type = strategy.commission.percent, commission_value = 0.10, slippage = 2,
+     process_orders_on_close = false, pyramiding = 0)
+
+mode      = input.string("donchian_trend", "Strategy", options = ["donchian_trend", "squeeze_breakout", "rsi2_reversion"])
+allowShort = input.bool(true, "Allow shorts")
+riskPct   = input.float(0.75, "Risk per trade (% of equity)", step = 0.05)
+adxStrong = input.float(25, "ADX strong trend threshold")
+
+// ---- indicators
+atr14  = ta.atr(14)
+sma200 = ta.sma(close, 200)
+[diPlus, diMinus, adx14] = ta.dmi(14, 14)
+
+// ---- signals (evaluated on the bar close, filled at the next open)
+hh55 = ta.highest(high, 55)[1]
+ll55 = ta.lowest(low, 55)[1]
+donLong  = close > hh55 and close > sma200
+donShort = close < ll55 and close < sma200
+
+[bbMid, bbUp, bbLo] = ta.bb(close, 20, 2)
+width    = (bbUp - bbLo) / bbMid
+widthQ20 = ta.percentile_linear_interpolation(width, 120, 20)
+squeezed = width <= widthQ20
+recent   = ta.highest(squeezed ? 1 : 0, 5)[1] == 1
+sqLong   = close > bbUp and recent
+sqShort  = close < bbLo and recent
+
+r2 = ta.rsi(close, 2)
+rsiLong  = r2 < 10 and close > sma200
+rsiShort = r2 > 90 and close < sma200
+
+goLong  = mode == "donchian_trend" ? donLong  : mode == "squeeze_breakout" ? sqLong  : rsiLong
+goShort = mode == "donchian_trend" ? donShort : mode == "squeeze_breakout" ? sqShort : rsiShort
+goShort := goShort and allowShort
+
+// ---- exits: stop = k ATR; target 2:1 normally ("4:2"), 3:1 when ADX is strong ("6:2");
+// squeeze breakout has no target and a 4 ATR trailing stop.
+stopAtr  = mode == "squeeze_breakout" ? 3.0 : 2.5
+rr       = adx14 >= adxStrong ? 3.0 : 2.0
+dist     = stopAtr * atr14
+qty      = strategy.equity * riskPct / 100 / dist
+qty     := math.min(qty, strategy.equity / close)  // no leverage per chart
+
+var float stopPx = na
+var float targetPx = na
+
+if goLong and strategy.position_size <= 0
+    strategy.entry("L", strategy.long, qty)
+    stopPx := close - dist
+    targetPx := mode == "squeeze_breakout" ? na : close + rr * dist
+if goShort and strategy.position_size >= 0
+    strategy.entry("S", strategy.short, qty)
+    stopPx := close + dist
+    targetPx := mode == "squeeze_breakout" ? na : close - rr * dist
+
+// trailing stop for the squeeze breakout
+if mode == "squeeze_breakout" and strategy.position_size > 0
+    stopPx := math.max(stopPx, ta.highest(close, 1) - 4 * atr14)
+if mode == "squeeze_breakout" and strategy.position_size < 0
+    stopPx := math.min(stopPx, ta.lowest(close, 1) + 4 * atr14)
+
+if strategy.position_size > 0
+    strategy.exit("xL", "L", stop = stopPx, limit = targetPx)
+if strategy.position_size < 0
+    strategy.exit("xS", "S", stop = stopPx, limit = targetPx)
+
+plot(sma200, "SMA 200", color = color.gray)
+plot(strategy.position_size != 0 ? stopPx : na, "Stop", color = color.red, style = plot.style_linebr)
+plot(strategy.position_size != 0 ? targetPx : na, "Target", color = color.green, style = plot.style_linebr)
+plotshape(goLong, "Long signal", shape.triangleup, location.belowbar, color.green, size = size.tiny)
+plotshape(goShort, "Short signal", shape.triangledown, location.abovebar, color.red, size = size.tiny)
+alertcondition(goLong, "Long signal", "tf system: LONG {{ticker}} at next open")
+alertcondition(goShort, "Short signal", "tf system: SHORT {{ticker}} at next open")

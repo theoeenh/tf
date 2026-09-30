@@ -18,18 +18,18 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import data, journal
+from . import core, data, journal, news
 from .engine import buy_and_hold
 from .metrics import equity_stats
 from .run import plot_equity
 from .system import (
-    COSTS, MAX_GROSS, MAX_OPEN_RISK, SLEEVE_RULES, TARGET_VOL, UNIVERSE, VARIANTS, bars_per_year, calibrate_risk,
-    load_prices, run_random, run_system,
+    COSTS, MAX_GROSS, MAX_OPEN_RISK, SLEEVE_RULES, TARGET_VOL, UNIVERSE, VARIANTS, bars_per_year, build_context,
+    calibrate_risk, load_prices, run_random, run_system,
 )
 
 log = logging.getLogger(__name__)
 
-HIGHLIGHT = "long/short + learner"  # the full system, shown in detail
+HIGHLIGHT = "long/short + learner + news"  # the full system, shown in detail
 RANDOM_SEEDS = 5
 
 
@@ -76,14 +76,17 @@ def table(rows: list[tuple[str, dict]]) -> str:
     return "\n".join(out)
 
 
-def study(prices, spy, train, test, label, out: Path, md: list[str]) -> dict:
+def study(prices, spy, train, test, label, out: Path, md: list[str], context: dict | None = None) -> dict:
     """Run every variant on one bar size; append the section to md."""
     results, risks = {}, {}
     for name, v in VARIANTS.items():
+        nw = v.get("news", False)
         log.info("%s: calibrating %s", label, name)
-        risks[name] = calibrate_risk(prices, v["allow_short"], v["learn"], train[0], train[1])
+        risks[name] = calibrate_risk(prices, v["allow_short"], v["learn"], train[0], train[1], news=nw,
+                                     context=context)
         log.info("%s: running %s at %.2f%% risk per trade", label, name, 100 * risks[name])
-        results[name] = run_system(prices, v["allow_short"], v["learn"], risks[name], train[0], test[1])
+        results[name] = run_system(prices, v["allow_short"], v["learn"], risks[name], train[0], test[1], news=nw,
+                                   context=context)
     ppy = bars_per_year(results[HIGHLIGHT].equity.index)
 
     # Skill test: same system with random entries, several seeds.
@@ -145,6 +148,26 @@ def study(prices, spy, train, test, label, out: Path, md: list[str]) -> dict:
                f"**{sh.r_multiple.mean():+.2f}R** (total {sh.r_multiple.sum():+.1f}R). "
                + ("Negative = skipping them was right." if sh.r_multiple.mean() < 0 else
                   "Positive = skipping them cost money; the learner was wrong on balance."), ""]
+    if not lessons.empty and "view" in lessons:
+        views = ["setup", "news", "event", "ai"]
+        md += ["What each view of the learner found (conditions with at least 10 trades):", "",
+               "| View | Conditions tracked | Blocked now | Worst condition | Its avg R |", "|---|---:|---:|---|---:|"]
+        for vname in views:
+            g = lessons[lessons.view == vname]
+            if g.empty:
+                continue
+            w = g.sort_values("recent_avg_r").iloc[0]
+            md.append(f"| {vname} | {len(g)} | {(g.status == 'blocked').sum()} | {w.setup} | {w.recent_avg_r:+.2f} |")
+        md += [""]
+        for vname in ("news", "event"):
+            g = lessons[lessons.view == vname].sort_values("recent_avg_r")
+            if len(g):
+                md += [f"**{vname.capitalize()} lessons** (all conditions with ≥ 10 trades):", "",
+                       "| Condition | Trades | Avg R, all | Avg R, last 60 | Win % | Status |",
+                       "|---|---:|---:|---:|---:|---|"]
+                md += [f"| {r.setup} | {r.trades} | {r.avg_r:+.2f} | {r.recent_avg_r:+.2f} | {r.win_rate:.0%} | "
+                       f"{r.status} |" for _, r in g.iterrows()]
+                md += [""]
     if not lessons.empty:
         blocked = lessons[lessons.status == "blocked"].sort_values("recent_avg_r")
         md += [f"**{len(blocked)}** setups were blocked at the end of the run (their last up-to-60 trades averaged "
@@ -168,6 +191,51 @@ def study(prices, spy, train, test, label, out: Path, md: list[str]) -> dict:
     if not sh.empty:
         sh.to_csv(out / f"{slug}_skipped_trades.csv", index=False)
     return results
+
+
+def core_study(source: str, tactical: pd.Series, out: Path, md: list[str]) -> None:
+    """Momentum core holdings, their random twin, and a 50/50 mix with the tactical system."""
+    px = core.load_universe(source)
+    data.TICKERS.setdefault("QQQ", "QQQ")
+    qqq = data.load("QQQ", source)
+    spy = data.load("SPY", source)
+    start = "2017-01-01"
+    w = core.momentum_weights(px)
+    eq, _ = core.backtest_core(px, w, start)
+    rand = [core.backtest_core(px, core.momentum_weights(px, rng=np.random.default_rng(s)), start)[0]
+            for s in range(20)]
+    ew_rets = px.pct_change().loc[start:].mean(axis=1, skipna=True).fillna(0.0)
+    ew = 100_000 * (1 + ew_rets).cumprod()
+    q_eq = buy_and_hold(qqq, COSTS["SPY"], 100_000.0, start)
+    s_eq = buy_and_hold(spy, COSTS["SPY"], 100_000.0, start)
+    tac = tactical.reindex(eq.index, method="ffill").dropna()
+    mix_r = 0.5 * eq.pct_change() + 0.5 * tac.reindex(eq.index).pct_change()
+    mix = 100_000 * (1 + mix_r.fillna(0.0)).cumprod()
+
+    md += ["## Core holdings: own the strongest assets for months (momentum)", "",
+           f"Universe fixed in advance: {', '.join(px.columns)} (the big tech names of end-2016, winners and "
+           "laggards alike, plus crypto and metals). Each month: rank by 12-month return (skipping the last month), "
+           f"keep assets above their 200-day average, hold the top {core.TOP_N} weighted by inverse volatility. "
+           "No leverage, costs on every rebalance. The random twin holds 5 random assets from the same list.", ""]
+    for wname, (a, b) in (("2017–2022", (start, "2022-12-31")), ("Test 2023 → today", ("2023-01-01", None))):
+        rows = [("**Momentum core**", equity_stats(eq.loc[a:b], 252)),
+                ("**50% core + 50% tactical system**", equity_stats(mix.loc[a:b], 252)),
+                ("↳ *random 5 picks, same rules* (avg of 20)",
+                 pd.DataFrame([equity_stats(r.loc[a:b], 252) for r in rand]).mean().to_dict()),
+                ("↳ equal weight, whole list", equity_stats(ew.loc[a:b], 252)),
+                ("↳ QQQ (Nasdaq 100)", equity_stats(q_eq.loc[a:b], 252)),
+                ("↳ SPY", equity_stats(s_eq.loc[a:b], 252))]
+        md += [f"### {wname}", "", table(rows), ""]
+    plot_equity({"momentum core": (eq, "strategy"), "random 5 picks (avg)": (pd.concat(rand, axis=1).mean(axis=1),
+                 "buy_hold"), "QQQ": (q_eq, "benchmark")}, "Core holdings since 2017", out / "core_equity.png")
+    md += ["![core](core_equity.png)", ""]
+    hy = core.holdings_by_year(w.loc["2016-12":])
+    hy = hy.loc[:, hy.sum() > 0]
+    md += ["Months held per year (decided each month end with only the data known then):", "",
+           "| Asset | " + " | ".join(str(y) for y in hy.index) + " |", "|---|" + "---:|" * len(hy.index)]
+    for a in hy.sum().sort_values(ascending=False).index:
+        md.append(f"| {a} | " + " | ".join(str(int(v)) if v else "·" for v in hy[a]) + " |")
+    md += [""]
 
 
 def main() -> None:
@@ -194,15 +262,26 @@ def main() -> None:
           + " (fee + slippage per side). Shorts pay 10%/yr borrow on crypto, 1%/yr on stocks and metals.",
           "",
           "Variants: long only vs long/short, each with and without the **learner** (skips setups whose "
-          "recent trades lost money; see `algo/journal.py`).", "",
+          "recent trades lost money; see `algo/journal.py`), and the full system with **news**: the learner "
+          "also judges news tone and coverage, upcoming earnings / Fed / jobs events, and a news-momentum "
+          "strategy trades bursts of one-sided news.", "",
           "**How to read this:** buy & hold tells you what the market did. The *random entries* rows run the "
           "exact same exits, sizing and costs with coin-flip entries: whatever they earn is market drift, "
           "not skill. A strategy shows real skill only by the margin it beats its random twin.", ""]
 
     daily = load_prices(args.source, "1d")
     spy = data.load("SPY", args.source)
+    news_data = news.load_all(UNIVERSE)
+    md += ["News data (point-in-time, see `algo/news.py`): GDELT daily tone and coverage for "
+           f"{', '.join(k for k in news_data['gdelt'] if k != 'MACRO')}; "
+           f"{len(news_data['fomc'])} Fed decision dates; earnings dates for "
+           f"{', '.join(k for k, v in news_data['earnings'].items() if v)}; jobs report dates. "
+           "The AI analyst is not in these backtests on purpose: a language model already knows what "
+           "happened after any past headline, so its past calls would be fake. It is tested forward only.", ""]
     first = daily["BTC"].index[-1] - pd.DateOffset(years=10)
-    study(daily, spy, (first, "2022-12-31"), ("2023-01-01", None), "Daily bars, 10 years", out, md)
+    res = study(daily, spy, (first, "2022-12-31"), ("2023-01-01", None), "Daily bars, 10 years", out, md,
+                build_context(daily, news_data))
+    core_study(args.source, res[HIGHLIGHT].equity, out, md)
 
     if not args.skip_hourly:
         hourly = load_prices(args.source, "1h")
@@ -210,7 +289,7 @@ def main() -> None:
         idx = hourly["BTC"].index
         split = idx[0] + (idx[-1] - idx[0]) * 0.6
         study(hourly, spy_h, (idx[0] + pd.Timedelta(days=10), split), (split + pd.Timedelta(hours=1), None),
-              "Hourly bars, last 2 years", out, md)
+              "Hourly bars, last 2 years", out, md, build_context(hourly, news_data))
 
     (out / "report.md").write_text("\n".join(md))
     print(f"Report written to {out / 'report.md'}")

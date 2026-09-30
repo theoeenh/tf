@@ -12,7 +12,7 @@ from . import data, journal
 from .engine import Costs, ExitRule
 from .metrics import equity_stats
 from .portfolio import PortfolioConfig, PortfolioResult, Sleeve, run_portfolio
-from .strategies import STRATEGIES
+from .strategies import STRATEGIES, news_momentum
 
 # Higher-volatility universe: three cryptos, two high-beta tech stocks, and
 # precious metals (silver is ~1.5x as volatile as gold) for diversification.
@@ -38,6 +38,7 @@ SLEEVE_RULES = {
     "donchian_trend": ExitRule(stop_atr=2.5, rr=2.0, rr_strong=3.0, adaptive=True),
     "squeeze_breakout": ExitRule(stop_atr=3.0, rr=None, trail_atr=4.0),
     "rsi2_reversion": ExitRule(stop_atr=2.5, rr=2.0, rr_strong=3.0, adaptive=True),
+    "news_momentum": ExitRule(stop_atr=2.5, rr=2.0, rr_strong=3.0, adaptive=True),
 }
 
 TARGET_VOL = 0.20  # yearly volatility the account is sized for ("higher volatility")
@@ -50,16 +51,44 @@ VARIANTS = {
     "long only + learner": dict(allow_short=False, learn=True),
     "long/short": dict(allow_short=True, learn=False),
     "long/short + learner": dict(allow_short=True, learn=True),
+    # News: the learner also judges news tone/coverage, upcoming events and AI views,
+    # and a fourth strategy trades news bursts.
+    "long/short + learner + news": dict(allow_short=True, learn=True, news=True),
 }
+NEWS_VIEWS = ("setup", "news", "event", "ai")
 
 
 def load_prices(source: str = "auto", interval: str = "1d", assets=UNIVERSE) -> dict[str, pd.DataFrame]:
     return {a: data.load(a, source, interval=interval) for a in assets}
 
 
-def build_sleeves(prices: dict[str, pd.DataFrame], allow_short: bool) -> list[Sleeve]:
-    return [Sleeve(asset, name, fn(prices[asset]), SLEEVE_RULES[name], allow_short)
-            for asset in prices for name, fn in STRATEGIES.items()]
+def build_sleeves(prices: dict[str, pd.DataFrame], allow_short: bool, context: dict | None = None,
+                  news: bool = False) -> list[Sleeve]:
+    out = [Sleeve(asset, name, fn(prices[asset]), SLEEVE_RULES[name], allow_short)
+           for asset in prices for name, fn in STRATEGIES.items()]
+    if news and context:
+        out += [Sleeve(a, "news_momentum", news_momentum(prices[a], context[a]), SLEEVE_RULES["news_momentum"],
+                       allow_short) for a in prices if a in context and context[a]["tone_z"].notna().any()]
+    return out
+
+
+def build_context(prices: dict[str, pd.DataFrame], news_data: dict, ai_bias: pd.DataFrame | None = None) -> dict:
+    """Point-in-time news, event and AI features for every bar of every asset."""
+    from . import news as news_mod
+
+    ctx = {}
+    for a, df in prices.items():
+        parts = [news_mod.event_features(df.index, news_data["earnings"].get(a, []), news_data["fomc"],
+                                         news_data["jobs"])]
+        if a in news_data["gdelt"]:
+            parts.append(news_mod.news_features(news_data["gdelt"][a], df.index))
+        if ai_bias is not None and a in ai_bias.columns:
+            # a view written on day D is used from the next bar after D
+            b = ai_bias[a].dropna()
+            b.index = b.index + pd.Timedelta(days=1)
+            parts.append(b.reindex(df.index, method="ffill", limit=5).rename("ai_bias").to_frame())
+        ctx[a] = pd.concat(parts, axis=1)
+    return ctx
 
 
 def bars_per_year(index: pd.DatetimeIndex) -> float:
@@ -69,21 +98,24 @@ def bars_per_year(index: pd.DatetimeIndex) -> float:
 
 def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=None, end=None,
                initial_capital: float = 100_000.0, close_at_end: bool = True,
-               learner: journal.Learner | None = None) -> PortfolioResult:
+               learner: journal.Learner | None = None, news: bool = False,
+               context: dict | None = None) -> PortfolioResult:
     if learner is None and learn:
-        learner = journal.Learner()
+        learner = journal.Learner(views=NEWS_VIEWS if news else ("setup",))
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
                           max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None)
-    return run_portfolio(prices, build_sleeves(prices, allow_short), COSTS, cfg, start, end,
-                         close_at_end=close_at_end)
+    ctx = context if news else None
+    return run_portfolio(prices, build_sleeves(prices, allow_short, ctx, news), COSTS, cfg, start, end,
+                         close_at_end=close_at_end, context=ctx)
 
 
-def calibrate_risk(prices, allow_short: bool, learn: bool, start, end, target_vol: float = TARGET_VOL) -> float:
+def calibrate_risk(prices, allow_short: bool, learn: bool, start, end, target_vol: float = TARGET_VOL,
+                   news: bool = False, context: dict | None = None) -> float:
     """Risk per trade that gives `target_vol` yearly volatility on the
     calibration window (training data only)."""
     risk = 0.01
     for _ in range(3):  # a few rounds because the leverage cap is not linear
-        eq = run_system(prices, allow_short, learn, risk, start, end).equity
+        eq = run_system(prices, allow_short, learn, risk, start, end, news=news, context=context).equity
         vol = equity_stats(eq, bars_per_year(eq.index))["volatility"]
         if not np.isfinite(vol) or vol <= 0:
             break
@@ -91,12 +123,13 @@ def calibrate_risk(prices, allow_short: bool, learn: bool, start, end, target_vo
     return risk
 
 
-def random_sleeves(prices, allow_short: bool, seed: int) -> list[Sleeve]:
+def random_sleeves(prices, allow_short: bool, seed: int, context: dict | None = None,
+                   news: bool = False) -> list[Sleeve]:
     """Same sleeves, exits and signal frequency, but entries at random.
     The skill test: a real strategy must beat this, not just buy & hold."""
     rng = np.random.default_rng(seed)
     out = []
-    for s in build_sleeves(prices, allow_short):
+    for s in build_sleeves(prices, allow_short, context, news):
         real = s.signals.reindex(prices[s.asset].index).fillna(0)
         fire = rng.random(len(real)) < (real != 0).mean()
         side = np.where(rng.random(len(real)) < 0.5, 1, -1) if allow_short else 1

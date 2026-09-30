@@ -71,10 +71,12 @@ class _Position:
 
 
 class _Asset:
-    def __init__(self, df: pd.DataFrame, atr_n: int):
+    def __init__(self, df: pd.DataFrame, atr_n: int, extra: pd.DataFrame | None = None):
         self.o, self.h, self.l, self.c = (df[k].to_numpy(dtype=float) for k in ("Open", "High", "Low", "Close"))
         self.atr = atr_indicator(df, atr_n).to_numpy()
         f = journal.compute_features(df)
+        if extra is not None:  # news, events, AI views: must already be point-in-time per bar
+            f = f.join(extra.reindex(df.index), rsuffix="_x")
         self.feats = {k: f[k].to_numpy() for k in f.columns}
         self.index = df.index
         self.secs = df.index.to_numpy().astype("datetime64[s]").astype(np.int64)
@@ -91,10 +93,12 @@ def run_portfolio(
     end: str | pd.Timestamp | None = None,
     atr_n: int = 14,
     close_at_end: bool = True,
+    context: dict[str, pd.DataFrame] | None = None,
 ) -> PortfolioResult:
     # Fixed processing order (sleeve order): a set's order changes between runs,
     # and the order matters when several assets trade on the same bar.
-    assets = {name: _Asset(prices[name], atr_n) for name in dict.fromkeys(s.asset for s in sleeves)}
+    context = context or {}
+    assets = {name: _Asset(prices[name], atr_n, context.get(name)) for name in dict.fromkeys(s.asset for s in sleeves)}
     timeline = pd.DatetimeIndex(sorted(set().union(*(prices[a].index for a in assets))))
     if start is not None:
         timeline = timeline[timeline >= pd.Timestamp(start)]
@@ -178,7 +182,7 @@ def run_portfolio(
         net, grs, open_risk = marked_value()
         eq = cash + net
         size = cfg.risk_pct * eq / dist
-        key = (learner or journal.Learner).key(s.strategy, direction, ctx)
+        key = learner.keys(s.strategy, direction, ctx) if learner is not None else []
         verdict = learner.judge(key) if learner is not None else journal.Verdict(False, "")
         if not verdict.skip:
             size = min(size, max(0.0, cfg.max_gross * eq - grs) / (px * (1 + fee)))
