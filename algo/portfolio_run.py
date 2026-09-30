@@ -11,6 +11,7 @@ trades already closed), so what it learned in training carries into test.
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 from datetime import date
 from pathlib import Path
@@ -67,6 +68,17 @@ COLS = {
 }
 
 
+def _summary_row(name: str, st: dict) -> dict:
+    clean = name.replace("*", "").replace("↳ ", "").split(" (")[0]
+    kind = "random" if "random" in name else "bench" if "↳" in name else "version"
+    if kind == "random":
+        clean = name.replace("*", "").replace("↳ ", "").split(" (skill")[0]
+    return {"version": clean, "kind": kind,
+            **{k: (float(st[k]) if k in st and np.isfinite(st[k]) else None)
+               for k in ("cagr", "sharpe", "max_drawdown", "trades", "avg_r")}} | \
+        {"max_dd": float(st["max_drawdown"]) if np.isfinite(st.get("max_drawdown", np.nan)) else None}
+
+
 def table(rows: list[tuple[str, dict]]) -> str:
     cols = [c for c in COLS if any(c in r for _, r in rows)]
     out = ["| | " + " | ".join(COLS[c][0] for c in cols) + " |", "|---|" + "---:|" * len(cols)]
@@ -110,6 +122,13 @@ def study(prices, spy, train, test, label, out: Path, md: list[str], context: di
             rows.append((f"↳ *random entries, {name}* (skill test, avg of {RANDOM_SEEDS})", stats))
         rows += [("↳ equal-weight buy & hold, all 7 assets", equity_stats(ew.loc[a:b], ppy)),
                  ("↳ SPY", equity_stats(spy_eq.loc[a:b], spy_ppy))]
+        if b == test[1]:  # the test window, as data (for the dashboard)
+            summary = {"label": label, "window": f"{pd.Timestamp(a):%Y-%m-%d} to {'today' if b is None else b}",
+                       "rows": [_summary_row(n, st) for n, st in rows],
+                       "ml_reports": {n: r.learner.report() for n, r in results.items()
+                                      if hasattr(r.learner, "report")}}
+            (out / f"{label.split()[0].lower()}_summary.json").write_text(json.dumps(summary, indent=1,
+                                                                                    default=float))
         md += [f"### {wname}: {pd.Timestamp(a).date()} → {pd.Timestamp(b).date() if b else 'today'}", "",
                table(rows), ""]
 

@@ -138,7 +138,7 @@ def update(source: str | None = None) -> Path:
                       f"  *Thinking:* {p['rationale']}"]
             orders.append({"asset": p["asset"], "ticker": data.TICKERS[p["asset"]], "strategy": p["strategy"],
                            "qty": p["side"] * p["qty"], "stop": p["stop"], "target": p["target"],
-                           "mark": p["mark"]})
+                           "mark": p["mark"], "entry": p["entry"], "r": p["unrealised_r"]})
         lines += ["", "## Closed trades (newest first)", ""]
         for t in reversed(res.trades):
             lines += [f"- **{t.exit_date:%Y-%m-%d %H:%M} · {'LONG' if t.side > 0 else 'SHORT'} {t.asset} · "

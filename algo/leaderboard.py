@@ -131,9 +131,11 @@ def write() -> str:
                "refused, followed without money: a negative average means skipping them was right.", ""]
         md += (_md_table(board, pct=("win %",), r=("R 7d", "R 30d", "R all", "avg R", "skipped avg R"))
                if not board.empty else ["No closed trades yet."]) + [""]
+        board.to_csv(PAPER_DIR / "board.csv", index=False)
         ml = getattr(live.learner, "report", None) if live is not None else None
         if ml:
             rep = ml()
+            (PAPER_DIR / "ml.json").write_text(json.dumps(rep, default=float, indent=2))
             md += ["## ML learner, out of sample", "",
                    f"Refitted {rep['fits']} times. {rep['judged']} trades judged before their outcome was known."]
             if rep.get("judged"):
