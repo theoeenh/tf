@@ -101,6 +101,8 @@ def study(prices, spy, train, test, label, out: Path, md: list[str], context: di
                                      **{o: v.get(o, False) for o in OPTIONS})
         log.info("%s: running %s at %.2f%% risk per trade", label, name, 100 * risks[name])
         results[name] = run_variant(prices, v, risks[name], train[0], test[1], context)
+    if HIGHLIGHT not in results:  # e.g. a --only run: show the last (newest) version in detail
+        HIGHLIGHT = list(results)[-1]
     ppy = bars_per_year(results[HIGHLIGHT].equity.index)
 
     # Skill test: same system with random entries, several seeds.
