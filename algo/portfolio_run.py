@@ -23,8 +23,8 @@ from .engine import buy_and_hold
 from .metrics import equity_stats
 from .run import plot_equity
 from .system import (
-    COSTS, MAX_GROSS, MAX_OPEN_RISK, SLEEVE_RULES, TARGET_VOL, UNIVERSE, VARIANTS, bars_per_year, build_context,
-    calibrate_risk, load_prices, run_random, run_system,
+    ALL_VARIANTS, COSTS, MAX_GROSS, MAX_OPEN_RISK, OPTIONS, SLEEVE_RULES, TARGET_VOL, UNIVERSE, VARIANTS,
+    bars_per_year, build_context, calibrate_risk, load_prices, run_random, run_variant,
 )
 
 log = logging.getLogger(__name__)
@@ -76,24 +76,26 @@ def table(rows: list[tuple[str, dict]]) -> str:
     return "\n".join(out)
 
 
-def study(prices, spy, train, test, label, out: Path, md: list[str], context: dict | None = None) -> dict:
+def study(prices, spy, train, test, label, out: Path, md: list[str], context: dict | None = None,
+          variants: dict = VARIANTS, highlight: str = None) -> dict:
     """Run every variant on one bar size; append the section to md."""
+    global HIGHLIGHT
+    HIGHLIGHT = highlight or HIGHLIGHT
     results, risks = {}, {}
-    for name, v in VARIANTS.items():
-        nw = v.get("news", False)
+    for name, v in variants.items():
         log.info("%s: calibrating %s", label, name)
-        risks[name] = calibrate_risk(prices, v["allow_short"], v["learn"], train[0], train[1], news=nw,
-                                     context=context)
+        risks[name] = calibrate_risk(prices, v["allow_short"], v["learn"], train[0], train[1],
+                                     news=v.get("news", False), context=context,
+                                     **{o: v.get(o, False) for o in OPTIONS})
         log.info("%s: running %s at %.2f%% risk per trade", label, name, 100 * risks[name])
-        results[name] = run_system(prices, v["allow_short"], v["learn"], risks[name], train[0], test[1], news=nw,
-                                   context=context)
+        results[name] = run_variant(prices, v, risks[name], train[0], test[1], context)
     ppy = bars_per_year(results[HIGHLIGHT].equity.index)
 
     # Skill test: same system with random entries, several seeds.
     randoms = {}
     for name, short in (("long only", False), ("long/short", True)):
         log.info("%s: random-entry baseline %s", label, name)
-        randoms[name] = [run_random(prices, short, risks[name], seed, train[0], test[1])
+        randoms[name] = [run_random(prices, short, risks.get(name, 0.0025), seed, train[0], test[1])
                          for seed in range(RANDOM_SEEDS)]
 
     ew = equal_weight(prices, train[0], test[1])
@@ -181,6 +183,23 @@ def study(prices, spy, train, test, label, out: Path, md: list[str], context: di
                for _, r in lessons.sort_values("recent_avg_r", ascending=False).head(5).iterrows()]
         md += [""]
 
+    # The ML learner's predictions, each made before the trade's outcome was known.
+    ml_rows = [(n, r.learner.report()) for n, r in results.items() if hasattr(r.learner, "report")]
+    if ml_rows:
+        md += ["### ML learner, out of sample", "",
+               "Every prediction was made before the trade's result was known (walk-forward refits on closed "
+               "trades only). AUC 0.50 = no better than a coin; the quintiles show the average R of trades "
+               "ranked by the model's expected result, worst to best: rising = the ranking works.", "",
+               "| Version | Refits | Judged | AUC | Taken | Taken avg R | Skipped | Skipped avg R | R by quintile |",
+               "|---|---:|---:|---:|---:|---:|---:|---:|---|"]
+        for n, rep in ml_rows:
+            if not rep.get("judged"):
+                continue
+            q = " / ".join(f"{v:+.2f}" for v in rep["by_quintile"].values())
+            md.append(f"| {n} | {rep['fits']} | {rep['judged']} | {rep['auc']:.3f} | {rep['taken']} | "
+                      f"{rep['taken_avg_r']:+.2f} | {rep['skipped']} | {rep['skipped_avg_r']:+.2f} | {q} |")
+        md += [""]
+
     # Journal sample.
     md += ["### Journal – last 8 closed trades", ""]
     for _, r in tj[tj.reason != "end"].tail(8).iterrows():
@@ -240,10 +259,14 @@ def core_study(source: str, tactical: pd.Series, out: Path, md: list[str]) -> No
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv"])
+    ap.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv", "alpaca"])
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--skip-hourly", action="store_true")
+    ap.add_argument("--hourly-only", action="store_true", help="only the hourly study (no daily, no core)")
+    ap.add_argument("--upgrades", action="store_true",
+                    help="also test the upgrades (trend filter, event blackout, ML learner)")
     args = ap.parse_args()
+    variants = ALL_VARIANTS if args.upgrades else VARIANTS
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     out = args.out or Path("reports") / f"{date.today()}-portfolio"
     out.mkdir(parents=True, exist_ok=True)
@@ -269,8 +292,8 @@ def main() -> None:
           "exact same exits, sizing and costs with coin-flip entries: whatever they earn is market drift, "
           "not skill. A strategy shows real skill only by the margin it beats its random twin.", ""]
 
-    daily = load_prices(args.source, "1d")
-    spy = data.load("SPY", args.source)
+    daily = load_prices(args.source, "1d") if not args.hourly_only else None
+    spy = data.load("SPY", args.source) if not args.hourly_only else None
     news_data = news.load_all(UNIVERSE)
     md += ["News data (point-in-time, see `algo/news.py`): GDELT daily tone and coverage for "
            f"{', '.join(k for k in news_data['gdelt'] if k != 'MACRO')}; "
@@ -278,18 +301,22 @@ def main() -> None:
            f"{', '.join(k for k, v in news_data['earnings'].items() if v)}; jobs report dates. "
            "The AI analyst is not in these backtests on purpose: a language model already knows what "
            "happened after any past headline, so its past calls would be fake. It is tested forward only.", ""]
-    first = daily["BTC"].index[-1] - pd.DateOffset(years=10)
-    res = study(daily, spy, (first, "2022-12-31"), ("2023-01-01", None), "Daily bars, 10 years", out, md,
-                build_context(daily, news_data))
-    core_study(args.source, res[HIGHLIGHT].equity, out, md)
+    if not args.hourly_only:
+        first = daily["BTC"].index[-1] - pd.DateOffset(years=10)
+        res = study(daily, spy, (first, "2022-12-31"), ("2023-01-01", None), "Daily bars, 10 years", out, md,
+                    build_context(daily, news_data), variants)
+        core_study(args.source, res[HIGHLIGHT].equity, out, md)
 
     if not args.skip_hourly:
         hourly = load_prices(args.source, "1h")
         spy_h = data.load("SPY", args.source, interval="1h")
+        if args.source == "alpaca":  # hourly headlines with exact times
+            news_data = news.load_all(UNIVERSE, alpaca_news=True)
         idx = hourly["BTC"].index
         split = idx[0] + (idx[-1] - idx[0]) * 0.6
+        span = f"{idx[0]:%Y-%m} to {idx[-1]:%Y-%m}"
         study(hourly, spy_h, (idx[0] + pd.Timedelta(days=10), split), (split + pd.Timedelta(hours=1), None),
-              "Hourly bars, last 2 years", out, md, build_context(hourly, news_data))
+              f"Hourly bars, {span}", out, md, build_context(hourly, news_data), variants)
 
     (out / "report.md").write_text("\n".join(md))
     print(f"Report written to {out / 'report.md'}")

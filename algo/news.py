@@ -197,6 +197,48 @@ def event_features(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: li
                          "days_to_jobs": days_to_next(jobs)}, index=index)
 
 
+def blackout(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list, stock: bool) -> pd.Series:
+    """Intraday bars (UTC start times) to be flat through, because a scheduled
+    event can gap the price through a stop. Dates are public in advance, so
+    this uses no future information.
+
+    - Earnings (stocks): the whole report day and the last bar of the session before
+      (reports come before the open or after the close).
+    - Fed decision (all assets): 13:00-16:00 New York on decision day (14:00 statement,
+      press conference after).
+    - Jobs report (8:30 New York): crypto 8:00-9:00; stocks the last bar of the session
+      before (the gap is at the open).
+    """
+    ny = index.tz_localize("UTC").tz_convert("America/New_York")
+    day = pd.DatetimeIndex(ny.date)
+    hour = ny.hour
+    out = np.zeros(len(index), bool)
+
+    def last_bar_before(days) -> np.ndarray:
+        """Mask of the last bar of each session that comes right before one of `days`."""
+        m = np.zeros(len(index), bool)
+        uniq = pd.DatetimeIndex(sorted(set(day)))
+        days = pd.DatetimeIndex(days)
+        pos = np.searchsorted(uniq, days)
+        # the session right before (a weekend or holiday in between at most)
+        prev = {uniq[p - 1] for p, d in zip(pos, days) if 0 < p and (d - uniq[p - 1]).days <= 4}
+        if prev:
+            last = pd.Series(np.arange(len(index))).groupby(day).max()
+            for d in prev:
+                m[last[d]] = True
+        return m
+
+    ev = pd.DatetimeIndex(earnings).normalize() if earnings else pd.DatetimeIndex([])
+    if stock and len(ev):
+        out |= day.isin(ev)
+        out |= last_bar_before(ev)
+    fed = pd.DatetimeIndex(fomc).normalize()
+    out |= day.isin(fed) & (hour >= 13) & (hour < 16)
+    jb = pd.DatetimeIndex(jobs).normalize()
+    out |= last_bar_before(jb) if stock else (day.isin(jb) & (hour == 8))
+    return pd.Series(out, index)
+
+
 # ---------------------------------------------------------------- live headlines
 
 
@@ -215,7 +257,7 @@ def headlines(name: str, limit: int = 8) -> list[dict]:
     return items[:limit]
 
 
-def load_all(assets, refresh: bool = False, strict: bool = False) -> dict:
+def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: bool = False) -> dict:
     """Everything the system needs, per asset, cached.
     strict: raise if an asset's news is missing, instead of going on without it
     (live trading: a missing input must not silently change the positions)."""
@@ -231,8 +273,96 @@ def load_all(assets, refresh: bool = False, strict: bool = False) -> dict:
             log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
         out["earnings"][a] = earnings_dates(a, refresh) if a in ("NVDA", "TSLA") else []
+    if alpaca_news:  # hourly: Alpaca / Benzinga articles with exact times
+        out["alpaca_news"] = {}
+        for a in assets:
+            try:
+                out["alpaca_news"][a] = load_alpaca_news(a)
+            except Exception as exc:
+                if strict:
+                    raise RuntimeError(f"no Alpaca news for {a}; not trading on incomplete inputs") from exc
+                log.warning("no Alpaca news for %s (%s)", a, exc)
     return out
 
 
 def cached(path: Path) -> bool:
     return path.exists()
+
+
+# ---------------------------------------------------------------- Alpaca (Benzinga) news, hourly
+
+ALPACA_NEWS_SYMBOLS = {"BTC": "BTCUSD", "ETH": "ETHUSD", "SOL": "SOLUSD", "NVDA": "NVDA", "TSLA": "TSLA",
+                       "GOLD": "GLD", "SILVER": "SLV"}
+# A small finance word list (in the spirit of Loughran-McDonald): headline tone = (pos - neg) / words hit.
+POSITIVE = set("""beat beats surge surges soar soars jump jumps rally rallies gain gains record upgrade upgraded
+upgrades bullish outperform strong stronger growth boost boosts rise rises rising higher approval approved
+wins win profit profitable exceed exceeds exceeded raise raises raised buy breakout expands expansion
+optimistic tops top rebound rebounds recovery inflows partnership launch launches accelerate""".split())
+NEGATIVE = set("""miss misses plunge plunges drop drops fall falls falling sink sinks slump slumps tumble tumbles
+crash crashes downgrade downgraded downgrades bearish underperform weak weaker loss losses lawsuit probe
+investigation recall recalls cut cuts cutting lower decline declines warning warns fraud risk risks selloff
+sell-off outflows ban bans delay delays halt halts fine fined layoffs slowdown fear fears concern concerns
+default hack hacked exploit liquidation liquidations""".split())
+
+
+def headline_score(text: str) -> float:
+    words = re.findall(r"[a-z\-]+", (text or "").lower())
+    pos = sum(w in POSITIVE for w in words)
+    neg = sum(w in NEGATIVE for w in words)
+    return (pos - neg) / (pos + neg) if pos + neg else 0.0
+
+
+def load_alpaca_news(name: str, start: str = "2023-01-01", refresh: bool = False) -> pd.DataFrame:
+    """Every Alpaca/Benzinga article tagged with the asset: time (UTC) and tone
+    score (no text is kept). Cached in data/news/<name>_alpaca_news.csv (not in
+    git), only new articles fetched."""
+    from .alpaca import get_data
+
+    NEWS_DIR.mkdir(parents=True, exist_ok=True)
+    path = NEWS_DIR / f"{name}_alpaca_news.csv"
+    old = None if refresh or not path.exists() else pd.read_csv(path, parse_dates=["time"])
+    since = pd.Timestamp(start) if old is None or old.empty else old["time"].max() - pd.Timedelta(hours=1)
+    rows, token = [], None
+    while True:
+        q = {"symbols": ALPACA_NEWS_SYMBOLS[name], "start": since.strftime("%Y-%m-%dT%H:%M:%SZ"), "limit": 50,
+             "sort": "asc", **({"page_token": token} if token else {})}
+        d = get_data("/v1beta1/news", q)
+        rows += [{"id": int(n["id"]), "time": pd.Timestamp(n["created_at"]).tz_convert(None),
+                  "score": headline_score(f"{n.get('headline', '')} {n.get('summary', '')}")}
+                 for n in d.get("news", [])]
+        token = d.get("next_page_token")
+        if not token:
+            break
+    new = pd.DataFrame(rows, columns=["id", "time", "score"])
+    df = new if old is None else pd.concat([old[["id", "time", "score"]], new])
+    df = df.drop_duplicates("id").sort_values("time").reset_index(drop=True)
+    df.to_csv(path, index=False)
+    return df
+
+
+def alpaca_news_features(articles: pd.DataFrame, index: pd.DatetimeIndex, bar: pd.Timedelta) -> pd.DataFrame:
+    """Per bar, from articles published before the bar *ended* (the trade opens after that):
+    news_1h      articles in the last hour
+    news_24h_z   articles in the last 24 h vs the last 30 days (z-score, log scale)
+    news_tone    average headline tone over the last 24 h (-1 .. +1, 0 = none / neutral)"""
+    t = pd.DatetimeIndex(articles["time"]) if len(articles) else pd.DatetimeIndex([])
+    cum = np.arange(1, len(t) + 1)
+    cum_score = np.cumsum(articles["score"].to_numpy()) if len(t) else np.array([])
+    ends = index + bar
+
+    def count_before(x):
+        return np.searchsorted(t, x, side="left")
+
+    def score_before(x):
+        k = count_before(x)
+        return np.where(k > 0, cum_score[np.maximum(k - 1, 0)] if len(t) else 0.0, 0.0)
+
+    n1 = count_before(ends) - count_before(ends - pd.Timedelta(hours=1))
+    n24 = count_before(ends) - count_before(ends - pd.Timedelta(hours=24))
+    s24 = score_before(ends) - score_before(ends - pd.Timedelta(hours=24))
+    daily = pd.Series(np.log1p(n24), index)
+    # 30 days of history, sampled at every bar: mean and spread of the 24 h count
+    hist = daily.rolling(pd.Timedelta(days=30), min_periods=100)
+    z = (daily - hist.mean()) / hist.std()
+    tone = np.where(n24 > 0, s24 / np.maximum(n24, 1), 0.0)
+    return pd.DataFrame({"news_1h": n1.astype(float), "news_24h_z": z.to_numpy(), "news_tone": tone}, index=index)

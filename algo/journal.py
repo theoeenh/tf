@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from .indicators import adx, atr, sma
+from .indicators import adx, atr, rsi, sma
 
 # ---------------------------------------------------------------- features
 
@@ -21,13 +21,20 @@ from .indicators import adx, atr, sma
 def compute_features(df: pd.DataFrame) -> pd.DataFrame:
     """Market context for every bar, known at that bar's close."""
     a = atr(df)
-    atr_pct = a / df["Close"]
+    c = df["Close"]
+    atr_pct = a / c
     return pd.DataFrame({
         "adx": adx(df),
-        "sma200": sma(df["Close"], 200),
+        "sma200": sma(c, 200),
         "atr_pct": atr_pct,
         # where today's volatility sits within the last 250 bars (0 = calmest, 1 = wildest)
         "vol_rank": atr_pct.rolling(250, min_periods=50).rank(pct=True),
+        # for the machine-learning learner: distances and momentum in ATRs, RSI(14)
+        "dist200": (c - sma(c, 200)) / a,
+        "dist50": (c - sma(c, 50)) / a,
+        "ret5": (c - c.shift(5)) / a,
+        "ret20": (c - c.shift(20)) / a,
+        "rsi14": rsi(c, 14),
     }, index=df.index)
 
 
@@ -205,6 +212,7 @@ def tag_stop_too_tight(trades: pd.DataFrame, prices: dict[str, pd.DataFrame], ba
 class Verdict:
     skip: bool
     reason: str
+    size: float = 1.0  # multiplier on the normal position size (the ML learner bets more when confident)
 
 
 class Learner:
@@ -234,7 +242,7 @@ class Learner:
     def key(strategy: str, side: int, ctx: dict) -> tuple:
         return (strategy, "long" if side > 0 else "short", ctx["regime"], ctx["vol"], ctx["aligned"])
 
-    def keys(self, strategy: str, side: int, ctx: dict) -> list[tuple]:
+    def keys(self, strategy: str, side: int, ctx: dict, **_) -> list[tuple]:
         d = "long" if side > 0 else "short"
         out = [("setup",) + tuple(self.key(strategy, side, ctx))] if "setup" in self.views else []
         if "news" in self.views and ctx.get("news", "unknown") != "unknown":
@@ -253,7 +261,7 @@ class Learner:
                                      f"{describe_key(k)} averaged {np.mean(past):+.2f}R.")
         return Verdict(False, "")
 
-    def record(self, keys: list[tuple], r: float) -> None:
+    def record(self, keys: list[tuple], r: float, when=None) -> None:
         for k in keys:
             self.history[k].append(r)
 

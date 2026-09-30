@@ -69,3 +69,19 @@ def news_momentum(df: pd.DataFrame, news: pd.DataFrame, buzz: float = 1.5, tone:
     long = spike & (nf["tone_z"] > tone) & (df["Close"] > ma)
     short = spike & (nf["tone_z"] < -tone) & (df["Close"] < ma)
     return _combine(long, short)
+
+
+def daily_trend(df: pd.DataFrame, n: int = 50) -> pd.Series:
+    """For intraday bars: +1 / -1 when the last *finished* day closed above /
+    below its n-day average (0 while unknown). Used to take hourly signals only
+    in the direction of the daily trend."""
+    day = df.index.normalize()
+    closes = df["Close"].groupby(day).last()
+    trend = (closes > sma(closes, n)).astype(int) - (closes < sma(closes, n)).astype(int)
+    trend = trend.shift(1).fillna(0)  # a day's close is only known once the day is over
+    return pd.Series(trend.reindex(day).to_numpy(), df.index).astype(int)
+
+
+def with_trend(signals: pd.Series, trend: pd.Series) -> pd.Series:
+    """Keep only the signals that agree with the trend."""
+    return signals.where(signals * trend.reindex(signals.index).fillna(0) > 0, 0).astype(int)

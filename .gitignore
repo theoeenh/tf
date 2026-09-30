@@ -6,3 +6,5 @@ __pycache__/
 data/*.csv
 reports/*
 !reports/.gitkeep
+# Alpaca / Benzinga article cache (downloaded, not ours to publish)
+data/news/*_alpaca_news.csv

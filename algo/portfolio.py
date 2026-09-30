@@ -18,6 +18,9 @@ Portfolio rules:
   `max_open_risk` x equity.
 - An optional Learner can veto trades. Vetoed trades are still followed as
   "shadow" trades (no money) so the learner keeps getting feedback.
+- Optional blackout bars per asset (scheduled events, known in advance): no
+  position is held through them, so open trades close at the bar's open and
+  no trade opens on it.
 """
 from __future__ import annotations
 
@@ -71,7 +74,8 @@ class _Position:
 
 
 class _Asset:
-    def __init__(self, df: pd.DataFrame, atr_n: int, extra: pd.DataFrame | None = None):
+    def __init__(self, df: pd.DataFrame, atr_n: int, extra: pd.DataFrame | None = None,
+                 blocked: pd.Series | None = None):
         self.o, self.h, self.l, self.c = (df[k].to_numpy(dtype=float) for k in ("Open", "High", "Low", "Close"))
         self.atr = atr_indicator(df, atr_n).to_numpy()
         f = journal.compute_features(df)
@@ -79,6 +83,8 @@ class _Asset:
             f = f.join(extra.reindex(df.index), rsuffix="_x")
         self.feats = {k: f[k].to_numpy() for k in f.columns}
         self.index = df.index
+        self.blocked = (np.zeros(len(df), bool) if blocked is None
+                        else blocked.reindex(df.index).fillna(False).to_numpy(dtype=bool))
         self.secs = df.index.to_numpy().astype("datetime64[s]").astype(np.int64)
         self.mark = np.nan
         self.seen = False  # had a bar inside the window already
@@ -94,11 +100,14 @@ def run_portfolio(
     atr_n: int = 14,
     close_at_end: bool = True,
     context: dict[str, pd.DataFrame] | None = None,
+    blocked: dict[str, pd.Series] | None = None,
 ) -> PortfolioResult:
     # Fixed processing order (sleeve order): a set's order changes between runs,
     # and the order matters when several assets trade on the same bar.
     context = context or {}
-    assets = {name: _Asset(prices[name], atr_n, context.get(name)) for name in dict.fromkeys(s.asset for s in sleeves)}
+    blocked = blocked or {}
+    assets = {name: _Asset(prices[name], atr_n, context.get(name), blocked.get(name))
+              for name in dict.fromkeys(s.asset for s in sleeves)}
     timeline = pd.DatetimeIndex(sorted(set().union(*(prices[a].index for a in assets))))
     if start is not None:
         timeline = timeline[timeline >= pd.Timestamp(start)]
@@ -164,7 +173,7 @@ def run_portfolio(
                   rationale=p.rationale, lesson=journal.lesson(err, r, mfe_r, reason), shadow=p.shadow)
         (shadows if p.shadow else trades).append(t)
         if learner is not None:
-            learner.record(p.key, r)
+            learner.record(p.key, r, when=A.index[i])
         pos[k] = None
 
     def open_(k: int, A: _Asset, i: int, direction: int) -> None:
@@ -182,9 +191,11 @@ def run_portfolio(
         net, grs, open_risk = marked_value()
         eq = cash + net
         size = cfg.risk_pct * eq / dist
-        key = learner.keys(s.strategy, direction, ctx) if learner is not None else []
+        key = (learner.keys(s.strategy, direction, ctx, asset=s.asset, time=A.index[i], feats=feats)
+               if learner is not None else [])
         verdict = learner.judge(key) if learner is not None else journal.Verdict(False, "")
         if not verdict.skip:
+            size *= verdict.size
             size = min(size, max(0.0, cfg.max_gross * eq - grs) / (px * (1 + fee)))
             if cfg.max_open_risk is not None:
                 size = min(size, max(0.0, cfg.max_open_risk * eq - open_risk) / dist)
@@ -222,6 +233,11 @@ def run_portfolio(
                         cash -= cost
                     p.fees += cost
                 want = sig[k][i - 1] if A.seen else 0
+                if A.blocked[i]:  # scheduled event: be flat through this bar
+                    want = 0
+                    if p is not None:
+                        close(k, A, i, A.o[i], "event")
+                        p = None
                 if p is not None and want == -p.side:
                     close(k, A, i, A.o[i], "reverse")
                 opened = False

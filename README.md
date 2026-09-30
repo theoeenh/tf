@@ -121,6 +121,27 @@ python -m algo.alpaca sync --send
   so a backtest of its past calls would be fake.
 - `python -m algo.daily` runs everything in order: paper update, then the brief.
 
+## Upgrades and the machine-learning learner (`algo/ml.py`, `algo/leaderboard.py`)
+
+```bash
+python -m algo.portfolio_run --source alpaca --hourly-only --upgrades   # test every version
+python -m algo.leaderboard                                            # daily race + strategy leaderboard
+```
+
+- **Daily trend filter** (`trend`): on hourly bars, take a signal only in the direction of the daily
+  trend (yesterday's close vs its 50-day average).
+- **Event blackout** (`blackout`): be flat through scheduled events that gap prices: earnings day and the
+  bar before it, the Fed decision afternoon, the jobs report. Dates are known in advance.
+- **Hourly news** (Alpaca / Benzinga): articles in the last hour, coverage over 24 h vs usual, headline tone.
+- **ML learner** (`ml`): meta-labelling. The strategies propose trades; gradient-boosted trees estimate each
+  trade's chance of profit from ~30 features (regime, volatility, momentum, trend, news, events, AI view,
+  time, how the strategy has done lately) and take it only if the expected result is positive. Refitted
+  every 30 days on trades that had already closed, so every prediction is out of sample. With `sizing`
+  it also bets more on trades with a better expected result (0.5x to 2x).
+- **The race** (`algo/leaderboard.py`, daily): every version is paper-traded side by side from the paper
+  start date and ranked, with the random-entry twins as the bar to beat, plus a leaderboard of every
+  strategy on every asset (last 7 / 30 days, skipped trades apart).
+
 ## Core holdings (`algo/core.py`)
 
 Momentum: each month hold the 5 strongest of a fixed list (big tech of end-2016, crypto, metals) by
@@ -148,6 +169,8 @@ algo/brief.py       daily brief (events ahead, news, signals, AI task)
 algo/core.py        momentum core holdings
 algo/daily.py       daily routine
 algo/alpaca.py      Alpaca paper account: market orders, broker-side stops and targets, live prices
+algo/ml.py          machine-learning learner (meta-labelling, walk-forward)
+algo/leaderboard.py daily race of all versions + strategy leaderboard
 tests/              engine & no-look-ahead tests
 ```
 

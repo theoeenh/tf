@@ -27,12 +27,12 @@ from typing import Protocol
 
 import pandas as pd
 
-from . import data, journal
+from . import data
 from .metrics import equity_stats
 from . import analyst, news
 from .system import (
-    NEWS_VIEWS, TARGET_VOL, UNIVERSE, VARIANTS, bars_per_year, build_context, calibrate_risk, load_prices,
-    run_system,
+    ALL_VARIANTS, OPTIONS, TARGET_VOL, UNIVERSE, bars_per_year, build_context, calibrate_risk, load_prices,
+    new_learner, run_variant,
 )
 
 log = logging.getLogger(__name__)
@@ -65,15 +65,17 @@ def complete_bars(df: pd.DataFrame, asset: str, interval: str, now: pd.Timestamp
     return df[df.index + length <= now]
 
 
-def news_context(prices: dict, v: dict) -> dict | None:
-    """News, events and AI views for the news variant (fetches only the missing recent days)."""
-    if not v.get("news"):
+def news_context(prices: dict, v: dict, interval: str = "1d") -> dict | None:
+    """News, events, AI views (and on hourly bars the daily trend, event blackout and
+    Alpaca news) for the variants that use them. Fetches only what is missing."""
+    if not (v.get("news") or v.get("ml") or v.get("blackout")):
         return None
-    return build_context(prices, news.load_all(UNIVERSE, strict=True), analyst.bias_frame(analyst.load_views()))
+    nd = news.load_all(UNIVERSE, strict=True, alpaca_news=interval != "1d")
+    return build_context(prices, nd, analyst.bias_frame(analyst.load_views()))
 
 
 def init(capital: float, variant: str, interval: str, start: str | None = None, source: str = "auto") -> dict:
-    v = VARIANTS[variant]
+    v = ALL_VARIANTS[variant]
     prices = load_prices(source, interval)
     if interval == "1d":
         train = DAILY_TRAIN
@@ -81,7 +83,7 @@ def init(capital: float, variant: str, interval: str, start: str | None = None, 
         idx = prices["BTC"].index
         train = (idx[0] + pd.Timedelta(days=10), idx[0] + (idx[-1] - idx[0]) * 0.6)
     risk = calibrate_risk(prices, v["allow_short"], v["learn"], *train, news=v.get("news", False),
-                          context=news_context(prices, v))
+                          context=news_context(prices, v, interval), **{o: v.get(o, False) for o in OPTIONS})
     cfg = {"start": str(pd.Timestamp(start) if start else now_utc().floor("h")), "capital": capital, "variant": variant, "interval": interval,
            "source": source, "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSE)}
     PAPER_DIR.mkdir(exist_ok=True)
@@ -93,18 +95,17 @@ def update(source: str | None = None) -> Path:
     """source: None = the one the account was started with (config.json)."""
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
     source = source or cfg.get("source", "auto")
-    v, interval = VARIANTS[cfg["variant"]], cfg["interval"]
+    v, interval = ALL_VARIANTS[cfg["variant"]], cfg["interval"]
     start, now = pd.Timestamp(cfg["start"]), now_utc()
     prices = {a: complete_bars(df, a, interval, now) for a, df in load_prices(source, interval).items()}
 
-    nw, ctx = v.get("news", False), news_context(prices, v)
+    ctx = news_context(prices, v, interval)
 
     # 1) Learn from history up to the start date.
-    learner = journal.Learner(views=NEWS_VIEWS if nw else ("setup",)) if v["learn"] else None
+    learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False))
     if learner is not None:
         hist_start = min(df.index[0] for df in prices.values())
-        run_system(prices, v["allow_short"], True, cfg["risk_pct"], hist_start, start - pd.Timedelta(seconds=1),
-                   learner=learner, news=nw, context=ctx)
+        run_variant(prices, v, cfg["risk_pct"], hist_start, start - pd.Timedelta(seconds=1), ctx, learner=learner)
 
     # 2) Trade from the start date with the paper capital, keep positions open.
     lines = [f"# Paper account – {cfg['variant']}, {interval} bars", "",
@@ -115,8 +116,8 @@ def update(source: str | None = None) -> Path:
         lines += ["No complete bar since the start yet. Nothing to do."]
         res = None
     else:
-        res = run_system(prices, v["allow_short"], v["learn"], cfg["risk_pct"], start, None,
-                         initial_capital=cfg["capital"], close_at_end=False, learner=learner, news=nw, context=ctx)
+        res = run_variant(prices, v, cfg["risk_pct"], start, None, ctx, initial_capital=cfg["capital"],
+                          close_at_end=False, learner=learner)
         eq = res.equity
         st = equity_stats(eq, bars_per_year(eq.index)) if len(eq) > 2 else {}
         lines += [f"**Equity ${eq.iloc[-1]:,.0f}** ({eq.iloc[-1] / cfg['capital'] - 1:+.2%}) · "
@@ -163,7 +164,7 @@ def main() -> None:
     sub = ap.add_subparsers(dest="cmd", required=True)
     p_init = sub.add_parser("init", help="start a new paper account now")
     p_init.add_argument("--capital", type=float, default=100_000.0)
-    p_init.add_argument("--variant", default="long/short + learner + news", choices=list(VARIANTS))
+    p_init.add_argument("--variant", default="long/short + learner + news", choices=list(ALL_VARIANTS))
     p_init.add_argument("--interval", default="1d", choices=["1d", "1h"])
     p_init.add_argument("--start", default=None, help="backdate the start (replay), e.g. 2026-09-01")
     p_init.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv", "alpaca"])
