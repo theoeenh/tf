@@ -30,12 +30,13 @@ from collections import defaultdict, deque
 import numpy as np
 import pandas as pd
 
+from . import data
 from .journal import Verdict
 
-STRATEGY_NAMES = ("donchian_trend", "squeeze_breakout", "rsi2_reversion", "news_momentum")
-ASSET_CLASS = {"BTC": "crypto", "ETH": "crypto", "SOL": "crypto", "NVDA": "stock", "TSLA": "stock",
-               "GOLD": "metal", "SILVER": "metal"}
-FEATURES = (["side"] + [f"is_{s}" for s in STRATEGY_NAMES] + ["is_crypto", "is_stock", "is_metal"]
+STRATEGY_NAMES = ("donchian_trend", "squeeze_breakout", "rsi2_reversion", "news_momentum", "opening_range",
+                  "vwap_reversion")
+ASSET_CLASS = data.ASSET_CLASS
+FEATURES = (["side"] + [f"is_{s}" for s in STRATEGY_NAMES] + ["is_crypto", "is_stock", "is_metal", "is_etf"]
             + ["adx", "atr_pct", "vol_rank", "dist200", "dist50", "ret5", "ret20", "rsi14", "daily_trend",
                "tone_z", "attention_z", "days_to_earnings", "days_to_fomc", "days_to_jobs", "ai_bias",
                "news_1h", "news_24h_z", "news_tone", "hour", "weekday", "sleeve_recent_r", "sleeve_trades",
@@ -77,7 +78,7 @@ class MLLearner:
         s = float(side)
         row = {
             "side": s, **{f"is_{n}": float(strategy == n) for n in STRATEGY_NAMES},
-            **{f"is_{c}": float(ASSET_CLASS.get(asset) == c) for c in ("crypto", "stock", "metal")},
+            **{f"is_{c}": float(ASSET_CLASS.get(asset) == c) for c in ("crypto", "stock", "metal", "etf")},
             "adx": _num(f.get("adx")), "atr_pct": _num(f.get("atr_pct")), "vol_rank": _num(f.get("vol_rank")),
             # direction-aware: positive = the market already moves the trade's way
             "dist200": s * _num(f.get("dist200")), "dist50": s * _num(f.get("dist50")),

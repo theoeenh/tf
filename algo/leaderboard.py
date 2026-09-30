@@ -109,7 +109,8 @@ def write() -> str:
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
     now = now_utc()
     prices = {a: complete_bars(df, a, cfg["interval"], now)
-              for a, df in load_prices(cfg.get("source", "auto"), cfg["interval"]).items()}
+              for a, df in load_prices(cfg.get("source", "auto"), cfg["interval"], cfg["universe"],
+                                       cfg.get("history_start")).items()}
     start = pd.Timestamp(cfg["start"])
     md = [f"# Leaderboard – {now:%Y-%m-%d %H:%M} UTC", "",
           f"All versions paper-traded side by side since {start} UTC ({cfg['interval']} bars), same bars, "

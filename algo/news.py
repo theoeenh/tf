@@ -24,7 +24,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .data import DATA_DIR, TICKERS
+from .data import ALPACA_SYMBOLS, ASSET_CLASS, DATA_DIR, TICKERS
 
 log = logging.getLogger(__name__)
 NEWS_DIR = DATA_DIR / "news"
@@ -158,7 +158,7 @@ def jobs_report_dates(start="2016-01-01", end="2027-12-31") -> list[pd.Timestamp
 
 def earnings_dates(name: str, refresh: bool = False) -> list[pd.Timestamp]:
     """Past and next scheduled earnings dates for a stock (empty for crypto/metals)."""
-    if name not in ("NVDA", "TSLA") and not name.isalpha():
+    if ASSET_CLASS.get(name) != "stock":
         return []
     NEWS_DIR.mkdir(parents=True, exist_ok=True)
     path = NEWS_DIR / f"{name}_earnings.csv"
@@ -272,7 +272,7 @@ def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: b
                 raise RuntimeError(f"no GDELT news for {a}; not trading on incomplete inputs") from exc
             log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
-        out["earnings"][a] = earnings_dates(a, refresh) if a in ("NVDA", "TSLA") else []
+        out["earnings"][a] = earnings_dates(a, refresh) if ASSET_CLASS.get(a) == "stock" else []
     if alpaca_news:  # hourly: Alpaca / Benzinga articles with exact times
         out["alpaca_news"] = {}
         for a in assets:
@@ -291,8 +291,7 @@ def cached(path: Path) -> bool:
 
 # ---------------------------------------------------------------- Alpaca (Benzinga) news, hourly
 
-ALPACA_NEWS_SYMBOLS = {"BTC": "BTCUSD", "ETH": "ETHUSD", "SOL": "SOLUSD", "NVDA": "NVDA", "TSLA": "TSLA",
-                       "GOLD": "GLD", "SILVER": "SLV"}
+ALPACA_NEWS_SYMBOLS = {a: sym.replace("/", "") for a, sym in ALPACA_SYMBOLS.items() if a != "SPY"}
 # A small finance word list (in the spirit of Loughran-McDonald): headline tone = (pos - neg) / words hit.
 POSITIVE = set("""beat beats surge surges soar soars jump jumps rally rallies gain gains record upgrade upgraded
 upgrades bullish outperform strong stronger growth boost boosts rise rises rising higher approval approved

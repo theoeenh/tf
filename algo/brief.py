@@ -11,6 +11,7 @@ learner and are scored against what the market did.
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 from pathlib import Path
 
@@ -79,9 +80,11 @@ def asset_snapshot(name: str, df: pd.DataFrame, nf: pd.DataFrame | None) -> list
 def write_brief(source: str = "auto") -> Path:
     now = now_utc()
     today = now.normalize()
-    prices = {a: complete_bars(df, a, "1d", now) for a, df in load_prices(source, "1d").items()}
+    cfg_path = PAPER_DIR / "config.json"  # the live account's assets
+    assets = json.loads(cfg_path.read_text())["universe"] if cfg_path.exists() else UNIVERSE
+    prices = {a: complete_bars(df, a, "1d", now) for a, df in load_prices(source, "1d", assets).items()}
     try:
-        news_data = news.load_all(UNIVERSE)
+        news_data = news.load_all(assets)
     except Exception as exc:
         log.warning("news unavailable (%s)", exc)
         news_data = {"fomc": [], "jobs": news.jobs_report_dates(), "gdelt": {}, "earnings": {}}

@@ -12,11 +12,15 @@ from . import data, journal
 from .engine import Costs, ExitRule
 from .metrics import equity_stats
 from .portfolio import PortfolioConfig, PortfolioResult, Sleeve, run_portfolio
-from .strategies import STRATEGIES, daily_trend, news_momentum, with_trend
+from .strategies import INTRADAY_STRATEGIES, STRATEGIES, daily_trend, news_momentum, with_trend
 
 # Higher-volatility universe: three cryptos, two high-beta tech stocks, and
 # precious metals (silver is ~1.5x as volatile as gold) for diversification.
 UNIVERSE = ("BTC", "ETH", "SOL", "NVDA", "TSLA", "GOLD", "SILVER")
+# Wider universe: more candidate trades for the ML learner to choose from, and
+# more trading during the day (liquid large caps, index / bond / oil ETFs).
+UNIVERSE_WIDE = UNIVERSE + data.WIDE_STOCKS + data.WIDE_ETFS
+UNIVERSES = {"core": UNIVERSE, "wide": UNIVERSE_WIDE}
 
 # Per side, on every fill, at the broker we trade on (Alpaca, lowest volume tier):
 # crypto 0.25% taker fee (market and stop orders take liquidity), stocks and ETFs
@@ -31,7 +35,8 @@ COSTS = {
     "GOLD": Costs(fee_bps=0.2, slippage_bps=2, short_borrow_apr=0.01),
     "SILVER": Costs(fee_bps=0.2, slippage_bps=3, short_borrow_apr=0.01),
     "SPY": Costs(fee_bps=0.2, slippage_bps=1),
-}
+} | {a: Costs(fee_bps=0.2, slippage_bps=3, short_borrow_apr=0.01) for a in data.WIDE_STOCKS} \
+  | {a: Costs(fee_bps=0.2, slippage_bps=2, short_borrow_apr=0.01) for a in data.WIDE_ETFS}
 
 # One exit rule per strategy, fixed in advance (from the BTC/gold study, so
 # out-of-sample for every other asset). "4:2 normally, 6:2 in strong trends"
@@ -42,6 +47,9 @@ SLEEVE_RULES = {
     "squeeze_breakout": ExitRule(stop_atr=3.0, rr=None, trail_atr=4.0),
     "rsi2_reversion": ExitRule(stop_atr=2.5, rr=2.0, rr_strong=3.0, adaptive=True),
     "news_momentum": ExitRule(stop_atr=2.5, rr=2.0, rr_strong=3.0, adaptive=True),
+    # hourly-native: out by the end of the day (opening range) / within 6 hours (VWAP)
+    "opening_range": ExitRule(stop_atr=1.5, rr=2.0, max_bars=5),
+    "vwap_reversion": ExitRule(stop_atr=2.0, rr=1.5, max_bars=6),
 }
 
 TARGET_VOL = 0.20  # yearly volatility the account is sized for ("higher volatility")
@@ -63,6 +71,8 @@ VARIANTS = {
 #   blackout  intraday bars: be flat through scheduled events (earnings, Fed, jobs)
 #   ml        the machine-learning learner (algo/ml.py) instead of the rule learner
 #   sizing    ML only: bet more on trades with a higher expected result
+#   intraday  add the hourly-native strategies (opening range breakout, VWAP reversion)
+#   universe  "wide": 22 assets instead of 7 (set per account / study, see UNIVERSES)
 UPGRADES = {
     "L/S + news + trend": dict(allow_short=True, learn=True, news=True, trend=True),
     "L/S + news + blackout": dict(allow_short=True, learn=True, news=True, blackout=True),
@@ -72,16 +82,25 @@ UPGRADES = {
                                               ml=True),
     "L/S + news + trend + blackout + ML sizing": dict(allow_short=True, learn=True, news=True, trend=True,
                                                      blackout=True, ml=True, sizing=True),
+    "long + trend + blackout + intraday + ML": dict(allow_short=False, learn=True, news=True, trend=True,
+                                                    blackout=True, intraday=True, ml=True),
+    "L/S + trend + blackout + intraday + ML": dict(allow_short=True, learn=True, news=True, trend=True,
+                                                   blackout=True, intraday=True, ml=True),
     "long + trend + blackout + ML": dict(allow_short=False, learn=True, news=True, trend=True, blackout=True,
                                          ml=True),
 }
 ALL_VARIANTS = VARIANTS | UPGRADES
-OPTIONS = ("trend", "blackout", "ml", "sizing")
+OPTIONS = ("trend", "blackout", "ml", "sizing", "intraday")
 NEWS_VIEWS = ("setup", "news", "event", "ai")
 
 
-def load_prices(source: str = "auto", interval: str = "1d", assets=UNIVERSE) -> dict[str, pd.DataFrame]:
-    return {a: data.load(a, source, interval=interval) for a in assets}
+def load_prices(source: str = "auto", interval: str = "1d", assets=UNIVERSE,
+                start: str | None = None) -> dict[str, pd.DataFrame]:
+    """start: drop older bars (an account's fixed history start, so its replays stay the same)."""
+    out = {a: data.load(a, source, interval=interval) for a in assets}
+    if start is not None:
+        out = {a: df[df.index >= pd.Timestamp(start)] for a, df in out.items()}
+    return out
 
 
 def intraday(prices: dict[str, pd.DataFrame]) -> bool:
@@ -90,9 +109,13 @@ def intraday(prices: dict[str, pd.DataFrame]) -> bool:
 
 
 def build_sleeves(prices: dict[str, pd.DataFrame], allow_short: bool, context: dict | None = None,
-                  news: bool = False, trend: bool = False) -> list[Sleeve]:
+                  news: bool = False, trend: bool = False, intraday_strats: bool = False) -> list[Sleeve]:
     out = [Sleeve(asset, name, fn(prices[asset]), SLEEVE_RULES[name], allow_short)
            for asset in prices for name, fn in STRATEGIES.items()]
+    if intraday_strats and intraday(prices):
+        out += [Sleeve(asset, name, fn(prices[asset]), SLEEVE_RULES[name], allow_short)
+                for asset in prices for name, fn in INTRADAY_STRATEGIES.items()
+                if not (name == "opening_range" and asset in data.CRYPTO)]
     if news and context:
         out += [Sleeve(a, "news_momentum", news_momentum(prices[a], context[a]), SLEEVE_RULES["news_momentum"],
                        allow_short) for a in prices if a in context and context[a]["tone_z"].notna().any()]
@@ -157,13 +180,14 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
                initial_capital: float = 100_000.0, close_at_end: bool = True,
                learner=None, news: bool = False, context: dict | None = None,
                trend: bool = False, blackout: bool = False, ml: bool = False,
-               sizing: bool = False) -> PortfolioResult:
+               sizing: bool = False, intraday: bool = False) -> PortfolioResult:
     if learner is None and learn:
         learner = new_learner(learn, news, ml, sizing)
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
                           max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None)
     ctx = context if (news or ml) else None  # the ML learner uses news / event features too
-    return run_portfolio(prices, build_sleeves(prices, allow_short, context if news else None, news, trend),
+    return run_portfolio(prices, build_sleeves(prices, allow_short, context if news else None, news, trend,
+                                               intraday),
                          COSTS, cfg, start, end, close_at_end=close_at_end, context=ctx,
                          blocked=blackout_masks(context) if blackout else None)
 

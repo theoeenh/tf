@@ -106,6 +106,8 @@ SETUPS = {
     "squeeze_breakout": ("broke out of a volatility squeeze to the {ud}", "volatility breakout"),
     "rsi2_reversion": ("made a sharp 2-bar {move} (RSI-2 extreme)", "mean reversion"),
     "news_momentum": ("had a burst of {tone} news and price confirmed it", "news momentum"),
+    "opening_range": ("broke {ud} out of its opening range", "opening range breakout"),
+    "vwap_reversion": ("stretched far {vw} the day's average price (VWAP)", "VWAP reversion"),
 }
 
 
@@ -114,7 +116,8 @@ def rationale(asset: str, strategy: str, side: int, ctx: dict, entry: float, sto
     """The 'thinking process' written at entry."""
     what, family = SETUPS.get(strategy, ("gave a signal", strategy))
     what = what.format(hl="high" if side > 0 else "low", ud="upside" if side > 0 else "downside",
-                       move="dip" if side > 0 else "spike", tone="positive" if side > 0 else "negative")
+                       move="dip" if side > 0 else "spike", tone="positive" if side > 0 else "negative",
+                       vw="below" if side > 0 else "above")
     direction = "LONG" if side > 0 else "SHORT"
     trend = "with" if ctx["aligned"] else "AGAINST"
     parts = [

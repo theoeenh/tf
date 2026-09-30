@@ -13,7 +13,9 @@ How `sync` works, each run:
 1. Cancel our open orders (the stops and targets of the last run).
 2. Our system can hold several trades in the same asset (one per strategy);
    Alpaca keeps one net position per symbol. Add up the wanted positions from
-   paper/orders.json per symbol and send market orders for the difference.
+   paper/orders.json per symbol and send market orders for the difference
+   (crypto: a limit at the bid / ask first for the lower maker fee, the rest
+   at market after 2 minutes; see crypto_limit_first).
 3. Once filled, protect every trade at the broker, so a stop fires the moment
    the price gets there, not at our next run:
    - stocks / ETFs: stop + target as one OCO order (one cancels the other) for
@@ -192,6 +194,47 @@ def _send(o: dict) -> dict:
     return request("POST", "/v2/orders", body)
 
 
+CRYPTO_LIMIT_WAIT = 120  # seconds a crypto order waits on the book before the rest goes at market
+
+
+def crypto_limit_first(o: dict, wait: float = CRYPTO_LIMIT_WAIT) -> tuple[str | None, str]:
+    """Send a crypto order as a limit at the bid (buy) / ask (sell), so it rests on the
+    book and pays the maker fee (0.15% vs 0.25% at market). Whatever has not filled
+    after `wait` seconds is cancelled and sent at market. Every outcome goes to
+    paper/fills.csv, to measure how often the cheaper fill happens.
+    Returns (id of the last order sent, description)."""
+    q = get_data("/v1beta3/crypto/us/latest/quotes", {"symbols": o["symbol"]})["quotes"][o["symbol"]]
+    px = float(q["bp"] if o["side"] == "buy" else q["ap"])
+    r = _send(o | {"type": "limit", "limit_price": _px(px), "time_in_force": "gtc"})
+    oid = r["id"]
+    _wait(lambda: request("GET", f"/v2/orders/{oid}")["status"] in ("filled", "canceled", "rejected"), wait)
+    st = request("GET", f"/v2/orders/{oid}")
+    maker = float(st.get("filled_qty") or 0)
+    taker, last, how = 0.0, oid, f"limit {px:,.2f} filled"
+    if st["status"] != "filled":
+        request("DELETE", f"/v2/orders/{oid}")
+        _wait(lambda: request("GET", f"/v2/orders/{oid}")["status"] in ("canceled", "filled"), 20)
+        st = request("GET", f"/v2/orders/{oid}")
+        maker = float(st.get("filled_qty") or 0)
+        rest = round(float(o["qty"]) - maker, 9)
+        how = f"limit {px:,.2f}: {maker:g} filled"
+        if rest * px >= MIN_NOTIONAL:
+            last = _send(o | {"qty": rest}).get("id")
+            taker = rest
+            how += f", rest {rest:g} at market"
+    line = f"{pd_now()},{o['symbol']},{o['side']},{o['qty']},{px},{maker},{taker}\n"
+    f = PAPER_DIR / "fills.csv"
+    if not f.exists():
+        f.write_text("time,symbol,side,qty,limit_price,maker_qty,taker_qty\n")
+    with f.open("a") as fh:
+        fh.write(line)
+    return last, how
+
+
+def pd_now() -> str:
+    return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+
+
 def _wait(check, seconds: float = 20.0) -> bool:
     end = time.time() + seconds
     while time.time() < end:
@@ -214,7 +257,12 @@ def sync(send: bool = False) -> list[dict]:
     sent = {}
     for o in todo:
         line = f"{o['side'].upper():4s} {o['qty']:>12,.6f} {o['symbol']:8s} market {o['note']}"
-        if send:
+        if send and "/" in o["symbol"]:  # crypto: rest on the book first (maker fee)
+            oid, how = crypto_limit_first(o)
+            if oid:
+                sent[oid] = o["symbol"]
+            line += f"  -> {how}"
+        elif send:
             r = _send(o)
             sent[r.get("id")] = o["symbol"]
             line += f"  -> sent, id {r.get('id', '?')}"

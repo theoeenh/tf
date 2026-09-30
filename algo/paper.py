@@ -31,7 +31,7 @@ from . import data
 from .metrics import equity_stats
 from . import analyst, news
 from .system import (
-    ALL_VARIANTS, OPTIONS, TARGET_VOL, UNIVERSE, bars_per_year, build_context, calibrate_risk, load_prices,
+    ALL_VARIANTS, OPTIONS, TARGET_VOL, UNIVERSES, bars_per_year, build_context, calibrate_risk, load_prices,
     new_learner, run_variant,
 )
 
@@ -71,17 +71,19 @@ def bars_since(prices: dict, start: pd.Timestamp) -> int:
 
 
 def news_context(prices: dict, v: dict, interval: str = "1d") -> dict | None:
+    """(the assets are those of `prices`)"""
     """News, events, AI views (and on hourly bars the daily trend, event blackout and
     Alpaca news) for the variants that use them. Fetches only what is missing."""
     if not (v.get("news") or v.get("ml") or v.get("blackout")):
         return None
-    nd = news.load_all(UNIVERSE, strict=True, alpaca_news=interval != "1d")
+    nd = news.load_all(list(prices), strict=True, alpaca_news=interval != "1d")
     return build_context(prices, nd, analyst.bias_frame(analyst.load_views()))
 
 
-def init(capital: float, variant: str, interval: str, start: str | None = None, source: str = "auto") -> dict:
+def init(capital: float, variant: str, interval: str, start: str | None = None, source: str = "auto",
+         universe: str = "core", history_start: str | None = None) -> dict:
     v = ALL_VARIANTS[variant]
-    prices = load_prices(source, interval)
+    prices = load_prices(source, interval, UNIVERSES[universe], history_start)
     if interval == "1d":
         train = DAILY_TRAIN
     else:
@@ -90,7 +92,8 @@ def init(capital: float, variant: str, interval: str, start: str | None = None, 
     risk = calibrate_risk(prices, v["allow_short"], v["learn"], *train, news=v.get("news", False),
                           context=news_context(prices, v, interval), **{o: v.get(o, False) for o in OPTIONS})
     cfg = {"start": str(pd.Timestamp(start) if start else now_utc().floor("h")), "capital": capital, "variant": variant, "interval": interval,
-           "source": source, "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSE)}
+           "source": source, "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSES[universe]),
+           "history_start": history_start}
     PAPER_DIR.mkdir(exist_ok=True)
     (PAPER_DIR / "config.json").write_text(json.dumps(cfg, indent=2))
     return cfg
@@ -102,7 +105,8 @@ def update(source: str | None = None) -> Path:
     source = source or cfg.get("source", "auto")
     v, interval = ALL_VARIANTS[cfg["variant"]], cfg["interval"]
     start, now = pd.Timestamp(cfg["start"]), now_utc()
-    prices = {a: complete_bars(df, a, interval, now) for a, df in load_prices(source, interval).items()}
+    prices = {a: complete_bars(df, a, interval, now)
+              for a, df in load_prices(source, interval, cfg["universe"], cfg.get("history_start")).items()}
 
     ctx = news_context(prices, v, interval)
 
@@ -172,13 +176,16 @@ def main() -> None:
     p_init.add_argument("--interval", default="1d", choices=["1d", "1h"])
     p_init.add_argument("--start", default=None, help="backdate the start (replay), e.g. 2026-09-01")
     p_init.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv", "alpaca"])
+    p_init.add_argument("--universe", default="core", choices=list(UNIVERSES))
+    p_init.add_argument("--history-start", default=None, help="first bar used (default: all cached data)")
     p_up = sub.add_parser("update", help="trade new bars and write paper/status.md")
     p_up.add_argument("--source", default=None, choices=["auto", "yahoo", "csv", "alpaca"],
                       help="default: the source the account was started with")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     if args.cmd == "init":
-        cfg = init(args.capital, args.variant, args.interval, args.start, args.source)
+        cfg = init(args.capital, args.variant, args.interval, args.start, args.source, args.universe,
+                   args.history_start)
         print(f"Paper account started: {json.dumps(cfg)}")
     else:
         print(f"Status written to {update(args.source)}")

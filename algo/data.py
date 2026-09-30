@@ -23,12 +23,18 @@ TICKERS = {
     "SILVER": "SLV",
     "SPY": "SPY",
 }
+# The wider universe: liquid US stocks and ETFs (name = ticker).
+WIDE_STOCKS = ("AAPL", "MSFT", "AMZN", "META", "GOOGL", "AMD", "AVGO", "NFLX", "JPM", "XOM", "COIN")
+WIDE_ETFS = ("QQQ", "IWM", "TLT", "USO")
+TICKERS |= {t: t for t in WIDE_STOCKS + WIDE_ETFS}
 CRYPTO = {"BTC", "ETH", "SOL"}
+ASSET_CLASS = ({a: "crypto" for a in CRYPTO} | {a: "stock" for a in ("NVDA", "TSLA") + WIDE_STOCKS}
+               | {"GOLD": "metal", "SILVER": "metal"} | {a: "etf" for a in WIDE_ETFS + ("SPY",)})
 
 # Name used in the project -> Alpaca symbol (the broker's own price data).
 ALPACA_SYMBOLS = {"BTC": "BTC/USD", "ETH": "ETH/USD", "SOL": "SOL/USD", "NVDA": "NVDA", "TSLA": "TSLA",
-                  "GOLD": "GLD", "SILVER": "SLV", "SPY": "SPY"}
-ALPACA_START = "2023-01-01"  # fixed, so replays from it are repeatable
+                  "GOLD": "GLD", "SILVER": "SLV", "SPY": "SPY"} | {t: t for t in WIDE_STOCKS + WIDE_ETFS}
+ALPACA_START = "2023-01-01"  # default history start; an account can use an earlier one (history_start)
 SIP_DELAY_MIN = 16  # Alpaca's free plan: full-market stock data from 15 minutes ago only
 
 # Daily bars per year, used to annualise returns and volatility.

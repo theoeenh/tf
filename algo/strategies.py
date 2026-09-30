@@ -85,3 +85,51 @@ def daily_trend(df: pd.DataFrame, n: int = 50) -> pd.Series:
 def with_trend(signals: pd.Series, trend: pd.Series) -> pd.Series:
     """Keep only the signals that agree with the trend."""
     return signals.where(signals * trend.reindex(signals.index).fillna(0) > 0, 0).astype(int)
+
+
+# ---------------------------------------------------------------- intraday (hourly bars)
+
+
+def _session(df: pd.DataFrame) -> pd.Index:
+    """Trading day of each bar: the UTC date (a US session never crosses midnight UTC)."""
+    return df.index.normalize()
+
+
+def opening_range_breakout(df: pd.DataFrame, n_open: int = 2) -> pd.Series:
+    """Stocks / ETFs: the high and low of the first `n_open` bars of the day
+    (9:30-11:00 New York on clock-hour bars) set the opening range; the first
+    later close above (below) it goes long (short). One signal per day.
+    Crypto has no opening, so it gets no signal (call it for sessions only)."""
+    day = _session(df)
+    k = df.groupby(day).cumcount()  # bar number within the day
+    first = k < n_open
+    hi = df["High"].where(first).groupby(day).transform("max")
+    lo = df["Low"].where(first).groupby(day).transform("min")
+    after = (k >= n_open) & (df.groupby(day)["Close"].transform("size") > n_open)
+    up = after & (df["Close"] > hi)
+    dn = after & (df["Close"] < lo)
+    # only the first break of the day
+    broke = (up | dn).astype(int).groupby(day).cumsum()
+    first_break = (up | dn) & (broke == 1)
+    return _combine(up & first_break, dn & first_break)
+
+
+def vwap_reversion(df: pd.DataFrame, k: float = 1.5, trend_ma: int = 200) -> pd.Series:
+    """Buy a stretch far below the day's volume-weighted average price in an
+    uptrend (sell far above it in a downtrend), for a snap back toward it.
+    Stretch measured in ATRs. Days are UTC days (crypto) or sessions (stocks)."""
+    from .indicators import atr
+
+    day = _session(df)
+    tp = (df["High"] + df["Low"] + df["Close"]) / 3
+    vol = df["Volume"].where(df["Volume"] > 0, 1.0)
+    vwap = (tp * vol).groupby(day).cumsum() / vol.groupby(day).cumsum()
+    z = (df["Close"] - vwap) / atr(df)
+    ma = sma(df["Close"], trend_ma)
+    return _combine((z < -k) & (df["Close"] > ma), (z > k) & (df["Close"] < ma))
+
+
+INTRADAY_STRATEGIES: dict[str, Callable[[pd.DataFrame], pd.Series]] = {
+    "opening_range": opening_range_breakout,
+    "vwap_reversion": vwap_reversion,
+}
