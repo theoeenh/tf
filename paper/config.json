@@ -1,10 +1,10 @@
 {
   "start": "2026-09-30 14:00:00",
   "capital": 100000.0,
-  "variant": "long/short + learner + news",
+  "variant": "long + trend + blackout + ML",
   "interval": "1h",
   "source": "alpaca",
-  "risk_pct": 0.0035169888645126264,
+  "risk_pct": 0.006505793083014993,
   "target_vol": 0.2,
   "universe": [
     "BTC",
