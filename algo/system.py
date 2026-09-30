@@ -118,7 +118,8 @@ def build_sleeves(prices: dict[str, pd.DataFrame], allow_short: bool, context: d
                 if not (name == "opening_range" and asset in data.CRYPTO)]
     if news and context:
         out += [Sleeve(a, "news_momentum", news_momentum(prices[a], context[a]), SLEEVE_RULES["news_momentum"],
-                       allow_short) for a in prices if a in context and context[a]["tone_z"].notna().any()]
+                       allow_short) for a in prices
+                if a in context and "tone_z" in context[a] and context[a]["tone_z"].notna().any()]
     if trend and intraday(prices):
         tr = {a: daily_trend(df) for a, df in prices.items()}
         out = [Sleeve(s.asset, s.strategy, with_trend(s.signals, tr[s.asset]), s.exit_rule, s.allow_short)
