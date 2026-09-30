@@ -74,14 +74,15 @@ def request(method: str, path: str, body: dict | None = None, base: str = BASE_U
 
 
 def get_data(path: str, params: dict) -> dict:
-    """GET from Alpaca's market data API, retrying when rate-limited."""
-    for attempt in range(5):
+    """GET from Alpaca's market data API. When rate-limited (200 requests a minute),
+    wait and retry for up to ~5 minutes instead of failing."""
+    for attempt in range(9):
         try:
             return request("GET", f"{path}?{urllib.parse.urlencode(params)}", base=DATA_URL)
         except AlpacaError as e:
-            if " 429:" not in str(e) or attempt == 4:
+            if " 429:" not in str(e) or attempt == 8:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(min(60, 2 ** (attempt + 1)))
 
 
 def positions() -> dict[str, float]:

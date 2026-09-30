@@ -21,7 +21,38 @@ permissions:
   contents: write
 
 jobs:
+  # Download prices and news once for all accounts (Alpaca allows 200 data
+  # requests a minute: three accounts downloading at once hit that limit).
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: paper-data
+      cancel-in-progress: false
+    env:
+      ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+      ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/*_alpaca.csv
+            data/news
+          key: market-data-${{ github.run_id }}
+          restore-keys: market-data-
+      - name: Download what is missing
+        run: python -m algo.fetch
+
   trade:
+    needs: data
     strategy:
       fail-fast: false  # one account failing never stops the others
       matrix:
@@ -74,13 +105,13 @@ jobs:
       - name: Account name (for notifications)
         run: echo "PAPER_ACCOUNT_NAME=$(python -c "import json;print(json.load(open('paper/${{ matrix.folder }}/config.json'.replace('//','/'))).get('name','${{ matrix.account }}'))")" >> "$GITHUB_ENV"
 
-      # Price and news caches: only the missing bars are downloaded each hour.
-      - uses: actions/cache@v4
+      # The data job's download (only bars newer than it are fetched here).
+      - uses: actions/cache/restore@v4
         with:
           path: |
             data/*_alpaca.csv
             data/news
-          key: market-data-${{ github.run_id }}-${{ matrix.account }}
+          key: market-data-${{ github.run_id }}
           restore-keys: market-data-
 
       - name: Paper account (trade the new bars)
