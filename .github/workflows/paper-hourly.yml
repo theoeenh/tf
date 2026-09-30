@@ -32,6 +32,13 @@ jobs:
       ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
       ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
     steps:
+      - name: Check the Alpaca keys are set
+        run: |
+          if [ -z "$ALPACA_API_KEY_ID" ] || [ -z "$ALPACA_API_SECRET_KEY" ]; then
+            echo "::error::Repository secrets ALPACA_API_KEY_ID / ALPACA_API_SECRET_KEY are missing or empty (Settings -> Secrets and variables -> Actions -> Repository secrets)."
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ vars.PAPER_BRANCH }}
@@ -62,7 +69,7 @@ jobs:
         if: always()
         run: |
           cat paper/status.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
-          { echo; echo '## Alpaca'; echo '```'; cat alpaca_sync.txt 2>/dev/null; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          { echo; echo '## Alpaca'; echo '```'; cat alpaca_sync.txt 2>/dev/null || echo "no sync this run"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save status to the repo
         run: |
