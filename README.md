@@ -82,6 +82,30 @@ python -m algo.paper update    # fetch new bars, trade them -> paper/status.md, 
 Deterministic replay from the start date on complete bars only, with the learner pre-trained on
 history. `paper/orders.json` holds the wanted positions with stops and targets, for a broker adapter.
 
+## Live paper trading on Alpaca (`algo/alpaca.py`, `.github/workflows/paper-hourly.yml`)
+
+```bash
+python -m algo.paper init --interval 1h --source alpaca   # hourly account on Alpaca's own prices
+python -m algo.alpaca check                                # keys + Alpaca paper balance
+python -m algo.alpaca sync                                 # dry run: orders it would send
+python -m algo.alpaca sync --send
+```
+
+- **Prices:** `--source alpaca` uses Alpaca's market data, the broker we trade on, since 2023. Hourly
+  stock bars are regular session only, cut on the clock hour (9:30-10:00, 10:00-11:00, … 15:00-16:00).
+  The free plan serves full-market stock data 15 minutes late, so a bar counts only once it is complete in
+  the data.
+- **Orders:** each sync cancels the last run's stops and targets, sends market orders for the difference
+  (one net position per symbol at Alpaca, the sum of our strategies), then protects every trade at the
+  broker: stop + target as one OCO order on whole shares, a stop on the fractional rest, a stop-limit on
+  crypto (Alpaca has no plain crypto stop). A stop therefore fires the moment the price gets there.
+- **Hourly job:** GitHub Actions runs `paper update` + `alpaca sync --send` at :20 past every hour and
+  commits `paper/status.md` etc. One-time setup: repo secrets `ALPACA_API_KEY_ID` and
+  `ALPACA_API_SECRET_KEY`; scheduled workflows only run from the default branch.
+- **Daily AI analyst:** a Claude routine at 9:20 New York refreshes the brief and writes the AI views.
+- Limits: no crypto shorts on Alpaca (held flat), stock shorts in whole shares, a stock order sent while
+  the market is closed is protected by the first run after it fills.
+
 ## News, events and the AI analyst
 
 - `algo/news.py`: point-in-time news for backtests. GDELT daily news tone and coverage per asset since 2017
@@ -123,6 +147,7 @@ algo/analyst.py     AI analyst views: storage, scoring, learner input
 algo/brief.py       daily brief (events ahead, news, signals, AI task)
 algo/core.py        momentum core holdings
 algo/daily.py       daily routine
+algo/alpaca.py      Alpaca paper account: market orders, broker-side stops and targets, live prices
 tests/              engine & no-look-ahead tests
 ```
 

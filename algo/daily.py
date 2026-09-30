@@ -19,7 +19,7 @@ from . import brief, paper
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    print(f"Paper account: {paper.update('auto')}")
+    print(f"Paper account: {paper.update()}")
     print(f"Brief: {brief.write_brief('auto')}")
 
 

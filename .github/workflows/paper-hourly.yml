@@ -1,0 +1,75 @@
+# Hourly paper trading: trade the hour that just closed, mirror it on the
+# Alpaca paper account with real stop / target orders, save the status.
+#
+# Setup (once): repo Settings -> Secrets and variables -> Actions ->
+#   secrets ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY (Alpaca *paper* keys);
+#   optional variable PAPER_BRANCH = the branch holding paper/ (default: the default branch).
+# Scheduled workflows only run from the repository's default branch.
+name: paper-hourly
+
+on:
+  schedule:
+    # :20 past every hour: Alpaca's free plan serves stock data 15 minutes late,
+    # so the hour that just ended is complete by then (GitHub may start a few minutes late).
+    - cron: "20 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-trading
+  cancel-in-progress: false
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash  # with pipefail: a failed step is not hidden by `| tee`
+    env:
+      ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+      ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Price and news caches: only the missing bars are downloaded each hour.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/*_alpaca.csv
+            data/news
+          key: market-data-${{ github.run_id }}
+          restore-keys: market-data-
+
+      - name: Paper account (trade the new bars)
+        run: python -m algo.paper update
+
+      - name: Mirror on Alpaca (market orders + stops / targets)
+        run: python -m algo.alpaca sync --send | tee alpaca_sync.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          cat paper/status.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          { echo; echo '## Alpaca'; echo '```'; cat alpaca_sync.txt 2>/dev/null; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save status to the repo
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add paper/
+          git diff --cached --quiet && exit 0
+          git commit -m "Paper account $(date -u +'%Y-%m-%d %H:%M') UTC"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && exit 0; sleep 5; done
+          exit 1

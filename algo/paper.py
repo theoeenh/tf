@@ -2,6 +2,7 @@
 
     python -m algo.paper init                 # start a $100k paper account now
     python -m algo.paper init --interval 1h   # hourly version (many trades a day)
+    python -m algo.paper init --interval 1h --source alpaca   # hourly, on the broker's own prices
     python -m algo.paper update               # fetch new bars, trade them, write paper/status.md
 
 `update` is deterministic: it replays the system from the paper start date on
@@ -68,12 +69,12 @@ def news_context(prices: dict, v: dict) -> dict | None:
     """News, events and AI views for the news variant (fetches only the missing recent days)."""
     if not v.get("news"):
         return None
-    return build_context(prices, news.load_all(UNIVERSE), analyst.bias_frame(analyst.load_views()))
+    return build_context(prices, news.load_all(UNIVERSE, strict=True), analyst.bias_frame(analyst.load_views()))
 
 
-def init(capital: float, variant: str, interval: str, start: str | None = None) -> dict:
+def init(capital: float, variant: str, interval: str, start: str | None = None, source: str = "auto") -> dict:
     v = VARIANTS[variant]
-    prices = load_prices("auto", interval)
+    prices = load_prices(source, interval)
     if interval == "1d":
         train = DAILY_TRAIN
     else:
@@ -82,14 +83,16 @@ def init(capital: float, variant: str, interval: str, start: str | None = None) 
     risk = calibrate_risk(prices, v["allow_short"], v["learn"], *train, news=v.get("news", False),
                           context=news_context(prices, v))
     cfg = {"start": str(pd.Timestamp(start) if start else now_utc().floor("h")), "capital": capital, "variant": variant, "interval": interval,
-           "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSE)}
+           "source": source, "risk_pct": risk, "target_vol": TARGET_VOL, "universe": list(UNIVERSE)}
     PAPER_DIR.mkdir(exist_ok=True)
     (PAPER_DIR / "config.json").write_text(json.dumps(cfg, indent=2))
     return cfg
 
 
-def update(source: str = "auto") -> Path:
+def update(source: str | None = None) -> Path:
+    """source: None = the one the account was started with (config.json)."""
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
+    source = source or cfg.get("source", "auto")
     v, interval = VARIANTS[cfg["variant"]], cfg["interval"]
     start, now = pd.Timestamp(cfg["start"]), now_utc()
     prices = {a: complete_bars(df, a, interval, now) for a, df in load_prices(source, interval).items()}
@@ -163,12 +166,14 @@ def main() -> None:
     p_init.add_argument("--variant", default="long/short + learner + news", choices=list(VARIANTS))
     p_init.add_argument("--interval", default="1d", choices=["1d", "1h"])
     p_init.add_argument("--start", default=None, help="backdate the start (replay), e.g. 2026-09-01")
+    p_init.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv", "alpaca"])
     p_up = sub.add_parser("update", help="trade new bars and write paper/status.md")
-    p_up.add_argument("--source", default="auto", choices=["auto", "yahoo", "csv"])
+    p_up.add_argument("--source", default=None, choices=["auto", "yahoo", "csv", "alpaca"],
+                      help="default: the source the account was started with")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     if args.cmd == "init":
-        cfg = init(args.capital, args.variant, args.interval, args.start)
+        cfg = init(args.capital, args.variant, args.interval, args.start, args.source)
         print(f"Paper account started: {json.dumps(cfg)}")
     else:
         print(f"Status written to {update(args.source)}")

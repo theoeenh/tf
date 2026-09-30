@@ -215,8 +215,10 @@ def headlines(name: str, limit: int = 8) -> list[dict]:
     return items[:limit]
 
 
-def load_all(assets, refresh: bool = False) -> dict:
-    """Everything the system needs, per asset, cached."""
+def load_all(assets, refresh: bool = False, strict: bool = False) -> dict:
+    """Everything the system needs, per asset, cached.
+    strict: raise if an asset's news is missing, instead of going on without it
+    (live trading: a missing input must not silently change the positions)."""
     fomc = fomc_dates(refresh)
     jobs = jobs_report_dates()
     out = {"fomc": fomc, "jobs": jobs, "gdelt": {}, "earnings": {}}
@@ -224,6 +226,8 @@ def load_all(assets, refresh: bool = False) -> dict:
         try:
             out["gdelt"][a] = load_gdelt(a, refresh)
         except Exception as exc:
+            if strict:
+                raise RuntimeError(f"no GDELT news for {a}; not trading on incomplete inputs") from exc
             log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
         out["earnings"][a] = earnings_dates(a, refresh) if a in ("NVDA", "TSLA") else []

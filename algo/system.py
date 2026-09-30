@@ -86,7 +86,9 @@ def build_context(prices: dict[str, pd.DataFrame], news_data: dict, ai_bias: pd.
             # a view written on day D is used from the next bar after D
             b = ai_bias[a].dropna()
             b.index = b.index + pd.Timedelta(days=1)
-            parts.append(b.reindex(df.index, method="ffill", limit=5).rename("ai_bias").to_frame())
+            # carried forward for up to 5 days (a count of bars would be 5 hours on hourly bars)
+            parts.append(b.reindex(df.index, method="ffill", tolerance=pd.Timedelta(days=5))
+                         .rename("ai_bias").to_frame())
         ctx[a] = pd.concat(parts, axis=1)
     return ctx
 
