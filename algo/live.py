@@ -32,6 +32,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LOG_DIR = ROOT / "paper" / "engine"
+# The shadow decisions run in a copy of the code and accounts (prices shared), so they
+# never touch the real paper/ files: only the engine log is written to the repo.
+WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "engine-workspace"
 ACCOUNTS = {"A": "", "B": "B", "C": "C"}  # account -> folder under paper/
 DECIDE_AT = (1, 17)  # minutes past the hour: crypto bars are final at once, stocks 16 minutes late
 STOP_AFTER_CLOSE_MIN = 25  # the last stock bar (15:00-16:00) is final at 16:16
@@ -55,7 +58,7 @@ def account_env(account: str) -> dict[str, str]:
 
 def run(args: list[str], env: dict | None = None, timeout: int = 1200) -> tuple[int, str]:
     try:
-        p = subprocess.run([sys.executable, "-m", *args], cwd=ROOT, env=env, capture_output=True, text=True,
+        p = subprocess.run([sys.executable, "-m", *args], cwd=WORK if (WORK / "algo").exists() else ROOT, env=env, capture_output=True, text=True,
                            timeout=timeout)
         return p.returncode, (p.stdout + ("\n" + p.stderr.strip().splitlines()[-1] if p.returncode and p.stderr.strip()
                                           else "")).strip()
@@ -74,7 +77,7 @@ def due(t: datetime, done: set) -> str | None:
 
 def held(account: str) -> list[dict]:
     """The paper account's open trades (from its orders.json, refreshed at each decision)."""
-    f = ROOT / "paper" / ACCOUNTS[account] / "orders.json"
+    f = WORK / "paper" / ACCOUNTS[account] / "orders.json"
     try:
         return json.loads(f.read_text())
     except (OSError, ValueError):
@@ -113,6 +116,35 @@ class Log:
             f.write(text + "\n")
 
 
+def workspace() -> None:
+    import shutil
+
+    shutil.rmtree(WORK, ignore_errors=True)
+    WORK.mkdir(parents=True)
+    shutil.copytree(ROOT / "algo", WORK / "algo", ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copytree(ROOT / "paper", WORK / "paper", ignore=shutil.ignore_patterns("engine"))
+    (ROOT / "data").mkdir(exist_ok=True)
+    (WORK / "data").symlink_to(ROOT / "data")
+
+
+def save(log: Log) -> None:
+    """Push the log to the repo (on GitHub only), so it can be read during the day."""
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return
+    git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True).returncode
+    git("add", str(log.path.relative_to(ROOT)))
+    if git("diff", "--cached", "--quiet") == 0:
+        return
+    git("-c", "user.name=paper-bot", "-c", "user.email=paper-bot@users.noreply.github.com",
+        "commit", "-q", "-m", f"Engine log {now():%Y-%m-%d %H:%M} UTC")
+    for _ in range(6):
+        if git("pull", "--rebase", "-X", "theirs", "-q") == 0 and git("push", "-q") == 0:
+            return
+        git("rebase", "--abort")
+        time.sleep(5)
+    print("engine log not saved this time (next decision retries)", flush=True)
+
+
 def decide(slot: str, log: Log, accounts) -> None:
     t0 = time.time()
     code, out = run(["algo.fetch"], dict(os.environ) | keys("A"))
@@ -125,7 +157,7 @@ def decide(slot: str, log: Log, accounts) -> None:
         if code:
             log.write(f"- **{a}**: paper update FAILED: {out[-300:]}")
             continue
-        status = (ROOT / "paper" / ACCOUNTS[a] / "status.md").read_text().splitlines()
+        status = (WORK / "paper" / ACCOUNTS[a] / "status.md").read_text().splitlines()
         eq = next((s for s in status if s.startswith("**Equity")), "").split("·")[0].replace("**", "").strip()
         code, out = run(["algo.alpaca", "sync"], env, timeout=300)  # dry run: no --send
         orders = [s for s in out.splitlines() if s[:4] in ("BUY ", "SELL")]
@@ -193,6 +225,7 @@ def main() -> None:
     end = time.time() + args.minutes * 60
     day = now().strftime("%Y-%m-%d")
     log = Log(day)
+    workspace()
     log.write("", f"Engine on at {now():%H:%M} UTC for {', '.join(accounts)} (shadow).")
     done, seen, closed_at = set(), set(), None
     if args.decide_now:
@@ -213,6 +246,7 @@ def main() -> None:
                     decide(slot, log, accounts)
                 except Exception as e:
                     log.write(f"- {slot}: decision FAILED ({e})")
+                save(log)
             try:
                 watch(log, accounts, seen)
             except Exception as e:
@@ -233,6 +267,7 @@ def main() -> None:
         compare(log, accounts, day)
     except Exception as e:
         log.write(f"Comparison unavailable ({e})")
+    save(log)
 
 
 if __name__ == "__main__":
