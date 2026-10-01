@@ -122,3 +122,11 @@ def test_notification_title_with_dash(monkeypatch):
         assert notify.send("[B – ML brake 10%] BUY 68 AAPL", "body", "green_circle")
         sent = json.loads(u.call_args[0][0].data)
     assert sent["topic"] == "topic" and sent["title"].startswith("[B – ML")
+
+
+def test_plan_closes_a_position_no_longer_wanted():
+    from algo.alpaca import plan
+
+    # the price comes from live data when orders.json no longer lists the asset
+    o = plan({}, {"AAPL": 68.06}, {"AAPL": 328.0})
+    assert o and o[0]["side"] == "sell" and abs(o[0]["qty"] - 68.06) < 1e-9

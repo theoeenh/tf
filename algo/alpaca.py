@@ -300,6 +300,13 @@ def sync(send: bool = False) -> list[dict]:
         request("DELETE", "/v2/orders")
         _wait(lambda: not request("GET", "/v2/orders?status=open"))
     have = positions()
+    missing = [s for s in have if s not in prices]  # held but no longer wanted: orders.json has no price for it
+    if missing:
+        try:
+            prices |= live_prices(missing)
+        except AlpacaError as e:
+            print(f"No live prices for {', '.join(missing)} ({e}); closing them anyway.")
+            prices |= {s: float("inf") for s in missing}
 
     # 2) market orders for the difference (just before the open: the opening auction)
     todo = plan(wanted(), have, prices)
