@@ -168,10 +168,14 @@ def decide(slot: str, log: Log, accounts) -> None:
         status = (WORK / "paper" / ACCOUNTS[a] / "status.md").read_text().splitlines()
         eq = next((s for s in status if s.startswith("**Equity")), "").split("·")[0].replace("**", "").strip()
         code, out = run(["algo.alpaca", "sync"], env, timeout=300)  # dry run: no --send
-        orders = [s for s in out.splitlines() if s[:4] in ("BUY ", "SELL")]
+        lines = [s for s in out.splitlines() if s[:4] in ("BUY ", "SELL")]
+        # trades = market orders; the stops / targets of held positions are re-placed every run
+        orders = [s for s in lines if " market " in s or s.rstrip().endswith(" market")]
+        held = sorted({s.split()[2] for s in lines if s not in orders})
         log.write(f"- **{a}** {eq} – decided at {now():%H:%M:%S} ({time.time() - t1:.0f}s): "
                   + ("sync FAILED: " + out[-300:] if code else
-                     "no order" if not orders else "would send:"))
+                     ("no trade" if not orders else "would trade:")
+                     + (f" (holds {', '.join(held)} with their stops / targets)" if held else "")))
         log.write(*[f"  - `{o.strip()}`" for o in orders])
 
 
