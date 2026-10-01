@@ -131,18 +131,26 @@ def save(log: Log) -> None:
     """Push the log to the repo (on GitHub only), so it can be read during the day."""
     if not os.environ.get("GITHUB_ACTIONS"):
         return
-    git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True).returncode
+    errors = []
+
+    def git(*a):
+        p = subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)
+        if p.returncode:
+            errors.append(p.stderr.strip().splitlines()[-1] if p.stderr.strip() else f"git {a[0]} failed")
+        return p.returncode
+
     git("add", str(log.path.relative_to(ROOT)))
     if git("diff", "--cached", "--quiet") == 0:
         return
     git("-c", "user.name=paper-bot", "-c", "user.email=paper-bot@users.noreply.github.com",
         "commit", "-q", "-m", f"Engine log {now():%Y-%m-%d %H:%M} UTC")
     for _ in range(6):
-        if git("pull", "--rebase", "-X", "theirs", "-q") == 0 and git("push", "-q") == 0:
+        # --autostash: the downloads update tracked news files in this checkout
+        if git("pull", "--rebase", "--autostash", "-X", "theirs", "-q") == 0 and git("push", "-q") == 0:
             return
         git("rebase", "--abort")
         time.sleep(5)
-    print("engine log not saved this time (next decision retries)", flush=True)
+    print(f"engine log not saved this time, next decision retries ({errors[-1] if errors else '?'})", flush=True)
 
 
 def decide(slot: str, log: Log, accounts) -> None:
