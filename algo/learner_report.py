@@ -39,6 +39,7 @@ PLAIN = {
     "news_tone": "headline tone, 24 h", "hour": "hour of the day", "weekday": "day of the week",
     "sleeve_recent_r": "how this strategy did lately on this asset", "sleeve_trades": "trades seen for this pair",
     "strategy_recent_r": "how this strategy did lately (all assets)",
+    "asia_move": "how Asia moved on its last day", "europe_move": "how Europe moved on its last day",
 } | {f"is_{s}": f"strategy: {s}" for s in ("donchian_trend", "squeeze_breakout", "rsi2_reversion",
                                               "news_momentum", "opening_range", "vwap_reversion")} \
   | {f"is_{c}": f"asset class: {c}" for c in ("crypto", "stock", "metal", "etf")}

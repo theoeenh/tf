@@ -40,7 +40,7 @@ FEATURES = (["side"] + [f"is_{s}" for s in STRATEGY_NAMES] + ["is_crypto", "is_s
             + ["adx", "atr_pct", "vol_rank", "dist200", "dist50", "ret5", "ret20", "rsi14", "daily_trend",
                "tone_z", "attention_z", "days_to_earnings", "days_to_fomc", "days_to_jobs", "ai_bias",
                "news_1h", "news_24h_z", "news_tone", "hour", "weekday", "sleeve_recent_r", "sleeve_trades",
-               "strategy_recent_r"])
+               "strategy_recent_r", "asia_move", "europe_move"])
 
 
 def _num(x) -> float:
@@ -92,6 +92,8 @@ class MLLearner:
             "ai_bias": s * np.nan_to_num(_num(f.get("ai_bias"))),
             "news_1h": _num(f.get("news_1h")), "news_24h_z": _num(f.get("news_24h_z")),
             "news_tone": s * _num(f.get("news_tone")),
+            # how Asia / Europe moved on their last finished day, in the trade's direction
+            "asia_move": s * _num(f.get("asia_move")), "europe_move": s * _num(f.get("europe_move")),
             "hour": float(time.hour) if time is not None else np.nan,
             "weekday": float(time.weekday()) if time is not None else np.nan,
             **(self.pool.recent(asset, strategy, time) if self.pool is not None and time is not None else {

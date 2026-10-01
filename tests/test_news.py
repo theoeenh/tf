@@ -94,3 +94,23 @@ def test_news_system_runs_end_to_end_on_synthetic_data():
     views = {k[0] for k in res.learner.history}
     assert {"setup", "news", "event"} <= views
     assert all(t.rationale for t in res.trades)
+
+
+def test_global_moves_only_after_that_market_closed():
+    import pandas as pd
+
+    from algo.news import global_features
+
+    days = pd.bdate_range("2026-06-01", periods=80)
+    import numpy as np
+
+    rng = np.random.default_rng(0)  # ordinary days: about 1% moves
+    closes = pd.DataFrame({c: 100 * np.cumprod(1 + rng.normal(0, 0.01, 80)) for c in
+                           ("^N225", "^HSI", "^GDAXI", "^STOXX50E")}, index=days)
+    closes.iloc[-1] *= 1.05  # a big last day everywhere
+    last = days[-1]
+    idx = pd.DatetimeIndex([last + pd.Timedelta(hours=h) for h in (8, 10, 16, 18)])
+    f = global_features(idx, closes)
+    big_asia = f.asia_move.iloc[1]
+    assert big_asia > 3 and abs(f.asia_move.iloc[0]) < 3  # Asia's big day only from 09:00 UTC
+    assert abs(f.europe_move.iloc[2]) < 3 and f.europe_move.iloc[3] > 3  # Europe's only from 17:00 UTC

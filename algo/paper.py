@@ -78,7 +78,8 @@ def news_context(prices: dict, v: dict, interval: str = "1d") -> dict | None:
     Alpaca news) for the variants that use them. Fetches only what is missing."""
     if not (v.get("news") or v.get("ml") or v.get("blackout")):
         return None
-    nd = news.load_all(list(prices), strict=True, alpaca_news=interval != "1d")
+    nd = news.load_all(list(prices), strict=True, alpaca_news=interval != "1d",
+                       global_markets=v.get("global", False))
     return build_context(prices, nd, analyst.bias_frame(analyst.load_views()))
 
 

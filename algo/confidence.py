@@ -70,7 +70,7 @@ def main() -> None:
     ap.add_argument("--variant", default="long + trend + blackout + ML")
     ap.add_argument("--source", default="alpaca")
     ap.add_argument("--random-seeds", type=int, default=5)
-    ap.add_argument("--universe", default="core", choices=["core", "wide"])
+    ap.add_argument("--universe", default="core", choices=["core", "wide", "global"])
     args = ap.parse_args()
     logging.basicConfig(level=logging.WARNING)
     prices = load_prices(args.source, "1h", UNIVERSES[args.universe])

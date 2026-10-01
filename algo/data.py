@@ -26,14 +26,18 @@ TICKERS = {
 # The wider universe: liquid US stocks and ETFs (name = ticker).
 WIDE_STOCKS = ("AAPL", "MSFT", "AMZN", "META", "GOOGL", "AMD", "AVGO", "NFLX", "JPM", "XOM", "COIN")
 WIDE_ETFS = ("QQQ", "IWM", "TLT", "USO")
-TICKERS |= {t: t for t in WIDE_STOCKS + WIDE_ETFS}
+# Asia and Europe, traded in New York: country ETFs and big foreign companies (ADRs).
+GLOBAL_ETFS = ("EWJ", "FXI", "EWG", "EZU")  # Japan, China, Germany, Eurozone
+GLOBAL_ADRS = ("TSM", "ASML", "SAP", "NVO", "TM", "BABA")
+TICKERS |= {t: t for t in WIDE_STOCKS + WIDE_ETFS + GLOBAL_ETFS + GLOBAL_ADRS}
 CRYPTO = {"BTC", "ETH", "SOL"}
-ASSET_CLASS = ({a: "crypto" for a in CRYPTO} | {a: "stock" for a in ("NVDA", "TSLA") + WIDE_STOCKS}
-               | {"GOLD": "metal", "SILVER": "metal"} | {a: "etf" for a in WIDE_ETFS + ("SPY",)})
+ASSET_CLASS = ({a: "crypto" for a in CRYPTO} | {a: "stock" for a in ("NVDA", "TSLA") + WIDE_STOCKS + GLOBAL_ADRS}
+               | {"GOLD": "metal", "SILVER": "metal"} | {a: "etf" for a in WIDE_ETFS + GLOBAL_ETFS + ("SPY",)})
 
 # Name used in the project -> Alpaca symbol (the broker's own price data).
 ALPACA_SYMBOLS = {"BTC": "BTC/USD", "ETH": "ETH/USD", "SOL": "SOL/USD", "NVDA": "NVDA", "TSLA": "TSLA",
-                  "GOLD": "GLD", "SILVER": "SLV", "SPY": "SPY"} | {t: t for t in WIDE_STOCKS + WIDE_ETFS}
+                  "GOLD": "GLD", "SILVER": "SLV", "SPY": "SPY"} | {t: t for t in WIDE_STOCKS + WIDE_ETFS + GLOBAL_ETFS
+                                                                   + GLOBAL_ADRS}
 ALPACA_START = "2023-01-01"  # default history start; an account can use an earlier one (history_start)
 SIP_DELAY_MIN = 16  # Alpaca's free plan: full-market stock data from 15 minutes ago only
 

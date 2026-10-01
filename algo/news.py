@@ -257,7 +257,8 @@ def headlines(name: str, limit: int = 8) -> list[dict]:
     return items[:limit]
 
 
-def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: bool = False) -> dict:
+def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: bool = False,
+             global_markets: bool = False) -> dict:
     """Everything the system needs, per asset, cached.
     strict: raise if an asset's news is missing, instead of going on without it
     (live trading: a missing input must not silently change the positions)."""
@@ -273,6 +274,13 @@ def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: b
             log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
         out["earnings"][a] = earnings_dates(a, refresh) if ASSET_CLASS.get(a) == "stock" else []
+    if global_markets:  # Asia / Europe daily moves (opt-in: the 'global' option)
+        try:
+            out["global"] = load_global_indices()
+        except Exception as exc:
+            if strict:
+                raise RuntimeError("no Asia / Europe index data; not trading on incomplete inputs") from exc
+            log.warning("no Asia / Europe index data (%s)", exc)
     if alpaca_news:  # hourly: Alpaca / Benzinga articles with exact times
         out["alpaca_news"] = {}
         for a in assets:
@@ -365,3 +373,53 @@ def alpaca_news_features(articles: pd.DataFrame, index: pd.DatetimeIndex, bar: p
     z = (daily - hist.mean()) / hist.std()
     tone = np.where(n24 > 0, s24 / np.maximum(n24, 1), 0.0)
     return pd.DataFrame({"news_1h": n1.astype(float), "news_24h_z": z.to_numpy(), "news_tone": tone}, index=index)
+
+
+# ---------------------------------------------------------------- Asia and Europe overnight
+
+GLOBAL_INDICES = {"asia": ("^N225", "^HSI"), "europe": ("^GDAXI", "^STOXX50E")}  # Nikkei, Hang Seng, DAX, Euro Stoxx 50
+# A day's close is known (UTC) after: Tokyo 06:00 / Hong Kong 08:00, Frankfurt 15:30-16:30 (summer/winter).
+GLOBAL_AVAILABLE = {"asia": pd.Timedelta(hours=9), "europe": pd.Timedelta(hours=17)}
+
+
+def load_global_indices(refresh_hours: float = 3.0) -> pd.DataFrame:
+    """Daily closes of the Asian and European indices since 2022, cached in
+    data/news/global_indices.csv (re-downloaded when older than `refresh_hours`).
+    A day only counts once that market has closed, so a half-finished day is never stored."""
+    import time as _time
+
+    NEWS_DIR.mkdir(parents=True, exist_ok=True)
+    path = NEWS_DIR / "global_indices.csv"
+    if path.exists() and _time.time() - path.stat().st_mtime < refresh_hours * 3600:
+        return pd.read_csv(path, index_col=0, parse_dates=True)
+    import yfinance as yf
+
+    cols = {}
+    for tickers in GLOBAL_INDICES.values():
+        for t in tickers:
+            d = yf.download(t, start="2022-06-01", progress=False, auto_adjust=True)
+            if isinstance(d.columns, pd.MultiIndex):
+                d.columns = d.columns.get_level_values(0)
+            cols[t] = d["Close"]
+    df = pd.DataFrame(cols)
+    df.index = pd.DatetimeIndex(df.index).tz_localize(None).normalize()
+    now = pd.Timestamp.now(tz="UTC").tz_localize(None)
+    for region, tickers in GLOBAL_INDICES.items():  # drop days not closed yet
+        df.loc[df.index + GLOBAL_AVAILABLE[region] > now, list(tickers)] = np.nan
+    df.to_csv(path)
+    return df
+
+
+def global_features(index: pd.DatetimeIndex, closes: pd.DataFrame) -> pd.DataFrame:
+    """Per bar: the last finished day's move in Asia and in Europe, in standard
+    deviations of that market's last 60 days (asia_move, europe_move). Only days
+    that had closed before the bar started are used."""
+    out = pd.DataFrame(index=index)
+    bars = pd.DataFrame({"t": index}).sort_values("t")
+    for region, tickers in GLOBAL_INDICES.items():
+        r = closes[list(tickers)].pct_change(fill_method=None).mean(axis=1, skipna=True).dropna()
+        z = (r / r.rolling(60, min_periods=20).std()).dropna()
+        avail = pd.DataFrame({"t": z.index + GLOBAL_AVAILABLE[region], f"{region}_move": z.to_numpy()})
+        m = pd.merge_asof(bars, avail.sort_values("t"), on="t", direction="backward")
+        out[f"{region}_move"] = m.set_index("t")[f"{region}_move"].reindex(index).to_numpy()
+    return out

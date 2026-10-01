@@ -20,7 +20,9 @@ UNIVERSE = ("BTC", "ETH", "SOL", "NVDA", "TSLA", "GOLD", "SILVER")
 # Wider universe: more candidate trades for the ML learner to choose from, and
 # more trading during the day (liquid large caps, index / bond / oil ETFs).
 UNIVERSE_WIDE = UNIVERSE + data.WIDE_STOCKS + data.WIDE_ETFS
-UNIVERSES = {"core": UNIVERSE, "wide": UNIVERSE_WIDE}
+# Global: plus Asia and Europe through New York (country ETFs, ADRs of TSMC, ASML, SAP...).
+UNIVERSE_GLOBAL = UNIVERSE_WIDE + data.GLOBAL_ETFS + data.GLOBAL_ADRS
+UNIVERSES = {"core": UNIVERSE, "wide": UNIVERSE_WIDE, "global": UNIVERSE_GLOBAL}
 
 # Per side, on every fill, at the broker we trade on (Alpaca, lowest volume tier):
 # crypto 0.25% taker fee (market and stop orders take liquidity), stocks and ETFs
@@ -36,7 +38,9 @@ COSTS = {
     "SILVER": Costs(fee_bps=0.2, slippage_bps=3, short_borrow_apr=0.01),
     "SPY": Costs(fee_bps=0.2, slippage_bps=1),
 } | {a: Costs(fee_bps=0.2, slippage_bps=3, short_borrow_apr=0.01) for a in data.WIDE_STOCKS} \
-  | {a: Costs(fee_bps=0.2, slippage_bps=2, short_borrow_apr=0.01) for a in data.WIDE_ETFS}
+  | {a: Costs(fee_bps=0.2, slippage_bps=2, short_borrow_apr=0.01) for a in data.WIDE_ETFS} \
+  | {a: Costs(fee_bps=0.2, slippage_bps=3, short_borrow_apr=0.01) for a in data.GLOBAL_ETFS} \
+  | {a: Costs(fee_bps=0.2, slippage_bps=4, short_borrow_apr=0.02) for a in data.GLOBAL_ADRS}
 
 # One exit rule per strategy, fixed in advance (from the BTC/gold study, so
 # out-of-sample for every other asset). "4:2 normally, 6:2 in strong trends"
@@ -89,11 +93,18 @@ UPGRADES = {
                                                    blackout=True, intraday=True, ml=True),
     "long + trend + blackout + ML + brake 10%": dict(allow_short=False, learn=True, news=True, trend=True,
                                                      blackout=True, ml=True, brake=0.10),
+    "long + trend + blackout + ML + global": dict(allow_short=False, learn=True, news=True, trend=True,
+                                                  blackout=True, ml=True, **{"global": True}),
+    "long + trend + blackout + intraday + ML + global": dict(allow_short=False, learn=True, news=True, trend=True,
+                                                             blackout=True, intraday=True, ml=True,
+                                                             **{"global": True}),
     "long + trend + blackout + ML": dict(allow_short=False, learn=True, news=True, trend=True, blackout=True,
                                          ml=True),
 }
 ALL_VARIANTS = VARIANTS | UPGRADES
 OPTIONS = ("trend", "blackout", "ml", "sizing", "intraday", "brake")
+# Context options (what data the variant reads), not run_system arguments:
+#   global    the ML also sees how Asia and Europe moved on their last finished day
 NEWS_VIEWS = ("setup", "news", "event", "ai")
 
 
@@ -149,6 +160,8 @@ def build_context(prices: dict[str, pd.DataFrame], news_data: dict, ai_bias: pd.
                          .rename("ai_bias").to_frame())
         if (df.index != df.index.normalize()).any():  # intraday: daily trend and event blackout
             parts.append(daily_trend(df).rename("daily_trend").to_frame())
+            if "global" in news_data:  # only when the 'global' option asked for it
+                parts.append(news_mod.global_features(df.index, news_data["global"]))
             if a in news_data.get("alpaca_news", {}):
                 parts.append(news_mod.alpaca_news_features(news_data["alpaca_news"][a], df.index,
                                                            pd.Timedelta(hours=1)))
