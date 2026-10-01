@@ -58,3 +58,18 @@ def test_session_in_progress_is_not_blocked_before_its_last_bar():
     assert not b.any()
     b = blackout(full, [], [], jobs, stock=True)
     assert list(b[b].index) == [pd.Timestamp("2026-10-01 19:00")]  # 15:00 New York
+
+
+def test_next_bar_blocked_before_the_jobs_report():
+    import pandas as pd
+    from algo.news import next_bar_blocked
+
+    jobs = ["2026-10-02"]
+    upto = lambda h: pd.DatetimeIndex([f"2026-10-01 {x}:00" for x in range(13, h + 1)])
+    assert not next_bar_blocked(upto(17), [], [], jobs, stock=True)  # next: 14:00 New York
+    assert next_bar_blocked(upto(18), [], [], jobs, stock=True)      # next: 15:00 New York, the last bar
+    assert not next_bar_blocked(upto(19), [], [], jobs, stock=True)  # next session: other rule
+    # crypto: flat through 8:00-9:00 New York on report day
+    crypto = pd.DatetimeIndex([f"2026-10-02 {x:02d}:00" for x in range(0, 12)])  # next: 12:00 UTC = 8:00 New York
+    assert next_bar_blocked(crypto, [], [], jobs, stock=False)
+    assert not next_bar_blocked(crypto[:-1], [], [], jobs, stock=False)

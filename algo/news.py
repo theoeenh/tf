@@ -264,6 +264,19 @@ def headlines(name: str, limit: int = 8) -> list[dict]:
     return items[:limit]
 
 
+def next_bar_blocked(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list, stock: bool) -> bool:
+    """Live: is the bar after the newest complete one an event bar? The backtest goes flat
+    at that bar's open, but live a bar is only seen once it has closed, so the account must
+    be flat before it starts. (For stocks only within the session: the first bar of the
+    next session is covered by the 'last bar before' rule.)"""
+    if not len(index):
+        return False
+    nxt = index[-1] + pd.Timedelta(hours=1)
+    if stock and nxt.tz_localize("UTC").tz_convert("America/New_York").hour > 15:
+        return False
+    return bool(blackout(index.append(pd.DatetimeIndex([nxt])), earnings, fomc, jobs, stock).iloc[-1])
+
+
 def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: bool = False,
              global_markets: bool = False) -> dict:
     """Everything the system needs, per asset, cached.

@@ -144,12 +144,23 @@ def update(source: str | None = None) -> Path:
         live = [p for p in res.open_positions if not p["shadow"]]
         if not live:
             lines += ["None.", ""]
+        closing = set()
+        if v.get("blackout") and interval == "1h":  # be flat before an event bar starts, not after it
+            for p in live:
+                a = p["asset"]
+                if news.next_bar_blocked(prices[a].index, news.earnings_dates(a) if a not in data.CRYPTO
+                                         and news.ASSET_CLASS.get(a) == "stock" else [],
+                                         news.fomc_dates(), news.jobs_report_dates(), stock=a not in data.CRYPTO):
+                    closing.add(id(p))
         for p in live:
             tgt = "none (trailing)" if p["target"] is None else f"{p['target']:,.2f}"
             lines += [f"- **{'LONG' if p['side'] > 0 else 'SHORT'} {p['qty']:.4f} {p['asset']}** "
                       f"({p['strategy']}) since {p['entry_time']:%Y-%m-%d %H:%M}, entry {p['entry']:,.2f}, "
                       f"stop {p['stop']:,.2f}, target {tgt}, now {p['unrealised_r']:+.2f}R  \n"
                       f"  *Thinking:* {p['rationale']}"]
+            if id(p) in closing:
+                lines += ["  *Closing now:* the next bar is a scheduled event (blackout); flat before it starts."]
+                continue
             orders.append({"asset": p["asset"], "ticker": data.TICKERS[p["asset"]], "strategy": p["strategy"],
                            "qty": p["side"] * p["qty"], "stop": p["stop"], "target": p["target"],
                            "mark": p["mark"], "entry": p["entry"], "r": p["unrealised_r"]})
