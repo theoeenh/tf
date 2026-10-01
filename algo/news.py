@@ -223,9 +223,16 @@ def blackout(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list, st
         # the session right before (a weekend or holiday in between at most)
         prev = {uniq[p - 1] for p, d in zip(pos, days) if 0 < p and (d - uniq[p - 1]).days <= 4}
         if prev:
+            # The session's last bar is the 15:00 New York bar (15:00-16:00). A session still
+            # in progress must not have its newest bar taken for its last one; a finished
+            # session's real last bar also covers early closes (13:00 half days).
             last = pd.Series(np.arange(len(index))).groupby(day).max()
+            newest_day = day.max()
             for d in prev:
-                m[last[d]] = True
+                if d < newest_day:
+                    m[last[d]] = True
+                else:
+                    m |= np.asarray(day == d) & (hour == 15)
         return m
 
     ev = pd.DatetimeIndex(earnings).normalize() if earnings else pd.DatetimeIndex([])

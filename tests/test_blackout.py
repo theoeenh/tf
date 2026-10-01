@@ -41,3 +41,20 @@ def test_daily_trend_uses_only_finished_days():
     sig = pd.Series(0, idx); sig.iloc[-1] = -1; sig.iloc[-2] = 1
     kept = with_trend(sig, tr)
     assert kept.iloc[-1] == 0 and kept.iloc[-2] == 1
+
+
+def test_session_in_progress_is_not_blocked_before_its_last_bar():
+    """The day before the jobs report: only the 15:00 New York bar is blocked, also while the
+    day is still in progress (the newest bar available is not the session's last bar)."""
+    import pandas as pd
+    from algo.news import blackout
+
+    # Thu 1 Oct 2026, jobs report Fri 2 Oct; New York is UTC-4: 13:00 UTC = 9:00 NY bar
+    full = pd.DatetimeIndex([f"2026-09-30 {h}:00" for h in range(13, 20)]
+                            + [f"2026-10-01 {h}:00" for h in range(13, 20)])
+    jobs = ["2026-10-02"]
+    so_far = full[full <= "2026-10-01 14:00"]  # live, at 11:20 New York
+    b = blackout(so_far, [], [], jobs, stock=True)
+    assert not b.any()
+    b = blackout(full, [], [], jobs, stock=True)
+    assert list(b[b].index) == [pd.Timestamp("2026-10-01 19:00")]  # 15:00 New York
