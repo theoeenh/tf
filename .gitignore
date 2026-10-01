@@ -8,3 +8,5 @@ reports/*
 !reports/.gitkeep
 # Alpaca / Benzinga article cache (downloaded, not ours to publish)
 data/news/*_alpaca_news.csv
+# Asia / Europe index cache (refreshed every 3 h; a committed copy would look fresh after checkout)
+data/news/global_indices.csv
