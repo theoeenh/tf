@@ -26,7 +26,10 @@ TEMPLATE = Path(__file__).with_name("dashboard_template.html")
 
 def _read_csv(name: str) -> pd.DataFrame:
     path = PAPER_DIR / name
-    return pd.read_csv(path) if path.exists() and path.stat().st_size else pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except (FileNotFoundError, pd.errors.EmptyDataError):  # missing, or no rows yet (no trades)
+        return pd.DataFrame()
 
 
 def _clean(x):
