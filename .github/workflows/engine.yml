@@ -64,5 +64,5 @@ jobs:
           git commit -m "Engine log $(date -u +'%Y-%m-%d %H:%M') UTC"
           # the shadow runs rewrote the accounts' files in this checkout: drop them, only the log is kept
           git reset --hard -q && git clean -fdq paper
-          for i in 1 2 3 4 5 6; do git pull --rebase -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null; sleep $((RANDOM % 10 + 3)); done
+          for i in 1 2 3 4 5 6; do git pull --rebase -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
           exit 1
