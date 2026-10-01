@@ -52,10 +52,25 @@ jobs:
           path: |
             data/*_alpaca.csv
             data/news
+            data/social
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
       - name: Download what is missing
         run: python -m algo.fetch
+      # Crowd mood from StockTwits: recorded only, no trading uses it yet. Never blocks trading.
+      - name: Record StockTwits counts
+        continue-on-error: true
+        run: python -m algo.social
+      - name: Save the StockTwits counts to the repo (once a day)
+        continue-on-error: true
+        run: |
+          [ "$(date -u +%H)" = "21" ] || exit 0
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add data/social
+          git diff --cached --quiet && exit 0
+          git commit -m "StockTwits counts $(date -u +'%Y-%m-%d')"
+          for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && exit 0; sleep $((RANDOM % 10 + 3)); done
 
   trade:
     needs: data
