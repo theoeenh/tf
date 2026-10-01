@@ -89,18 +89,19 @@ def table(rows: list[tuple[str, dict]]) -> str:
 
 
 def study(prices, spy, train, test, label, out: Path, md: list[str], context: dict | None = None,
-          variants: dict = VARIANTS, highlight: str = None) -> dict:
+          variants: dict = VARIANTS, highlight: str = None, context_global: dict | None = None) -> dict:
     """Run every variant on one bar size; append the section to md."""
     global HIGHLIGHT
     HIGHLIGHT = highlight or HIGHLIGHT
     results, risks = {}, {}
     for name, v in variants.items():
+        ctx = context_global if v.get("global") and context_global is not None else context
         log.info("%s: calibrating %s", label, name)
         risks[name] = calibrate_risk(prices, v["allow_short"], v["learn"], train[0], train[1],
-                                     news=v.get("news", False), context=context,
+                                     news=v.get("news", False), context=ctx,
                                      **{o: v.get(o, False) for o in OPTIONS})
         log.info("%s: running %s at %.2f%% risk per trade", label, name, 100 * risks[name])
-        results[name] = run_variant(prices, v, risks[name], train[0], test[1], context)
+        results[name] = run_variant(prices, v, risks[name], train[0], test[1], ctx)
     if HIGHLIGHT not in results:  # e.g. a --only run: show the last (newest) version in detail
         HIGHLIGHT = list(results)[-1]
     ppy = bars_per_year(results[HIGHLIGHT].equity.index)
@@ -341,8 +342,11 @@ def main() -> None:
         idx = hourly["BTC"].index
         split = idx[0] + (idx[-1] - idx[0]) * 0.6
         span = f"{idx[0]:%Y-%m} to {idx[-1]:%Y-%m}"
+        ctx_g = None
+        if any(v.get("global") for v in variants.values()):  # Asia / Europe features for those versions
+            ctx_g = build_context(hourly, news_data | {"global": news.load_global_indices()})
         study(hourly, spy_h, (idx[0] + pd.Timedelta(days=10), split), (split + pd.Timedelta(hours=1), None),
-              f"Hourly bars, {span}", out, md, build_context(hourly, news_data), variants)
+              f"Hourly bars, {span}", out, md, build_context(hourly, news_data), variants, context_global=ctx_g)
 
     (out / "report.md").write_text("\n".join(md))
     print(f"Report written to {out / 'report.md'}")
