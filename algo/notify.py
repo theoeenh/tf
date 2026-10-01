@@ -6,20 +6,25 @@ it, nothing is sent. Messages only describe paper trades.
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 import urllib.request
 
 log = logging.getLogger(__name__)
 NTFY_URL = "https://ntfy.sh/"
+PRIORITY = {"min": 1, "low": 2, "default": 3, "high": 4, "max": 5, "urgent": 5}
 
 
 def send(title: str, body: str, tags: str = "chart_with_upwards_trend", priority: str = "default") -> bool:
     topic = os.environ.get("NTFY_TOPIC")
     if not topic:
         return False
-    req = urllib.request.Request(NTFY_URL + topic, data=body.encode(), method="POST",
-                                 headers={"Title": title, "Tags": tags, "Priority": priority})
+    # JSON publishing: HTTP headers cannot carry characters like the "–" in account names
+    msg = {"topic": topic, "title": title, "message": body, "tags": tags.split(","),
+           "priority": PRIORITY.get(priority, 3)}
+    req = urllib.request.Request(NTFY_URL, data=json.dumps(msg).encode(), method="POST",
+                                 headers={"Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=15):
             return True

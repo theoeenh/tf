@@ -108,3 +108,17 @@ def test_opening_auction_window_and_order_split():
 def test_clock_without_fractional_seconds():
     assert alpaca.opening_auction({"is_open": False, "next_open": "2026-10-01T09:30:00-04:00",
                                    "timestamp": "2026-10-01T09:10:00-04:00"})
+
+
+def test_notification_title_with_dash(monkeypatch):
+    """Account names contain '–', which an HTTP header cannot carry: sent as JSON."""
+    import json
+    from unittest import mock
+
+    from algo import notify
+
+    monkeypatch.setenv("NTFY_TOPIC", "topic")
+    with mock.patch("urllib.request.urlopen") as u:
+        assert notify.send("[B – ML brake 10%] BUY 68 AAPL", "body", "green_circle")
+        sent = json.loads(u.call_args[0][0].data)
+    assert sent["topic"] == "topic" and sent["title"].startswith("[B – ML")
