@@ -119,7 +119,11 @@ def plan(want: dict[str, float], have: dict[str, float], prices: dict[str, float
         diff = target - have.get(sym, 0.0)
         if abs(diff) * prices.get(sym, 0.0) < MIN_NOTIONAL:
             continue
-        orders.append({"symbol": sym, "side": "buy" if diff > 0 else "sell", "qty": round(abs(diff), 6),
+        # round down (crypto to 9 decimals, Alpaca's precision): rounding up asks for more than is held
+        qty = math.floor(abs(diff) * 1e9) / 1e9 if sym in crypto_syms else round(abs(diff), 6)
+        if target == 0 and sym in have:
+            qty = abs(have[sym])  # closing: exactly what is held
+        orders.append({"symbol": sym, "side": "buy" if diff > 0 else "sell", "qty": qty,
                        "type": "market", "time_in_force": "gtc" if sym in crypto_syms else "day", "note": note})
     return orders
 

@@ -130,3 +130,12 @@ def test_plan_closes_a_position_no_longer_wanted():
     # the price comes from live data when orders.json no longer lists the asset
     o = plan({}, {"AAPL": 68.06}, {"AAPL": 328.0})
     assert o and o[0]["side"] == "sell" and abs(o[0]["qty"] - 68.06) < 1e-9
+
+
+def test_closing_crypto_sells_exactly_what_is_held():
+    from algo.alpaca import plan
+
+    o = plan({}, {"SOL/USD": 140.302451782}, {"SOL/USD": 120.0})
+    assert o[0]["side"] == "sell" and o[0]["qty"] == 140.302451782
+    o = plan({"SOL/USD": 10.0000000004}, {}, {"SOL/USD": 120.0})
+    assert o[0]["qty"] <= 10.0000000004
