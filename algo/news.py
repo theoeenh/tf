@@ -52,12 +52,16 @@ def _get(url: str, timeout: int = 60) -> str:
         return r.read().decode("utf-8", "replace")
 
 
-def _gdelt(query: str, mode: str, start: str, end: str) -> pd.Series:
+GDELT_STALE_DAYS = 3  # how old the cached daily news may be when GDELT is down
+_gdelt_down = [False]  # set after a failure: the rest of this run uses the caches at once
+
+
+def _gdelt(query: str, mode: str, start: str, end: str, attempts: int = 6) -> pd.Series:
     params = {"query": query, "mode": mode, "format": "json",
               "startdatetime": pd.Timestamp(start).strftime("%Y%m%d%H%M%S"),
               "enddatetime": pd.Timestamp(end).strftime("%Y%m%d%H%M%S")}
     url = GDELT_URL + "?" + urllib.parse.urlencode(params)
-    for attempt in range(6):
+    for attempt in range(attempts):
         wait = 6.0 - (time.time() - _last_call[0])  # GDELT allows one request per 5 s
         if wait > 0:
             time.sleep(wait)
@@ -86,8 +90,23 @@ def load_gdelt(name: str, refresh: bool = False, end: str | None = None) -> pd.D
     else:
         start = GDELT_START
     q = QUERIES[name]
-    df = pd.DataFrame({"articles": _gdelt(q, "timelinevolraw", start, end),
-                       "tone": _gdelt(q, "timelinetone", start, end)})
+    recent = old is not None and not refresh and \
+        old.index[-1] >= pd.Timestamp(end) - pd.Timedelta(days=GDELT_STALE_DAYS)
+    if recent and _gdelt_down[0]:
+        return old
+    try:
+        # with a cache, a short try: GDELT often rate-limits (429) shared runners
+        n = 6 if old is None or refresh else 2
+        df = pd.DataFrame({"articles": _gdelt(q, "timelinevolraw", start, end, n),
+                           "tone": _gdelt(q, "timelinetone", start, end, n)})
+    except RuntimeError:
+        # Daily tone is a 7-day average used from the next day: a day or two late changes
+        # little, and stopping all trading for it would cost far more. Older than that: fail.
+        _gdelt_down[0] = True
+        if recent:
+            log.warning("GDELT unavailable for %s: using the cache up to %s", name, old.index[-1].date())
+            return old
+        raise
     if old is not None and not refresh:
         df = pd.concat([old[old.index < df.index.min()], df]) if len(df) else old
     df.index.name = "Date"

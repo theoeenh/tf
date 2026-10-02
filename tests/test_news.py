@@ -114,3 +114,22 @@ def test_global_moves_only_after_that_market_closed():
     big_asia = f.asia_move.iloc[1]
     assert big_asia > 3 and abs(f.asia_move.iloc[0]) < 3  # Asia's big day only from 09:00 UTC
     assert abs(f.europe_move.iloc[2]) < 3 and f.europe_move.iloc[3] > 3  # Europe's only from 17:00 UTC
+
+
+def test_gdelt_down_uses_a_recent_cache(tmp_path, monkeypatch):
+    import pandas as pd
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    days = pd.date_range("2026-09-01", "2026-09-30", freq="D", name="Date")
+    pd.DataFrame({"articles": 10.0, "tone": 0.5}, index=days).to_csv(tmp_path / "NVDA_gdelt.csv")
+
+    def down(*a, **k):
+        raise RuntimeError("GDELT unavailable")
+
+    monkeypatch.setattr(news, "_gdelt", down)
+    monkeypatch.setattr(news, "_gdelt_down", [False])
+    assert len(news.load_gdelt("NVDA", end="2026-10-02")) == len(days)  # 2 days late: fine
+    import pytest
+    with pytest.raises(RuntimeError):
+        news.load_gdelt("NVDA", end="2026-10-08")  # a week late: refuse
