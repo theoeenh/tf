@@ -1,1 +1,68 @@
-[]
+[
+  {
+    "asset": "NVDA",
+    "ticker": "NVDA",
+    "strategy": "donchian_trend",
+    "qty": 60.993488354419476,
+    "stop": 231.55876026012953,
+    "target": 249.14609447974092,
+    "mark": 236.56,
+    "entry": 237.421205,
+    "r": -0.14690202436245273
+  },
+  {
+    "asset": "NVDA",
+    "ticker": "NVDA",
+    "strategy": "squeeze_breakout",
+    "qty": 50.82584954691073,
+    "stop": 230.38627131215543,
+    "target": null,
+    "mark": 236.56,
+    "entry": 237.421205,
+    "r": -0.12241835363537729
+  },
+  {
+    "asset": "AMD",
+    "ticker": "AMD",
+    "strategy": "donchian_trend",
+    "qty": 16.63731775628505,
+    "stop": 618.8583259344047,
+    "target": 683.3394921311907,
+    "mark": 638.7953,
+    "entry": 640.352048,
+    "r": -0.07242803248544054
+  },
+  {
+    "asset": "AMD",
+    "ticker": "AMD",
+    "strategy": "squeeze_breakout",
+    "qty": 13.862358626764607,
+    "stop": 614.5595815212855,
+    "target": null,
+    "mark": 638.7953,
+    "entry": 640.352048,
+    "r": -0.06035669373786712
+  },
+  {
+    "asset": "QQQ",
+    "ticker": "QQQ",
+    "strategy": "donchian_trend",
+    "qty": 36.514939747929795,
+    "stop": 742.57651078109,
+    "target": 771.95831043782,
+    "mark": 751.77,
+    "entry": 752.370444,
+    "r": -0.06130774905026995
+  },
+  {
+    "asset": "QQQ",
+    "ticker": "QQQ",
+    "strategy": "squeeze_breakout",
+    "qty": 30.43103085826665,
+    "stop": 740.617724137308,
+    "target": null,
+    "mark": 751.77,
+    "entry": 752.370444,
+    "r": -0.05108979087522496
+  }
+]
