@@ -1,16 +1,19 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-02 11:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-02 13:26 UTC.
 
-**Equity $99,422** (-0.58%) · max drawdown -1.0% · 7 closed trades · 1 open
+**Equity $99,336** (-0.66%) · max drawdown -1.0% · 8 closed trades · 0 open
 
 ## Open positions
 
-- **LONG 140.3033 SOL** (donchian_trend) since 2026-10-02 05:00, entry 123.59, stop 120.76, target 129.27, now -0.58R  
-  *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.
+None.
+
 
 ## Closed trades (newest first)
 
+- **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-362** (fees $86, event)  
+  *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.  
+  *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.91R, best point +0.0R)
 - **2026-10-01 19:00 · LONG USO · squeeze_breakout · -0.15R · $-60** (fees $0, event)  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 17 = chop market, high volatility (ATR 1.2% of price). Plan: entry 150.31, stop 144.67, no target, trailing stop lets it run; risking $397.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.15R, best point +0.0R)
@@ -35,3 +38,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 
 ## Skipped by the learner (4)
 
+- 2026-10-02 05:00 BTC donchian_trend: would have made -0.60R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.06R (avg win +2.43R, avg loss -1.16R).
+- 2026-10-02 05:00 ETH donchian_trend: would have made -0.28R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).
+- 2026-10-02 03:00 ETH squeeze_breakout: would have made +0.19R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.10R (avg win +1.58R, avg loss -0.87R).
+- 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.11R (avg win +1.58R, avg loss -0.87R).
