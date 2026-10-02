@@ -1,12 +1,12 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-02 07:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-02 08:22 UTC.
 
-**Equity $99,391** (-0.61%) · max drawdown -1.0% · 7 closed trades · 1 open
+**Equity $99,383** (-0.62%) · max drawdown -1.0% · 7 closed trades · 1 open
 
 ## Open positions
 
-- **LONG 140.3033 SOL** (donchian_trend) since 2026-10-02 05:00, entry 123.59, stop 120.76, target 129.27, now -0.66R  
+- **LONG 140.3033 SOL** (donchian_trend) since 2026-10-02 05:00, entry 123.59, stop 120.76, target 129.27, now -0.68R  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.
 
 ## Closed trades (newest first)
