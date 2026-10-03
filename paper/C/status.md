@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-03 23:09 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-03 23:21 UTC.
 
 **Equity $98,788** (-1.21%) · max drawdown -1.3% · 9 closed trades · 7 open
 
@@ -56,10 +56,10 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
 - 2026-10-02 03:00 ETH squeeze_breakout: would have made +0.19R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.08R (avg win +1.58R, avg loss -0.87R).
 - 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.08R (avg win +1.58R, avg loss -0.87R).
 - 2026-10-02 13:00 XOM opening_range: would have made +1.67R. SKIPPED by the ML learner: 47% estimated chance of profit, expected -0.00R (avg win +1.05R, avg loss -0.95R).
-- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.15R).
+- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 25% estimated chance of profit, expected -0.23R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-02 16:00 ETH vwap_reversion: would have made -1.35R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
 - 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.15R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-02 16:00 SOL vwap_reversion: would have made -1.31R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
-- 2026-10-02 18:00 BTC vwap_reversion: would have made -0.66R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.34R (avg win +0.64R, avg loss -0.81R).
-- 2026-10-03 00:00 BTC vwap_reversion: would have made -0.39R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
+- 2026-10-02 18:00 BTC vwap_reversion: would have made -0.66R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.37R (avg win +0.64R, avg loss -0.81R).
+- 2026-10-03 00:00 BTC vwap_reversion: would have made -0.39R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.38R (avg win +0.64R, avg loss -0.81R).
