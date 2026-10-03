@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-03 13:51 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-03 14:00 UTC.
 
 **Equity $98,476** (-1.52%) · max drawdown -1.5% · 8 closed trades · 6 open
 
@@ -46,7 +46,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $399. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (8)
+## Skipped by the learner (9)
 
 - 2026-10-02 05:00 BTC donchian_trend: would have made -0.60R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-02 05:00 ETH donchian_trend: would have made -0.28R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.03R (avg win +2.43R, avg loss -1.16R).
