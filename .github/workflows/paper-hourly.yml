@@ -71,6 +71,13 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "StockTwits counts $(date -u +'%Y-%m-%d')"
           for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
+      - name: Alert the phone if the download failed (no account trades this run)
+        if: failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: >
+          python -c "from algo import notify; notify.send('⚠️ data download failed: no trading this run',
+          'See GitHub Actions run ${{ github.run_id }}.', 'warning', 'high')"
 
   trade:
     needs: data
@@ -140,6 +147,17 @@ jobs:
 
       - name: Mirror on Alpaca (market orders + stops / targets)
         run: python -m algo.alpaca sync --send | tee alpaca_sync.txt
+
+      # Alpaca must hold what the plan wants, every position covered by a stop: if not, phone alert
+      - name: Check Alpaca matches the plan
+        continue-on-error: true
+        run: python -m algo.alpaca verify --alert
+
+      - name: Alert the phone if this run failed
+        if: failure()
+        run: >
+          python -c "from algo import notify; notify.send('⚠️ [${{ env.PAPER_ACCOUNT_NAME || matrix.account }}] trading run failed',
+          'See GitHub Actions run ${{ github.run_id }}. Stops are put back automatically when the Alpaca step fails.', 'warning', 'high')"
 
       - name: Summary
         if: always()

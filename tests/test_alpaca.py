@@ -139,3 +139,51 @@ def test_closing_crypto_sells_exactly_what_is_held():
     assert o[0]["side"] == "sell" and o[0]["qty"] == 140.302451782
     o = plan({"SOL/USD": 10.0000000004}, {}, {"SOL/USD": 120.0})
     assert o[0]["qty"] <= 10.0000000004
+
+
+def _fake_alpaca(monkeypatch, positions, open_orders, plan):
+    import json
+
+    from algo import alpaca, notify
+
+    monkeypatch.setattr(alpaca, "positions", lambda: dict(positions))
+    monkeypatch.setattr(alpaca, "wanted", lambda: dict(plan))
+    monkeypatch.setattr(alpaca, "last_prices", lambda: {s: 100.0 for s in plan})
+    sent, alerts = [], []
+    monkeypatch.setattr(alpaca, "_send", lambda o: sent.append(o) or {"id": "x"})
+    monkeypatch.setattr(notify, "send", lambda *a, **k: alerts.append(a) or True)
+
+    def request(method, path, body=None, base=None):
+        if path.startswith("/v2/orders?status=open"):
+            return open_orders
+        raise AssertionError(path)
+
+    monkeypatch.setattr(alpaca, "request", request)
+    return sent, alerts
+
+
+def test_verify_flags_a_position_without_stop(monkeypatch):
+    from algo import alpaca
+
+    oco = {"symbol": "NVDA", "side": "sell", "type": "limit", "qty": "10", "order_class": "oco",
+           "legs": [{"symbol": "NVDA", "side": "sell", "type": "stop", "qty": "10"}]}
+    _, alerts = _fake_alpaca(monkeypatch, {"NVDA": 10.0, "AMD": 5.0}, [oco], {"NVDA": 10.0, "AMD": 5.0})
+    problems = alpaca.verify(alert=True)
+    assert problems == ["AMD: 5 held, only 0 covered by a stop"] and alerts
+
+
+def test_verify_all_good(monkeypatch):
+    from algo import alpaca
+
+    stop = {"symbol": "AMD", "side": "sell", "type": "stop", "qty": "5"}
+    _fake_alpaca(monkeypatch, {"AMD": 5.0}, [stop], {"AMD": 5.0})
+    assert alpaca.verify() == []
+
+
+def test_failed_run_puts_the_stops_back(monkeypatch):
+    from algo import alpaca
+
+    sent, alerts = _fake_alpaca(monkeypatch, {"NVDA": 10.0}, [], {"NVDA": 10.0})
+    trades = [{"asset": "NVDA", "strategy": "s", "qty": 10.0, "stop": 95.0, "target": 120.0}]
+    alpaca.emergency_protect(trades, RuntimeError("boom"))
+    assert sent and sent[0]["symbol"] == "NVDA" and alerts and "NVDA" in alerts[0][1]

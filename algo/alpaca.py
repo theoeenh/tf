@@ -303,6 +303,47 @@ def sync(send: bool = False) -> list[dict]:
     if send:  # 1) cancel the stops and targets of the last run
         request("DELETE", "/v2/orders")
         _wait(lambda: not request("GET", "/v2/orders?status=open"))
+    try:
+        return _trade_and_protect(send, trades, prices)
+    except Exception as exc:
+        if send:  # the old stops are gone: never leave what is held unprotected
+            emergency_protect(trades, exc)
+        raise
+
+
+def emergency_protect(trades: list[dict], exc: Exception) -> None:
+    """After a failure, put stops back on everything held (the plan's levels), and alert."""
+    from . import notify
+
+    placed, failed = [], []
+    try:
+        held = positions()
+        open_syms = {o["symbol"] for o in request("GET", "/v2/orders?status=open")}
+    except AlpacaError as e:
+        held, open_syms = {}, set()
+        failed.append(f"positions unreadable ({e})")
+    for sym, q in sorted(held.items()):
+        if abs(q) < 1e-9 or sym.replace("/", "") in {s.replace("/", "") for s in open_syms}:
+            continue
+        mine = [t for t in trades if SYMBOLS.get(t["asset"]) == sym]
+        if not mine:
+            failed.append(f"{sym}: no stop level in the plan")
+            continue
+        for o in protect(sym, q, mine):
+            try:
+                _send(o)
+                placed.append(sym)
+            except AlpacaError as e:
+                failed.append(f"{sym}: {e}")
+    msg = (f"Run failed ({type(exc).__name__}: {str(exc)[:150]}). Stops put back on: "
+           f"{', '.join(sorted(set(placed))) or 'nothing needed'}."
+           + (f" NOT protected: {'; '.join(failed)}" if failed else ""))
+    print("EMERGENCY: " + msg)
+    acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
+    notify.send(f"⚠️ [{acct}] trading run failed", msg, "warning", "high")
+
+
+def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float]) -> list[dict]:
     have = positions()
     missing = [s for s in have if s not in prices]  # held but no longer wanted: orders.json has no price for it
     if missing:
@@ -391,18 +432,65 @@ def sync(send: bool = False) -> list[dict]:
     return todo + protective
 
 
+def verify(alert: bool = False) -> list[str]:
+    """Does Alpaca hold what the plan wants, and is every position covered by a stop?
+    Returns the problems (empty = all good); with `alert`, sends them to the phone."""
+    problems = []
+    want = wanted()
+    have = positions()
+    orders = request("GET", "/v2/orders?status=open&nested=true")
+    norm = lambda s: s.replace("/", "")
+    pending = {}  # market / limit entries not filled yet (e.g. queued while the market is closed)
+    stops = {}
+    for o in orders:
+        legs = [o] + list(o.get("legs") or [])
+        for x in legs:
+            q = float(x.get("qty") or 0) - float(x.get("filled_qty") or 0)
+            sign = 1 if x.get("side") == "buy" else -1
+            if x.get("type") in ("stop", "stop_limit", "trailing_stop"):
+                stops[norm(x["symbol"])] = stops.get(norm(x["symbol"]), 0.0) + q
+            elif x is o and x.get("type") in ("market", "limit") and not o.get("order_class"):
+                pending[norm(x["symbol"])] = pending.get(norm(x["symbol"]), 0.0) + sign * q
+    prices = last_prices()
+    for sym in sorted({norm(s) for s in want} | {norm(s) for s in have}):
+        w = sum(q for s, q in want.items() if norm(s) == sym)
+        if "/" not in next((s for s in want if norm(s) == sym), "") and w < 0:
+            w = -math.floor(-w)  # whole-share shorts
+        if any(norm(SYMBOLS[a]) == sym for a in CRYPTO) and w < 0:
+            w = 0.0  # crypto shorts are held flat
+        h = sum(q for s, q in have.items() if norm(s) == sym) + pending.get(sym, 0.0)
+        px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or 100.0
+        if abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):
+            problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
+        held = sum(q for s, q in have.items() if norm(s) == sym)
+        if abs(held) > 1e-9 and stops.get(sym, 0.0) < 0.98 * abs(held):
+            problems.append(f"{sym}: {abs(held):g} held, only {stops.get(sym, 0.0):g} covered by a stop")
+    if alert and problems:
+        from . import notify
+
+        acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
+        notify.send(f"⚠️ [{acct}] Alpaca does not match the plan", "; ".join(problems), "warning", "high")
+    return problems
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("check", help="test the keys and show the account")
     p = sub.add_parser("sync", help="match Alpaca to paper/orders.json")
     p.add_argument("--send", action="store_true", help="really send the orders (default: dry run)")
+    v = sub.add_parser("verify", help="check Alpaca matches the plan and every position has a stop")
+    v.add_argument("--alert", action="store_true", help="send problems to the phone (ntfy)")
     args = ap.parse_args()
     if args.cmd == "check":
         acct = request("GET", "/v2/account")
         print(f"Alpaca PAPER account {acct.get('account_number')}: status {acct.get('status')}, "
               f"equity ${float(acct.get('equity', 0)):,.2f}, buying power ${float(acct.get('buying_power', 0)):,.2f}")
         print(f"Positions: {positions() or 'none'}")
+    elif args.cmd == "verify":
+        problems = verify(args.alert)
+        print("\n".join(problems) if problems else "Alpaca matches the plan; every position has its stop.")
+        raise SystemExit(1 if problems else 0)
     else:
         sync(args.send)
 
