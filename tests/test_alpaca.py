@@ -187,3 +187,11 @@ def test_failed_run_puts_the_stops_back(monkeypatch):
     trades = [{"asset": "NVDA", "strategy": "s", "qty": 10.0, "stop": 95.0, "target": 120.0}]
     alpaca.emergency_protect(trades, RuntimeError("boom"))
     assert sent and sent[0]["symbol"] == "NVDA" and alerts and "NVDA" in alerts[0][1]
+
+
+def test_tiny_top_up_is_skipped_but_real_changes_are_not():
+    from algo.alpaca import plan
+
+    assert plan({"NVDA": 111.876}, {"NVDA": 111.819}, {"NVDA": 234.0}) == []  # 0.05%: keep
+    assert plan({"NVDA": 130.0}, {"NVDA": 111.8}, {"NVDA": 234.0})[0]["side"] == "buy"  # real add
+    assert plan({}, {"NVDA": 111.8}, {"NVDA": 234.0})[0]["side"] == "sell"  # close

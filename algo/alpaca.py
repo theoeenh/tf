@@ -46,6 +46,9 @@ BASE_URL = "https://paper-api.alpaca.markets"
 DATA_URL = "https://data.alpaca.markets"
 SYMBOLS = {a: s for a, s in ALPACA_SYMBOLS.items() if a != "SPY"}
 MIN_NOTIONAL = 5.0  # ignore differences smaller than $5
+# ... and top-ups / trims under 1% of the position (fill rounding): a pending order on a held
+# stock makes Alpaca refuse its stops ("potential wash trade"), so tiny adjustments cost protection
+MIN_ADJUST = 0.01
 CRYPTO_STOP_ROOM = 0.01  # crypto stop-limit: limit 1% past the stop, so it fills in a fast drop
 
 
@@ -119,6 +122,8 @@ def plan(want: dict[str, float], have: dict[str, float], prices: dict[str, float
         diff = target - have.get(sym, 0.0)
         if abs(diff) * prices.get(sym, 0.0) < MIN_NOTIONAL:
             continue
+        if target != 0 and have.get(sym, 0.0) * target > 0 and abs(diff) < MIN_ADJUST * abs(target):
+            continue  # same side, almost the right size: keep it (and its stops)
         # round down (crypto to 9 decimals, Alpaca's precision): rounding up asks for more than is held
         qty = math.floor(abs(diff) * 1e9) / 1e9 if sym in crypto_syms else round(abs(diff), 6)
         if target == 0 and sym in have:
@@ -460,10 +465,10 @@ def verify(alert: bool = False) -> list[str]:
             w = 0.0  # crypto shorts are held flat
         h = sum(q for s, q in have.items() if norm(s) == sym) + pending.get(sym, 0.0)
         px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or 100.0
-        if abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):
+        if abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):  # same 1-2% tolerance as plan()
             problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
         held = sum(q for s, q in have.items() if norm(s) == sym)
-        if abs(held) > 1e-9 and stops.get(sym, 0.0) < 0.98 * abs(held):
+        if abs(held) * px >= 1.0 and stops.get(sym, 0.0) < 0.98 * abs(held):  # dust (< $1) needs no stop
             problems.append(f"{sym}: {abs(held):g} held, only {stops.get(sym, 0.0):g} covered by a stop")
     if alert and problems:
         from . import notify
