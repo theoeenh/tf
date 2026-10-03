@@ -9,9 +9,8 @@
 name: engine
 
 on:
-  schedule:
-    - cron: "15 13 * * 1-5"  # 9:15 New York in summer (8:15 in winter: it waits for the open)
-    - cron: "5 19 * * 1-5"   # afternoon shift
+  # Started by the outside timer (cron-job.org) at 9:15 and 15:05 New York, Monday to Friday:
+  # GitHub's own schedule started the morning shift ~5 hours late on 2 Oct.
   workflow_dispatch:
     inputs:
       minutes:
