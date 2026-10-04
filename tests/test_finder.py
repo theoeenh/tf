@@ -1,3 +1,6 @@
+import json
+from dataclasses import asdict
+
 import numpy as np
 import pandas as pd
 
@@ -150,3 +153,23 @@ def test_a_strategy_that_works_in_some_sectors_gets_specialised_children():
     assert "sector:Energy" in assets  # worked there, with enough signals to judge
     assert "sector:Utilities" not in assets and "sector:Financials" not in assets  # lost there / too few signals
     assert {"sp400", "sp600"} <= assets
+
+
+def test_loop_moves_on_to_parents_with_untried_children(monkeypatch, tmp_path):
+    rule = dict(F.RULES["target 2R"])
+    explored = F.Candidate("rsi2", {"rsi_n": 3}, rule)
+    fresh = F.Candidate("vwap", {"k": 2.0}, rule)
+    rows = []
+    for c, icir in ((explored, 0.9), (fresh, 0.1)):
+        rows.append({"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c)),
+                     "s_icir": icir, "s_events": 500, "s_sr_daily": 0.0, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0})
+    for k, _ in F.mutate(explored, "; ".join(F.GATES)):  # every child of the best one is already in the registry
+        rows.append({"id": k.id, "label": k.label(), "family": k.family, "candidate": json.dumps(asdict(k)),
+                     "s_icir": -1.0, "s_events": 500, "s_sr_daily": 0.0, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0})
+    monkeypatch.setattr(F, "OUT", tmp_path)
+    pd.DataFrame(rows).to_csv(tmp_path / "registry.csv", index=False)
+    tried = []
+    monkeypatch.setattr(F, "run", lambda cands: tried.extend(cands) or F.registry())
+    monkeypatch.setattr(F, "grid", lambda: [])
+    F.loop(rounds=1, parents=1)
+    assert tried and all(k.notes.startswith(f"from {fresh.id}") for k in tried)

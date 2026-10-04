@@ -463,13 +463,18 @@ def loop(rounds: int = 3, parents: int = 8, per_round: int = 40) -> pd.DataFrame
         reg = score(registry())
         done = set(reg["id"])
         order = sorted(reg.itertuples(index=False), key=lambda r: fitness(r._asdict()), reverse=True)
-        todo, seen = [], set()
-        for r in order[:parents]:
+        todo, seen, used = [], set(), 0
+        for r in order:  # the best `parents` that still have untried children (explored ones are skipped)
             c = Candidate(**json.loads(r.candidate))
-            for kid, _ in mutate(c, r.failed if isinstance(r.failed, str) else "", r._asdict()):
-                if kid.id not in done and kid.id not in seen:
-                    seen.add(kid.id)
-                    todo.append(kid)
+            kids = [k for k, _ in mutate(c, r.failed if isinstance(r.failed, str) else "", r._asdict())
+                    if k.id not in done and k.id not in seen]
+            if not kids:
+                continue
+            seen.update(k.id for k in kids)
+            todo += kids
+            used += 1
+            if used == parents:
+                break
         # spread the budget over the parents instead of spending it all on the first one
         by_parent: dict[str, list] = {}
         for k in todo:
