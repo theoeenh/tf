@@ -133,3 +133,19 @@ def test_gdelt_down_uses_a_recent_cache(tmp_path, monkeypatch):
     import pytest
     with pytest.raises(RuntimeError):
         news.load_gdelt("NVDA", end="2026-10-08")  # a week late: refuse
+
+
+def test_old_gdelt_cache_does_not_stop_trading(tmp_path, monkeypatch):
+    import pandas as pd
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setattr(news, "_gdelt_down", [False])
+    days = pd.date_range("2026-09-01", "2026-09-30", freq="D", name="Date")
+    for a in ("BTC", "MACRO"):
+        pd.DataFrame({"articles": 10.0, "tone": 0.5}, index=days).to_csv(tmp_path / f"{a}_gdelt.csv")
+    monkeypatch.setattr(news, "_gdelt", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("429")))
+    monkeypatch.setattr(news, "fomc_dates", lambda refresh=False: [])
+    monkeypatch.setattr(news, "jobs_report_dates", lambda: [])
+    out = news.load_all(["BTC"], strict=True)  # a week stale: used anyway
+    assert len(out["gdelt"]["BTC"]) == len(days)

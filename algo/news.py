@@ -308,9 +308,17 @@ def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: b
         try:
             out["gdelt"][a] = load_gdelt(a, refresh)
         except Exception as exc:
-            if strict:
+            # GDELT (free) can refuse our requests for days (HTTP 429 from shared machines). Its daily
+            # tone is one input among many (the hourly Alpaca news features are live), so trading goes
+            # on with what is cached: the missing days simply have no tone. Strict only without a cache.
+            path = NEWS_DIR / f"{a}_gdelt.csv"
+            if path.exists():
+                out["gdelt"][a] = pd.read_csv(path, index_col=0, parse_dates=True)
+                log.warning("GDELT unavailable for %s: daily tone stops at %s", a, out["gdelt"][a].index[-1].date())
+            elif strict:
                 raise RuntimeError(f"no GDELT news for {a}; not trading on incomplete inputs") from exc
-            log.warning("no GDELT data for %s (%s)", a, exc)
+            else:
+                log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
         out["earnings"][a] = earnings_dates(a, refresh) if ASSET_CLASS.get(a) == "stock" else []
     if global_markets:  # Asia / Europe daily moves (opt-in: the 'global' option)
