@@ -1,6 +1,7 @@
 """Strategy finder, steps 1-3: locked data periods, one score card per strategy, shelf life.
 
     python -m algo.finder grid            # score the built-in families over a parameter grid
+    python -m algo.finder loop --rounds 3 # grid of untried families, then rounds of improved children
     python -m algo.finder report          # rewrite paper/finder/report.md from the registry
     python -m algo.finder vault <id>      # the ONE vault test of a candidate that passed every gate
 
@@ -62,6 +63,15 @@ RULES = {
     "target 2R": dict(stop_atr=2.0, rr=2.0),
     "target 2R, out in 12 bars": dict(stop_atr=1.5, rr=2.0, max_bars=12),
     "trailing 3 ATR": dict(stop_atr=2.5, rr=None, trail_atr=3.0),
+    "out after 1 bar": dict(stop_atr=1.5, rr=None, max_bars=1),
+    "target 1.5R, out in 6 bars": dict(stop_atr=1.0, rr=1.5, max_bars=6),
+}
+ASSET_SETS = {
+    "all": lambda a: True,
+    "stocks": lambda a: ASSET_CLASS.get(a) == "stock",
+    "etfs": lambda a: ASSET_CLASS.get(a) in ("etf", "metal"),
+    "crypto": lambda a: a in S_CRYPTO,
+    "stocks+etfs": lambda a: a not in S_CRYPTO,
 }
 
 
@@ -72,17 +82,20 @@ class Candidate:
     rule: dict
     short: bool = False
     trend: bool = True  # only with the daily trend (as the live system)
+    assets: str = "all"  # all / stocks / etfs / crypto / stocks+etfs
     notes: str = ""
 
     @property
     def id(self) -> str:
-        key = json.dumps([self.family, self.params, self.rule, self.short, self.trend], sort_keys=True)
+        key = json.dumps([self.family, self.params, self.rule, self.short, self.trend]
+                         + ([self.assets] if self.assets != "all" else []), sort_keys=True)
         return hashlib.sha1(key.encode()).hexdigest()[:10]
 
     def label(self) -> str:
         p = ", ".join(f"{k}={v}" for k, v in self.params.items())
         r = ", ".join(f"{k}={v}" for k, v in self.rule.items())
-        return f"{self.family}({p}) | {r}{' | long/short' if self.short else ''}{'' if self.trend else ' | no trend filter'}"
+        return (f"{self.family}({p}) | {r}{' | long/short' if self.short else ''}"
+                f"{'' if self.trend else ' | no trend filter'}{'' if self.assets == 'all' else ' | ' + self.assets}")
 
     def horizon(self) -> int:
         return int(self.rule.get("max_bars") or 24)
@@ -98,12 +111,17 @@ def load(include_vault: bool = False) -> dict[str, pd.DataFrame]:
 
 
 def signals(c: Candidate, prices) -> dict[str, pd.Series]:
-    fn = FAMILIES[c.family][0]
+    prices = {a: df for a, df in prices.items() if ASSET_SETS[c.assets](a)}
+    if c.family in PANEL_FAMILIES:  # cross-asset families see the whole universe at once
+        raw = PANEL_FAMILIES[c.family][0](prices, **c.params)
+    else:
+        fn = FAMILIES[c.family][0]
+        raw = {a: fn(df, **c.params) for a, df in prices.items()
+               if not (c.family == "opening_range" and a in S_CRYPTO)}
     out = {}
-    for a, df in prices.items():
-        if c.family == "opening_range" and a in S_CRYPTO:
-            continue
-        s = fn(df, **c.params).reindex(df.index).fillna(0).astype(int)
+    for a, s in raw.items():
+        df = prices[a]
+        s = s.reindex(df.index).fillna(0).astype(int)
         if c.trend:
             s = S.with_trend(s, S.daily_trend(df))
         if not c.short:
@@ -112,7 +130,9 @@ def signals(c: Candidate, prices) -> dict[str, pd.Series]:
     return out
 
 
+from .data import ASSET_CLASS  # noqa: E402
 from .data import CRYPTO as S_CRYPTO  # noqa: E402
+from .finder_families import PANEL_FAMILIES  # noqa: E402
 
 
 # ------------------------------------------------------------------ 2. score card
@@ -298,14 +318,91 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
     return reg
 
 
-def grid() -> list[Candidate]:
+def grid(families: dict | None = None) -> list[Candidate]:
     out = []
-    for fam, (_, space) in FAMILIES.items():
+    for fam, (_, space) in (families or FAMILIES | PANEL_FAMILIES).items():
         keys = list(space)
         for vals in itertools.product(*(space[k] for k in keys)):
             for rule in RULES.values():
                 out.append(Candidate(fam, dict(zip(keys, vals)), dict(rule)))
     return out
+
+
+# ------------------------------------------------------------------ 4-5. the loop: read why it fails, try a better version
+
+SEARCH_GATES = [g for g in GATES if g.startswith("search:")]
+LONGER = {"n", "lookback", "trend_ma", "rsi_n"}  # parameters that make a strategy slower when raised
+
+
+def fitness(r) -> tuple:
+    """Ranking for picking parents: search gates and search ICIR only. Validation and the shelf-life
+    months (which include validation) are never used to rank, only to gate, or they would leak."""
+    return (sum(_safe(GATES[g], r) for g in SEARCH_GATES), np.nan_to_num(r["s_icir"], nan=-9))
+
+
+def _neighbours(c: Candidate, keys=None) -> list[dict]:
+    out = []
+    for k, v in c.params.items():
+        if keys is not None and k not in keys or isinstance(v, bool) or not isinstance(v, (int, float)):
+            continue
+        for f in (0.7, 1.4):
+            nv = max(1, int(round(v * f))) if isinstance(v, int) else round(v * f, 2)
+            if nv != v:
+                out.append(c.params | {k: nv})
+    return out
+
+
+def mutate(c: Candidate, failed: str) -> list[tuple[Candidate, str]]:
+    """Children of a candidate, the ones its failures point to first."""
+    kids: list[tuple[Candidate, str]] = []
+
+    def add(why, **change):
+        kids.append((Candidate(**(asdict(c) | change | {"notes": f"from {c.id}: {why}"})), why))
+
+    if "assets" in failed:  # works on some assets only: try it where it might belong
+        for a in ASSET_SETS:
+            if a != c.assets:
+                add(f"breadth failed -> only {a}", assets=a)
+    if "random" in failed or "costs" in failed:  # entries no better than chance with these exits
+        for name, rule in RULES.items():
+            if rule != c.rule:
+                add(f"no better than random -> exit '{name}'", rule=dict(rule))
+    if "decay" in failed or "ICIR" in failed:  # unstable or fading: slower versions
+        for p in _neighbours(c, LONGER):
+            if any(p[k] > c.params[k] for k in p if k in LONGER):
+                add("unstable / decaying -> slower", params=p)
+    if "regime" in failed:
+        add("fails in some regime -> " + ("no trend filter" if c.trend else "with trend filter"), trend=not c.trend)
+    for p in _neighbours(c):
+        add("parameter neighbour", params=p)
+    return kids
+
+
+def loop(rounds: int = 3, parents: int = 8, per_round: int = 40) -> pd.DataFrame:
+    """Each round: the best candidates so far (search only) get children aimed at their failures."""
+    run(grid())  # any family or exit not tried yet goes first (already tried ones are skipped)
+    for rnd in range(1, rounds + 1):
+        reg = score(registry())
+        done = set(reg["id"])
+        order = sorted(reg.itertuples(index=False), key=lambda r: fitness(r._asdict()), reverse=True)
+        todo, seen = [], set()
+        for r in order[:parents]:
+            c = Candidate(**json.loads(r.candidate))
+            for kid, _ in mutate(c, r.failed if isinstance(r.failed, str) else ""):
+                if kid.id not in done and kid.id not in seen:
+                    seen.add(kid.id)
+                    todo.append(kid)
+        # spread the budget over the parents instead of spending it all on the first one
+        by_parent: dict[str, list] = {}
+        for k in todo:
+            by_parent.setdefault(k.notes.split(":")[0], []).append(k)
+        picked = [k for grp in itertools.zip_longest(*by_parent.values()) for k in grp if k][:per_round]
+        if not picked:
+            log.info("round %d: nothing new to try", rnd)
+            break
+        log.info("round %d: %d children of %d parents", rnd, len(picked), len(by_parent))
+        reg = run(picked)
+    return reg
 
 
 # ------------------------------------------------------------------ vault (once per candidate)
@@ -350,11 +447,22 @@ def report(reg: pd.DataFrame) -> Path:
           "return v | DSR | months + | regimes + | breadth | first failed gate |",
           "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for _, r in top.iterrows():
-        md.append(f"| {r.gates_passed}/{len(GATES)} | `{r.id}` {r.label} | {r.s_ic:+.3f} | {r.s_icir:+.2f} | "
+        md.append(f"| {r.gates_passed}/{len(GATES)} | `{r.id}` {r.label.replace('|', '·')} | {r.s_ic:+.3f} | {r.s_icir:+.2f} | "
                   f"{r.v_ic:+.3f} | {r.s_avg_r:+.2f} / {r.s_rand_avg_r:+.2f} | {r.v_avg_r:+.2f} / {r.v_rand_avg_r:+.2f} | "
                   f"{r.v_return:+.1%} | {r.s_dsr:.2f} | {r.get('pos_months', np.nan):.0%} | "
                   f"{int(r.get('regimes_positive', 0))}/{int(r.get('regimes_seen', 0))} | {r.get('breadth', np.nan):.0%} | "
                   f"{(r.failed or 'none – vault candidate').split(';')[0]} |")
+    best = reg.sort_values(["gates_passed", "s_icir"], ascending=False).groupby("family").head(1)
+    md += ["", "## Best of each family", "", "| family | tried | best gates | its ICIR (search) | strategy |", "|---|---|---|---|---|"]
+    md += [f"| {r.family} | {int((reg['family'] == r.family).sum())} | {r.gates_passed}/{len(GATES)} | {r.s_icir:+.2f} | "
+           f"`{r.id}` {r.label.replace('|', '·')} |" for _, r in best.iterrows()]
+    notes = reg["candidate"].map(lambda x: json.loads(x).get("notes", "") if isinstance(x, str) else "")
+    kids = reg[notes.str.startswith("from ")]
+    if len(kids):
+        md += ["", f"## The loop: {len(kids)} children tried (improved versions aimed at a parent's failures)", ""]
+        why = notes[notes.str.startswith("from ")].str.split(": ", n=1).str[1].str.split(" -> ").str[0]
+        for w, g in kids.groupby(why.values):
+            md.append(f"- {w}: {len(g)} tried, best {int(g['gates_passed'].max())}/{len(GATES)} gates")
     fails = pd.Series([f for x in reg["failed"].fillna("") for f in x.split("; ") if f]).value_counts()
     md += ["", "## Why strategies fail (all attempts)", ""] + [f"- {k}: {v} of {n}" for k, v in fails.items()]
     log_path = OUT / "vault_log.json"
@@ -372,12 +480,18 @@ def main() -> None:
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("grid")
     sub.add_parser("report")
+    lp = sub.add_parser("loop")
+    lp.add_argument("--rounds", type=int, default=3)
+    lp.add_argument("--per-round", type=int, default=40)
     v = sub.add_parser("vault")
     v.add_argument("id")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     if args.cmd == "grid":
         reg = run(grid())
+        print(f"{len(reg)} strategies in the registry; report: {OUT / 'report.md'}")
+    elif args.cmd == "loop":
+        reg = loop(args.rounds, per_round=args.per_round)
         print(f"{len(reg)} strategies in the registry; report: {OUT / 'report.md'}")
     elif args.cmd == "report":
         print(report(score(registry())))

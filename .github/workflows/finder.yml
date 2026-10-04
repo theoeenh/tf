@@ -1,0 +1,78 @@
+# Nightly strategy finder: new families first, then rounds of improved children of the best
+# candidates (aimed at why they failed). Research only: nothing here trades or touches Alpaca.
+# Every attempt is written to paper/finder/registry.csv (the deflated Sharpe bar rises with it).
+# The vault period stays sealed: only `python -m algo.finder vault <id>`, run by hand once per
+# candidate that passed every gate, ever loads it.
+name: finder
+
+on:
+  schedule:
+    - cron: "37 3 * * *"  # 23:37 / 22:37 New York: markets closed, no trading run competes for the runner
+  workflow_dispatch:
+    inputs:
+      rounds:
+        description: "loop rounds"
+        default: "6"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: finder
+  cancel-in-progress: false
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # the prices the hourly job downloaded (read only: the finder never downloads)
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/*_alpaca.csv
+            data/news
+            data/social
+          key: market-data-none
+          restore-keys: market-data-
+      - name: Run the loop
+        run: python -m algo.finder loop --rounds ${{ inputs.rounds || '6' }}
+      - name: Save the registry and report
+        if: always()
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add paper/finder
+          git diff --cached --quiet && exit 0
+          git commit -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
+          exit 1
+      - name: Tell the phone if a strategy passed every gate
+        continue-on-error: true
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          python - <<'EOF'
+          from algo import finder as F, notify
+          reg = F.score(F.registry())
+          top = reg[reg["gates_passed"] == len(F.GATES)]
+          if len(top):
+              r = top.sort_values("s_icir", ascending=False).iloc[0]
+              notify.send("finder: a strategy passed every gate",
+                          f"{r['label']} ({r['id']}). Ready for its one vault test.", "tada", "high")
+          EOF
+      - name: Alert the phone if the finder failed
+        if: failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: >
+          python -c "from algo import notify; notify.send('finder run failed',
+          'See GitHub Actions run ${{ github.run_id }}.', 'warning', 'default')"
