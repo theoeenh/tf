@@ -83,3 +83,48 @@ def test_old_ids_do_not_change_with_the_asset_filter():
     c = F.Candidate("rsi2", {"rsi_n": 3}, {"stop_atr": 2.0, "rr": 2.0})
     assert c.id == F.Candidate("rsi2", {"rsi_n": 3}, {"stop_atr": 2.0, "rr": 2.0}, assets="all").id
     assert c.id != F.Candidate("rsi2", {"rsi_n": 3}, {"stop_atr": 2.0, "rr": 2.0}, assets="stocks").id
+
+
+def _daily(n=400, seed=0):
+    rng = np.random.default_rng(seed)
+    c = 100 * np.exp(np.cumsum(rng.normal(0, 0.01, n)))
+    return _bars(c, start="2020-01-01", freq="B")
+
+
+def test_insider_cluster_fires_once_on_the_filing_day(monkeypatch):
+    from algo import finder_families as FF
+
+    df = _daily()
+    filings = pd.DataFrame({"ticker": "X", "code": "P", "owner": ["a", "b", "c"], "accession": ["1", "2", "3"],
+                            "filed": pd.to_datetime(["2020-03-02", "2020-03-10", "2020-03-12"]),
+                            "value": 1e6, "role": "Officer"})
+    monkeypatch.setattr(FF, "_insider", lambda code="P": filings)
+    s = FF.insider_cluster({"X": df}, buyers=2, days=30)["X"]
+    assert s.sum() == 1 and s.idxmax() == pd.Timestamp("2020-03-10")  # the second buyer's filing day
+    weekend = filings.assign(filed=pd.to_datetime(["2020-03-02", "2020-03-14", "2020-03-20"]))  # a Saturday
+    monkeypatch.setattr(FF, "_insider", lambda code="P": weekend)
+    s = FF.insider_cluster({"X": df}, buyers=2, days=30)["X"]
+    assert s.idxmax() == pd.Timestamp("2020-03-16")  # the next trading day, never before the filing
+
+
+def test_daily_factor_families_use_no_future_bar():
+    from algo.finder_families import WIDE_FAMILIES
+
+    prices = {f"S{i}": _daily(seed=i) for i in range(20)}
+    cut = 300
+    for fam in ("momentum_12_1", "reversal_5d", "high_52w"):
+        fn, space = WIDE_FAMILIES[fam]
+        params = {k: v[0] for k, v in space.items()}
+        full = fn(prices, **params)
+        part = fn({a: df.iloc[:cut] for a, df in prices.items()}, **params)
+        for a in part:
+            # the last bar of the cut may differ only for momentum's month-end test (needs the next day)
+            n = cut - 1 if fam == "momentum_12_1" else cut
+            assert (full[a].iloc[:n] == part[a].iloc[:n]).all(), fam
+
+
+def test_daily_candidates_keep_their_own_id_and_rules():
+    c = F.Candidate("insider_cluster", {"buyers": 2, "days": 30}, dict(F.DAILY_RULES["hold 20 days"]), data="daily500")
+    assert c.id != F.Candidate("insider_cluster", {"buyers": 2, "days": 30}, dict(F.DAILY_RULES["hold 20 days"])).id
+    kids = F.mutate(c, "search: beats random entries (avg R)")
+    assert all(k.data == "daily500" and k.rule in F.DAILY_RULES.values() for k, _ in kids)

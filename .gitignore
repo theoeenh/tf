@@ -11,3 +11,4 @@ data/news/*_alpaca_news.csv
 # Asia / Europe index cache (refreshed every 3 h; a committed copy would look fresh after checkout)
 data/news/global_indices.csv
 data/insider/company_tickers.json
+data/wide/daily.csv.gz

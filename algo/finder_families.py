@@ -146,3 +146,98 @@ PANEL_FAMILIES = {
     "volume_breakout": (volume_breakout, {"n": [10, 20], "m": [1.5, 2.5]}),
     "btc_lead": (btc_lead, {"k": [0.75, 1.5]}),
 }
+
+
+# ------------------------------------------------------------------ S&P 500, daily bars (data="daily500")
+# Signals fire on a day's close and fill at the next open. Insider filings count from their filing
+# date: a Form 4 accepted after the close is still only traded the next morning.
+
+def _on_days(dates: pd.Series, index: pd.DatetimeIndex) -> np.ndarray:
+    """Position of the first trading day on or after each date (len(index) when past the end)."""
+    return index.searchsorted(pd.DatetimeIndex(dates).normalize(), side="left")
+
+
+def _insider(code: str = "P"):
+    from . import wide
+
+    t = wide.load_insider()
+    return t[t["code"] == code] if len(t) else t
+
+
+def insider_cluster(prices: dict, buyers: int = 2, days: int = 30) -> dict:
+    """Several insiders buying their own stock in the open market within `days` days: the day the
+    number of distinct buyers reaches `buyers` (one signal per cluster)."""
+    t = _insider("P")
+    out = {}
+    for a, df in prices.items():
+        g = t[t["ticker"] == a].sort_values("filed") if len(t) else t
+        s = np.zeros(len(df), int)
+        last = pd.Timestamp("1900-01-01")
+        for f in g["filed"].drop_duplicates():
+            win = g[(g["filed"] > f - pd.Timedelta(days=days)) & (g["filed"] <= f)]
+            if win["owner"].nunique() >= buyers and f - last > pd.Timedelta(days=days):
+                p = _on_days(pd.Series([f]), df.index)[0]
+                if p < len(df):
+                    s[p] = 1
+                last = f
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
+def insider_big_buy(prices: dict, min_value: float = 250_000, officer: bool = True) -> dict:
+    """One insider buying at least `min_value` dollars in the open market (an officer only, e.g. CEO
+    or CFO, if `officer`): the filing day."""
+    t = _insider("P")
+    if len(t) and officer:
+        t = t[t["role"].fillna("").str.contains("Officer", case=False)]
+    out = {}
+    for a, df in prices.items():
+        g = t[t["ticker"] == a] if len(t) else t
+        if len(g):
+            v = g.groupby(["accession", "filed"])["value"].sum().reset_index()
+            v = v[v["value"] >= min_value]
+            pos = _on_days(v["filed"], df.index)
+        else:
+            pos = []
+        s = np.zeros(len(df), int)
+        s[[p for p in pos if p < len(df)]] = 1
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
+def momentum_12_1(prices: dict, top: float = 0.1) -> dict:
+    """Classic momentum: at each month end, buy the stocks in the top `top` share of the 12-month
+    return skipping the last month (entries only, the exit rule decides the hold)."""
+    close = _panel(prices)
+    ret = close.shift(21) / close.shift(252) - 1
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    rank = ret.rank(axis=1, pct=True, ascending=False)
+    sig = ((rank <= top) & month_end.to_numpy()[:, None]).astype(int)
+    return _own(sig, prices)
+
+
+def reversal_5d(prices: dict, bottom: float = 0.05) -> dict:
+    """Short-term reversal: buy the worst `bottom` share of the last five days (weekly, Fridays)."""
+    close = _panel(prices)
+    ret = close / close.shift(5) - 1
+    friday = close.index.dayofweek == 4
+    rank = ret.rank(axis=1, pct=True, ascending=True)
+    return _own(((rank <= bottom) & friday[:, None]).astype(int), prices)
+
+
+def high_52w(prices: dict, within: float = 0.02) -> dict:
+    """Close within `within` of its 52-week high for the first time in a month (anchoring: investors
+    hesitate to buy near the high, so good news there is priced in slowly)."""
+    close = _panel(prices)
+    near = close >= (1 - within) * close.rolling(252, min_periods=200).max()
+    fresh = near & ~near.shift(1, fill_value=False).rolling(21, min_periods=1).max().astype(bool)
+    return _own(fresh.astype(int), prices)
+
+
+WIDE_FAMILIES = {
+    "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
+    "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
+    "momentum_12_1": (momentum_12_1, {"top": [0.05, 0.1]}),
+    "reversal_5d": (reversal_5d, {"bottom": [0.02, 0.05]}),
+    "high_52w": (high_52w, {"within": [0.01, 0.03]}),
+}

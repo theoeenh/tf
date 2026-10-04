@@ -48,6 +48,9 @@ log = logging.getLogger(__name__)
 OUT = Path(__file__).resolve().parent.parent / "paper" / "finder"
 SEARCH = ("2023-01-11", "2024-12-31 23:59")
 VALIDATION = ("2025-01-01", "2025-06-30 23:59")
+# per data set: (search, validation). Same sealed vault for both.
+PERIODS = {"hourly": (SEARCH, VALIDATION),
+           "daily500": (("2017-01-01", "2022-12-31 23:59"), ("2023-01-01", "2025-06-30 23:59"))}
 VAULT_START = "2025-07-01"
 RISK = 0.004
 SEEDS = 3
@@ -66,6 +69,12 @@ RULES = {
     "out after 1 bar": dict(stop_atr=1.5, rr=None, max_bars=1),
     "target 1.5R, out in 6 bars": dict(stop_atr=1.0, rr=1.5, max_bars=6),
 }
+DAILY_RULES = {  # daily bars: holds of days to weeks
+    "hold 5 days": dict(stop_atr=2.5, rr=None, max_bars=5),
+    "hold 20 days": dict(stop_atr=3.0, rr=None, max_bars=20),
+    "target 3R, out in 20 days": dict(stop_atr=2.0, rr=3.0, max_bars=20),
+    "trailing 3 ATR, out in 60 days": dict(stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60),
+}
 ASSET_SETS = {
     "all": lambda a: True,
     "stocks": lambda a: ASSET_CLASS.get(a) == "stock",
@@ -83,28 +92,36 @@ class Candidate:
     short: bool = False
     trend: bool = True  # only with the daily trend (as the live system)
     assets: str = "all"  # all / stocks / etfs / crypto / stocks+etfs
+    data: str = "hourly"  # hourly: the live universe, hourly bars; daily500: S&P 500, daily bars
     notes: str = ""
 
     @property
     def id(self) -> str:
         key = json.dumps([self.family, self.params, self.rule, self.short, self.trend]
-                         + ([self.assets] if self.assets != "all" else []), sort_keys=True)
+                         + ([self.assets] if self.assets != "all" else [])
+                         + ([self.data] if self.data != "hourly" else []), sort_keys=True)
         return hashlib.sha1(key.encode()).hexdigest()[:10]
 
     def label(self) -> str:
         p = ", ".join(f"{k}={v}" for k, v in self.params.items())
         r = ", ".join(f"{k}={v}" for k, v in self.rule.items())
         return (f"{self.family}({p}) | {r}{' | long/short' if self.short else ''}"
-                f"{'' if self.trend else ' | no trend filter'}{'' if self.assets == 'all' else ' | ' + self.assets}")
+                f"{'' if self.trend else ' | no trend filter'}{'' if self.assets == 'all' else ' | ' + self.assets}"
+                f"{'' if self.data == 'hourly' else ' | S&P 500 daily'}")
 
     def horizon(self) -> int:
-        return int(self.rule.get("max_bars") or 24)
+        return int(self.rule.get("max_bars") or (24 if self.data == "hourly" else 10))
 
 
 # ------------------------------------------------------------------ data (vault sealed)
 
-def load(include_vault: bool = False) -> dict[str, pd.DataFrame]:
-    prices = load_prices("alpaca", "1h", UNIVERSE_WIDE)
+def load(include_vault: bool = False, data: str = "hourly") -> dict[str, pd.DataFrame]:
+    if data == "daily500":
+        from . import wide
+
+        prices = wide.load_daily()
+    else:
+        prices = load_prices("alpaca", "1h", UNIVERSE_WIDE)
     if not include_vault:  # the vault months are not even in memory
         prices = {a: df[df.index < pd.Timestamp(VAULT_START)] for a, df in prices.items()}
     return prices
@@ -112,7 +129,9 @@ def load(include_vault: bool = False) -> dict[str, pd.DataFrame]:
 
 def signals(c: Candidate, prices) -> dict[str, pd.Series]:
     prices = {a: df for a, df in prices.items() if ASSET_SETS[c.assets](a)}
-    if c.family in PANEL_FAMILIES:  # cross-asset families see the whole universe at once
+    if c.family in WIDE_FAMILIES:
+        raw = WIDE_FAMILIES[c.family][0](prices, **c.params)
+    elif c.family in PANEL_FAMILIES:  # cross-asset families see the whole universe at once
         raw = PANEL_FAMILIES[c.family][0](prices, **c.params)
     else:
         fn = FAMILIES[c.family][0]
@@ -132,7 +151,7 @@ def signals(c: Candidate, prices) -> dict[str, pd.Series]:
 
 from .data import ASSET_CLASS  # noqa: E402
 from .data import CRYPTO as S_CRYPTO  # noqa: E402
-from .finder_families import PANEL_FAMILIES  # noqa: E402
+from .finder_families import PANEL_FAMILIES, WIDE_FAMILIES  # noqa: E402
 
 
 # ------------------------------------------------------------------ 2. score card
@@ -180,7 +199,13 @@ def backtest(c: Candidate, prices, sig, start, end, seed: int | None = None):
             s = pd.Series(np.where(fire, side, 0), s.index)
         sl.append(Sleeve(a, c.family, s, rule, c.short))
     cfg = PortfolioConfig(risk_pct=RISK, max_gross=MAX_GROSS, max_open_risk=MAX_OPEN_RISK)
-    return run_portfolio(prices, sl, COSTS, cfg, start, end)
+    if c.data == "daily500":
+        from . import wide
+
+        costs = wide.costs(sig)
+    else:
+        costs = COSTS
+    return run_portfolio({a: prices[a] for a in sig}, sl, costs, cfg, start, end)
 
 
 def trading_stats(res) -> dict:
@@ -260,7 +285,8 @@ def registry() -> pd.DataFrame:
 def evaluate(c: Candidate, prices) -> dict:
     sig = signals(c, prices)
     row = {"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c))}
-    for w, (a, b) in (("s", SEARCH), ("v", VALIDATION)):
+    search, validation = PERIODS[c.data]
+    for w, (a, b) in (("s", search), ("v", validation)):
         win = {k: v[(v.index >= pd.Timestamp(a)) & (v.index <= pd.Timestamp(b))] for k, v in sig.items()}
         ev = edge_events(win, prices, c.horizon())
         ic = monthly_ic(ev)
@@ -271,7 +297,7 @@ def evaluate(c: Candidate, prices) -> dict:
         rnd = [trading_stats(backtest(c, prices, sig, a, b, seed=sd)) for sd in range(SEEDS)]
         row |= {f"{w}_rand_avg_r": float(np.nanmean([r["avg_r"] for r in rnd])),
                 f"{w}_rand_return": float(np.mean([r["return"] for r in rnd]))}
-    both = {k: v[(v.index >= pd.Timestamp(SEARCH[0])) & (v.index <= pd.Timestamp(VALIDATION[1]))]
+    both = {k: v[(v.index >= pd.Timestamp(search[0])) & (v.index <= pd.Timestamp(validation[1]))]
             for k, v in sig.items()}
     row |= shelf_life(edge_events(both, prices, c.horizon()), prices)
     return row
@@ -301,7 +327,7 @@ def _safe(fn, r) -> bool:
 
 def run(candidates: list[Candidate]) -> pd.DataFrame:
     OUT.mkdir(parents=True, exist_ok=True)
-    prices = load()
+    data: dict[str, dict] = {}  # each data set loaded once, when first needed
     reg = registry()
     done = set(reg["id"]) if len(reg) else set()
     new = []
@@ -309,7 +335,9 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
         if c.id in done:
             continue
         log.info("[%d/%d] %s", i, len(candidates), c.label())
-        new.append(evaluate(c, prices))
+        if c.data not in data:
+            data[c.data] = load(data=c.data)
+        new.append(evaluate(c, data[c.data]))
         reg = pd.concat([reg, pd.DataFrame(new[-1:])], ignore_index=True)
         reg.to_csv(OUT / "registry.csv", index=False)  # saved after every attempt
     reg = score(reg)
@@ -320,11 +348,12 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
 
 def grid(families: dict | None = None) -> list[Candidate]:
     out = []
-    for fam, (_, space) in (families or FAMILIES | PANEL_FAMILIES).items():
+    for fam, (_, space) in (families or FAMILIES | PANEL_FAMILIES | WIDE_FAMILIES).items():
+        wide_ = fam in WIDE_FAMILIES
         keys = list(space)
         for vals in itertools.product(*(space[k] for k in keys)):
-            for rule in RULES.values():
-                out.append(Candidate(fam, dict(zip(keys, vals)), dict(rule)))
+            for rule in (DAILY_RULES if wide_ else RULES).values():
+                out.append(Candidate(fam, dict(zip(keys, vals)), dict(rule), data="daily500" if wide_ else "hourly"))
     return out
 
 
@@ -359,12 +388,13 @@ def mutate(c: Candidate, failed: str) -> list[tuple[Candidate, str]]:
     def add(why, **change):
         kids.append((Candidate(**(asdict(c) | change | {"notes": f"from {c.id}: {why}"})), why))
 
-    if "assets" in failed:  # works on some assets only: try it where it might belong
+    rules = DAILY_RULES if c.data == "daily500" else RULES
+    if "assets" in failed and c.data == "hourly":  # works on some assets only: try it where it might belong
         for a in ASSET_SETS:
             if a != c.assets:
                 add(f"breadth failed -> only {a}", assets=a)
     if "random" in failed or "costs" in failed:  # entries no better than chance with these exits
-        for name, rule in RULES.items():
+        for name, rule in rules.items():
             if rule != c.rule:
                 add(f"no better than random -> exit '{name}'", rule=dict(rule))
     if "decay" in failed or "ICIR" in failed:  # unstable or fading: slower versions
@@ -419,7 +449,7 @@ def vault(cid: str) -> dict:
     if cid in used:
         raise SystemExit(f"{cid} already had its vault test on {used[cid]['date']}: {used[cid]['result']}")
     c = Candidate(**json.loads(row.iloc[0]["candidate"]))
-    prices = load(include_vault=True)
+    prices = load(include_vault=True, data=c.data)
     sig = signals(c, prices)
     end = max(df.index[-1] for df in prices.values())
     st = trading_stats(backtest(c, prices, sig, VAULT_START, end))
@@ -440,7 +470,9 @@ def report(reg: pd.DataFrame) -> Path:
     top = reg.sort_values(["gates_passed", "s_icir"], ascending=False).head(25)
     md = [f"# Strategy finder – {pd.Timestamp.now():%Y-%m-%d}", "",
           f"**{n} strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). "
-          f"Search {SEARCH[0]} → {SEARCH[1][:10]}, validation {VALIDATION[0]} → {VALIDATION[1][:10]}, "
+          f"Hourly (live universe): search {SEARCH[0]} → {SEARCH[1][:10]}, validation {VALIDATION[0]} → "
+          f"{VALIDATION[1][:10]}. S&P 500 daily: search {PERIODS['daily500'][0][0]} → {PERIODS['daily500'][0][1][:10]}, "
+          f"validation {PERIODS['daily500'][1][0]} → {PERIODS['daily500'][1][1][:10]}. Both: "
           f"vault from {VAULT_START} (sealed). {len(GATES)} gates; only a candidate passing all of them may "
           "take its one vault test.", "",
           "| gates | strategy | IC search | ICIR | IC valid. | avg R s / random | avg R v / random | "
