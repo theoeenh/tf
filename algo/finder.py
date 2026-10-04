@@ -245,7 +245,9 @@ def deflated_sharpe(sr: float, n_obs: int, skew: float, kurt: float, trial_srs: 
 
 # ------------------------------------------------------------------ 3. shelf life
 
-def shelf_life(events: pd.DataFrame, prices) -> dict:
+def shelf_life(events: pd.DataFrame, prices, groups: dict | None = None) -> dict:
+    """groups: asset -> group for the breadth test (S&P 500: its sector, as most stocks only get a
+    signal or two; the live universe: each asset on its own)."""
     ic = monthly_ic(events)
     if len(ic) < 6:
         return {"months": len(ic)}
@@ -259,7 +261,8 @@ def shelf_life(events: pd.DataFrame, prices) -> dict:
     mkt.index = mkt.index.to_period("M")
     reg = pd.cut(mkt.reindex(ic.index), [-np.inf, -0.02, 0.02, np.inf], labels=["down", "flat", "up"])
     by_reg = ic.groupby(reg, observed=False).mean()
-    by_asset = events.groupby("asset")["edge"].mean()
+    key = events["asset"].map(groups) if groups else events["asset"]
+    by_asset = events.groupby(key)["edge"].mean()
     return {"months": len(ic), "pos_months": float(pos.mean()), "longest_bad_run": longest_bad,
             "ic_first_half": float(ic.iloc[:half].mean()), "ic_second_half": float(ic.iloc[half:].mean()),
             "regimes_positive": int((by_reg > 0).sum()), "regimes_seen": int(by_reg.notna().sum()),
@@ -280,7 +283,7 @@ GATES = {  # a candidate must pass all of them to be offered to the vault
     "shelf life: positive in >= 55% of months": lambda s: s["pos_months"] >= 0.55,
     "shelf life: no decay (2nd half >= half of 1st)": lambda s: s["ic_second_half"] >= 0.5 * s["ic_first_half"],
     "shelf life: positive in every market regime seen": lambda s: s["regimes_positive"] == s["regimes_seen"],
-    "shelf life: works on >= 55% of assets": lambda s: s["breadth"] >= 0.55,
+    "shelf life: works on >= 55% of assets (S&P 500: of sectors)": lambda s: s["breadth"] >= 0.55,
 }
 
 
@@ -306,7 +309,12 @@ def evaluate(c: Candidate, prices) -> dict:
                 f"{w}_rand_return": float(np.mean([r["return"] for r in rnd]))}
     both = {k: v[(v.index >= pd.Timestamp(search[0])) & (v.index <= pd.Timestamp(validation[1]))]
             for k, v in sig.items()}
-    row |= shelf_life(edge_events(both, prices, c.horizon()), prices)
+    groups = None
+    if c.data == "daily500":
+        from . import wide
+
+        groups = wide.sectors()
+    row |= shelf_life(edge_events(both, prices, c.horizon()), prices, groups)
     return row
 
 

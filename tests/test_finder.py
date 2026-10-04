@@ -128,3 +128,15 @@ def test_daily_candidates_keep_their_own_id_and_rules():
     assert c.id != F.Candidate("insider_cluster", {"buyers": 2, "days": 30}, dict(F.DAILY_RULES["hold 20 days"])).id
     kids = F.mutate(c, "search: beats random entries (avg R)")
     assert all(k.data == "daily500" and k.rule in F.DAILY_RULES.values() for k, _ in kids)
+
+
+def test_untraded_days_are_dropped_from_the_research_data(tmp_path, monkeypatch):
+    from algo import wide
+
+    days = pd.bdate_range("2020-01-01", periods=600)
+    rows = pd.DataFrame({"symbol": "X", "date": days, "Open": 10.0, "High": 10.5, "Low": 9.5, "Close": 10.0,
+                         "Volume": [0 if 100 <= i < 200 else 1000 for i in range(600)]})
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    rows.to_csv(tmp_path / "daily.csv.gz", index=False)
+    df = wide.load_daily(min_days=100)["X"]
+    assert len(df) == 500 and (df["Volume"] > 0).all()

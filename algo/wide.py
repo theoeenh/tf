@@ -115,6 +115,9 @@ def load_daily(min_days: int = 500) -> dict[str, pd.DataFrame]:
     out = {}
     for sym, g in df.groupby("symbol"):
         g = g.set_index("date").sort_index()[COLUMNS]
+        # days without a single trade (e.g. SMCI while delisted in 2018-2020: a frozen quote) could not
+        # be traded, and their zero range would make the volatility, hence 1R, close to nothing
+        g = g[g["Volume"] > 0]
         g.index.name = "Date"
         if len(g) >= min_days and (g["Close"] > 0).all():
             out[sym] = g
