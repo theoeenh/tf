@@ -40,6 +40,8 @@ PLAIN = {
     "sleeve_recent_r": "how this strategy did lately on this asset", "sleeve_trades": "trades seen for this pair",
     "strategy_recent_r": "how this strategy did lately (all assets)",
     "asia_move": "how Asia moved on its last day", "europe_move": "how Europe moved on its last day",
+    "insider_buyers_90d": "insiders who bought (90 days)", "insider_buy_90d": "insider buying, $ (90 days)",
+    "insider_sell_30d": "insider selling outside plans, $ (30 days)",
 } | {f"is_{s}": f"strategy: {s}" for s in ("donchian_trend", "squeeze_breakout", "rsi2_reversion",
                                               "news_momentum", "opening_range", "vwap_reversion")} \
   | {f"is_{c}": f"asset class: {c}" for c in ("crypto", "stock", "metal", "etf")}

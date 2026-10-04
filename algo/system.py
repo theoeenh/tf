@@ -98,6 +98,11 @@ UPGRADES = {
     "long + trend + blackout + intraday + ML + global": dict(allow_short=False, learn=True, news=True, trend=True,
                                                              blackout=True, intraday=True, ml=True,
                                                              **{"global": True}),
+    "long + trend + blackout + ML + insider": dict(allow_short=False, learn=True, news=True, trend=True,
+                                                   blackout=True, ml=True, insider=True),
+    "long + trend + blackout + intraday + ML + insider": dict(allow_short=False, learn=True, news=True,
+                                                              trend=True, blackout=True, intraday=True, ml=True,
+                                                              insider=True),
     "long + trend + blackout + ML": dict(allow_short=False, learn=True, news=True, trend=True, blackout=True,
                                          ml=True),
 }
@@ -160,6 +165,10 @@ def build_context(prices: dict[str, pd.DataFrame], news_data: dict, ai_bias: pd.
                          .rename("ai_bias").to_frame())
         if (df.index != df.index.normalize()).any():  # intraday: daily trend and event blackout
             parts.append(daily_trend(df).rename("daily_trend").to_frame())
+            if a in news_data.get("insider", {}):  # only when the 'insider' option asked for it
+                from . import insider as insider_mod
+
+                parts.append(insider_mod.features(df.index, news_data["insider"][a]))
             if "global" in news_data:  # only when the 'global' option asked for it
                 parts.append(news_mod.global_features(df.index, news_data["global"]))
             if a in news_data.get("alpaca_news", {}):

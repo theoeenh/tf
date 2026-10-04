@@ -33,9 +33,10 @@ def run_race(prices: dict, cfg: dict, variants: dict = ALL_VARIANTS) -> tuple[pd
     start = pd.Timestamp(cfg["start"])
     hist_start = min(df.index[0] for df in prices.values())
     rows, results = [], {}
-    ctxs = {g: news_context(prices, {"news": True, "global": g}, cfg["interval"]) for g in (False, True)}
+    keys = {(bool(v.get("global")), bool(v.get("insider"))) for v in variants.values()}
+    ctxs = {k: news_context(prices, {"news": True, "global": k[0], "insider": k[1]}, cfg["interval"]) for k in keys}
     for name, v in variants.items():
-        ctx_all = ctxs[bool(v.get("global"))]  # Asia / Europe features only for the versions that use them
+        ctx_all = ctxs[(bool(v.get("global")), bool(v.get("insider")))]  # extra inputs only for the versions using them
         learner = new_learner(v["learn"], v.get("news", False), v.get("ml", False), v.get("sizing", False),
                               prices=prices, context=ctx_all)
         if learner is not None:

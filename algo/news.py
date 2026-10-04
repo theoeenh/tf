@@ -299,7 +299,7 @@ def next_bar_blocked(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: 
 
 
 def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: bool = False,
-             global_markets: bool = False) -> dict:
+             global_markets: bool = False, insider: bool = False) -> dict:
     """Everything the system needs, per asset, cached.
     strict: raise if an asset's news is missing, instead of going on without it
     (live trading: a missing input must not silently change the positions)."""
@@ -323,6 +323,10 @@ def load_all(assets, refresh: bool = False, strict: bool = False, alpaca_news: b
                 log.warning("no GDELT data for %s (%s)", a, exc)
     for a in assets:
         out["earnings"][a] = earnings_dates(a, refresh) if ASSET_CLASS.get(a) == "stock" else []
+    if insider:  # SEC Form 4 insider trades (opt-in: the 'insider' option; never blocks: cache on failure)
+        from . import insider as insider_mod
+
+        out["insider"] = {a: insider_mod.load(a) for a in insider_mod.stocks(assets)}
     if global_markets:  # Asia / Europe daily moves (opt-in: the 'global' option)
         try:
             out["global"] = load_global_indices()
