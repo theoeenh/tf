@@ -92,8 +92,10 @@ def load_gdelt(name: str, refresh: bool = False, end: str | None = None) -> pd.D
     q = QUERIES[name]
     recent = old is not None and not refresh and \
         old.index[-1] >= pd.Timestamp(end) - pd.Timedelta(days=GDELT_STALE_DAYS)
-    if recent and _gdelt_down[0]:
-        return old
+    if _gdelt_down[0]:  # refused earlier in this run: don't wait on it again
+        if recent:
+            return old
+        raise RuntimeError("GDELT unavailable (refused earlier in this run)")
     try:
         # with a cache, a short try: GDELT often rate-limits (429) shared runners
         n = 6 if old is None or refresh else 2
