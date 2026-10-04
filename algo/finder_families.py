@@ -161,7 +161,9 @@ def _insider(code: str = "P"):
     from . import wide
 
     t = wide.load_insider()
-    return t[t["code"] == code] if len(t) else t
+    if t.empty:
+        raise FileNotFoundError("no insider data (python -m algo.wide)")
+    return t[t["code"] == code]
 
 
 def insider_cluster(prices: dict, buyers: int = 2, days: int = 30) -> dict:

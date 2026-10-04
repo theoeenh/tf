@@ -367,9 +367,13 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
         if c.id in done:
             continue
         log.info("[%d/%d] %s", i, len(candidates), c.label())
-        if c.data not in data:
-            data[c.data] = load(data=c.data)
-        new.append(evaluate(c, data[c.data]))
+        try:
+            if c.data not in data:
+                data[c.data] = load(data=c.data)
+            new.append(evaluate(c, data[c.data]))
+        except (OSError, KeyError, ValueError) as exc:  # e.g. research data missing tonight: skip, not counted
+            log.warning("skipped %s: %r", c.label(), exc)
+            continue
         reg = pd.concat([reg, pd.DataFrame(new[-1:])], ignore_index=True)
         reg.to_csv(OUT / "registry.csv", index=False)  # saved after every attempt
     reg = score(reg)
