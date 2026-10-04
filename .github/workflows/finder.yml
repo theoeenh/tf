@@ -12,7 +12,7 @@ on:
     inputs:
       rounds:
         description: "loop rounds"
-        default: "6"
+        default: "4"
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ concurrency:
 jobs:
   loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,7 +44,7 @@ jobs:
           key: market-data-none
           restore-keys: market-data-
       - name: Run the loop
-        run: python -m algo.finder loop --rounds ${{ inputs.rounds || '6' }}
+        run: python -m algo.finder loop --rounds ${{ inputs.rounds || '4' }}
       - name: Save the registry and report
         if: always()
         run: |
