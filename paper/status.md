@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-04 15:23 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-04 15:26 UTC.
 
 **Equity $98,474** (-1.53%) · max drawdown -1.5% · 8 closed trades · 6 open
 
@@ -50,8 +50,8 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 
 - 2026-10-02 05:00 BTC donchian_trend: would have made -0.60R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.06R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-02 05:00 ETH donchian_trend: would have made -0.28R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.05R (avg win +2.43R, avg loss -1.16R).
-- 2026-10-02 03:00 ETH squeeze_breakout: would have made +0.19R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.09R (avg win +1.58R, avg loss -0.86R).
-- 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.10R (avg win +1.58R, avg loss -0.86R).
-- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 26% estimated chance of profit, expected -0.20R (avg win +2.48R, avg loss -1.16R).
-- 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.12R (avg win +2.48R, avg loss -1.16R).
+- 2026-10-02 03:00 ETH squeeze_breakout: would have made +0.19R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.08R (avg win +1.58R, avg loss -0.86R).
+- 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.09R (avg win +1.58R, avg loss -0.86R).
+- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.29R (avg win +2.48R, avg loss -1.16R).
+- 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.16R).
 - 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 26% estimated chance of profit, expected -0.19R (avg win +2.48R, avg loss -1.16R).
