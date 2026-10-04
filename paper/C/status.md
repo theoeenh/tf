@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-04 07:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-04 08:22 UTC.
 
 **Equity $98,788** (-1.21%) · max drawdown -1.3% · 9 closed trades · 7 open
 
@@ -8,11 +8,11 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
 
 - **LONG 61.0263 NVDA** (donchian_trend) since 2026-10-02 14:00, entry 237.42, stop 231.56, target 249.15, now -0.58R  
   *Thinking:* LONG NVDA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 23 = trend market, high volatility (ATR 1.0% of price). Plan: entry 237.42, stop 231.56, target 249.15 (2:1); risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 50.8500 NVDA** (squeeze_breakout) since 2026-10-02 14:00, entry 237.42, stop 230.39, target none (trailing), now -0.49R  
+- **LONG 50.8532 NVDA** (squeeze_breakout) since 2026-10-02 14:00, entry 237.42, stop 230.39, target none (trailing), now -0.49R  
   *Thinking:* LONG NVDA (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 23 = trend market, high volatility (ATR 1.0% of price). Plan: entry 237.42, stop 230.39, no target, trailing stop lets it run; risking $358. Warning: jobs report coming up while in the trade.
 - **LONG 16.6463 AMD** (donchian_trend) since 2026-10-02 14:00, entry 640.35, stop 618.86, target 683.34, now -0.31R  
   *Thinking:* LONG AMD (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 1.3% of price). Plan: entry 640.35, stop 618.86, target 683.34 (2:1); risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 13.8703 AMD** (squeeze_breakout) since 2026-10-02 14:00, entry 640.35, stop 614.56, target none (trailing), now -0.26R  
+- **LONG 13.8698 AMD** (squeeze_breakout) since 2026-10-02 14:00, entry 640.35, stop 614.56, target none (trailing), now -0.26R  
   *Thinking:* LONG AMD (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 1.3% of price). Plan: entry 640.35, stop 614.56, no target, trailing stop lets it run; risking $358. Warning: jobs report coming up while in the trade.
 - **LONG 36.5346 QQQ** (donchian_trend) since 2026-10-02 14:00, entry 752.37, stop 742.58, target 771.96, now -0.29R  
   *Thinking:* LONG QQQ (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, high volatility (ATR 0.5% of price). Plan: entry 752.37, stop 742.58, target 771.96 (2:1); risking $358. Warning: jobs report coming up while in the trade.
@@ -54,12 +54,12 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
 ## Skipped by the learner (17)
 
 - 2026-10-02 03:00 ETH squeeze_breakout: would have made +0.19R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.08R (avg win +1.58R, avg loss -0.87R).
-- 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.08R (avg win +1.58R, avg loss -0.87R).
-- 2026-10-02 13:00 XOM opening_range: would have made +1.67R. SKIPPED by the ML learner: 47% estimated chance of profit, expected -0.00R (avg win +1.05R, avg loss -0.95R).
-- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.15R).
+- 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.10R (avg win +1.58R, avg loss -0.87R).
+- 2026-10-02 13:00 XOM opening_range: would have made +1.67R. SKIPPED by the ML learner: 46% estimated chance of profit, expected -0.02R (avg win +1.05R, avg loss -0.95R).
+- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.48R, avg loss -1.15R).
-- 2026-10-02 16:00 ETH vwap_reversion: would have made -1.35R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
-- 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.15R (avg win +2.48R, avg loss -1.15R).
+- 2026-10-02 16:00 ETH vwap_reversion: would have made -1.35R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.34R (avg win +0.64R, avg loss -0.81R).
+- 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-02 16:00 SOL vwap_reversion: would have made -1.31R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
 - 2026-10-02 18:00 BTC vwap_reversion: would have made -0.66R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.34R (avg win +0.64R, avg loss -0.81R).
 - 2026-10-03 00:00 BTC vwap_reversion: would have made -0.39R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.35R (avg win +0.64R, avg loss -0.81R).
