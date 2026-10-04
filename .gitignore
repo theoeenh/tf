@@ -12,3 +12,5 @@ data/news/*_alpaca_news.csv
 data/news/global_indices.csv
 data/insider/company_tickers.json
 data/wide/daily.csv.gz
+data/wide/insider.csv.gz
+data/wide/insider_quarters.txt

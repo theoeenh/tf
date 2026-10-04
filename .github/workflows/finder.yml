@@ -43,9 +43,17 @@ jobs:
             data/social
           key: market-data-none
           restore-keys: market-data-
-      # S&P 500 daily bars (Alpaca market data: account A's keys, read only, no trading call) and any
+      # S&P 1500 daily bars (Alpaca market data: account A's keys, read only, no trading call) and any
       # newly published quarter of SEC insider trades. If it fails, the hourly families still run.
-      - name: Update the S&P 500 research data
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/wide/daily.csv.gz
+            data/wide/insider.csv.gz
+            data/wide/insider_quarters.txt
+          key: wide-data-${{ github.run_id }}
+          restore-keys: wide-data-
+      - name: Update the S&P 1500 research data
         continue-on-error: true
         env:
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
@@ -58,7 +66,7 @@ jobs:
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add paper/finder data/wide/members.csv data/wide/insider.csv.gz data/wide/insider_quarters.txt
+          git add paper/finder data/wide/members.csv
           git diff --cached --quiet && exit 0
           git commit -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
           for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done

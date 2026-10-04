@@ -1,11 +1,12 @@
-"""Wide research universe: the S&P 500 on daily bars, plus every insider trade the SEC published.
+"""Wide research universe: the S&P 1500 (large, mid and small companies) on daily bars, plus every
+insider trade the SEC published.
 
     python -m algo.wide            # download / update members, daily bars and insider trades
 
 Research only (the strategy finder): nothing here trades. The live accounts keep their own
 universe; a strategy found here would first go through the finder's gates and the vault.
 
-- members      today's S&P 500 list (Wikipedia). Survivorship bias: companies that fell out of
+- members      today's S&P 500, 400 and 600 lists (Wikipedia), with sector and index. Survivorship bias: companies that fell out of
                the index since 2016 are missing, which flatters any long strategy. The finder
                measures every signal against the same stocks' ordinary drift and against random
                entries on the same stocks, which removes most of that bias from the comparison.
@@ -13,7 +14,7 @@ universe; a strategy found here would first go through the finder's gates and th
                (not committed: about 30 MB; GitHub caches it between runs)
 - insider      SEC "Insider Transactions Data Sets" (every Form 4 of every company, one zip per
                quarter): open-market purchases (P) and sales (S) of common stock, by filing date.
-               data/wide/insider.csv.gz (committed: small, and re-downloading takes a while).
+               data/wide/insider.csv.gz (not committed; GitHub caches it, a full download takes ~5 min).
                Point in time: the filing date. A Form 4 can be accepted up to 22:00 New York, so
                a strategy may only act on it from the NEXT session (the finder's signals fire on
                the filing day's close and fill at the next open, which is exactly that).
@@ -54,21 +55,54 @@ def _get(url: str, headers=None, tries: int = 4) -> bytes:
 
 # ------------------------------------------------------------------ members
 
+INDEXES = ("500", "400", "600")  # large, mid and small companies (S&P 1500)
+
+
+def _members_table(index: str) -> pd.DataFrame:
+    html = _get(f"https://en.wikipedia.org/wiki/List_of_S%26P_{index}_companies").decode()
+    t = next(t for t in pd.read_html(io.StringIO(html)) if {"Symbol", "GICS Sector"} <= set(t.columns) and len(t) > 300)
+    return pd.DataFrame({"symbol": t["Symbol"].astype(str).str.replace(".", "-", regex=False),
+                         "sector": t["GICS Sector"], "index": f"sp{index}"})
+
+
+def _table() -> pd.DataFrame:
+    m = pd.read_csv(WIDE_DIR / "members.csv")
+    if "index" not in m:  # file from before the S&P 400 / 600 were added
+        m["index"] = "sp500"
+    return m
+
+
 def members(refresh: bool = False) -> list[str]:
     path = WIDE_DIR / "members.csv"
     if path.exists() and not refresh:
-        return pd.read_csv(path)["symbol"].tolist()
-    html = _get("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies").decode()
-    t = pd.read_html(io.StringIO(html), attrs={"id": "constituents"})[0]
-    out = pd.DataFrame({"symbol": t["Symbol"].str.replace(".", "-", regex=False), "sector": t["GICS Sector"]})
+        return _table()["symbol"].tolist()
+    out = pd.concat([_members_table(i) for i in INDEXES]).drop_duplicates("symbol")
     WIDE_DIR.mkdir(parents=True, exist_ok=True)
     out.sort_values("symbol").to_csv(path, index=False)
     return out["symbol"].tolist()
 
 
 def sectors() -> dict[str, str]:
-    m = pd.read_csv(WIDE_DIR / "members.csv")
+    m = _table()
     return dict(zip(m["symbol"], m["sector"]))
+
+
+def index_of() -> dict[str, str]:
+    m = _table()
+    return dict(zip(m["symbol"], m["index"]))
+
+
+def segment(name: str):
+    """Which stocks a strategy trades: "all" = the S&P 500 (the first research universe, kept so
+    earlier results keep their meaning), sp400 / sp600 / sp1500, or one sector ("sector:Energy")."""
+    idx, sec = index_of(), sectors()
+    if name == "all":
+        return lambda a: idx.get(a) == "sp500"
+    if name == "sp1500":
+        return lambda a: a in idx
+    if name.startswith("sector:"):
+        return lambda a: sec.get(a) == name[7:]
+    return lambda a: idx.get(a) == name
 
 
 # ------------------------------------------------------------------ daily bars
@@ -174,6 +208,12 @@ def update_insider() -> pd.DataFrame:
     done_path = WIDE_DIR / "insider_quarters.txt"
     done = set(done_path.read_text().split()) if done_path.exists() else set()
     tickers = set(members())
+    import hashlib
+
+    stamp = "members:" + hashlib.sha1(",".join(sorted(tickers)).encode()).hexdigest()[:12]
+    if stamp not in done:  # the stock list changed: every quarter again, for the new list
+        old, done = pd.DataFrame(), set()
+    done.add(stamp)
     new = []
     for q in quarters():
         if q in done:
@@ -202,11 +242,16 @@ def load_insider() -> pd.DataFrame:
     return pd.read_csv(path, parse_dates=["filed", "traded"]) if path.exists() else pd.DataFrame()
 
 
+SLIPPAGE_BPS = {"sp500": 5, "sp400": 8, "sp600": 15}  # smaller companies: wider spreads at the open
+
+
 def costs(symbols) -> dict:
-    """Large US stocks: no commission at Alpaca, regulatory fees on sales, ~5 bps slippage at the open."""
+    """US stocks: no commission at Alpaca, regulatory fees on sales, slippage by company size."""
     from .engine import Costs
 
-    return {s: Costs(fee_bps=0.2, slippage_bps=5, short_borrow_apr=0.01) for s in symbols}
+    idx = index_of()
+    return {s: Costs(fee_bps=0.2, slippage_bps=SLIPPAGE_BPS.get(idx.get(s), 15), short_borrow_apr=0.01)
+            for s in symbols}
 
 
 def main() -> None:

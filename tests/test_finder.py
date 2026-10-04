@@ -140,3 +140,13 @@ def test_untraded_days_are_dropped_from_the_research_data(tmp_path, monkeypatch)
     rows.to_csv(tmp_path / "daily.csv.gz", index=False)
     df = wide.load_daily(min_days=100)["X"]
     assert len(df) == 500 and (df["Volume"] > 0).all()
+
+
+def test_a_strategy_that_works_in_some_sectors_gets_specialised_children():
+    c = F.Candidate("insider_cluster", {"buyers": 2, "days": 30}, dict(F.DAILY_RULES["hold 20 days"]), data="daily500")
+    row = {"by_group": '{"Energy": [0.4, 60], "Utilities": [-0.2, 50], "Financials": [0.3, 12]}'}
+    kids = [k for k, _ in F.mutate(c, "shelf life: works on >= 55% of assets (S&P 500: of sectors)", row)]
+    assets = {k.assets for k in kids}
+    assert "sector:Energy" in assets  # worked there, with enough signals to judge
+    assert "sector:Utilities" not in assets and "sector:Financials" not in assets  # lost there / too few signals
+    assert {"sp400", "sp600"} <= assets

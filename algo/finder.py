@@ -105,9 +105,13 @@ class Candidate:
     def label(self) -> str:
         p = ", ".join(f"{k}={v}" for k, v in self.params.items())
         r = ", ".join(f"{k}={v}" for k, v in self.rule.items())
+        if self.data == "daily500":
+            where = {"all": "S&P 500", "sp400": "S&P 400 (mid)", "sp600": "S&P 600 (small)",
+                     "sp1500": "S&P 1500"}.get(self.assets, self.assets.replace("sector:", "sector "))
+            return (f"{self.family}({p}) | {r}{'' if self.trend else ' | no trend filter'} | "
+                    f"{where}, daily")
         return (f"{self.family}({p}) | {r}{' | long/short' if self.short else ''}"
-                f"{'' if self.trend else ' | no trend filter'}{'' if self.assets == 'all' else ' | ' + self.assets}"
-                f"{'' if self.data == 'hourly' else ' | S&P 500 daily'}")
+                f"{'' if self.trend else ' | no trend filter'}{'' if self.assets == 'all' else ' | ' + self.assets}")
 
     def horizon(self) -> int:
         return int(self.rule.get("max_bars") or (24 if self.data == "hourly" else 10))
@@ -128,7 +132,13 @@ def load(include_vault: bool = False, data: str = "hourly") -> dict[str, pd.Data
 
 
 def signals(c: Candidate, prices) -> dict[str, pd.Series]:
-    prices = {a: df for a, df in prices.items() if ASSET_SETS[c.assets](a)}
+    if c.data == "daily500":
+        from . import wide
+
+        keep = wide.segment(c.assets)
+    else:
+        keep = ASSET_SETS[c.assets]
+    prices = {a: df for a, df in prices.items() if keep(a)}
     if c.family in WIDE_FAMILIES:
         raw = WIDE_FAMILIES[c.family][0](prices, **c.params)
     elif c.family in PANEL_FAMILIES:  # cross-asset families see the whole universe at once
@@ -262,11 +272,18 @@ def shelf_life(events: pd.DataFrame, prices, groups: dict | None = None) -> dict
     reg = pd.cut(mkt.reindex(ic.index), [-np.inf, -0.02, 0.02, np.inf], labels=["down", "flat", "up"])
     by_reg = ic.groupby(reg, observed=False).mean()
     key = events["asset"].map(groups) if groups else events["asset"]
+    if groups is None:  # specialised in one group: breadth over its stocks with a few signals each
+        n = events.groupby("asset")["edge"].transform("size")
+        if (events[n >= 3]["asset"].nunique()) >= 5:
+            events, key = events[n >= 3], events[n >= 3]["asset"]
     by_asset = events.groupby(key)["edge"].mean()
+    count = events.groupby(key)["edge"].size()
     return {"months": len(ic), "pos_months": float(pos.mean()), "longest_bad_run": longest_bad,
             "ic_first_half": float(ic.iloc[:half].mean()), "ic_second_half": float(ic.iloc[half:].mean()),
             "regimes_positive": int((by_reg > 0).sum()), "regimes_seen": int(by_reg.notna().sum()),
-            "breadth": float((by_asset > 0).mean())}
+            "breadth": float((by_asset > 0).mean()),
+            # edge per group (sector, or asset), for the loop: where does it work?
+            "by_group": json.dumps({str(k): [round(float(v), 4), int(count[k])] for k, v in by_asset.items()})}
 
 
 # ------------------------------------------------------------------ gates and registry
@@ -310,7 +327,7 @@ def evaluate(c: Candidate, prices) -> dict:
     both = {k: v[(v.index >= pd.Timestamp(search[0])) & (v.index <= pd.Timestamp(validation[1]))]
             for k, v in sig.items()}
     groups = None
-    if c.data == "daily500":
+    if c.data == "daily500" and not c.assets.startswith("sector:"):
         from . import wide
 
         groups = wide.sectors()
@@ -368,7 +385,9 @@ def grid(families: dict | None = None) -> list[Candidate]:
         keys = list(space)
         for vals in itertools.product(*(space[k] for k in keys)):
             for rule in (DAILY_RULES if wide_ else RULES).values():
-                out.append(Candidate(fam, dict(zip(keys, vals)), dict(rule), data="daily500" if wide_ else "hourly"))
+                for seg in (("all", "sp400", "sp600") if wide_ else ("all",)):  # S&P 500, mid, small companies
+                    out.append(Candidate(fam, dict(zip(keys, vals)), dict(rule), assets=seg,
+                                         data="daily500" if wide_ else "hourly"))
     return out
 
 
@@ -396,7 +415,7 @@ def _neighbours(c: Candidate, keys=None) -> list[dict]:
     return out
 
 
-def mutate(c: Candidate, failed: str) -> list[tuple[Candidate, str]]:
+def mutate(c: Candidate, failed: str, row: dict | None = None) -> list[tuple[Candidate, str]]:
     """Children of a candidate, the ones its failures point to first."""
     kids: list[tuple[Candidate, str]] = []
 
@@ -404,6 +423,16 @@ def mutate(c: Candidate, failed: str) -> list[tuple[Candidate, str]]:
         kids.append((Candidate(**(asdict(c) | change | {"notes": f"from {c.id}: {why}"})), why))
 
     rules = DAILY_RULES if c.data == "daily500" else RULES
+    if c.data == "daily500" and ("assets" in failed or "regime" in failed):
+        # specialise: the sectors where it worked (enough signals there to judge), then company size
+        groups = json.loads(row["by_group"]) if row and isinstance(row.get("by_group"), str) else {}
+        if not c.assets.startswith("sector:"):
+            good = sorted(((v[0], g) for g, v in groups.items() if v[0] > 0 and v[1] >= 30), reverse=True)
+            for _, g in good[:4]:
+                add(f"works only in some sectors -> only {g}", assets=f"sector:{g}")
+        if c.assets == "all":
+            for seg in ("sp400", "sp600", "sp1500"):
+                add(f"try other company sizes -> {seg}", assets=seg)
     if "assets" in failed and c.data == "hourly":  # works on some assets only: try it where it might belong
         for a in ASSET_SETS:
             if a != c.assets:
@@ -433,7 +462,7 @@ def loop(rounds: int = 3, parents: int = 8, per_round: int = 40) -> pd.DataFrame
         todo, seen = [], set()
         for r in order[:parents]:
             c = Candidate(**json.loads(r.candidate))
-            for kid, _ in mutate(c, r.failed if isinstance(r.failed, str) else ""):
+            for kid, _ in mutate(c, r.failed if isinstance(r.failed, str) else "", r._asdict()):
                 if kid.id not in done and kid.id not in seen:
                     seen.add(kid.id)
                     todo.append(kid)
