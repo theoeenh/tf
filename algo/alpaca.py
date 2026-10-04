@@ -345,7 +345,7 @@ def emergency_protect(trades: list[dict], exc: Exception) -> None:
            + (f" NOT protected: {'; '.join(failed)}" if failed else ""))
     print("EMERGENCY: " + msg)
     acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
-    notify.send(f"⚠️ [{acct}] trading run failed", msg, "warning", "high")
+    notify.send(f"[{acct}] trading run failed", msg, "warning", "high")
 
 
 def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float]) -> list[dict]:
@@ -474,7 +474,7 @@ def verify(alert: bool = False) -> list[str]:
         from . import notify
 
         acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
-        notify.send(f"⚠️ [{acct}] Alpaca does not match the plan", "; ".join(problems), "warning", "high")
+        notify.send(f"[{acct}] Alpaca does not match the plan", "; ".join(problems), "warning", "high")
     return problems
 
 

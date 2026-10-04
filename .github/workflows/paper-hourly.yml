@@ -76,7 +76,7 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: >
-          python -c "from algo import notify; notify.send('⚠️ data download failed: no trading this run',
+          python -c "from algo import notify; notify.send('data download failed: no trading this run',
           'See GitHub Actions run ${{ github.run_id }}.', 'warning', 'high')"
 
   trade:
@@ -156,7 +156,7 @@ jobs:
       - name: Alert the phone if this run failed
         if: failure()
         run: >
-          python -c "from algo import notify; notify.send('⚠️ [${{ env.PAPER_ACCOUNT_NAME || matrix.account }}] trading run failed',
+          python -c "from algo import notify; notify.send('[${{ env.PAPER_ACCOUNT_NAME || matrix.account }}] trading run failed',
           'See GitHub Actions run ${{ github.run_id }}. Stops are put back automatically when the Alpaca step fails.', 'warning', 'high')"
 
       - name: Summary
