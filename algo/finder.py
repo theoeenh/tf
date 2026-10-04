@@ -190,11 +190,18 @@ def monthly_ic(events: pd.DataFrame) -> pd.Series:
 
 def backtest(c: Candidate, prices, sig, start, end, seed: int | None = None):
     rule = ExitRule(**c.rule)
+    if c.data == "daily500":  # 500 stocks: only those with a signal in the window, and only the window
+        a0, b0 = pd.Timestamp(start), pd.Timestamp(end)
+        sig = {a: s for a, s in sig.items() if (s[(s.index >= a0) & (s.index <= b0)] != 0).any()}
+        lo = a0 - pd.Timedelta(days=400)  # warm-up for the indicators the exits use
+        prices = {a: prices[a][(prices[a].index >= lo) & (prices[a].index <= b0)] for a in sig}
+        sig = {a: s.reindex(prices[a].index).fillna(0).astype(int) for a, s in sig.items()}
     sl = []
     rng = np.random.default_rng(seed) if seed is not None else None
     for a, s in sig.items():
         if rng is not None:  # random twin: same exits, same number of signals, random timing (and side)
-            fire = rng.random(len(s)) < (s != 0).mean()
+            inside = (s.index >= pd.Timestamp(start)) & (s.index <= pd.Timestamp(end))
+            fire = rng.random(len(s)) < (s[inside] != 0).mean()  # same rate as the signals in the window
             side = np.where(rng.random(len(s)) < 0.5, 1, -1) if c.short else 1
             s = pd.Series(np.where(fire, side, 0), s.index)
         sl.append(Sleeve(a, c.family, s, rule, c.short))
