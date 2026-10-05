@@ -57,3 +57,25 @@ def test_target_is_relative_to_the_average_stock(monkeypatch):
 
 def test_no_feature_uses_todays_index_membership():
     assert "index" not in R.FEATURES  # today's S&P lists would tell the model which stocks grew
+
+
+def test_short_features_use_only_published_days(monkeypatch):
+    """FINRA publishes a day's short volume after the close: the feature on day t uses days <= t-1."""
+    from algo import ranker, wide
+
+    days = pd.bdate_range("2020-01-01", periods=700)
+    prices = {a: pd.DataFrame({"Open": 10.0, "Close": 10.0 + np.arange(700) * (i + 1) / 100, "Volume": 1e6},
+                              index=days) for i, a in enumerate(["AAA", "BBB", "CCC", "DDD"])}
+    monkeypatch.setattr(wide, "load_insider", lambda: pd.DataFrame())
+    base = pd.DataFrame(np.linspace(0.3, 0.5, 700)[:, None] * [1, 1.1, 1.2, 1.3], days, list(prices))
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ranker.dataset(prices)
+    fri = a.index.get_level_values("date").unique()[-5]
+    moved = base.copy()
+    moved.loc[fri, "AAA"] = 9.0  # that Friday's own ratio: not published before its close
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ranker.dataset(prices)
+    assert len(a) and a["short_20"].notna().any()
+    pd.testing.assert_series_equal(a.loc[fri, "short_20"], b.loc[fri, "short_20"])
+    nxt = a.index.get_level_values("date").unique()[-4]
+    assert not a.loc[nxt, "short_20"].equals(b.loc[nxt, "short_20"])  # used from the next week on

@@ -17,3 +17,5 @@ data/wide/insider_quarters.txt
 data/wide/ml_scores_*.pkl
 data/wide/ml_insider_*.pkl
 data/wide/earnings.csv.gz
+data/wide/short_volume.csv.gz
+data/wide/short_volume_days.txt

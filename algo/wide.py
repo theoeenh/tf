@@ -413,6 +413,71 @@ def load_earnings() -> pd.DataFrame:
     return df
 
 
+# ------------------------------------------------------------------ short selling (FINRA, free)
+
+FINRA_SHORT = "https://cdn.finra.org/equity/regsho/daily/{feed}shvol{day}.txt"
+SHORT_FEEDS = ("FNSQ", "FNYX")  # the Nasdaq and NYSE trade reporting facilities: off-exchange volume, from 2016
+
+
+def _short_day(day: str, tickers: set[str]) -> pd.DataFrame | None:
+    """Short and total volume per stock reported that day (None: no file, e.g. a holiday)."""
+    parts = []
+    for feed in SHORT_FEEDS:
+        try:
+            raw = _get(FINRA_SHORT.format(feed=feed, day=day), tries=2).decode("utf-8", "replace")
+        except OSError:
+            return None
+        df = pd.read_csv(io.StringIO(raw), sep="|", usecols=["Symbol", "ShortVolume", "TotalVolume"],
+                         dtype={"Symbol": str})
+        parts.append(df[df["Symbol"].isin(tickers)])
+    df = pd.concat(parts).groupby("Symbol")[["ShortVolume", "TotalVolume"]].sum().reset_index()
+    if df.empty:
+        return None
+    return df.rename(columns={"Symbol": "ticker", "ShortVolume": "short", "TotalVolume": "total"}).assign(date=day)
+
+
+def update_short_volume(start: str = START) -> pd.DataFrame:
+    """FINRA daily short sale volume of the S&P 1500 (published each evening for that day): one row per
+    stock and day. Downloads only the days not stored yet."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    path, done_path = WIDE_DIR / "short_volume.csv.gz", WIDE_DIR / "short_volume_days.txt"
+    old = pd.read_csv(path, dtype={"date": str}) if path.exists() else pd.DataFrame()
+    done = set(done_path.read_text().split()) if done_path.exists() else set()
+    tickers = set(members())
+    days = [d.strftime("%Y%m%d") for d in pd.bdate_range(start, pd.Timestamp.now(tz="America/New_York").tz_localize(None))]
+    todo = [d for d in days if d not in done]
+    recent = (pd.Timestamp.now() - pd.Timedelta(days=5)).strftime("%Y%m%d")
+    rows = []
+    with ThreadPoolExecutor(6) as ex:
+        for d, df in zip(todo, ex.map(lambda d: _short_day(d, tickers), todo)):
+            if df is not None:
+                rows.append(df)
+                done.add(d)
+            elif d < recent:
+                done.add(d)  # holiday: no file will come
+    if rows:
+        old = pd.concat([old, *rows], ignore_index=True).drop_duplicates(["date", "ticker"], keep="last")
+        WIDE_DIR.mkdir(parents=True, exist_ok=True)
+        old.sort_values(["date", "ticker"]).to_csv(path, index=False)
+    done_path.write_text("\n".join(sorted(done)) + "\n")
+    log.info("short volume: %d new days, %d rows", len(rows), len(old))
+    return old
+
+
+def load_short_volume() -> pd.DataFrame:
+    """Short share of off-exchange volume per (day, stock) as a wide table, usable from the NEXT session
+    (FINRA publishes it after the close)."""
+    path = WIDE_DIR / "short_volume.csv.gz"
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_csv(path, dtype={"date": str})
+    df["date"] = pd.to_datetime(df["date"])
+    df = df[df["total"] > 0]
+    return (df.assign(ratio=df["short"] / df["total"]).pivot(index="date", columns="ticker", values="ratio")
+            .sort_index())
+
+
 def costs(symbols) -> dict:
     """US stocks: no commission at Alpaca, regulatory fees on sales, slippage by company size."""
     from .engine import Costs
@@ -432,6 +497,8 @@ def main() -> None:
     print(f"daily bars: {d['symbol'].nunique()} symbols, {len(d)} rows")
     r = update_insider_recent()
     print(f"recent insider filings (after the last published quarter): {len(r)} trades")
+    sv = update_short_volume()
+    print(f"short volume: {len(sv)} rows")
     e = update_earnings()
     print(f"earnings releases: {len(e)} for {e['ticker'].nunique()} tickers")
 

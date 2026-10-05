@@ -8,7 +8,8 @@ market regime reads the same scale in another):
   momentum 12-1 and 6-1 months, last month's and last week's return (reversal), 60-day volatility,
   distance to the 52-week high, distance to the 200-day average, dollar volume (liquidity / size),
   insider buying (distinct buyers in 90 days, $ bought) and discretionary
-  selling (30 days) from Form 4 filings filed by that day, plus the market's own last month.
+  selling (30 days) from Form 4 filings filed by that day, the short share of off-exchange volume
+  (FINRA, 20-day average and its change vs 120 days, from the day after), plus the market's last month.
 Target: the return from the next session's open over the next 20 sessions, minus the average of all
 stocks over the same days (so survivorship and the market's rise are taken out), as a percentile rank.
 Walk-forward: a refit every 13 weeks on every week whose target was fully known by then (no overlap
@@ -34,6 +35,7 @@ MIN_TRAIN_ROWS = 5000
 # which small companies of 2019 grew into big ones (alone it had the highest IC of all: a leak).
 FEATURES = ["mom_12_1", "mom_6_1", "ret_1m", "ret_1w", "vol_60", "off_high", "trend_200", "dollar_vol",
             "ins_buyers", "ins_buy", "ins_sell", "mkt_1m"]
+SHORT_FEATURES = ["short_20", "short_chg"]  # added 2026-10-05 (FINRA data): a separate version, counted
 
 
 def panel(prices: dict, col: str) -> pd.DataFrame:
@@ -86,6 +88,10 @@ def dataset(prices: dict) -> pd.DataFrame:
         "trend_200": close / close.rolling(200, min_periods=150).mean() - 1,
         "dollar_vol": np.log1p((close * vol).rolling(20, min_periods=10).mean()),
     }
+    # FINRA short share of off-exchange volume, published after the close: known from the next session
+    sv = wide.load_short_volume().reindex(index=days, columns=close.columns).shift(1)
+    f["short_20"] = sv.rolling(20, min_periods=10).mean()
+    f["short_chg"] = f["short_20"] - sv.rolling(120, min_periods=60).mean()
     mkt = close.pct_change(21, fill_method=None).mean(axis=1)
     f["mkt_1m"] = pd.DataFrame(np.repeat(mkt.to_numpy()[:, None], close.shape[1], axis=1), days, close.columns)
     # target: next open -> 20 sessions later, minus the average stock over the same days
@@ -99,7 +105,7 @@ def dataset(prices: dict) -> pd.DataFrame:
     long.index.names = ["date", "stock"]
     long = long[long["mom_12_1"].notna() & np.isfinite(long["vol_60"])]
     # percentile ranks within each date for the stock-specific features
-    for k in FEATURES:
+    for k in FEATURES + SHORT_FEATURES:
         if k != "mkt_1m":
             long[k] = long.groupby(level="date")[k].rank(pct=True)
     long["target_rank"] = long.groupby(level="date")["target"].rank(pct=True)
@@ -117,9 +123,10 @@ def _model(kind: str):
                                          min_samples_leaf=500, l2_regularization=1.0, random_state=0)
 
 
-def walk_forward(ds: pd.DataFrame, kind: str) -> pd.Series:
+def walk_forward(ds: pd.DataFrame, kind: str, features: list[str] | None = None) -> pd.Series:
     """Score of every (date, stock), each from a model fitted only on weeks whose target was known
     (target end = date + HORIZON sessions) before that date. NaN for the first MIN_TRAIN_WEEKS."""
+    features = features or FEATURES
     dates = ds.index.get_level_values("date").unique().sort_values()
     out = []
     for k in range(MIN_TRAIN_WEEKS, len(dates), REFIT_WEEKS):
@@ -130,8 +137,8 @@ def walk_forward(ds: pd.DataFrame, kind: str) -> pd.Series:
         test = ds[ds.index.get_level_values("date").isin(test_dates)]
         if len(train) < MIN_TRAIN_ROWS or test.empty:
             continue
-        m = _model(kind).fit(train[FEATURES].fillna(0.5), train["target_rank"])
-        out.append(pd.Series(m.predict(test[FEATURES].fillna(0.5)), test.index))
+        m = _model(kind).fit(train[features].fillna(0.5), train["target_rank"])
+        out.append(pd.Series(m.predict(test[features].fillna(0.5)), test.index))
         log.info("ranker %s: fitted on %d rows up to %s, scored %s -> %s", kind, len(train), known_until.date(),
                  test_dates[0].date(), test_dates[-1].date())
     return pd.concat(out) if out else pd.Series(dtype=float)
@@ -140,9 +147,10 @@ def walk_forward(ds: pd.DataFrame, kind: str) -> pd.Series:
 _CACHE: dict = {}
 
 
-def scores(prices: dict, kind: str) -> pd.Series:
+def scores(prices: dict, kind: str, short: bool = False) -> pd.Series:
     """Cached walk-forward scores for this universe and data end."""
-    key = hashlib.sha1((kind + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
+    feats = FEATURES + (SHORT_FEATURES if short else [])
+    key = hashlib.sha1((kind + ("+short" if short else "") + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
                        .encode()).hexdigest()[:12]
     if key in _CACHE:
         return _CACHE[key]
@@ -150,7 +158,7 @@ def scores(prices: dict, kind: str) -> pd.Series:
     if path.exists():
         s = pd.read_pickle(path)
     else:
-        s = walk_forward(dataset(prices), kind)
+        s = walk_forward(dataset(prices), kind, feats)
         wide.WIDE_DIR.mkdir(parents=True, exist_ok=True)
         s.to_pickle(path)
     _CACHE[key] = s
@@ -177,9 +185,9 @@ def main() -> None:
     prices = load(data="daily500")  # vault sealed
     ds = dataset(prices)
     print(f"{len(ds):,} stock-weeks, {ds.index.get_level_values('date').nunique()} weeks")
-    for kind in ("ridge", "gbm"):
-        s = scores(prices, kind)
-        print(f"\n{kind}: IC by year (20-session excess return; top10 = best decile minus average, per 20 sessions)")
+    for kind, short in (("ridge", False), ("gbm", False), ("ridge", True), ("gbm", True)):
+        s = scores(prices, kind, short)
+        print(f"\n{kind}{' + short selling' if short else ''}: IC by year (20-session excess return; top10 = best decile minus average, per 20 sessions)")
         print(ic_report(ds, s).round(4).to_string())
 
 
