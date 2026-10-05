@@ -211,6 +211,28 @@
    "desc": "sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2",
    "opened": "2026-10-05 17:26",
    "id": "bear_call_spread-TLT-2026-10-05"
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "IWM",
+   "legs": [
+    {
+     "symbol": "IWM261113C00302000",
+     "qty": 4,
+     "price": 1.28
+    },
+    {
+     "symbol": "IWM261113C00294000",
+     "qty": -4,
+     "price": 3.02
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -696.0,
+   "max_loss": 2528.0,
+   "desc": "sell 294 / buy 302 calls, 2026-11-13, credit 1.68 on width 8",
+   "opened": "2026-10-05 18:39",
+   "id": "bear_call_spread-IWM-2026-10-05"
   }
  ],
  "closed": []

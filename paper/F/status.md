@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-05 18:27 UTC. **Equity $99,493** (-0.51% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-05 18:39 UTC. **Equity $99,379** (-0.62% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 0 | $+0 | $+141 | 0 / 0 |
-| long_put | 3 | 0 | $+0 | $-423 | 0 / 0 |
-| bull_put_spread | 3 | 0 | $+0 | $-39 | 0 / 0 |
-| bear_call_spread | 2 | 0 | $+0 | $-122 | 0 / 0 |
+| long_call | 3 | 0 | $+0 | $+222 | 0 / 0 |
+| long_put | 3 | 0 | $+0 | $-474 | 0 / 0 |
+| bull_put_spread | 3 | 0 | $+0 | $-34 | 0 / 0 |
+| bear_call_spread | 3 | 0 | $+0 | $-275 | 0 / 0 |
 
 ## Open positions
 
@@ -22,3 +22,4 @@ Updated 2026-10-05 18:27 UTC. **Equity $99,493** (-0.51% since start). A test of
 - **bull_put_spread** MSFT: sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30 (opened 2026-10-05 16:25, cost $-650, most it can lose $2,377)
 - **bull_put_spread** QQQ: sell 732 / buy 700 puts, 2026-11-13, credit 5.34 on width 32 (opened 2026-10-05 17:26, cost $-543, most it can lose $2,666)
 - **bear_call_spread** TLT: sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2 (opened 2026-10-05 17:26, cost $-629, most it can lose $2,839)
+- **bear_call_spread** IWM: sell 294 / buy 302 calls, 2026-11-13, credit 1.68 on width 8 (opened 2026-10-05 18:39, cost $-696, most it can lose $2,528)
