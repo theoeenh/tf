@@ -306,3 +306,23 @@ def test_recent_insider_file_with_mixed_date_formats(tmp_path, monkeypatch):
                   "price": [1.0, 2.0]}).to_csv(tmp_path / "insider_recent.csv.gz", index=False)
     t = wide.load_insider()
     assert str(t["filed"].dtype).startswith("datetime64") and t["filed"].max() == pd.Timestamp("2026-06-29")
+
+
+def test_insider_low_short_uses_only_published_short_data(monkeypatch):
+    """The short-volume filter on day t reads ratios up to t-1 (FINRA publishes after the close)."""
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_low_short(prices, max_rank=0.5)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # the signal day's own ratio and later: unknown that day
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_low_short(prices, max_rank=0.5)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)

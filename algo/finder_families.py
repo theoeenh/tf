@@ -317,6 +317,22 @@ def insider_ml(prices: dict, model: str = "ridge", keep: float = 0.3) -> dict:
     return out
 
 
+def insider_low_short(prices: dict, buyers: int = 2, days: int = 90, max_rank: float = 0.5) -> dict:
+    """Insider clusters where short sellers are NOT betting against the stock: the day a cluster
+    forms (insider_cluster) and the stock's 20-day short share of off-exchange volume (FINRA, known
+    from the next session) ranks in the lowest `max_rank` share of the S&P 1500 that day."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=days)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
@@ -335,6 +351,10 @@ WIDE_FAMILIES = {
     # the same ranker with FINRA short-selling features added (2026-10-05): its own 4 tries
     "ml_rank_short": (lambda prices, **p: ml_rank(prices, short=True, **p), {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
                       {"rules": ["hold 20 days"], "segments": ["sp1500"], "trend": False}),
+    # insider clusters where short sellers are not against the stock (FINRA short volume, 2026-10-05)
+    "insider_low_short": (insider_low_short, {"buyers": [2, 3], "max_rank": [0.5, 0.3]},
+                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

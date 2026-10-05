@@ -248,3 +248,14 @@ def test_one_refused_order_does_not_stop_the_others(monkeypatch):
     with pytest.raises(alpaca.AlpacaError, match="AMD"):
         alpaca._trade_and_protect(True, [], {"NVDA": 100.0, "AMD": 100.0})
     assert any(o["symbol"] == "NVDA" for o in sent)
+
+
+def test_verify_accepts_fractional_rest_without_stop_after_the_close(monkeypatch):
+    from algo import alpaca
+
+    stop = {"symbol": "AMD", "side": "sell", "type": "stop", "qty": "33"}
+    _fake_alpaca(monkeypatch, {"AMD": 33.82}, [stop], {"AMD": 33.82})
+    assert alpaca.verify() == []
+    stop = {"symbol": "AMD", "side": "sell", "type": "stop", "qty": "32"}
+    _fake_alpaca(monkeypatch, {"AMD": 33.82}, [stop], {"AMD": 33.82})
+    assert alpaca.verify() == ["AMD: 33.82 held, only 32 covered by a stop"]
