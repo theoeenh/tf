@@ -141,7 +141,7 @@ def test_closing_crypto_sells_exactly_what_is_held():
     assert o[0]["qty"] <= 10.0000000004
 
 
-def _fake_alpaca(monkeypatch, positions, open_orders, plan):
+def _fake_alpaca(monkeypatch, positions, open_orders, plan, cash=1e6):
     import json
 
     from algo import alpaca, notify
@@ -156,6 +156,8 @@ def _fake_alpaca(monkeypatch, positions, open_orders, plan):
     def request(method, path, body=None, base=None):
         if path.startswith("/v2/orders?status=open"):
             return open_orders
+        if path == "/v2/account":
+            return {"non_marginable_buying_power": str(cash), "equity": "100000"}
         raise AssertionError(path)
 
     monkeypatch.setattr(alpaca, "request", request)
@@ -195,3 +197,54 @@ def test_tiny_top_up_is_skipped_but_real_changes_are_not():
     assert plan({"NVDA": 111.876}, {"NVDA": 111.819}, {"NVDA": 234.0}) == []  # 0.05%: keep
     assert plan({"NVDA": 130.0}, {"NVDA": 111.8}, {"NVDA": 234.0})[0]["side"] == "buy"  # real add
     assert plan({}, {"NVDA": 111.8}, {"NVDA": 234.0})[0]["side"] == "sell"  # close
+
+
+def test_crypto_buy_is_cut_to_the_cash_left(monkeypatch):
+    from algo import alpaca
+
+    monkeypatch.setattr(alpaca, "get_data", lambda path, q: {"quotes": {"SOL/USD": {"bp": 100.0, "ap": 100.1}}})
+    sent = []
+    monkeypatch.setattr(alpaca, "_send", lambda o: sent.append(o) or {"id": "x"})
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: {"status": "filled", "filled_qty": "1"})
+    monkeypatch.setattr(alpaca, "PAPER_DIR", __import__("pathlib").Path(__import__("tempfile").mkdtemp()))
+    oid, how = alpaca.crypto_limit_first({"symbol": "SOL/USD", "side": "buy", "qty": 500.0, "note": ""}, wait=0,
+                                         cash=10_000.0)
+    assert sent[0]["qty"] * 100.0 <= 0.97 * 10_000 + 1e-6 and "crypto needs cash" in how
+    sent.clear()
+    oid, how = alpaca.crypto_limit_first({"symbol": "SOL/USD", "side": "buy", "qty": 5.0, "note": ""}, wait=0, cash=2.0)
+    assert oid is None and not sent and "skipped" in how
+
+
+def test_verify_accepts_crypto_smaller_than_plan_when_cash_is_short(monkeypatch):
+    from algo import alpaca
+
+    stop = {"symbol": "SOLUSD", "side": "sell", "type": "stop_limit", "qty": "100"}
+    _fake_alpaca(monkeypatch, {"SOL/USD": 100.0}, [stop], {"SOL/USD": 500.0}, cash=1_000.0)
+    assert alpaca.verify() == []
+    _fake_alpaca(monkeypatch, {"SOL/USD": 100.0}, [stop], {"SOL/USD": 500.0}, cash=1e6)
+    assert alpaca.verify()  # with the cash there, a gap is a real problem
+
+
+def test_one_refused_order_does_not_stop_the_others(monkeypatch):
+    from algo import alpaca
+
+    monkeypatch.setattr(alpaca, "positions", lambda: {})
+    monkeypatch.setattr(alpaca, "wanted", lambda: {"NVDA": 10.0, "AMD": 5.0})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: 100.0 for s in syms})
+    sent = []
+
+    def send(o):
+        if o["symbol"] == "AMD" and o["type"] == "market":
+            raise alpaca.AlpacaError("403 refused")
+        sent.append(o)
+        return {"id": o["symbol"]}
+
+    monkeypatch.setattr(alpaca, "_send", send)
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
+                        {"is_open": True} if p == "/v2/clock" else {"status": "filled", "equity": "1"})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    import pytest
+
+    with pytest.raises(alpaca.AlpacaError, match="AMD"):
+        alpaca._trade_and_protect(True, [], {"NVDA": 100.0, "AMD": 100.0})
+    assert any(o["symbol"] == "NVDA" for o in sent)

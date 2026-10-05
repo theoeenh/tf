@@ -241,7 +241,11 @@ def _send(o: dict) -> dict:
 CRYPTO_LIMIT_WAIT = 120  # seconds a crypto order waits on the book before the rest goes at market
 
 
-def crypto_limit_first(o: dict, wait: float = CRYPTO_LIMIT_WAIT) -> tuple[str | None, str]:
+CASH_BUFFER = 0.97  # crypto buys use at most 97% of the cash available (fees, price moves)
+
+
+def crypto_limit_first(o: dict, wait: float = CRYPTO_LIMIT_WAIT,
+                       cash: float | None = None) -> tuple[str | None, str]:
     """Send a crypto order as a limit at the bid (buy) / ask (sell), so it rests on the
     book and pays the maker fee (0.15% vs 0.25% at market). Whatever has not filled
     after `wait` seconds is cancelled and sent at market. Every outcome goes to
@@ -249,6 +253,14 @@ def crypto_limit_first(o: dict, wait: float = CRYPTO_LIMIT_WAIT) -> tuple[str | 
     Returns (id of the last order sent, description)."""
     q = get_data("/v1beta3/crypto/us/latest/quotes", {"symbols": o["symbol"]})["quotes"][o["symbol"]]
     px = float(q["bp"] if o["side"] == "buy" else q["ap"])
+    capped = ""
+    if o["side"] == "buy" and cash is not None and o["qty"] * px > CASH_BUFFER * cash:
+        # crypto cannot be bought on margin: only with the cash left after the stocks
+        qty = math.floor(CASH_BUFFER * max(cash, 0.0) / px * 1e9) / 1e9
+        if qty * px < MIN_NOTIONAL:
+            return None, f"skipped: crypto needs cash, only ${cash:,.0f} available (no margin for crypto)"
+        capped = f" (cut from {o['qty']:g} to {qty:g}: crypto needs cash, ${cash:,.0f} available)"
+        o = o | {"qty": qty}
     r = _send(o | {"type": "limit", "limit_price": _px(px), "time_in_force": "gtc"})
     oid = r["id"]
     _wait(lambda: request("GET", f"/v2/orders/{oid}")["status"] in ("filled", "canceled", "rejected"), wait)
@@ -272,7 +284,7 @@ def crypto_limit_first(o: dict, wait: float = CRYPTO_LIMIT_WAIT) -> tuple[str | 
         f.write_text("time,symbol,side,qty,limit_price,maker_qty,taker_qty\n")
     with f.open("a") as fh:
         fh.write(line)
-    return last, how
+    return last, how + capped
 
 
 def pd_now() -> str:
@@ -332,7 +344,12 @@ def emergency_protect(trades: list[dict], exc: Exception) -> None:
             continue
         mine = [t for t in trades if SYMBOLS.get(t["asset"]) == sym]
         if not mine:
-            failed.append(f"{sym}: no stop level in the plan")
+            try:
+                value = abs(q) * live_prices([sym]).get(sym, float("inf"))
+            except AlpacaError:
+                value = float("inf")
+            if value >= 1.0:  # dust (< $1, left over from rounding) needs no stop, as in verify()
+                failed.append(f"{sym}: no stop level in the plan (${value:,.0f} held)")
             continue
         for o in protect(sym, q, mine):
             try:
@@ -365,18 +382,24 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             todo = at_the_open(todo)
     except (AlpacaError, KeyError, ValueError) as e:
         print(f"Market clock unavailable ({e}); normal orders.")
-    sent = {}
+    sent, errors = {}, []
+    todo = sorted(todo, key=lambda o: o["side"] != "sell")  # sells first: they free the cash buys need
     for o in todo:
         line = f"{o['side'].upper():4s} {o['qty']:>12,.6f} {o['symbol']:8s} market {o['note']}"
-        if send and "/" in o["symbol"]:  # crypto: rest on the book first (maker fee)
-            oid, how = crypto_limit_first(o)
-            if oid:
-                sent[oid] = o["symbol"]
-            line += f"  -> {how}"
-        elif send:
-            r = _send(o)
-            sent[r.get("id")] = o["symbol"]
-            line += f"  -> sent, id {r.get('id', '?')}"
+        try:
+            if send and "/" in o["symbol"]:  # crypto: rest on the book first (maker fee)
+                cash = float(request("GET", "/v2/account").get("non_marginable_buying_power") or 0.0)
+                oid, how = crypto_limit_first(o, cash=cash)
+                if oid:
+                    sent[oid] = o["symbol"]
+                line += f"  -> {how}"
+            elif send:
+                r = _send(o)
+                sent[r.get("id")] = o["symbol"]
+                line += f"  -> sent, id {r.get('id', '?')}"
+        except AlpacaError as e:  # one refused order must not leave the others (and the stops) unsent
+            errors.append(f"{o['side']} {o['symbol']}: {e}")
+            line += f"  -> REFUSED: {e}"
         print(line)
     if not todo:
         print("Positions already match the paper account.")
@@ -432,8 +455,11 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             eq = float(request("GET", "/v2/account").get("equity", 0))
         except AlpacaError:
             eq = None
-        for title, body, tags in notify.trade_messages(todo, eq):
+        done_syms = set(sent.values())
+        for title, body, tags in notify.trade_messages([o for o in todo if o["symbol"] in done_syms], eq):
             notify.send(title, body, tags)
+    if errors:  # the rest went through and everything held is protected; still report what was refused
+        raise AlpacaError("orders refused: " + "; ".join(errors))
     return todo + protective
 
 
@@ -457,6 +483,11 @@ def verify(alert: bool = False) -> list[str]:
             elif x is o and x.get("type") in ("market", "limit") and not o.get("order_class"):
                 pending[norm(x["symbol"])] = pending.get(norm(x["symbol"]), 0.0) + sign * q
     prices = last_prices()
+    try:
+        cash = float(request("GET", "/v2/account").get("non_marginable_buying_power") or 0.0)
+    except AlpacaError:
+        cash = None
+    crypto = {norm(SYMBOLS[a]) for a in CRYPTO}
     for sym in sorted({norm(s) for s in want} | {norm(s) for s in have}):
         w = sum(q for s, q in want.items() if norm(s) == sym)
         if "/" not in next((s for s in want if norm(s) == sym), "") and w < 0:
@@ -465,7 +496,11 @@ def verify(alert: bool = False) -> list[str]:
             w = 0.0  # crypto shorts are held flat
         h = sum(q for s, q in have.items() if norm(s) == sym) + pending.get(sym, 0.0)
         px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or 100.0
-        if abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):  # same 1-2% tolerance as plan()
+        short_of_cash = (sym in crypto and h < w and cash is not None
+                         and (w - h) * px > CASH_BUFFER * cash - MIN_NOTIONAL)
+        if short_of_cash:  # crypto cannot use margin: smaller than the plan when the cash is in stocks
+            print(f"{sym}: plan wants {w:g}, Alpaca has {h:g} (crypto needs cash: ${cash:,.0f} left)")
+        elif abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):  # same 1-2% tolerance as plan()
             problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
         held = sum(q for s, q in have.items() if norm(s) == sym)
         if abs(held) * px >= 1.0 and stops.get(sym, 0.0) < 0.98 * abs(held):  # dust (< $1) needs no stop
