@@ -210,11 +210,19 @@ def compare(log: Log, accounts, day: str) -> None:
     for a in accounts:
         os.environ.update(keys(a))
         try:
-            orders = request("GET", f"/v2/orders?status=all&after={day}T00:00:00Z&limit=200&direction=asc")
+            orders, after = [], f"{day}T00:00:00Z"
+            while True:  # pages of 500: the stops / targets re-placed every run fill a day with hundreds
+                page = request("GET", f"/v2/orders?status=all&after={after}&limit=500&direction=asc")
+                orders += page
+                if len(page) < 500:
+                    break
+                after = page[-1]["submitted_at"]
         except AlpacaError as e:
             log.write(f"- **{a}**: unavailable ({e})")
             continue
-        main = [o for o in orders if o.get("type") in ("market", "limit") and not o.get("legs")]
+        # entries and exits only: not the protective target legs (OCO with the stop), re-placed every run
+        main = [o for o in orders if o.get("type") in ("market", "limit") and not o.get("legs")
+                and o.get("order_class") not in ("oco", "oto", "bracket")]
         log.write(f"- **{a}**: " + ("no order" if not main else ""))
         log.write(*[f"  - `{o['submitted_at'][11:19]} {o['side'].upper()} {o.get('qty') or o.get('notional')} "
                     f"{o['symbol']} {o['type']} ({o['status']})`" for o in main])
