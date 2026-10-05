@@ -301,6 +301,9 @@ GATES = {  # a candidate must pass all of them to be offered to the vault
     "shelf life: no decay (2nd half >= half of 1st)": lambda s: s["ic_second_half"] >= 0.5 * s["ic_first_half"],
     "shelf life: positive in every market regime seen": lambda s: s["regimes_positive"] == s["regimes_seen"],
     "shelf life: works on >= 55% of assets (S&P 500: of sectors)": lambda s: s["breadth"] >= 0.55,
+    "decay: edge still >= half its peak at the exit, peak after the first bar":
+        lambda s: s["s_exit_vs_peak"] >= 0.5 and s["s_peak_h"] > 1,
+    "robust: parameter neighbours keep >= half the edge (2+ tested)": lambda s: s["plateau"] >= 0.5,
 }
 
 
@@ -324,6 +327,8 @@ def evaluate(c: Candidate, prices) -> dict:
         rnd = [trading_stats(backtest(c, prices, sig, a, b, seed=sd)) for sd in range(SEEDS)]
         row |= {f"{w}_rand_avg_r": float(np.nanmean([r["avg_r"] for r in rnd])),
                 f"{w}_rand_return": float(np.mean([r["return"] for r in rnd]))}
+    s_win = {k: v[(v.index >= pd.Timestamp(search[0])) & (v.index <= pd.Timestamp(search[1]))] for k, v in sig.items()}
+    row |= edge_curve(c, s_win, prices)
     both = {k: v[(v.index >= pd.Timestamp(search[0])) & (v.index <= pd.Timestamp(validation[1]))]
             for k, v in sig.items()}
     groups = None
@@ -335,9 +340,64 @@ def evaluate(c: Candidate, prices) -> dict:
     return row
 
 
+HORIZONS = {"daily500": [1, 2, 5, 10, 20, 40, 60], "hourly": [1, 2, 3, 6, 12, 24, 48]}
+
+
+def edge_curve(c: Candidate, sig: dict, prices) -> dict:
+    """How long the edge lasts (search window): the average extra move after a signal at several
+    horizons. Where it peaks is how long the trade should be held; an edge that is mostly gone by
+    the strategy's exit, or peaks on the first bar, is not tradeable after costs."""
+    hs = sorted(set(HORIZONS[c.data]) | {c.horizon()})
+    curve = {}
+    for h in hs:
+        ev = edge_events(sig, prices, h)
+        curve[h] = float(ev["edge"].mean()) if len(ev) else np.nan
+    vals = pd.Series(curve).dropna()
+    if vals.empty:
+        return {"s_edge_curve": json.dumps(curve)}
+    peak_h = int(vals.idxmax())
+    peak = float(vals.max())
+    at_exit = curve.get(c.horizon(), np.nan)
+    return {"s_edge_curve": json.dumps({str(k): round(v, 4) for k, v in curve.items()}), "s_peak_h": peak_h,
+            "s_peak_edge": peak, "s_exit_vs_peak": float(at_exit / peak) if peak > 0 else np.nan}
+
+
+def _neighbour_key(c: dict) -> str:
+    return json.dumps([c["family"], c["rule"], c.get("short"), c.get("trend"), c.get("assets", "all"),
+                       c.get("data", "hourly"), sorted(c["params"])], sort_keys=True)
+
+
+def plateau(rows: pd.DataFrame) -> pd.Series:
+    """Robustness: the average search edge of the tested parameter neighbours (one parameter moved
+    by up to 60%) relative to the strategy's own. A real edge works across a range of reasonable
+    parameters; one magic number does not. NaN when fewer than 2 neighbours were tested."""
+    cands = rows["candidate"].map(json.loads)
+    groups: dict[str, list[int]] = {}
+    for i, c in cands.items():
+        groups.setdefault(_neighbour_key(c), []).append(i)
+    out = pd.Series(np.nan, rows.index)
+    for idx in groups.values():
+        for i in idx:
+            p = cands[i]["params"]
+            nb = []
+            for j in idx:
+                q = cands[j]["params"]
+                diff = [k for k in p if q.get(k) != p[k]]
+                if len(diff) != 1 or isinstance(p[diff[0]], bool) or not isinstance(p[diff[0]], (int, float)):
+                    continue
+                k = diff[0]
+                if p[k] and 0.6 <= q[k] / p[k] <= 1.67:
+                    nb.append(rows.at[j, "s_ic"])
+            own = rows.at[i, "s_ic"]
+            if len(nb) >= 2 and own > 0:
+                out[i] = float(np.nanmean(nb) / own)
+    return out
+
+
 def score(rows: pd.DataFrame) -> pd.DataFrame:
     """Deflated Sharpe with N = every attempt so far, then the gates."""
-    rows = rows.copy()
+    rows = rows.copy().reset_index(drop=True)
+    rows["plateau"] = plateau(rows)
     srs = rows["s_sr_daily"].fillna(0).tolist()
     rows["s_dsr"] = [deflated_sharpe(r.s_sr_daily, int(r.s_n_days), r.s_skew, r.s_kurt, srs)
                      for r in rows.itertuples()]
@@ -427,6 +487,11 @@ def mutate(c: Candidate, failed: str, row: dict | None = None) -> list[tuple[Can
         kids.append((Candidate(**(asdict(c) | change | {"notes": f"from {c.id}: {why}"})), why))
 
     rules = DAILY_RULES if c.data == "daily500" else RULES
+    peak_h = row.get("s_peak_h") if row else None
+    if peak_h is not None and np.isfinite(peak_h) and peak_h > 1 and not (c.horizon() / 1.5 <= peak_h <= c.horizon() * 1.5):
+        # the edge peaks well before / after the exit: hold for as long as it lasts
+        add(f"edge peaks at {int(peak_h)} bars, exit at {c.horizon()} -> hold {int(peak_h)}",
+            rule=c.rule | {"max_bars": int(peak_h)})
     if c.data == "daily500" and ("assets" in failed or "regime" in failed):
         # specialise: the sectors where it worked (enough signals there to judge), then company size
         groups = json.loads(row["by_group"]) if row and isinstance(row.get("by_group"), str) else {}
@@ -456,34 +521,106 @@ def mutate(c: Candidate, failed: str, row: dict | None = None) -> list[tuple[Can
     return kids
 
 
+MAX_ROUNDS = 5  # refinement rounds per idea: more is just slower overfitting
+SURVIVE_ICIR = 0.2  # search ICIR a campaign's best version needs to stay alive (the ICIR gate)
+
+
+def lineage(reg: pd.DataFrame) -> pd.DataFrame:
+    """Each strategy's campaign (the original idea it descends from) and its round (0 = the idea,
+    1 = a first improvement, ...), from the 'from <parent>' notes."""
+    notes = reg["candidate"].map(lambda x: json.loads(x).get("notes", ""))
+    parent = {i: (n[5:15] if n.startswith("from ") else None) for i, n in zip(reg["id"], notes)}
+    root, depth = {}, {}
+    for i in reg["id"]:
+        p, d, seen = i, 0, set()
+        while parent.get(p) and parent[p] in parent and p not in seen:
+            seen.add(p)
+            p, d = parent[p], d + 1
+        root[i], depth[i] = p, d
+    return pd.DataFrame({"root": reg["id"].map(root), "round": reg["id"].map(depth)}, index=reg.index)
+
+
+def campaigns(reg: pd.DataFrame) -> pd.DataFrame:
+    """One row per campaign: its best version so far (search data only), rounds used, and status."""
+    reg = reg.join(lineage(reg))
+    reg["fit"] = [fitness(r) for r in reg.to_dict("records")]
+    rows = []
+    for root, g in reg.groupby("root"):
+        best = g.loc[max(g.index, key=lambda i: g.at[i, "fit"])]
+        alive = np.nan_to_num(best["s_icir"], nan=-9) >= SURVIVE_ICIR
+        status = ("done: all gates" if best["gates_passed"] == len(GATES) else
+                  "stopped: ICIR below the bar" if not alive else
+                  f"finished: {MAX_ROUNDS} rounds" if g["round"].max() >= MAX_ROUNDS else "improving")
+        rows.append({"root": root, "best": best["id"], "label": best["label"], "rounds": int(g["round"].max()),
+                     "tried": len(g), "best_gates": int(best["gates_passed"]), "best_icir": best["s_icir"],
+                     "root_gates": int(g.loc[g["id"] == root, "gates_passed"].iloc[0]) if (g["id"] == root).any() else np.nan,
+                     "fit": best["fit"], "status": status,
+                     "path": [int(g[g["round"] <= k]["gates_passed"].max()) for k in range(int(g["round"].max()) + 1)]})
+    return pd.DataFrame(rows).sort_values("fit", ascending=False)
+
+
+def backfill() -> None:
+    """Edge-decay columns for strategies scored before they existed (signals only, no backtest)."""
+    reg = registry()
+    if reg.empty:
+        return
+    if "s_peak_h" not in reg:
+        reg["s_peak_h"] = np.nan
+    todo = reg.index[reg["s_peak_h"].isna() & reg.get("s_edge_curve", pd.Series(np.nan, reg.index)).isna()]
+    data: dict[str, dict] = {}
+    for n, i in enumerate(todo, 1):
+        c = Candidate(**json.loads(reg.at[i, "candidate"]))
+        try:
+            if c.data not in data:
+                data[c.data] = load(data=c.data)
+            prices = data[c.data]
+            a, b = PERIODS[c.data][0]
+            win = {k: v[(v.index >= pd.Timestamp(a)) & (v.index <= pd.Timestamp(b))]
+                   for k, v in signals(c, prices).items()}
+            for k, v in edge_curve(c, win, prices).items():
+                reg.at[i, k] = v
+        except (OSError, KeyError, ValueError) as exc:
+            log.warning("no edge curve for %s: %r", c.label(), exc)
+        if n % 50 == 0:
+            log.info("edge curves %d/%d", n, len(todo))
+            reg.to_csv(OUT / "registry.csv", index=False)
+    reg.to_csv(OUT / "registry.csv", index=False)
+
+
 def loop(rounds: int = 3, parents: int = 8, per_round: int = 40) -> pd.DataFrame:
-    """Each round: the best candidates so far (search only) get children aimed at their failures."""
+    """Campaigns: every round, the best version of each surviving idea (search ICIR >= the bar, at
+    most MAX_ROUNDS rounds deep) gets improved versions aimed at why it fails; the best version of a
+    campaign stays its parent until a child beats it. Ideas below the bar are dropped, so the pool
+    gets smaller and stronger. New ideas (families, exits) enter through the grid."""
+    backfill()
     run(grid())  # any family or exit not tried yet goes first (already tried ones are skipped)
     for rnd in range(1, rounds + 1):
         reg = score(registry())
         done = set(reg["id"])
-        order = sorted(reg.itertuples(index=False), key=lambda r: fitness(r._asdict()), reverse=True)
-        todo, seen, used = [], set(), 0
-        for r in order:  # the best `parents` that still have untried children (explored ones are skipped)
-            c = Candidate(**json.loads(r.candidate))
-            kids = [k for k, _ in mutate(c, r.failed if isinstance(r.failed, str) else "", r._asdict())
-                    if k.id not in done and k.id not in seen]
-            if not kids:
+        rows = {r["id"]: r for r in reg.to_dict("records")}
+        depth = dict(zip(reg["id"], lineage(reg)["round"]))
+        todo: dict[str, list] = {}
+        for camp in campaigns(reg).itertuples():
+            if camp.status != "improving":
                 continue
-            seen.update(k.id for k in kids)
-            todo += kids
-            used += 1
-            if used == parents:
+            best = rows[camp.best]
+            if depth[best["id"]] >= MAX_ROUNDS:
+                continue
+            c = Candidate(**json.loads(best["candidate"]))
+            all_kids = [(k, w) for k, w in mutate(c, best["failed"] if isinstance(best["failed"], str) else "", best)
+                        if k.id not in done]
+            aimed = [k for k, w in all_kids if w != "parameter neighbour"]
+            near = [k for k, w in all_kids if w == "parameter neighbour"]  # also needed for the robustness gate
+            kids = [k for pair in itertools.zip_longest(aimed, near) for k in pair if k]
+            if kids:
+                todo[camp.root] = kids
+            if len(todo) == parents:
                 break
-        # spread the budget over the parents instead of spending it all on the first one
-        by_parent: dict[str, list] = {}
-        for k in todo:
-            by_parent.setdefault(k.notes.split(":")[0], []).append(k)
-        picked = [k for grp in itertools.zip_longest(*by_parent.values()) for k in grp if k][:per_round]
+        picked = [k for grp in itertools.zip_longest(*todo.values()) for k in grp if k][:per_round]
         if not picked:
-            log.info("round %d: nothing new to try", rnd)
+            log.info("round %d: no campaign left to improve (new ideas needed)", rnd)
             break
-        log.info("round %d: %d children of %d parents", rnd, len(picked), len(by_parent))
+        log.info("round %d: %d improved versions of %d campaigns", rnd, len(picked), len(todo))
         reg = run(picked)
     return reg
 
@@ -537,6 +674,16 @@ def report(reg: pd.DataFrame) -> Path:
                   f"{r.v_return:+.1%} | {r.s_dsr:.2f} | {r.get('pos_months', np.nan):.0%} | "
                   f"{int(r.get('regimes_positive', 0))}/{int(r.get('regimes_seen', 0))} | {r.get('breadth', np.nan):.0%} | "
                   f"{(r.failed or 'none – vault candidate').split(';')[0]} |")
+    camp = campaigns(reg)
+    alive = camp[camp["status"] == "improving"]
+    md += ["", f"## Campaigns: each idea refined round by round (max {MAX_ROUNDS} rounds)", "",
+           f"{len(camp)} ideas tried; **{len(alive)} still improving** (search ICIR >= {SURVIVE_ICIR}), "
+           f"{int((camp['status'] == 'stopped: ICIR below the bar').sum())} dropped below the bar, "
+           f"{int(camp['status'].str.startswith('finished').sum())} finished their {MAX_ROUNDS} rounds.", "",
+           "| idea → best version so far | rounds | tried | gates by round | ICIR | status |", "|---|---|---|---|---|---|"]
+    for r in camp[camp["status"] != "stopped: ICIR below the bar"].head(15).itertuples():
+        md.append(f"| `{r.best}` {r.label.replace('|', '·')} | {r.rounds} | {r.tried} | "
+                  f"{' → '.join(map(str, r.path))} | {r.best_icir:+.2f} | {r.status} |")
     best = reg.sort_values(["gates_passed", "s_icir"], ascending=False).groupby("family").head(1)
     md += ["", "## Best of each family", "", "| family | tried | best gates | its ICIR (search) | strategy |", "|---|---|---|---|---|"]
     md += [f"| {r.family} | {int((reg['family'] == r.family).sum())} | {r.gates_passed}/{len(GATES)} | {r.s_icir:+.2f} | "

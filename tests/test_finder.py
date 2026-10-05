@@ -155,21 +155,62 @@ def test_a_strategy_that_works_in_some_sectors_gets_specialised_children():
     assert {"sp400", "sp600"} <= assets
 
 
-def test_loop_moves_on_to_parents_with_untried_children(monkeypatch, tmp_path):
+def _row(c, icir, ic=0.1, **kw):
+    return {"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c)), "s_icir": icir,
+            "s_ic": ic, "s_events": 500, "s_sr_daily": 0.0, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0} | kw
+
+
+def _child(parent, **change):
+    return F.Candidate(**(asdict(parent) | change | {"notes": f"from {parent.id}: test"}))
+
+
+def test_campaign_refines_its_best_version_and_drops_weak_ideas(monkeypatch, tmp_path):
     rule = dict(F.RULES["target 2R"])
-    explored = F.Candidate("rsi2", {"rsi_n": 3}, rule)
-    fresh = F.Candidate("vwap", {"k": 2.0}, rule)
-    rows = []
-    for c, icir in ((explored, 0.9), (fresh, 0.1)):
-        rows.append({"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c)),
-                     "s_icir": icir, "s_events": 500, "s_sr_daily": 0.0, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0})
-    for k, _ in F.mutate(explored, "; ".join(F.GATES)):  # every child of the best one is already in the registry
-        rows.append({"id": k.id, "label": k.label(), "family": k.family, "candidate": json.dumps(asdict(k)),
-                     "s_icir": -1.0, "s_events": 500, "s_sr_daily": 0.0, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0})
+    idea = F.Candidate("rsi2", {"rsi_n": 3, "threshold": 5.0, "trend_ma": 100}, rule)
+    better = _child(idea, rule=dict(F.RULES["trailing 3 ATR"]))  # round 1 beat its parent
+    weak = F.Candidate("donchian", {"n": 20, "trend_ma": 100}, rule)  # ICIR under the bar
+    rows = [_row(idea, 0.25), _row(better, 0.40), _row(weak, -0.3)]
     monkeypatch.setattr(F, "OUT", tmp_path)
     pd.DataFrame(rows).to_csv(tmp_path / "registry.csv", index=False)
+    camp = F.campaigns(F.score(F.registry())).set_index("root")
+    assert camp.at[idea.id, "best"] == better.id and camp.at[idea.id, "status"] == "improving"
+    assert camp.at[weak.id, "status"].startswith("stopped")
     tried = []
     monkeypatch.setattr(F, "run", lambda cands: tried.extend(cands) or F.registry())
     monkeypatch.setattr(F, "grid", lambda: [])
-    F.loop(rounds=1, parents=1)
-    assert tried and all(k.notes.startswith(f"from {fresh.id}") for k in tried)
+    monkeypatch.setattr(F, "backfill", lambda: None)
+    F.loop(rounds=1)
+    assert tried and all(k.notes.startswith(f"from {better.id}") for k in tried)  # only the survivor's best
+
+
+def test_campaign_stops_after_the_round_cap(monkeypatch, tmp_path):
+    c = F.Candidate("rsi2", {"rsi_n": 3, "threshold": 5.0, "trend_ma": 100}, dict(F.RULES["target 2R"]))
+    chain = [c]
+    for k in range(F.MAX_ROUNDS):
+        chain.append(_child(chain[-1], params=chain[-1].params | {"rsi_n": 3 + k + 1}))
+    rows = [_row(x, 0.3 + 0.01 * k) for k, x in enumerate(chain)]
+    monkeypatch.setattr(F, "OUT", tmp_path)
+    pd.DataFrame(rows).to_csv(tmp_path / "registry.csv", index=False)
+    camp = F.campaigns(F.score(F.registry()))
+    assert camp.iloc[0]["rounds"] == F.MAX_ROUNDS and camp.iloc[0]["status"].startswith("finished")
+    tried = []
+    monkeypatch.setattr(F, "run", lambda cands: tried.extend(cands) or F.registry())
+    monkeypatch.setattr(F, "grid", lambda: [])
+    monkeypatch.setattr(F, "backfill", lambda: None)
+    F.loop(rounds=1)
+    assert not tried
+
+
+def test_hold_follows_where_the_edge_peaks():
+    c = F.Candidate("insider_cluster", {"buyers": 2, "days": 30}, dict(F.DAILY_RULES["hold 5 days"]), data="daily500")
+    kids = F.mutate(c, "", {"s_peak_h": 40})
+    assert any(k.rule["max_bars"] == 40 for k, w in kids if "edge peaks" in w)
+    assert not any("edge peaks" in w for _, w in F.mutate(c, "", {"s_peak_h": 6}))  # close enough to 5
+
+
+def test_plateau_compares_with_parameter_neighbours():
+    rule = dict(F.RULES["target 2R"])
+    mk = lambda n, ic: _row(F.Candidate("donchian", {"n": n, "trend_ma": 100}, rule), 0.3, ic)  # noqa: E731
+    rows = pd.DataFrame([mk(20, 0.10), mk(14, 0.08), mk(28, 0.06), mk(55, -0.5)])  # 55 is too far to count
+    p = F.plateau(rows)
+    assert abs(p[0] - 0.7) < 1e-9 and np.isnan(p[3])
