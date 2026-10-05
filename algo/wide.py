@@ -239,8 +239,104 @@ def update_insider() -> pd.DataFrame:
 
 
 def load_insider() -> pd.DataFrame:
-    path = WIDE_DIR / "insider.csv.gz"
-    return pd.read_csv(path, parse_dates=["filed", "traded"]) if path.exists() else pd.DataFrame()
+    """Quarterly SEC data sets plus the recent filings not in a published quarter yet."""
+    parts = [pd.read_csv(p, parse_dates=["filed", "traded"]) for p in
+             (WIDE_DIR / "insider.csv.gz", WIDE_DIR / "insider_recent.csv.gz") if p.exists()]
+    if not parts:
+        return pd.DataFrame()
+    df = pd.concat(parts, ignore_index=True)
+    return df.drop_duplicates(["accession", "owner", "code", "shares", "price"])
+
+
+def _bulk_end() -> pd.Timestamp:
+    done_path = WIDE_DIR / "insider_quarters.txt"
+    qs = [q for q in (done_path.read_text().split() if done_path.exists() else []) if "q" in q]
+    if not qs:
+        return pd.Timestamp(START)
+    return pd.Period(max(qs).replace("q", "Q"), freq="Q").end_time.normalize()
+
+
+def _sec(url: str) -> bytes:
+    """The SEC blocks bursts (HTTP 403 for a few minutes): slower pace, long waits on a refusal."""
+    from . import insider as ins
+
+    for wait in (0, 60, 180, 600):
+        if wait:
+            log.info("SEC asks to slow down: waiting %ds", wait)
+            time.sleep(wait)
+        try:
+            time.sleep(0.12)  # ~5 requests a second with insider._get's own spacing
+            return ins._get(url)
+        except OSError as exc:
+            if "403" not in str(exc) and "429" not in str(exc):
+                raise
+    raise OSError(f"SEC refused {url}")
+
+
+def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame:
+    """Form 4 filings since the last published quarter, from the SEC's daily indexes: the filings of
+    our companies (issuer CIK), parsed like the insider module (open-market P / S). Days already read
+    are kept in data/wide/insider_recent_days.txt."""
+    from . import insider as ins
+
+    path, done_path = WIDE_DIR / "insider_recent.csv.gz", WIDE_DIR / "insider_recent_days.txt"
+    old = pd.read_csv(path) if path.exists() else pd.DataFrame()
+    done = set(done_path.read_text().split()) if done_path.exists() else set()
+    cik_to_ticker = {}
+    ins.cik("AAPL")  # makes sure company_tickers.json is there
+    for row in json.loads((ins.INSIDER_DIR / "company_tickers.json").read_text()).values():
+        cik_to_ticker.setdefault(int(row["cik_str"]), row["ticker"].replace(".", "-"))
+    ours = set(tickers) if tickers is not None else set(members())
+    start = _bulk_end() + pd.Timedelta(days=1)
+    today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
+    days_ = pd.bdate_range(start if days is None else today - pd.Timedelta(days=days), today)
+    rows = []
+    for d in days_:
+        key = d.strftime("%Y%m%d")
+        if key in done and d < today - pd.Timedelta(days=3):  # the last days are read again (late index)
+            continue
+        q = (d.month - 1) // 3 + 1
+        try:
+            raw = _sec(f"https://www.sec.gov/Archives/edgar/daily-index/{d.year}/QTR{q}/form.{key}.idx")
+        except OSError:
+            continue  # holiday / not published yet
+        seen = set()
+        for line in raw.decode("latin-1").splitlines():
+            if not line.startswith("4 "):
+                continue
+            parts = line.split()
+            fname = parts[-1]
+            try:
+                cik = int(parts[-3])
+            except ValueError:
+                continue
+            tick = cik_to_ticker.get(cik)
+            acc = fname.rsplit("/", 1)[-1].replace(".txt", "")
+            if tick not in ours or acc in seen:
+                continue
+            seen.add(acc)
+            try:
+                xml = _sec(f"https://www.sec.gov/Archives/{fname}").decode("utf-8", "replace")
+            except OSError:
+                continue
+            issuer = (ins._tag(xml, "issuerTradingSymbol") or tick).upper().replace(".", "-")
+            role = "Officer" if ins._tag(xml, "isOfficer") in ("1", "true") else (
+                "Director" if ins._tag(xml, "isDirector") in ("1", "true") else "")
+            for r in ins.parse(xml):
+                rows.append({"accession": acc, "filed": d, "traded": pd.NaT, "ticker": issuer, "owner": r["owner"],
+                             "role": role, "title": ins._tag(xml, "officerTitle"), "code": r["code"],
+                             "shares": r["shares"], "price": r["price"], "value": r["value"], "plan": r["plan"]})
+        done.add(key)
+        log.info("Form 4 %s: %d of our companies' filings", key, len(seen))
+    new = pd.DataFrame(rows)
+    df = pd.concat([old, new], ignore_index=True) if len(new) else old
+    if len(df):
+        df = df.drop_duplicates(["accession", "owner", "code", "shares", "price"])
+        df = df[pd.to_datetime(df["filed"]) > _bulk_end()]  # covered by a published quarter now
+        WIDE_DIR.mkdir(parents=True, exist_ok=True)
+        df.to_csv(path, index=False)
+    done_path.write_text("\n".join(sorted(done)) + "\n")
+    return df
 
 
 SLIPPAGE_BPS = {"sp500": 5, "sp400": 8, "sp600": 15}  # smaller companies: wider spreads at the open
@@ -323,6 +419,8 @@ def main() -> None:
     print(f"insider: {len(ins)} trades, {int((ins['code'] == 'P').sum()) if len(ins) else 0} open-market purchases")
     d = update_bars()
     print(f"daily bars: {d['symbol'].nunique()} symbols, {len(d)} rows")
+    r = update_insider_recent()
+    print(f"recent insider filings (after the last published quarter): {len(r)} trades")
     e = update_earnings()
     print(f"earnings releases: {len(e)} for {e['ticker'].nunique()} tickers")
 

@@ -44,7 +44,14 @@ from .paper import PAPER_DIR
 
 BASE_URL = "https://paper-api.alpaca.markets"
 DATA_URL = "https://data.alpaca.markets"
-SYMBOLS = {a: s for a, s in ALPACA_SYMBOLS.items() if a != "SPY"}
+class _Symbols(dict):
+    """Our asset names -> Alpaca symbols; any other stock (the S&P 1500 accounts) is its own symbol."""
+
+    def __missing__(self, key: str) -> str:
+        return key
+
+
+SYMBOLS = _Symbols({a: s for a, s in ALPACA_SYMBOLS.items() if a != "SPY"})
 MIN_NOTIONAL = 5.0  # ignore differences smaller than $5
 # ... and top-ups / trims under 1% of the position (fill rounding): a pending order on a held
 # stock makes Alpaca refuse its stops ("potential wash trade"), so tiny adjustments cost protection
