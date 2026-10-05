@@ -95,6 +95,7 @@ jobs:
             git add paper/finder paper/forward data/wide/members.csv
             git diff --cached --quiet || git commit -q -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
             git checkout -q -- .  # other files the run touched (downloaded data) are not saved here
+            git clean -fdq data/  # nor new data files (they would block the rebase if committed meanwhile)
             git rebase -X theirs -q "origin/$branch" && git push -q && exit 0
             git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
           done
