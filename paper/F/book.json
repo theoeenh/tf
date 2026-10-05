@@ -111,6 +111,23 @@
    "desc": "SLV Nov 20 2026 58 Put, delta -0.60",
    "opened": "2026-10-05 14:57",
    "id": "long_put-SLV-2026-10-05"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "NVDA",
+   "legs": [
+    {
+     "symbol": "NVDA261106C00235000",
+     "qty": 2,
+     "price": 9.9
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": 1980.0,
+   "max_loss": 2016.0,
+   "desc": "NVDA Nov 06 2026 235 Call, delta +0.57",
+   "opened": "2026-10-05 15:25",
+   "id": "long_call-NVDA-2026-10-05"
   }
  ],
  "closed": []
