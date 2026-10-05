@@ -1,4 +1,39 @@
 {
- "open": [],
+ "open": [
+  {
+   "playbook": "long_call",
+   "underlying": "QQQ",
+   "legs": [
+    {
+     "symbol": "QQQ261113C00744000",
+     "qty": 1,
+     "price": 26.42
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": 2642.0,
+   "max_loss": 2678.0,
+   "desc": "QQQ Nov 13 2026 744 Call, delta +0.60",
+   "opened": "2026-10-05 13:56",
+   "id": "long_call-QQQ-2026-10-05"
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "JPM",
+   "legs": [
+    {
+     "symbol": "JPM261120P00340000",
+     "qty": 1,
+     "price": 17.5
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 1750.0,
+   "max_loss": 1782.0,
+   "desc": "JPM Nov 20 2026 340 Put, delta -0.57",
+   "opened": "2026-10-05 13:57",
+   "id": "long_put-JPM-2026-10-05"
+  }
+ ],
  "closed": []
 }

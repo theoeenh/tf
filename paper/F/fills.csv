@@ -1,0 +1,7 @@
+time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
+2026-10-05 13:56:59,long_call,QQQ,QQQ261113C00744000,buy,1,1,26.42,filled,"open: QQQ Nov 13 2026 744 Call, delta +0.60"
+2026-10-05 13:57:06,long_put,JPM,JPM261120P00340000,buy,1,1,17.5,filled,"open: JPM Nov 20 2026 340 Put, delta -0.57"
+2026-10-05 13:57:08,bull_put_spread,QQQ,QQQ261120P00691000,buy,1,1,5.5,filled,"open: sell 727 / buy 691 puts, 2026-11-20, credit 6.23 on width 36"
+2026-10-05 13:57:31,bull_put_spread,QQQ,QQQ261120P00727000,sell,1,0,,canceled,"open: sell 727 / buy 691 puts, 2026-11-20, credit 6.23 on width 36"
+2026-10-05 13:57:53,bull_put_spread,QQQ,QQQ261120P00691000,sell,1,0,,canceled,"unwind"
+2026-10-05 13:58:16,bear_call_spread,JPM,JPM261120C00360000,buy,3,0,,canceled,"open: sell 350 / buy 360 calls, 2026-11-20, credit 1.85 on width 10"
