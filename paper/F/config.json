@@ -2,6 +2,6 @@
   "name": "F – Options",
   "alpaca_account": "PA3AOX0V1LBZ",
   "capital": 100000.0,
-  "status": "waiting",
-  "plan": "Buys calls on the strongest buy signals (loss capped at the premium). Starts once option orders are built and tested."
+  "status": "trading",
+  "plan": "Buys 30-60 day calls (delta ~0.60, ~3% of equity each, max 6) on the stocks account A buys while the trade is fresh; sells when A exits or 10 days before expiry. Loss per trade capped at the premium."
 }
