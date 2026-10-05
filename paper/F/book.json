@@ -145,6 +145,28 @@
    "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
    "opened": "2026-10-05 15:55",
    "id": "long_call-MSFT-2026-10-05"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261120P00470000",
+     "qty": 1,
+     "price": 5.0
+    },
+    {
+     "symbol": "MSFT261120P00500000",
+     "qty": -1,
+     "price": 11.5
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -650.0,
+   "max_loss": 2377.0,
+   "desc": "sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30",
+   "opened": "2026-10-05 16:25",
+   "id": "bull_put_spread-MSFT-2026-10-05"
   }
  ],
  "closed": []

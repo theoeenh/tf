@@ -33,3 +33,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-05 15:56:23,bull_put_spread,MSFT,MSFT261106P00505000,sell,1,0,,canceled,"open: sell 505 / buy 475 puts, 2026-11-06, credit 6.07 on width 30"
 2026-10-05 15:56:25,bull_put_spread,MSFT,MSFT261106P00475000,sell,1,1,3.8,filled,"unwind"
 2026-10-05 15:56:50,bull_put_spread,XOM,XOM261120P00145000,buy,3,0,,canceled,"open: sell 155 / buy 145 puts, 2026-11-20, credit 1.91 on width 10"
+2026-10-05 16:25:51,bull_put_spread,MSFT,MSFT261120P00470000,buy,1,1,5,filled,"open: sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30"
+2026-10-05 16:25:53,bull_put_spread,MSFT,MSFT261120P00500000,sell,1,1,11.5,filled,"open: sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30"
+2026-10-05 16:25:56,bull_put_spread,QQQ,QQQ261113P00699000,buy,1,1,4.84,filled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.36 on width 32"
+2026-10-05 16:26:19,bull_put_spread,QQQ,QQQ261113P00731000,sell,1,0,,canceled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.36 on width 32"
+2026-10-05 16:26:42,bull_put_spread,QQQ,QQQ261113P00699000,sell,1,0,,canceled,"unwind"
