@@ -38,3 +38,6 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-05 16:25:56,bull_put_spread,QQQ,QQQ261113P00699000,buy,1,1,4.84,filled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.36 on width 32"
 2026-10-05 16:26:19,bull_put_spread,QQQ,QQQ261113P00731000,sell,1,0,,canceled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.36 on width 32"
 2026-10-05 16:26:42,bull_put_spread,QQQ,QQQ261113P00699000,sell,1,0,,canceled,"unwind"
+2026-10-05 16:31:35,bull_put_spread,QQQ,QQQ261113P00699000,buy,1,1,4.82,filled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.44 on width 32"
+2026-10-05 16:31:59,bull_put_spread,QQQ,QQQ261113P00731000,sell,1,0,,canceled,"open: sell 731 / buy 699 puts, 2026-11-13, credit 5.44 on width 32"
+2026-10-05 16:32:24,bull_put_spread,QQQ,QQQ261113P00699000,sell,1,0,,canceled,"unwind"
