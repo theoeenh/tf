@@ -94,6 +94,23 @@
    "desc": "sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6",
    "opened": "2026-10-05 14:28",
    "id": "bear_call_spread-NFLX-2026-10-05"
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "SLV",
+   "legs": [
+    {
+     "symbol": "SLV261120P00058000",
+     "qty": 6,
+     "price": 4.2
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2520.0000000000005,
+   "max_loss": 2561.9999999999995,
+   "desc": "SLV Nov 20 2026 58 Put, delta -0.60",
+   "opened": "2026-10-05 14:57",
+   "id": "long_put-SLV-2026-10-05"
   }
  ],
  "closed": []

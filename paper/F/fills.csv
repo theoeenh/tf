@@ -15,3 +15,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-05 14:28:22,bull_put_spread,QQQ,QQQ261113P00699000,sell,1,0,,canceled,"unwind"
 2026-10-05 14:28:24,bear_call_spread,NFLX,NFLX261113C00079000,buy,5,5,0.73,filled,"open: sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6"
 2026-10-05 14:28:27,bear_call_spread,NFLX,NFLX261113C00073000,sell,5,5,1.74,filled,"open: sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6"
+2026-10-05 14:57:02,long_call,NVDA,NVDA261113C00235000,buy,2,0,,canceled,"open: NVDA Nov 13 2026 235 Call, delta +0.57"
+2026-10-05 14:57:04,long_put,SLV,SLV261120P00058000,buy,6,6,4.2,filled,"open: SLV Nov 20 2026 58 Put, delta -0.60"
+2026-10-05 14:57:07,bull_put_spread,QQQ,QQQ261106P00704000,buy,1,1,4.26,filled,"open: sell 733 / buy 704 puts, 2026-11-06, credit 4.91 on width 29"
+2026-10-05 14:57:29,bull_put_spread,QQQ,QQQ261106P00733000,sell,1,0,,canceled,"open: sell 733 / buy 704 puts, 2026-11-06, credit 4.91 on width 29"
+2026-10-05 14:57:52,bull_put_spread,QQQ,QQQ261106P00704000,sell,1,0,,canceled,"unwind"
