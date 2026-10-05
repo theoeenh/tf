@@ -52,6 +52,7 @@ jobs:
             data/wide/insider.csv.gz
             data/wide/insider_quarters.txt
             data/wide/ml_scores_*.pkl
+            data/wide/ml_insider_*.pkl
             data/wide/earnings.csv.gz
           key: wide-data-${{ github.run_id }}
           restore-keys: wide-data-
@@ -91,6 +92,7 @@ jobs:
             python -m algo.finder report
             git add paper/finder paper/forward data/wide/members.csv
             git diff --cached --quiet || git commit -q -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
+            git checkout -q -- .  # other files the run touched (downloaded data) are not saved here
             git rebase -X theirs -q "origin/$branch" && git push -q && exit 0
             git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
           done
