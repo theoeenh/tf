@@ -1,0 +1,7 @@
+{
+  "name": "F – Options",
+  "alpaca_account": "PA3AOX0V1LBZ",
+  "capital": 100000.0,
+  "status": "waiting",
+  "plan": "Buys calls on the strongest buy signals (loss capped at the premium). Starts once option orders are built and tested."
+}

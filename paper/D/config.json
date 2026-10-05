@@ -1,0 +1,7 @@
+{
+  "name": "D – Graduates",
+  "alpaca_account": "PA3NSRCFNGRZ",
+  "capital": 100000.0,
+  "status": "waiting",
+  "plan": "Trades the finder's graduates (strategies that passed all 14 checks and their vault test). None yet: flat until the first one."
+}
