@@ -265,7 +265,7 @@ def _sec(url: str) -> bytes:
             log.info("SEC asks to slow down: waiting %ds", wait)
             time.sleep(wait)
         try:
-            time.sleep(0.12)  # ~5 requests a second with insider._get's own spacing
+            time.sleep(0.25)  # ~2.5 requests a second: the SEC blocks sustained bursts for minutes
             return ins._get(url)
         except OSError as exc:
             if "403" not in str(exc) and "429" not in str(exc):
@@ -291,6 +291,18 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
     today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
     days_ = pd.bdate_range(start if days is None else today - pd.Timedelta(days=days), today)
     rows = []
+
+    def save():
+        new = pd.DataFrame(rows)
+        df = pd.concat([old, new], ignore_index=True) if len(new) else old
+        if len(df):
+            df = df.drop_duplicates(["accession", "owner", "code", "shares", "price"])
+            df = df[pd.to_datetime(df["filed"]) > _bulk_end()]  # covered by a published quarter now
+            WIDE_DIR.mkdir(parents=True, exist_ok=True)
+            df.to_csv(path, index=False)
+        done_path.write_text("\n".join(sorted(done)) + "\n")
+        return df
+
     for d in days_:
         key = d.strftime("%Y%m%d")
         if key in done and d < today - pd.Timedelta(days=3):  # the last days are read again (late index)
@@ -298,7 +310,10 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
         q = (d.month - 1) // 3 + 1
         try:
             raw = _sec(f"https://www.sec.gov/Archives/edgar/daily-index/{d.year}/QTR{q}/form.{key}.idx")
-        except OSError:
+        except OSError as exc:
+            if "refused" in str(exc):  # still blocked after the long waits: keep what we have, next run goes on
+                log.warning("SEC keeps refusing: stopping at %s, progress saved", key)
+                return save()
             continue  # holiday / not published yet
         seen = set()
         for line in raw.decode("latin-1").splitlines():
@@ -317,7 +332,10 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
             seen.add(acc)
             try:
                 xml = _sec(f"https://www.sec.gov/Archives/{fname}").decode("utf-8", "replace")
-            except OSError:
+            except OSError as exc:
+                if "refused" in str(exc):
+                    log.warning("SEC keeps refusing: stopping in %s, progress saved", key)
+                    return save()  # this day is not marked done: read again next run
                 continue
             issuer = (ins._tag(xml, "issuerTradingSymbol") or tick).upper().replace(".", "-")
             role = "Officer" if ins._tag(xml, "isOfficer") in ("1", "true") else (
@@ -328,15 +346,8 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
                              "shares": r["shares"], "price": r["price"], "value": r["value"], "plan": r["plan"]})
         done.add(key)
         log.info("Form 4 %s: %d of our companies' filings", key, len(seen))
-    new = pd.DataFrame(rows)
-    df = pd.concat([old, new], ignore_index=True) if len(new) else old
-    if len(df):
-        df = df.drop_duplicates(["accession", "owner", "code", "shares", "price"])
-        df = df[pd.to_datetime(df["filed"]) > _bulk_end()]  # covered by a published quarter now
-        WIDE_DIR.mkdir(parents=True, exist_ok=True)
-        df.to_csv(path, index=False)
-    done_path.write_text("\n".join(sorted(done)) + "\n")
-    return df
+        save()  # after every day: an interruption loses nothing
+    return save()
 
 
 SLIPPAGE_BPS = {"sp500": 5, "sp400": 8, "sp600": 15}  # smaller companies: wider spreads at the open

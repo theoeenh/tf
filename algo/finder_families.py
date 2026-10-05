@@ -303,6 +303,20 @@ def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02) -> dict:
     return out
 
 
+def insider_ml(prices: dict, model: str = "ridge", keep: float = 0.3) -> dict:
+    """Insider clusters (2+ buyers in 90 days) that the ML scorer (algo/insider_ml.py) keeps: the
+    `keep` share it rates best, each score from a model fitted only on clusters already over."""
+    from . import insider_ml as iml
+
+    k = iml.kept(prices, model, keep)
+    k = k[k["keep"]] if len(k) else k
+    out = {}
+    for a, df in prices.items():
+        days = pd.DatetimeIndex(k.loc[k["stock"] == a, "date"]) if len(k) else pd.DatetimeIndex([])
+        out[a] = pd.Series(df.index.isin(days).astype(int), df.index)
+    return out
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
@@ -318,4 +332,9 @@ WIDE_FAMILIES = {
     # held one month (the horizon it is trained for)
     "ml_rank": (ml_rank, {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
                 {"rules": ["hold 20 days"], "segments": ["sp1500"], "trend": False}),
+    # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
+    # trained for (wide stop: the model bets on the 3 months, not the first days)
+    "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
+                   {"rules": {"hold 60 days": dict(stop_atr=4.0, rr=None, max_bars=60)}, "segments": ["sp1500"],
+                    "trend": False}),
 }

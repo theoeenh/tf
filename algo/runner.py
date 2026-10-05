@@ -32,7 +32,7 @@ from .portfolio import PortfolioConfig, Sleeve, run_portfolio
 from .system import MAX_GROSS, MAX_OPEN_RISK
 
 log = logging.getLogger(__name__)
-INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip"}
+INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml"}
 
 
 def complete_sessions(df: pd.DataFrame, now_ny: pd.Timestamp) -> pd.DataFrame:

@@ -456,7 +456,8 @@ def grid(families: dict | None = None) -> list[Candidate]:
         opts = spec[2] if len(spec) > 2 else {}  # a family can limit its own grid (fewer tries)
         wide_ = fam in WIDE_FAMILIES
         rules = DAILY_RULES if wide_ else RULES
-        rules = {k: rules[k] for k in opts.get("rules", rules)}
+        want = opts.get("rules", rules)  # names of the standard rules, or {name: rule} of the family's own
+        rules = dict(want) if isinstance(want, dict) else {k: rules[k] for k in want}
         segs = opts.get("segments", ("all", "sp400", "sp600") if wide_ else ("all",))  # S&P 500, mid, small
         keys = list(space)
         for vals in itertools.product(*(space[k] for k in keys)):
