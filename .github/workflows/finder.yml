@@ -52,6 +52,7 @@ jobs:
             data/wide/insider.csv.gz
             data/wide/insider_quarters.txt
             data/wide/ml_scores_*.pkl
+            data/wide/earnings.csv.gz
           key: wide-data-${{ github.run_id }}
           restore-keys: wide-data-
       - name: Update the S&P 1500 research data

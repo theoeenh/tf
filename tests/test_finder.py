@@ -264,3 +264,33 @@ def test_deflated_sharpe_counts_every_try_but_compares_like_with_like():
     mixed = F.deflated_sharpe(0.08, 1500, 0.0, 3.0, calm + wild, n_trials=800)
     fewer = F.deflated_sharpe(0.08, 1500, 0.0, 3.0, calm, n_trials=200)
     assert mixed < 0.01 < own and fewer >= own  # more tries never make it easier
+
+
+def test_earnings_reaction_buys_the_strong_reaction_at_its_close(monkeypatch):
+    from algo import finder_families as FF
+
+    idx = pd.bdate_range("2021-01-04", periods=120)
+    rng = np.random.default_rng(5)
+    c = 100 * np.exp(np.cumsum(rng.normal(0, 0.01, 120)))
+    c[100:] *= 1.08  # +8% on day 100, about 8 normal days' moves
+    v = np.full(120, 1e6)
+    v[100] = 4e6
+    df = pd.DataFrame({"Open": c, "High": c, "Low": c, "Close": c, "Volume": v}, idx)
+    after_close = pd.Timestamp(idx[99]) + pd.Timedelta(hours=21)  # 16:00 NY: reacts the next session
+    monkeypatch.setattr("algo.wide.load_earnings", lambda: pd.DataFrame(
+        {"ticker": ["X"], "accepted": [str(after_close)], "day": [idx[100]]}))
+    s = FF.earnings_reaction({"X": df}, z=3.0, volume=2.0)["X"]
+    assert s.sum() == 1 and s.idxmax() == idx[100]
+    cut = FF.earnings_reaction({"X": df.iloc[:101]}, z=3.0, volume=2.0)["X"]
+    assert cut.iloc[100] == 1  # known at that close, without any later bar
+
+
+def test_earnings_day_is_the_first_session_that_can_react(tmp_path, monkeypatch):
+    from algo import wide
+
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    pd.DataFrame({"ticker": ["A", "B"], "accepted": ["2026-07-30T20:30:28.000Z", "2026-07-14T10:30:38.000Z"]}).to_csv(
+        tmp_path / "earnings.csv.gz", index=False)
+    e = wide.load_earnings().set_index("ticker")["day"]
+    assert e["A"] == pd.Timestamp("2026-07-31")  # after the close: next session
+    assert e["B"] == pd.Timestamp("2026-07-14")  # 6:30 New York, before the open: same day

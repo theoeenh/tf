@@ -22,6 +22,7 @@ universe; a strategy found here would first go through the finder's gates and th
 from __future__ import annotations
 
 import io
+import json
 import logging
 import time
 import urllib.request
@@ -245,6 +246,66 @@ def load_insider() -> pd.DataFrame:
 SLIPPAGE_BPS = {"sp500": 5, "sp400": 8, "sp600": 15}  # smaller companies: wider spreads at the open
 
 
+# ------------------------------------------------------------------ earnings dates (SEC 8-K item 2.02)
+
+def _earnings_of(ticker: str) -> list[str]:
+    """Acceptance times (UTC) of every earnings release (8-K with item 2.02) since START."""
+    from .insider import _get, cik
+
+    try:
+        c = cik(ticker)  # the SEC writes BRK-B like us
+    except KeyError:
+        c = cik(ticker.replace("-", "."))
+    d = json.loads(_get(f"https://data.sec.gov/submissions/CIK{c:010d}.json"))
+    parts = [d["filings"]["recent"]]
+    for f in d["filings"].get("files", []):
+        if f.get("filingTo", "9999") >= START:
+            parts.append(json.loads(_get(f"https://data.sec.gov/submissions/{f['name']}")))
+    out = []
+    for p in parts:
+        for i, form in enumerate(p["form"]):
+            if form in ("8-K", "8-K/A") and "2.02" in (p["items"][i] or "") and p["filingDate"][i] >= START:
+                out.append(p["acceptanceDateTime"][i])
+    return out
+
+
+def update_earnings(refresh: bool = False) -> pd.DataFrame:
+    """data/wide/earnings.csv.gz: one row per earnings release (ticker, accepted UTC). Tickers already
+    done are only refreshed when the file is a week old (a quarter brings one new date each)."""
+    path = WIDE_DIR / "earnings.csv.gz"
+    old = pd.read_csv(path) if path.exists() else pd.DataFrame(columns=["ticker", "accepted"])
+    stale = refresh or not path.exists() or time.time() - path.stat().st_mtime > 7 * 86400
+    todo = members() if stale else [t for t in members() if t not in set(old["ticker"])]
+    rows, failed = [], 0
+    for n, t in enumerate(todo, 1):
+        try:
+            rows += [{"ticker": t, "accepted": a} for a in _earnings_of(t)]
+        except (KeyError, OSError, ValueError) as exc:
+            failed += 1
+            log.debug("no earnings for %s (%s)", t, exc)
+        if n % 200 == 0:
+            log.info("earnings dates %d/%d", n, len(todo))
+    new = pd.DataFrame(rows, columns=["ticker", "accepted"])
+    df = pd.concat([old[~old["ticker"].isin(todo)], new], ignore_index=True).drop_duplicates()
+    WIDE_DIR.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False)
+    log.info("earnings: %d releases, %d tickers (%d without SEC filings)", len(df), df["ticker"].nunique(), failed)
+    return df
+
+
+def load_earnings() -> pd.DataFrame:
+    path = WIDE_DIR / "earnings.csv.gz"
+    if not path.exists():
+        return pd.DataFrame(columns=["ticker", "accepted", "day"])
+    df = pd.read_csv(path)
+    ny = pd.to_datetime(df["accepted"], utc=True).dt.tz_convert("America/New_York")
+    # the first session that can react: the same day if released before the 9:30 open, else the next
+    before_open = (ny.dt.hour < 9) | ((ny.dt.hour == 9) & (ny.dt.minute < 30))
+    day = ny.dt.tz_localize(None).dt.normalize()
+    df["day"] = day.where(before_open, day + pd.Timedelta(days=1))
+    return df
+
+
 def costs(symbols) -> dict:
     """US stocks: no commission at Alpaca, regulatory fees on sales, slippage by company size."""
     from .engine import Costs
@@ -262,6 +323,8 @@ def main() -> None:
     print(f"insider: {len(ins)} trades, {int((ins['code'] == 'P').sum()) if len(ins) else 0} open-market purchases")
     d = update_bars()
     print(f"daily bars: {d['symbol'].nunique()} symbols, {len(d)} rows")
+    e = update_earnings()
+    print(f"earnings releases: {len(e)} for {e['ticker'].nunique()} tickers")
 
 
 if __name__ == "__main__":

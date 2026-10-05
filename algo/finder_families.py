@@ -250,6 +250,32 @@ def insider_dip(prices: dict, buyers: int = 2, days: int = 30, drop: float = 0.1
     return out
 
 
+def earnings_reaction(prices: dict, z: float = 2.0, volume: float = 1.5) -> dict:
+    """Post-earnings drift: a stock that reacts strongly to its earnings release (the first session that
+    could react: the release day if it came out before the 9:30 open, else the next) keeps drifting the
+    same way for weeks. Buy at that session's close when the move is at least `z` times the stock's
+    usual daily move (60 sessions before) on at least `volume` times its usual volume (20 sessions).
+    Release times: the SEC's 8-K item 2.02 filings (wide.load_earnings)."""
+    from . import wide
+
+    e = wide.load_earnings()
+    out = {}
+    for a, df in prices.items():
+        s = np.zeros(len(df), int)
+        days = e.loc[e["ticker"] == a, "day"]
+        if len(days):
+            close, vol = df["Close"].to_numpy(), df["Volume"].to_numpy(dtype=float)
+            ret = np.r_[np.nan, close[1:] / close[:-1] - 1]
+            sd = pd.Series(ret).rolling(60, min_periods=40).std().shift(1).to_numpy()
+            usual = pd.Series(vol).rolling(20, min_periods=10).mean().shift(1).to_numpy()
+            for p in np.unique(df.index.searchsorted(pd.DatetimeIndex(days), side="left")):
+                if 0 < p < len(df) and sd[p] > 0 and usual[p] > 0:
+                    if ret[p] / sd[p] >= z and vol[p] / usual[p] >= volume:
+                        s[p] = 1
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
 def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02) -> dict:
     """The ML ranker (algo/ranker.py): every Friday, buy the stocks in the top `top` share of the
     walk-forward score (each score from a model trained only on the past). A signal every week the
@@ -275,6 +301,8 @@ WIDE_FAMILIES = {
     "reversal_5d": (reversal_5d, {"bottom": [0.02, 0.05]}),
     "high_52w": (high_52w, {"within": [0.01, 0.03]}),
     "insider_dip": (insider_dip, {"buyers": [2, 3], "days": [30, 90], "drop": [0.1, 0.2]}),
+    "earnings_reaction": (earnings_reaction, {"z": [1.5, 2.5, 3.5], "volume": [1.5]},
+                          {"rules": ["hold 20 days", "hold 40 days", "trailing 3 ATR, out in 60 days"]}),
     # few versions on purpose (every one counts as a try): 2 models x 2 portfolio sizes, whole S&P 1500,
     # held one month (the horizon it is trained for)
     "ml_rank": (ml_rank, {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
