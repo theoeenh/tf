@@ -167,6 +167,50 @@
    "desc": "sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30",
    "opened": "2026-10-05 16:25",
    "id": "bull_put_spread-MSFT-2026-10-05"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "QQQ",
+   "legs": [
+    {
+     "symbol": "QQQ261113P00700000",
+     "qty": 1,
+     "price": 4.87
+    },
+    {
+     "symbol": "QQQ261113P00732000",
+     "qty": -1,
+     "price": 10.3
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -543.0,
+   "max_loss": 2666.0,
+   "desc": "sell 732 / buy 700 puts, 2026-11-13, credit 5.34 on width 32",
+   "opened": "2026-10-05 17:26",
+   "id": "bull_put_spread-QQQ-2026-10-05"
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "TLT",
+   "legs": [
+    {
+     "symbol": "TLT261106C00081000",
+     "qty": 17,
+     "price": 0.26
+    },
+    {
+     "symbol": "TLT261106C00079000",
+     "qty": -17,
+     "price": 0.63
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": -629.0,
+   "max_loss": 2839.0,
+   "desc": "sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2",
+   "opened": "2026-10-05 17:26",
+   "id": "bear_call_spread-TLT-2026-10-05"
   }
  ],
  "closed": []
