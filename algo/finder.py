@@ -587,7 +587,7 @@ def backfill() -> None:
     reg.to_csv(OUT / "registry.csv", index=False)
 
 
-def loop(rounds: int = 3, parents: int = 8, per_round: int = 40) -> pd.DataFrame:
+def loop(rounds: int = 3, parents: int = 12, per_round: int = 48) -> pd.DataFrame:
     """Campaigns: every round, the best version of each surviving idea (search ICIR >= the bar, at
     most MAX_ROUNDS rounds deep) gets improved versions aimed at why it fails; the best version of a
     campaign stays its parent until a child beats it. Ideas below the bar are dropped, so the pool
@@ -714,7 +714,7 @@ def main() -> None:
     sub.add_parser("report")
     lp = sub.add_parser("loop")
     lp.add_argument("--rounds", type=int, default=3)
-    lp.add_argument("--per-round", type=int, default=40)
+    lp.add_argument("--per-round", type=int, default=48)
     v = sub.add_parser("vault")
     v.add_argument("id")
     args = ap.parse_args()
