@@ -232,3 +232,26 @@ def test_graduate_trades_only_after_it_graduates(monkeypatch, tmp_path):
     t = pd.read_csv(tmp_path / "abc" / "trades.csv", parse_dates=["entry_date"])
     assert r["trades"] > 0 and (t["entry_date"] >= pd.Timestamp("2026-01-05")).all()
     assert "holding up" in forward.write([r]).read_text() or "behind" in (tmp_path / "report.md").read_text()
+
+
+def test_insider_dip_needs_the_fall(monkeypatch):
+    from algo import finder_families as FF
+
+    idx = pd.bdate_range("2020-01-01", periods=120)
+    falling = pd.DataFrame({"Close": np.linspace(100, 70, 120)}, idx)
+    rising = pd.DataFrame({"Close": np.linspace(70, 100, 120)}, idx)
+    filings = pd.DataFrame({"ticker": ["F", "F", "R", "R"], "code": "P", "owner": ["a", "b", "a", "b"],
+                            "accession": ["1", "2", "3", "4"], "filed": pd.to_datetime(["2020-04-01", "2020-04-02"] * 2),
+                            "value": 1e6, "role": "Officer"})
+    monkeypatch.setattr(FF, "_insider", lambda code="P": filings)
+    out = FF.insider_dip({"F": falling, "R": rising}, buyers=2, days=30, drop=0.05)
+    assert out["F"].sum() == 1 and out["R"].sum() == 0
+
+
+def test_merge_keeps_every_attempt_once(monkeypatch, tmp_path):
+    monkeypatch.setattr(F, "OUT", tmp_path)
+    pd.DataFrame({"id": ["a", "b"], "x": [1, 2]}).to_csv(tmp_path / "registry.csv", index=False)
+    pd.DataFrame({"id": ["b", "c"], "x": [9, 3]}).to_csv(tmp_path / "other.csv", index=False)
+    assert F.merge(str(tmp_path / "other.csv")) == 1
+    r = pd.read_csv(tmp_path / "registry.csv")
+    assert list(r["id"]) == ["a", "b", "c"] and r.loc[r.id == "b", "x"].item() == 2

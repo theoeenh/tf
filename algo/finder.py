@@ -71,7 +71,9 @@ RULES = {
 }
 DAILY_RULES = {  # daily bars: holds of days to weeks
     "hold 5 days": dict(stop_atr=2.5, rr=None, max_bars=5),
+    "hold 10 days": dict(stop_atr=3.0, rr=None, max_bars=10),
     "hold 20 days": dict(stop_atr=3.0, rr=None, max_bars=20),
+    "hold 40 days": dict(stop_atr=4.0, rr=None, max_bars=40),
     "target 3R, out in 20 days": dict(stop_atr=2.0, rr=3.0, max_bars=20),
     "trailing 3 ATR, out in 60 days": dict(stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60),
 }
@@ -658,6 +660,15 @@ def vault(cid: str) -> dict:
     return used[cid]
 
 
+def merge(other: str) -> int:
+    """Union of this registry and another copy (e.g. the remote one): every attempt is kept once,
+    whoever ran it (the nightly workflow and a local run can both add rows the same day)."""
+    mine, theirs = registry(), pd.read_csv(other) if Path(other).exists() else pd.DataFrame()
+    both = pd.concat([mine, theirs[~theirs["id"].isin(mine["id"])]] if len(theirs) else [mine], ignore_index=True)
+    both.to_csv(OUT / "registry.csv", index=False)
+    return len(both) - len(mine)
+
+
 def promote() -> list[dict]:
     """Every strategy that passed all the gates takes its one vault test (the user's standing go,
     2026-10-05); one that passes it starts forward paper trading (algo.forward). Phone alerts both."""
@@ -745,6 +756,8 @@ def main() -> None:
     lp.add_argument("--rounds", type=int, default=3)
     lp.add_argument("--per-round", type=int, default=48)
     sub.add_parser("promote")
+    mg = sub.add_parser("merge")
+    mg.add_argument("other")
     v = sub.add_parser("vault")
     v.add_argument("id")
     args = ap.parse_args()
@@ -755,6 +768,8 @@ def main() -> None:
     elif args.cmd == "loop":
         reg = loop(args.rounds, per_round=args.per_round)
         print(f"{len(reg)} strategies in the registry; report: {OUT / 'report.md'}")
+    elif args.cmd == "merge":
+        print(f"{merge(args.other)} rows added from {args.other}")
     elif args.cmd == "promote":
         print(promote() or "no new strategy passed every gate")
     elif args.cmd == "report":

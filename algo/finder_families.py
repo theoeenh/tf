@@ -236,10 +236,25 @@ def high_52w(prices: dict, within: float = 0.02) -> dict:
     return _own(fresh.astype(int), prices)
 
 
+def insider_dip(prices: dict, buyers: int = 2, days: int = 30, drop: float = 0.10) -> dict:
+    """Insiders buying after the stock fell: a cluster of open-market purchases (as insider_cluster)
+    on a stock that is down more than `drop` from its close 20 trading days earlier. Insiders who
+    buy into a fall are the classic contrarian signal (they know the business better than the
+    sellers)."""
+    cl = insider_cluster(prices, buyers=buyers, days=days)
+    out = {}
+    for a, s in cl.items():
+        close = prices[a]["Close"]
+        fell = close / close.shift(20) - 1 < -drop
+        out[a] = (s.astype(bool) & fell).astype(int)
+    return out
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
     "momentum_12_1": (momentum_12_1, {"top": [0.05, 0.1]}),
     "reversal_5d": (reversal_5d, {"bottom": [0.02, 0.05]}),
     "high_52w": (high_52w, {"within": [0.01, 0.03]}),
+    "insider_dip": (insider_dip, {"buyers": [2, 3], "days": [30, 90], "drop": [0.1, 0.2]}),
 }

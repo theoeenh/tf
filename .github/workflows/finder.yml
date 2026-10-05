@@ -24,7 +24,7 @@ concurrency:
 jobs:
   loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v4
         with:
@@ -80,10 +80,18 @@ jobs:
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add paper/finder paper/forward data/wide/members.csv
-          git diff --cached --quiet && exit 0
-          git commit -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
-          for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
+          branch="$(git rev-parse --abbrev-ref HEAD)"
+          for i in 1 2 3 4 5; do
+            # rows added elsewhere meanwhile (a local run) are merged in, never overwritten
+            git fetch -q origin "$branch"
+            git show "origin/$branch:paper/finder/registry.csv" > "$RUNNER_TEMP/remote.csv" 2>/dev/null || true
+            python -m algo.finder merge "$RUNNER_TEMP/remote.csv"
+            python -m algo.finder report
+            git add paper/finder paper/forward data/wide/members.csv
+            git diff --cached --quiet || git commit -q -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
+            git rebase -X theirs -q "origin/$branch" && git push -q && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
+          done
           exit 1
       - name: Alert the phone if the finder failed
         if: failure()
