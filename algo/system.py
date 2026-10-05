@@ -209,7 +209,10 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
                initial_capital: float = 100_000.0, close_at_end: bool = True,
                learner=None, news: bool = False, context: dict | None = None,
                trend: bool = False, blackout: bool = False, ml: bool = False,
-               sizing: bool = False, intraday: bool = False, brake: float | None = None) -> PortfolioResult:
+               sizing: bool = False, intraday: bool = False, brake: float | None = None,
+               retired: dict | None = None) -> PortfolioResult:
+    """retired: asset -> time from which the account no longer trades it (flat from that bar on,
+    no new entries); earlier bars are untouched, so the account's history stays the same."""
     if learner is None and learn:
         learner = new_learner(learn, news, ml, sizing, prices=prices, context=context)
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
@@ -219,7 +222,20 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
     return run_portfolio(prices, build_sleeves(prices, allow_short, context if news else None, news, trend,
                                                intraday),
                          COSTS, cfg, start, end, close_at_end=close_at_end, context=ctx,
-                         blocked=blackout_masks(context) if blackout else None)
+                         blocked=retire_masks(prices, retired, blackout_masks(context) if blackout else None))
+
+
+def retire_masks(prices: dict, retired: dict | None, blocked: dict | None) -> dict | None:
+    if not retired:
+        return blocked
+    out = dict(blocked or {})
+    for a, when in retired.items():
+        if a not in prices:
+            continue
+        idx = prices[a].index
+        gone = pd.Series(idx >= pd.Timestamp(when), idx)
+        out[a] = (out[a].reindex(idx).fillna(False).astype(bool) | gone) if a in out else gone
+    return out
 
 
 def run_variant(prices, v: dict, risk_pct: float, start=None, end=None, context: dict | None = None,

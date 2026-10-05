@@ -73,3 +73,17 @@ def test_next_bar_blocked_before_the_jobs_report():
     crypto = pd.DatetimeIndex([f"2026-10-02 {x:02d}:00" for x in range(0, 12)])  # next: 12:00 UTC = 8:00 New York
     assert next_bar_blocked(crypto, [], [], jobs, stock=False)
     assert not next_bar_blocked(crypto[:-1], [], [], jobs, stock=False)
+
+
+def test_retired_asset_is_flat_from_its_date_and_history_is_unchanged():
+    import numpy as np
+    import pandas as pd
+
+    from algo.system import retire_masks
+
+    idx = pd.date_range("2026-10-01", periods=10, freq="h")
+    prices = {"BTC": pd.DataFrame({"Close": np.arange(10.0)}, idx), "NVDA": pd.DataFrame({"Close": np.arange(10.0)}, idx)}
+    m = retire_masks(prices, {"BTC": "2026-10-01 05:00"}, {"NVDA": pd.Series(False, idx)})
+    assert not m["BTC"].iloc[:5].any() and m["BTC"].iloc[5:].all()  # earlier bars untouched
+    assert not m["NVDA"].any()
+    assert retire_masks(prices, None, None) is None

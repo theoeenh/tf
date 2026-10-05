@@ -131,7 +131,7 @@ def update(source: str | None = None) -> Path:
         res = None
     else:
         res = run_variant(prices, v, cfg["risk_pct"], start, None, ctx, initial_capital=cfg["capital"],
-                          close_at_end=False, learner=learner)
+                          close_at_end=False, learner=learner, retired=cfg.get("retired"))
         eq = res.equity
         st = equity_stats(eq, bars_per_year(eq.index)) if len(eq) > 2 else {}
         lines += [f"**Equity ${eq.iloc[-1]:,.0f}** ({eq.iloc[-1] / cfg['capital'] - 1:+.2%}) · "
@@ -152,6 +152,10 @@ def update(source: str | None = None) -> Path:
                                          and news.ASSET_CLASS.get(a) == "stock" else [],
                                          news.fomc_dates(), news.jobs_report_dates(), stock=a not in data.CRYPTO):
                     closing.add(id(p))
+        retired = {a: pd.Timestamp(t) for a, t in (cfg.get("retired") or {}).items()}
+        for p in live:  # no longer traded by this account: out now, not once the next bar is final
+            if p["asset"] in retired and now >= retired[p["asset"]]:
+                closing.add(id(p))
         for p in live:
             tgt = "none (trailing)" if p["target"] is None else f"{p['target']:,.2f}"
             lines += [f"- **{'LONG' if p['side'] > 0 else 'SHORT'} {p['qty']:.4f} {p['asset']}** "
@@ -159,7 +163,9 @@ def update(source: str | None = None) -> Path:
                       f"stop {p['stop']:,.2f}, target {tgt}, now {p['unrealised_r']:+.2f}R  \n"
                       f"  *Thinking:* {p['rationale']}"]
             if id(p) in closing:
-                lines += ["  *Closing now:* the next bar is a scheduled event (blackout); flat before it starts."]
+                why = ("this account no longer trades it (retired)" if p["asset"] in retired
+                       else "the next bar is a scheduled event (blackout); flat before it starts")
+                lines += [f"  *Closing now:* {why}."]
                 continue
             orders.append({"asset": p["asset"], "ticker": data.TICKERS[p["asset"]], "strategy": p["strategy"],
                            "qty": p["side"] * p["qty"], "stop": p["stop"], "target": p["target"],

@@ -32,5 +32,11 @@
   ],
   "history_start": null,
   "name": "C \u2013 ML intraday",
-  "alpaca_account": "PA36I46L8ZXT"
+  "alpaca_account": "PA36I46L8ZXT",
+  "retired": {
+    "BTC": "2026-10-05 04:00",
+    "ETH": "2026-10-05 04:00",
+    "SOL": "2026-10-05 04:00"
+  },
+  "retired_why": "Crypto stopped 2026-10-05 (user's decision): since 2023 the live rules lost -0.27R a trade on crypto (986 trades, fees $83k vs edge ~0) while stocks made +0.20R. History before this date is unchanged."
 }
