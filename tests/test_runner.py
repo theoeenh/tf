@@ -35,3 +35,17 @@ def test_last_session_signal_becomes_an_entry_sized_by_risk():
     risk = (o["mark"] - o["stop"]) * o["qty"]
     assert abs(risk - F.RISK * 100_000) < 1e-6 or o["qty"] * o["mark"] <= 2.0 * 100_000 / 4 + 1e-6
     assert o["pending"] and o["stop"] < o["mark"]
+
+
+def test_insider_coverage_needs_the_whole_window():
+    import pandas as pd
+    from algo.runner import insider_coverage
+
+    today = pd.Timestamp("2026-10-06")
+    days = {d.strftime("%Y%m%d") for d in pd.bdate_range("2026-06-20", "2026-10-05")}
+    assert insider_coverage(days, pd.Timestamp("2026-03-31"), today)[0]
+    gap = {d for d in days if not "20260801" <= d <= "20260815"}
+    ok, why = insider_coverage(gap, pd.Timestamp("2026-03-31"), today)
+    assert not ok and "2026-07-31" in why
+    stale = {d for d in days if d < "20260925"}
+    assert not insider_coverage(stale, pd.Timestamp("2026-03-31"), today)[0]

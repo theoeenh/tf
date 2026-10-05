@@ -55,6 +55,22 @@ def load_bars(symbols: list[str], now_ny: pd.Timestamp) -> dict[str, pd.DataFram
     return out
 
 
+def insider_coverage(done_days: set[str], bulk_end: pd.Timestamp, today: pd.Timestamp,
+                     window: int = 100) -> tuple[bool, str]:
+    """Are the recent Form 4 filings complete enough to trade an insider strategy? Every stretch of the
+    last `window` calendar days after the last published quarter must have been read (no gap longer
+    than a long weekend / holiday), up to the last few days."""
+    start = max(bulk_end + pd.Timedelta(days=1), today - pd.Timedelta(days=window))
+    days = sorted(pd.Timestamp(d) for d in done_days if pd.Timestamp(d) >= start)
+    if not days:
+        return False, f"no filings read since {start.date()}"
+    points = [start - pd.Timedelta(days=1)] + days + [today]
+    worst = max(zip(points, points[1:]), key=lambda ab: ab[1] - ab[0])
+    if (worst[1] - worst[0]).days > 5:
+        return False, f"insider filings missing between {worst[0].date()} and {worst[1].date()}"
+    return True, f"insider filings read through {days[-1].date()}"
+
+
 def pending_entries(c: F.Candidate, sig: dict, prices: dict, held: set, equity: float) -> list[dict]:
     """Signals on the last complete session, not in the replay yet (they fill at the next open)."""
     rule = ExitRule(**c.rule)
@@ -84,6 +100,14 @@ def update(fetch_insider: bool = True) -> dict:
     universe = [a for a in wide.members() if wide.segment(c.assets)(a)]
     if fetch_insider and c.family in INSIDER_FAMILIES:
         wide.update_insider_recent(days=10, tickers=universe)
+    blocked = ""
+    if c.family in INSIDER_FAMILIES:
+        done_path = wide.WIDE_DIR / "insider_recent_days.txt"
+        done = set(done_path.read_text().split()) if done_path.exists() else set()
+        ok, why = insider_coverage(done, wide._bulk_end(), now_ny.normalize())
+        log.info(why)
+        if not ok:
+            blocked = f"No new entries: {why} (the data download is catching up)."
     prices = load_bars(universe, now_ny)
     sig = F.signals(c, prices)
     lo = start - pd.Timedelta(days=400)
@@ -104,14 +128,14 @@ def update(fetch_insider: bool = True) -> dict:
     orders = [{"asset": p["asset"], "ticker": p["asset"], "strategy": p["strategy"], "qty": p["side"] * p["qty"],
                "stop": p["stop"], "target": p["target"], "mark": p["mark"], "entry": p["entry"],
                "r": p.get("unrealised_r", 0.0)} for p in live]
-    pend = pending_entries(c, sig, prices, {o["asset"] for o in orders}, equity)
+    pend = [] if blocked else pending_entries(c, sig, prices, {o["asset"] for o in orders}, equity)
     (PAPER_DIR / "orders.json").write_text(json.dumps(orders + pend, indent=1, default=float))
     if len(trades):
         trades.to_csv(PAPER_DIR / "trades.csv", index=False)
     lines = [f"# {cfg.get('name', PAPER_DIR.name)}", "",
              f"Strategy: `{c.id}` {c.label()}", f"Started {start.date()} with ${cfg['capital']:,.0f}. "
              f"Data through {last.date()}. **Equity ${equity:,.0f}** ({equity / cfg['capital'] - 1:+.2%}).", "",
-             cfg.get("plan", ""), "", "## Open positions", ""]
+             cfg.get("plan", ""), "", *([f"**{blocked}**", ""] if blocked else []), "## Open positions", ""]
     lines += [f"- **{o['asset']}** {o['qty']:.2f} shares, entry {o['entry']:.2f}, stop {o['stop']:.2f}, "
               f"now {o['mark']:.2f} ({o['r']:+.2f}R)" for o in orders] or ["None."]
     lines += ["", "## New signals (bought at the next open)", ""]

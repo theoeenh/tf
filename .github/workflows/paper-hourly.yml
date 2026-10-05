@@ -87,10 +87,17 @@ jobs:
         include:
           - account: A
             folder: ""
+            update: python -m algo.paper update
           - account: B
             folder: B
+            update: python -m algo.paper update
           - account: C
             folder: C
+            update: python -m algo.paper update
+          # E: the finder's best candidate on the S&P 1500 (daily runner, algo/runner.py)
+          - account: E
+            folder: E
+            update: python -m algo.runner update
     concurrency:
       group: paper-trading-${{ matrix.account }}
       cancel-in-progress: false
@@ -111,6 +118,8 @@ jobs:
           SECRET_B: ${{ secrets.ALPACA_B_API_SECRET_KEY }}
           KEY_C: ${{ secrets.ALPACA_C_API_KEY_ID }}
           SECRET_C: ${{ secrets.ALPACA_C_API_SECRET_KEY }}
+          KEY_E: ${{ secrets.ALPACA_E_API_KEY_ID }}
+          SECRET_E: ${{ secrets.ALPACA_E_API_SECRET_KEY }}
         run: |
           key_var="KEY_${{ matrix.account }}"; secret_var="SECRET_${{ matrix.account }}"
           if [ -z "${!key_var}" ] || [ -z "${!secret_var}" ]; then
@@ -143,7 +152,9 @@ jobs:
           restore-keys: market-data-
 
       - name: Paper account (trade the new bars)
-        run: python -m algo.paper update
+        env:
+          SEC_PACE: "1.0"  # E reads new Form 4 filings: one SEC request a second, or the SEC blocks the runner
+        run: ${{ matrix.update }}
 
       - name: Mirror on Alpaca (market orders + stops / targets)
         run: python -m algo.alpaca sync --send | tee alpaca_sync.txt
@@ -170,6 +181,8 @@ jobs:
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
           git add "paper/${{ matrix.folder }}"
+          # E keeps the recent insider filings it reads (SEC daily index) for its next run
+          [ "${{ matrix.account }}" = "E" ] && git add data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -m "Paper account ${{ matrix.account }} $(date -u +'%Y-%m-%d %H:%M') UTC"
           # the three accounts push at about the same time: retry with a random pause
