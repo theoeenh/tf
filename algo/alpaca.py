@@ -526,6 +526,8 @@ def main() -> None:
         acct = request("GET", "/v2/account")
         print(f"Alpaca PAPER account {acct.get('account_number')}: status {acct.get('status')}, "
               f"equity ${float(acct.get('equity', 0)):,.2f}, buying power ${float(acct.get('buying_power', 0)):,.2f}")
+        print(f"Options: approved level {acct.get('options_approved_level', '?')}, "
+              f"trading level {acct.get('options_trading_level', '?')}")
         print(f"Positions: {positions() or 'none'}")
     elif args.cmd == "verify":
         problems = verify(args.alert)

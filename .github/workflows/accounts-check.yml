@@ -1,0 +1,28 @@
+# Manual check of every Alpaca paper account's keys: account number, cash, options level.
+# Read only: no order is sent.
+name: accounts-check
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        account: [A, B, C, D, E, F]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check ${{ matrix.account }}
+        env:
+          ALPACA_API_KEY_ID: ${{ matrix.account == 'A' && secrets.ALPACA_API_KEY_ID || matrix.account == 'B' && secrets.ALPACA_B_API_KEY_ID || matrix.account == 'C' && secrets.ALPACA_C_API_KEY_ID || matrix.account == 'D' && secrets.ALPACA_D_API_KEY_ID || matrix.account == 'E' && secrets.ALPACA_E_API_KEY_ID || secrets.ALPACA_F_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ matrix.account == 'A' && secrets.ALPACA_API_SECRET_KEY || matrix.account == 'B' && secrets.ALPACA_B_API_SECRET_KEY || matrix.account == 'C' && secrets.ALPACA_C_API_SECRET_KEY || matrix.account == 'D' && secrets.ALPACA_D_API_SECRET_KEY || matrix.account == 'E' && secrets.ALPACA_E_API_SECRET_KEY || secrets.ALPACA_F_API_SECRET_KEY }}
+        run: |
+          [ -n "$ALPACA_API_KEY_ID" ] || { echo "No key for account ${{ matrix.account }} in the GitHub secrets"; exit 1; }
+          python -m algo.alpaca check
