@@ -54,6 +54,7 @@ class PortfolioConfig:
     financing_apr: float = 0.06
     learner: journal.Learner | None = None
     brake: float | None = None  # stop for good once equity is this far below its peak (0.10 = -10%)
+    max_positions: int | None = None  # at most this many positions open at once (best-ranked first)
 
 
 @dataclass
@@ -273,6 +274,9 @@ def run_portfolio(
         cands = [candidate(k, A, i, wants[k]) for a, A, i in live for k in by_asset[a]
                  if pos[k] is None and wants.get(k, 0) != 0 and np.isfinite(A.atr[i - 1]) and A.atr[i - 1] > 0]
         for c_ in sorted(cands, key=lambda c_: (c_["verdict"].skip, -c_["score"])):
+            if (cfg.max_positions is not None and not c_["verdict"].skip
+                    and sum(p is not None and not p.shadow for p in pos.values()) >= cfg.max_positions):
+                continue
             open_(c_)
 
         # 3) during the bar: stops, targets, time stops; then trailing stops on the close
