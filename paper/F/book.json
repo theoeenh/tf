@@ -128,6 +128,23 @@
    "desc": "NVDA Nov 06 2026 235 Call, delta +0.57",
    "opened": "2026-10-05 15:25",
    "id": "long_call-NVDA-2026-10-05"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261120C00520000",
+     "qty": 1,
+     "price": 27.95
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2795.0,
+   "max_loss": 2798.0,
+   "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
+   "opened": "2026-10-05 15:55",
+   "id": "long_call-MSFT-2026-10-05"
   }
  ],
  "closed": []
