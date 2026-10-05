@@ -250,6 +250,24 @@ def insider_dip(prices: dict, buyers: int = 2, days: int = 30, drop: float = 0.1
     return out
 
 
+def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02) -> dict:
+    """The ML ranker (algo/ranker.py): every Friday, buy the stocks in the top `top` share of the
+    walk-forward score (each score from a model trained only on the past). A signal every week the
+    stock is in the top; the exit rule decides the hold."""
+    from . import ranker
+
+    s = ranker.scores(prices, model)
+    out = {}
+    if s.empty:
+        return {a: pd.Series(0, df.index) for a, df in prices.items()}
+    wide_ = s.unstack("stock")
+    pick = wide_.rank(axis=1, pct=True, ascending=False) <= top
+    for a, df in prices.items():
+        sig = pick[a].astype(int) if a in pick else pd.Series(0, pick.index)
+        out[a] = sig.reindex(df.index).fillna(0).astype(int)
+    return out
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
@@ -257,4 +275,8 @@ WIDE_FAMILIES = {
     "reversal_5d": (reversal_5d, {"bottom": [0.02, 0.05]}),
     "high_52w": (high_52w, {"within": [0.01, 0.03]}),
     "insider_dip": (insider_dip, {"buyers": [2, 3], "days": [30, 90], "drop": [0.1, 0.2]}),
+    # few versions on purpose (every one counts as a try): 2 models x 2 portfolio sizes, whole S&P 1500,
+    # held one month (the horizon it is trained for)
+    "ml_rank": (ml_rank, {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
+                {"rules": ["hold 20 days"], "segments": ["sp1500"], "trend": False}),
 }

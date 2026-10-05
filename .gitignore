@@ -14,3 +14,4 @@ data/insider/company_tickers.json
 data/wide/daily.csv.gz
 data/wide/insider.csv.gz
 data/wide/insider_quarters.txt
+data/wide/ml_scores_*.pkl
