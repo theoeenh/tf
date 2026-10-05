@@ -1,5 +1,7 @@
 # F – Options
 
-Alpaca paper account PA3AOX0V1LBZ, $100,000, flat.
+Updated 2026-10-05 08:10 UTC. **Equity $100,000** (+0.00% since start).
 
-Buys calls on the strongest buy signals (loss capped at the premium). Starts once option orders are built and tested.
+## Calls held
+
+None.
