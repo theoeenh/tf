@@ -204,7 +204,9 @@ def backtest(c: Candidate, prices, sig, start, end, seed: int | None = None):
     rule = ExitRule(**c.rule)
     if c.data == "daily500":  # 500 stocks: only those with a signal in the window, and only the window
         a0, b0 = pd.Timestamp(start), pd.Timestamp(end)
-        sig = {a: s for a, s in sig.items() if (s[(s.index >= a0) & (s.index <= b0)] != 0).any()}
+        active = {a: s for a, s in sig.items() if (s[(s.index >= a0) & (s.index <= b0)] != 0).any()}
+        # no signal in the window: still a (flat) result, so the attempt counts like any other
+        sig = active or {a: s * 0 for a, s in list(sig.items())[:1]}
         lo = a0 - pd.Timedelta(days=400)  # warm-up for the indicators the exits use
         prices = {a: prices[a][(prices[a].index >= lo) & (prices[a].index <= b0)] for a in sig}
         sig = {a: s.reindex(prices[a].index).fillna(0).astype(int) for a, s in sig.items()}
