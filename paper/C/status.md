@@ -1,30 +1,30 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-05 15:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-05 16:22 UTC.
 
-**Equity $98,621** (-1.38%) · max drawdown -1.7% · 10 closed trades · 10 open
+**Equity $98,667** (-1.33%) · max drawdown -1.7% · 10 closed trades · 10 open
 
 ## Open positions
 
-- **LONG 60.9935 NVDA** (donchian_trend) since 2026-10-02 14:00, entry 237.42, stop 231.56, target 249.15, now -0.02R  
+- **LONG 60.9935 NVDA** (donchian_trend) since 2026-10-02 14:00, entry 237.42, stop 231.56, target 249.15, now -0.11R  
   *Thinking:* LONG NVDA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 23 = trend market, high volatility (ATR 1.0% of price). Plan: entry 237.42, stop 231.56, target 249.15 (2:1); risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 50.8258 NVDA** (squeeze_breakout) since 2026-10-02 14:00, entry 237.42, stop 230.39, target none (trailing), now -0.02R  
+- **LONG 50.8258 NVDA** (squeeze_breakout) since 2026-10-02 14:00, entry 237.42, stop 230.39, target none (trailing), now -0.09R  
   *Thinking:* LONG NVDA (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 23 = trend market, high volatility (ATR 1.0% of price). Plan: entry 237.42, stop 230.39, no target, trailing stop lets it run; risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 31.3968 MSFT** (donchian_trend) since 2026-10-05 14:00, entry 527.70, stop 516.43, target 550.24, now -0.13R  
+- **LONG 31.3968 MSFT** (donchian_trend) since 2026-10-05 14:00, entry 527.70, stop 516.43, target 550.24, now -0.11R  
   *Thinking:* LONG MSFT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 14 = chop market, high volatility (ATR 0.9% of price). Plan: entry 527.70, stop 516.43, target 550.24 (2:1); risking $354. AI analyst view +1: it agrees with this trade.
-- **LONG 26.1633 MSFT** (squeeze_breakout) since 2026-10-05 14:00, entry 527.70, stop 514.18, target none (trailing), now -0.11R  
+- **LONG 26.1633 MSFT** (squeeze_breakout) since 2026-10-05 14:00, entry 527.70, stop 514.18, target none (trailing), now -0.09R  
   *Thinking:* LONG MSFT (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 14 = chop market, high volatility (ATR 0.9% of price). Plan: entry 527.70, stop 514.18, no target, trailing stop lets it run; risking $354. AI analyst view +1: it agrees with this trade.
-- **LONG 17.1707 META** (squeeze_breakout) since 2026-10-05 14:00, entry 738.17, stop 717.57, target none (trailing), now +0.33R  
+- **LONG 17.1707 META** (squeeze_breakout) since 2026-10-05 14:00, entry 738.17, stop 718.26, target none (trailing), now +0.32R  
   *Thinking:* LONG META (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 14 = chop market, low volatility (ATR 0.9% of price). Plan: entry 738.17, stop 717.57, no target, trailing stop lets it run; risking $354. AI analyst view +1: it agrees with this trade.
-- **LONG 16.6373 AMD** (donchian_trend) since 2026-10-02 14:00, entry 640.35, stop 618.86, target 683.34, now -0.44R  
+- **LONG 16.6373 AMD** (donchian_trend) since 2026-10-02 14:00, entry 640.35, stop 618.86, target 683.34, now -0.36R  
   *Thinking:* LONG AMD (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 1.3% of price). Plan: entry 640.35, stop 618.86, target 683.34 (2:1); risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 13.8624 AMD** (squeeze_breakout) since 2026-10-02 14:00, entry 640.35, stop 614.56, target none (trailing), now -0.37R  
+- **LONG 13.8624 AMD** (squeeze_breakout) since 2026-10-02 14:00, entry 640.35, stop 614.56, target none (trailing), now -0.30R  
   *Thinking:* LONG AMD (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 1.3% of price). Plan: entry 640.35, stop 614.56, no target, trailing stop lets it run; risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 117.2037 XOM** (rsi2_reversion) since 2026-10-05 14:00, entry 163.14, stop 160.12, target 172.19, now +0.16R  
+- **LONG 117.2037 XOM** (rsi2_reversion) since 2026-10-05 14:00, entry 163.14, stop 160.12, target 172.19, now +0.32R  
   *Thinking:* LONG XOM (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 163.14, stop 160.12, target 172.19 (3:1); risking $354.
-- **LONG 36.5149 QQQ** (donchian_trend) since 2026-10-02 14:00, entry 752.37, stop 742.58, target 771.96, now +0.16R  
+- **LONG 36.5149 QQQ** (donchian_trend) since 2026-10-02 14:00, entry 752.37, stop 742.58, target 771.96, now +0.13R  
   *Thinking:* LONG QQQ (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, high volatility (ATR 0.5% of price). Plan: entry 752.37, stop 742.58, target 771.96 (2:1); risking $358. Warning: jobs report coming up while in the trade.
-- **LONG 30.4310 QQQ** (squeeze_breakout) since 2026-10-02 14:00, entry 752.37, stop 740.62, target none (trailing), now +0.14R  
+- **LONG 30.4310 QQQ** (squeeze_breakout) since 2026-10-02 14:00, entry 752.37, stop 740.92, target none (trailing), now +0.11R  
   *Thinking:* LONG QQQ (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 16 = chop market, high volatility (ATR 0.5% of price). Plan: entry 752.37, stop 740.62, no target, trailing stop lets it run; risking $358. Warning: jobs report coming up while in the trade.
 
 ## Closed trades (newest first)
