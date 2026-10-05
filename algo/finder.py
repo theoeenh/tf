@@ -241,13 +241,15 @@ def trading_stats(res) -> dict:
             "skew": float(r.skew()) if len(r) > 3 else 0.0, "kurt": float(r.kurt() + 3) if len(r) > 3 else 3.0}
 
 
-def deflated_sharpe(sr: float, n_obs: int, skew: float, kurt: float, trial_srs: list[float]) -> float:
+def deflated_sharpe(sr: float, n_obs: int, skew: float, kurt: float, trial_srs: list[float],
+                    n_trials: int | None = None) -> float:
     """Probability that the true (per-day) Sharpe is above what the best of N random tries would
-    reach by luck. N = number of strategies tried so far (the registry)."""
+    reach by luck. N = every strategy tried so far (the whole registry); the spread of Sharpes comes
+    from the comparable tries (same data set), as a mix of data sets is not one experiment."""
     from scipy.stats import norm
 
-    n = max(len(trial_srs), 1)
-    var = float(np.var(trial_srs)) if n > 1 else 0.0
+    n = max(n_trials or len(trial_srs), 1)
+    var = float(np.var(trial_srs)) if n > 1 and len(trial_srs) > 1 else 0.0
     if n > 1 and var > 0:
         g = 0.5772156649
         sr0 = math.sqrt(var) * ((1 - g) * norm.ppf(1 - 1 / n) + g * norm.ppf(1 - 1 / (n * math.e)))
@@ -402,9 +404,10 @@ def score(rows: pd.DataFrame) -> pd.DataFrame:
     """Deflated Sharpe with N = every attempt so far, then the gates."""
     rows = rows.copy().reset_index(drop=True)
     rows["plateau"] = plateau(rows)
-    srs = rows["s_sr_daily"].fillna(0).tolist()
-    rows["s_dsr"] = [deflated_sharpe(r.s_sr_daily, int(r.s_n_days), r.s_skew, r.s_kurt, srs)
-                     for r in rows.itertuples()]
+    data = rows["candidate"].map(lambda x: json.loads(x).get("data", "hourly"))
+    srs = {d: rows.loc[data == d, "s_sr_daily"].fillna(0).tolist() for d in data.unique()}
+    rows["s_dsr"] = [deflated_sharpe(r.s_sr_daily, int(r.s_n_days), r.s_skew, r.s_kurt, srs[d], n_trials=len(rows))
+                     for r, d in zip(rows.itertuples(), data)]
     passed, failed = [], []
     for _, r in rows.iterrows():
         f = [g for g, ok in GATES.items() if not _safe(ok, r)]

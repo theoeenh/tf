@@ -255,3 +255,12 @@ def test_merge_keeps_every_attempt_once(monkeypatch, tmp_path):
     assert F.merge(str(tmp_path / "other.csv")) == 1
     r = pd.read_csv(tmp_path / "registry.csv")
     assert list(r["id"]) == ["a", "b", "c"] and r.loc[r.id == "b", "x"].item() == 2
+
+
+def test_deflated_sharpe_counts_every_try_but_compares_like_with_like():
+    calm = list(np.random.default_rng(1).normal(0.0, 0.02, 200))
+    wild = list(np.random.default_rng(2).normal(0.0, 0.13, 600))
+    own = F.deflated_sharpe(0.08, 1500, 0.0, 3.0, calm, n_trials=800)
+    mixed = F.deflated_sharpe(0.08, 1500, 0.0, 3.0, calm + wild, n_trials=800)
+    fewer = F.deflated_sharpe(0.08, 1500, 0.0, 3.0, calm, n_trials=200)
+    assert mixed < 0.01 < own and fewer >= own  # more tries never make it easier
