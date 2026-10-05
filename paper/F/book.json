@@ -33,6 +33,67 @@
    "desc": "JPM Nov 20 2026 340 Put, delta -0.57",
    "opened": "2026-10-05 13:57",
    "id": "long_put-JPM-2026-10-05"
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261106P00070000",
+     "qty": 5,
+     "price": 5.35
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": 2675.0,
+   "max_loss": 2705.0,
+   "desc": "NFLX Nov 06 2026 70 Put, delta -0.59",
+   "opened": "2026-10-05 14:27",
+   "id": "long_put-NFLX-2026-10-05"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "NVDA",
+   "legs": [
+    {
+     "symbol": "NVDA261120P00210000",
+     "qty": 2,
+     "price": 2.83
+    },
+    {
+     "symbol": "NVDA261120P00225000",
+     "qty": -2,
+     "price": 6.15
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -664.0,
+   "max_loss": 2344.0,
+   "desc": "sell 225 / buy 210 puts, 2026-11-20, credit 3.28 on width 15",
+   "opened": "2026-10-05 14:27",
+   "id": "bull_put_spread-NVDA-2026-10-05"
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261113C00079000",
+     "qty": 5,
+     "price": 0.73
+    },
+    {
+     "symbol": "NFLX261113C00073000",
+     "qty": -5,
+     "price": 1.74
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -504.9999999999999,
+   "max_loss": 2520.0,
+   "desc": "sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6",
+   "opened": "2026-10-05 14:28",
+   "id": "bear_call_spread-NFLX-2026-10-05"
   }
  ],
  "closed": []
