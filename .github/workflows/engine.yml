@@ -51,6 +51,10 @@ jobs:
             data/news
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
+      - name: Git identity (the engine saves its log during the day)
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
       - name: Run the engine (shadow)
         run: python -m algo.live --minutes "${{ inputs.minutes || '345' }}"
       - name: Save the engine log to the repo
@@ -59,7 +63,9 @@ jobs:
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
           git add paper/engine
-          git diff --cached --quiet && exit 0
-          git commit -m "Engine log $(date -u +'%Y-%m-%d %H:%M') UTC"
+          # commit what is new; also push earlier commits the engine could not push during the day
+          git diff --cached --quiet || git commit -m "Engine log $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git fetch -q origin "$(git rev-parse --abbrev-ref HEAD)"
+          [ "$(git rev-list --count @{u}..HEAD 2>/dev/null || echo 1)" = "0" ] && exit 0
           for i in 1 2 3 4 5 6; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
           exit 1

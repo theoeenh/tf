@@ -133,8 +133,11 @@ def save(log: Log) -> None:
         return
     errors = []
 
-    def git(*a):
-        p = subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)
+    who = {"GIT_AUTHOR_NAME": "paper-bot", "GIT_AUTHOR_EMAIL": "paper-bot@users.noreply.github.com",
+           "GIT_COMMITTER_NAME": "paper-bot", "GIT_COMMITTER_EMAIL": "paper-bot@users.noreply.github.com"}
+
+    def git(*a):  # the identity is needed by the rebase too, not only by the commit
+        p = subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, env=os.environ | who)
         if p.returncode:
             errors.append(p.stderr.strip().splitlines()[-1] if p.stderr.strip() else f"git {a[0]} failed")
         return p.returncode
@@ -142,8 +145,7 @@ def save(log: Log) -> None:
     git("add", str(log.path.relative_to(ROOT)))
     if git("diff", "--cached", "--quiet") == 0:
         return
-    git("-c", "user.name=paper-bot", "-c", "user.email=paper-bot@users.noreply.github.com",
-        "commit", "-q", "-m", f"Engine log {now():%Y-%m-%d %H:%M} UTC")
+    git("commit", "-q", "-m", f"Engine log {now():%Y-%m-%d %H:%M} UTC")
     for _ in range(6):
         # --autostash: the downloads update tracked news files in this checkout
         if git("pull", "--rebase", "--autostash", "-X", "theirs", "-q") == 0 and git("push", "-q") == 0:
