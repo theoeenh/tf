@@ -9,6 +9,9 @@ on:
       sector:
         description: "sector (Wikipedia GICS name)"
         default: "Industrials"
+      days:
+        description: "calendar days back from today (90 covers the insider-cluster window)"
+        default: "100"
 
 permissions:
   contents: write
@@ -29,12 +32,14 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Download the filings
+        env:
+          SEC_PACE: "1.0"  # one request a second: faster paces get the runner blocked within minutes
         run: |
           python -c "
           import logging; logging.basicConfig(level=logging.INFO, format='%(levelname)s %(message)s')
           from algo import wide
           t = [a for a, s in wide.sectors().items() if s == '${{ inputs.sector }}']
-          df = wide.update_insider_recent(tickers=t); print('rows', len(df))"
+          df = wide.update_insider_recent(days=${{ inputs.days }}, tickers=t); print('rows', len(df))"
           tail -2 data/wide/insider_recent_days.txt
       - name: Save
         if: always()

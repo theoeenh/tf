@@ -24,6 +24,7 @@ from __future__ import annotations
 import io
 import json
 import logging
+import os
 import time
 import urllib.request
 import zipfile
@@ -265,7 +266,7 @@ def _sec(url: str) -> bytes:
             log.info("SEC asks to slow down: waiting %ds", wait)
             time.sleep(wait)
         try:
-            time.sleep(0.25)  # ~2.5 requests a second: the SEC blocks sustained bursts for minutes
+            time.sleep(float(os.environ.get("SEC_PACE", "0.25")))  # the SEC blocks sustained bursts for minutes
             return ins._get(url)
         except OSError as exc:
             if "403" not in str(exc) and "429" not in str(exc):
