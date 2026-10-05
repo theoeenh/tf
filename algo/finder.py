@@ -646,11 +646,39 @@ def vault(cid: str) -> dict:
     rnd = [trading_stats(backtest(c, prices, sig, VAULT_START, end, seed=s)) for s in range(SEEDS)]
     win = {k: v[v.index >= pd.Timestamp(VAULT_START)] for k, v in sig.items()}
     ic = monthly_ic(edge_events(win, prices, c.horizon()))
-    ok = st["return"] > 0 and st["avg_r"] > np.nanmean([r["avg_r"] for r in rnd]) and ic.mean() > 0
+    icir = float(ic.mean() / ic.std()) if len(ic) > 2 and ic.std() > 0 else np.nan
+    s_icir = float(row.iloc[0]["s_icir"])
+    # an overfit strategy keeps some edge but loses its consistency: the ICIR must hold at least half
+    ok = (st["return"] > 0 and st["avg_r"] > np.nanmean([r["avg_r"] for r in rnd]) and ic.mean() > 0
+          and np.nan_to_num(icir, nan=-9) >= 0.5 * s_icir)
     used[cid] = {"date": str(pd.Timestamp.now().date()), "label": c.label(), "result": "PASS" if ok else "FAIL",
-                 "return": st["return"], "avg_r": st["avg_r"], "ic": float(ic.mean())}
+                 "return": st["return"], "avg_r": st["avg_r"], "ic": float(ic.mean()), "icir": icir,
+                 "search_icir": s_icir}
     log_path.write_text(json.dumps(used, indent=1, default=float))
     return used[cid]
+
+
+def promote() -> list[dict]:
+    """Every strategy that passed all the gates takes its one vault test (the user's standing go,
+    2026-10-05); one that passes it starts forward paper trading (algo.forward). Phone alerts both."""
+    from . import forward, notify
+
+    reg = score(registry())
+    used = json.loads((OUT / "vault_log.json").read_text()) if (OUT / "vault_log.json").exists() else {}
+    out = []
+    for r in reg[reg["gates_passed"] == len(GATES)].itertuples():
+        if r.id in used:
+            continue
+        res = vault(r.id)
+        out.append(res | {"id": r.id})
+        msg = (f"{r.label}: vault (data from {VAULT_START}, never seen) return {res['return']:+.1%}, "
+               f"avg {res['avg_r']:+.2f}R, ICIR {res['icir']:+.2f} vs {res['search_icir']:+.2f} in the search.")
+        if res["result"] == "PASS":
+            forward.start(r.id)
+            notify.send("finder: a strategy passed the vault, paper trading starts", msg, "tada", "high")
+        else:
+            notify.send("finder: a strategy failed its vault test", msg, "x", "default")
+    return out
 
 
 # ------------------------------------------------------------------ report
@@ -701,7 +729,8 @@ def report(reg: pd.DataFrame) -> Path:
     if log_path.exists():
         md += ["", "## Vault tests (one per strategy, final)", ""]
         md += [f"- `{k}` {v['label']}: **{v['result']}** (return {v['return']:+.1%}, avg R {v['avg_r']:+.2f}, "
-               f"IC {v['ic']:+.3f}) on {v['date']}" for k, v in json.loads(log_path.read_text()).items()]
+               f"IC {v['ic']:+.3f}, ICIR {v.get('icir', float('nan')):+.2f} vs {v.get('search_icir', float('nan')):+.2f} "
+               f"in the search) on {v['date']}" for k, v in json.loads(log_path.read_text()).items()]
     path = OUT / "report.md"
     path.write_text("\n".join(md) + "\n")
     return path
@@ -715,6 +744,7 @@ def main() -> None:
     lp = sub.add_parser("loop")
     lp.add_argument("--rounds", type=int, default=3)
     lp.add_argument("--per-round", type=int, default=48)
+    sub.add_parser("promote")
     v = sub.add_parser("vault")
     v.add_argument("id")
     args = ap.parse_args()
@@ -725,6 +755,8 @@ def main() -> None:
     elif args.cmd == "loop":
         reg = loop(args.rounds, per_round=args.per_round)
         print(f"{len(reg)} strategies in the registry; report: {OUT / 'report.md'}")
+    elif args.cmd == "promote":
+        print(promote() or "no new strategy passed every gate")
     elif args.cmd == "report":
         print(report(score(registry())))
     else:

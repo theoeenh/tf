@@ -214,3 +214,21 @@ def test_plateau_compares_with_parameter_neighbours():
     rows = pd.DataFrame([mk(20, 0.10), mk(14, 0.08), mk(28, 0.06), mk(55, -0.5)])  # 55 is too far to count
     p = F.plateau(rows)
     assert abs(p[0] - 0.7) < 1e-9 and np.isnan(p[3])
+
+
+def test_graduate_trades_only_after_it_graduates(monkeypatch, tmp_path):
+    from algo import forward
+
+    idx = pd.date_range("2025-01-01", periods=400, freq="B")
+    c = 100 * np.exp(np.cumsum(np.random.default_rng(3).normal(0.0005, 0.01, len(idx))))
+    df = pd.DataFrame({"Open": c, "High": c * 1.01, "Low": c * 0.99, "Close": c, "Volume": 1e6}, idx)
+    cand = F.Candidate("momentum_12_1", {"top": 0.5}, dict(F.DAILY_RULES["hold 5 days"]), data="daily500")
+    monkeypatch.setattr(F, "load", lambda include_vault=False, data="hourly": {"X": df, "Y": df * 1.1})
+    monkeypatch.setattr(F, "signals", lambda c, p: {a: pd.Series(1, d.index) for a, d in p.items()})
+    monkeypatch.setattr("algo.wide.costs", lambda syms: {s: F.COSTS["NVDA"] for s in syms})
+    monkeypatch.setattr(forward, "FWD", tmp_path)
+    info = {"since": "2026-01-05", "label": cand.label(), "candidate": json.dumps(asdict(cand))}
+    r = forward.update_one("abc", info, {})
+    t = pd.read_csv(tmp_path / "abc" / "trades.csv", parse_dates=["entry_date"])
+    assert r["trades"] > 0 and (t["entry_date"] >= pd.Timestamp("2026-01-05")).all()
+    assert "holding up" in forward.write([r]).read_text() or "behind" in (tmp_path / "report.md").read_text()
