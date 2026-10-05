@@ -1,6 +1,6 @@
 # Strategy finder – 2026-10-05
 
-**794 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
+**799 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
 
 | gates | strategy | IC search | ICIR | IC valid. | avg R s / random | avg R v / random | return v | DSR | months + | regimes + | breadth | first failed gate |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -32,7 +32,7 @@
 
 ## Campaigns: each idea refined round by round (max 5 rounds)
 
-418 ideas tried; **6 still improving** (search ICIR >= 0.2), 407 dropped below the bar, 5 finished their 5 rounds.
+423 ideas tried; **6 still improving** (search ICIR >= 0.2), 412 dropped below the bar, 5 finished their 5 rounds.
 
 | idea → best version so far | rounds | tried | gates by round | ICIR | status |
 |---|---|---|---|---|---|
@@ -53,22 +53,22 @@
 | family | tried | best gates | its ICIR (search) | strategy |
 |---|---|---|---|---|
 | insider_cluster | 85 | 13/14 | +0.31 | `5aca4825d9` insider_cluster(buyers=3, days=90) · stop_atr=2.5, rr=None, max_bars=60 · no trend filter · sector Industrials, daily |
-| vwap | 217 | 10/14 | +0.30 | `59e9efbbe7` vwap(k=2.0, trend_ma=140) · stop_atr=1.5, rr=2.0, max_bars=12 |
+| vwap | 218 | 10/14 | +0.30 | `59e9efbbe7` vwap(k=2.0, trend_ma=140) · stop_atr=1.5, rr=2.0, max_bars=12 |
 | volume_breakout | 75 | 8/14 | +0.26 | `2f7b678096` volume_breakout(n=20, m=3.5) · stop_atr=1.5, rr=None, max_bars=3 |
 | insider_big_buy | 48 | 8/14 | +0.15 | `917deb29a5` insider_big_buy(min_value=500000, officer=True) · stop_atr=2.5, rr=None, max_bars=5 · S&P 600 (small), daily |
 | reversal_5d | 24 | 8/14 | -0.05 | `cbc6e766e6` reversal_5d(bottom=0.05) · stop_atr=2.5, rr=None, max_bars=5 · S&P 500, daily |
-| donchian | 99 | 7/14 | +0.33 | `e4dbf9e4e1` donchian(n=118, trend_ma=140) · stop_atr=1.5, rr=None, max_bars=2 · no trend filter |
-| opening_range | 23 | 6/14 | +0.54 | `a406807eaa` opening_range(n_open=1) · stop_atr=1.5, rr=None, max_bars=1 · no trend filter |
+| donchian | 100 | 7/14 | +0.33 | `e4dbf9e4e1` donchian(n=118, trend_ma=140) · stop_atr=1.5, rr=None, max_bars=2 · no trend filter |
+| opening_range | 24 | 6/14 | +0.54 | `a406807eaa` opening_range(n_open=1) · stop_atr=1.5, rr=None, max_bars=1 · no trend filter |
 | xs_reversal | 30 | 6/14 | +0.15 | `d2867573f6` xs_reversal(lookback=6, bottom=4) · stop_atr=1.5, rr=None, max_bars=1 |
 | xs_momentum | 30 | 6/14 | +0.05 | `7ffb46fdcc` xs_momentum(lookback=120, top=4) · stop_atr=1.0, rr=1.5, max_bars=6 |
 | momentum_12_1 | 24 | 6/14 | +0.04 | `9171f4b689` momentum_12_1(top=0.05) · stop_atr=2.5, rr=None, max_bars=5 · S&P 500, daily |
-| rsi2 | 40 | 6/14 | -0.00 | `9dcb4f23b3` rsi2(rsi_n=3, threshold=5.0, trend_ma=200) · stop_atr=1.5, rr=None, max_bars=1 |
+| rsi2 | 41 | 6/14 | -0.00 | `9dcb4f23b3` rsi2(rsi_n=3, threshold=5.0, trend_ma=200) · stop_atr=1.5, rr=None, max_bars=1 |
 | intraday_momentum | 15 | 6/14 | -0.22 | `52f33b3180` intraday_momentum(k=1.0) · stop_atr=2.0, rr=2.0 |
+| squeeze | 21 | 6/14 | -0.36 | `5f107ac95d` squeeze() · stop_atr=3.0, rr=None, trail_atr=4.0, adx_threshold=25.0 · stocks+etfs |
 | gap_fade | 15 | 5/14 | -0.17 | `63e0bb1295` gap_fade(g=1.0) · stop_atr=1.5, rr=None, max_bars=1 |
 | earnings_drift | 15 | 5/14 | -0.29 | `6493eb9de4` earnings_drift(x=2.0) · stop_atr=2.0, rr=2.0 |
 | high_52w | 24 | 4/14 | -0.29 | `59732b89d7` high_52w(within=0.03) · stop_atr=2.5, rr=None, max_bars=5 · S&P 500, daily |
 | btc_lead | 10 | 4/14 | -0.52 | `498531f181` btc_lead(k=0.75) · stop_atr=1.5, rr=None, max_bars=1 |
-| squeeze | 20 | 2/14 | -0.52 | `626682875e` squeeze(n=20, k=2.0, lookback=60, pct=0.2) · stop_atr=1.5, rr=2.0, max_bars=12 |
 
 ## The loop: 376 children tried (improved versions aimed at a parent's failures)
 
@@ -88,17 +88,17 @@
 
 ## Why strategies fail (all attempts)
 
-- search: deflated Sharpe >= 0.90: 794 of 794
-- shelf life: positive in every market regime seen: 750 of 794
-- shelf life: no decay (2nd half >= half of 1st): 665 of 794
-- shelf life: positive in >= 55% of months: 639 of 794
-- validation: positive edge: 617 of 794
-- shelf life: works on >= 55% of assets (S&P 500: of sectors): 613 of 794
-- search: ICIR >= 0.2 (stable month to month): 606 of 794
-- decay: edge still >= half its peak at the exit, peak after the first bar: 595 of 794
-- robust: parameter neighbours keep >= half the edge (2+ tested): 568 of 794
-- validation: makes money after costs: 546 of 794
-- validation: beats random entries: 501 of 794
-- search: positive edge (IC): 404 of 794
-- search: beats random entries (avg R): 300 of 794
-- search: at least 100 signals: 122 of 794
+- search: deflated Sharpe >= 0.90: 799 of 799
+- shelf life: positive in every market regime seen: 755 of 799
+- shelf life: no decay (2nd half >= half of 1st): 669 of 799
+- shelf life: positive in >= 55% of months: 644 of 799
+- validation: positive edge: 621 of 799
+- shelf life: works on >= 55% of assets (S&P 500: of sectors): 616 of 799
+- search: ICIR >= 0.2 (stable month to month): 611 of 799
+- decay: edge still >= half its peak at the exit, peak after the first bar: 599 of 799
+- robust: parameter neighbours keep >= half the edge (2+ tested): 573 of 799
+- validation: makes money after costs: 548 of 799
+- validation: beats random entries: 504 of 799
+- search: positive edge (IC): 408 of 799
+- search: beats random entries (avg R): 303 of 799
+- search: at least 100 signals: 122 of 799
