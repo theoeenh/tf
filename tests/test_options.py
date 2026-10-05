@@ -5,40 +5,64 @@ from algo import options as O
 TODAY = pd.Timestamp("2026-10-05")
 
 
-def _c(sym, exp, delta, bid, ask):
-    return ({"symbol": sym, "expiration_date": exp, "name": sym},
-            {sym: {"latestQuote": {"bp": bid, "ap": ask}, "greeks": {"delta": delta}}})
+def _c(sym, strike, delta, bid, ask, exp="2026-11-13"):
+    return {"symbol": sym, "expiry": exp, "strike": strike, "bid": bid, "ask": ask, "delta": delta, "name": sym}
 
 
-def test_choose_takes_the_liquid_call_nearest_to_060_delta():
-    cs, snaps = [], {}
-    for sym, exp, d, b, a in [("X1", "2026-11-13", 0.58, 5.0, 5.2),     # 39 days, fine
-                              ("X2", "2026-11-13", 0.61, 5.0, 6.5),     # nearer delta but spread 26%
-                              ("X3", "2026-10-16", 0.60, 5.0, 5.1),     # 11 days: too short
-                              ("X4", "2026-11-13", 0.80, 9.0, 9.1)]:
-        c, s = _c(sym, exp, d, b, a)
-        cs.append(c)
-        snaps |= s
-    assert O.choose(cs, snaps, TODAY)["symbol"] == "X1"
+def test_long_call_sized_by_premium():
+    cs = [_c("C1", 230, 0.62, 9.8, 10.0), _c("C2", 250, 0.35, 3.0, 3.1)]
+    d = O.design("long_call", cs, 100_000)
+    assert d["legs"] == [{"symbol": "C1", "qty": 3, "price": 10.0}] and d["max_loss"] == 3000
 
 
-def test_plan_sells_what_a_closed_and_buys_fresh_signals_within_budget():
-    plan = [{"asset": "NVDA", "qty": 50.0, "r": 0.1, "mark": 235.0},
-            {"asset": "AMD", "qty": 20.0, "r": 1.4, "mark": 640.0},       # old move: no chase
-            {"asset": "QQQ", "qty": 30.0, "r": -0.1, "mark": 750.0}]
-    held = [{"symbol": "AAPL261120C00250000", "qty": "3"},              # A no longer holds AAPL
-            {"symbol": "QQQ261009C00740000", "qty": "2"}]               # 4 days to expiry
-    pick = lambda und: {"symbol": f"{und}261120C00230000", "ask": 10.0, "delta": 0.6, "dte": 46}  # noqa: E731
-    o = O.plan_orders(plan, held, 100_000, TODAY, pick)
-    sells = {x["underlying"]: x for x in o if x["side"] == "sell"}
-    buys = {x["underlying"]: x for x in o if x["side"] == "buy"}
-    assert set(sells) == {"AAPL", "QQQ"} and set(buys) == {"NVDA", "QQQ"}
-    assert buys["NVDA"]["qty"] == 3  # 3% of $100k = $3,000 / ($10 x 100)
-    assert o.index(next(x for x in o if x["side"] == "buy")) > o.index(next(x for x in o if x["side"] == "sell"))
+def test_bull_put_spread_sells_the_030_put_and_buys_protection_below():
+    cs = [_c("P230", 230, -0.31, 5.0, 5.2), _c("P220", 220, -0.16, 2.0, 2.1), _c("P240", 240, -0.45, 9, 9.3)]
+    d = O.design("bull_put_spread", cs, 100_000)
+    legs = {leg["symbol"]: leg["qty"] for leg in d["legs"]}
+    credit, width = 5.0 - 2.1, 10
+    assert legs["P220"] > 0 and legs["P230"] < 0 and legs["P220"] == -legs["P230"]
+    assert abs(d["max_loss"] - (width - credit) * 100 * legs["P220"]) < 1e-6 and d["max_loss"] <= 3000
+    assert d["cost"] < 0  # a credit
 
 
-def test_no_contract_when_one_is_too_expensive_and_crypto_ignored():
-    plan = [{"asset": "NVDA", "qty": 50.0, "r": 0.0, "mark": 235.0}, {"asset": "BTC", "qty": 0.5, "r": 0.0, "mark": 1}]
-    pick = lambda und: {"symbol": "NVDA261120C00100000", "ask": 140.0, "delta": 0.6, "dte": 46}  # $14,000 a contract
-    assert O.plan_orders(plan, [], 100_000, TODAY, pick) == []
-    assert O.underlying_of("NVDA261106C00220000") == "NVDA" and str(O.expiry_of("NVDA261106C00220000").date()) == "2026-11-06"
+def test_spread_with_too_little_credit_is_skipped():
+    cs = [_c("P230", 230, -0.30, 1.0, 1.1), _c("P220", 220, -0.15, 0.9, 1.0)]
+    assert O.design("bull_put_spread", cs, 100_000) is None
+
+
+def test_entries_respect_freshness_limits_and_one_position_per_stock():
+    bull = {"NVDA": {"r": 0.1, "spot": 235}, "AMD": {"r": 1.2, "spot": 640}}   # AMD: old move
+    bear = {"TSLA": {"spot": 400}}
+    book = {"open": [{"playbook": "long_call", "underlying": "NVDA"}], "closed": []}
+
+    def chain_for(und, kind, spot):
+        k = spot / 100  # option prices in proportion to the stock
+        if kind == "call":
+            return [_c(f"{und}C", spot, 0.6, 4.9 * k, 5.0 * k), _c(f"{und}C2", spot * 1.05, 0.3, 2.0 * k, 2.05 * k),
+                    _c(f"{und}C3", spot * 1.1, 0.15, 0.7 * k, 0.72 * k)]
+        return [_c(f"{und}P", spot, -0.6, 4.9 * k, 5.0 * k), _c(f"{und}P2", spot * 0.95, -0.3, 2.0 * k, 2.05 * k),
+                _c(f"{und}P3", spot * 0.9, -0.15, 0.7 * k, 0.72 * k)]
+
+    got = {(e["playbook"], e["underlying"]) for e in O.entries(book, bull, bear, 100_000, chain_for)}
+    assert ("long_call", "NVDA") not in got and ("long_call", "AMD") not in got  # held / not fresh
+    assert {("bull_put_spread", "NVDA"), ("long_put", "TSLA"), ("bear_call_spread", "TSLA")} <= got
+
+
+def test_exits_follow_each_playbook_rule():
+    book = {"open": [
+        {"playbook": "long_call", "underlying": "NVDA", "expiry": "2026-11-20", "opened": "2026-10-01", "legs": [], "cost": 3000},
+        {"playbook": "long_put", "underlying": "TSLA", "expiry": "2026-11-20", "opened": "2026-10-01", "legs": [], "cost": 3000},
+        {"playbook": "bull_put_spread", "underlying": "QQQ", "expiry": "2026-11-20", "opened": "2026-10-01", "legs": [1, 2], "cost": -1000},
+        {"playbook": "long_call", "underlying": "QQQ", "expiry": "2026-10-12", "opened": "2026-09-01", "legs": [], "cost": 3000}]}
+    out = {(p["playbook"], p["underlying"]): why for p, why in
+           O.exits(book, {"QQQ": {"r": 0, "spot": 1}}, {"TSLA": 1}, TODAY, lambda p: 400.0)}
+    assert "closed the stock" in out[("long_call", "NVDA")]
+    assert "trend turned up" in out[("long_put", "TSLA")]
+    assert "half the credit" in out[("bull_put_spread", "QQQ")]
+    assert "expiry" in out[("long_call", "QQQ")]
+
+
+def test_close_cost_buys_back_short_legs_at_ask():
+    p = {"legs": [{"symbol": "L", "qty": 2}, {"symbol": "S", "qty": -2}]}
+    q = {"L": {"bp": 1.0, "ap": 1.1}, "S": {"bp": 3.0, "ap": 3.2}}
+    assert abs(O.close_cost(p, q) - (2 * 3.2 * 100 - 2 * 1.0 * 100)) < 1e-9

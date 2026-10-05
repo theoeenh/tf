@@ -3,5 +3,5 @@
   "alpaca_account": "PA3AOX0V1LBZ",
   "capital": 100000.0,
   "status": "trading",
-  "plan": "Buys 30-60 day calls (delta ~0.60, ~3% of equity each, max 6) on the stocks account A buys while the trade is fresh; sells when A exits or 10 days before expiry. Loss per trade capped at the premium."
+  "plan": "Four option playbooks side by side (a test of option mechanics; the signals have no proven edge yet): long calls and bull put spreads on account A's fresh longs, long puts and bear call spreads on fresh short signals; ~3% of equity at risk each, max 3 per playbook. See algo/options.py."
 }

@@ -177,7 +177,7 @@ jobs:
           for i in 1 2 3 4 5 6; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
           exit 1
 
-  # Account F: calls on the stocks account A buys (algo/options.py). Runs after A has committed
+  # Account F: four option playbooks on the stock signals (algo/options.py). Runs after A has committed
   # its new plan; option orders only go out while the US market is open.
   options:
     needs: [data, trade]
@@ -202,7 +202,15 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Calls on A's signals
+      # the hourly bars the data job downloaded (for the bearish signals and daily trends)
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/*_alpaca.csv
+            data/news
+          key: market-data-${{ github.run_id }}
+          restore-keys: market-data-
+      - name: Option playbooks (calls, puts, put and call spreads)
         run: python -m algo.options sync --send | tee options_sync.txt
       - name: Alert the phone if this run failed
         if: failure()
