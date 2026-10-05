@@ -7,7 +7,7 @@ Features, all as of the Friday close (cross-sectional percentile ranks, so a mod
 market regime reads the same scale in another):
   momentum 12-1 and 6-1 months, last month's and last week's return (reversal), 60-day volatility,
   distance to the 52-week high, distance to the 200-day average, dollar volume (liquidity / size),
-  index (large / mid / small), insider buying (distinct buyers in 90 days, $ bought) and discretionary
+  insider buying (distinct buyers in 90 days, $ bought) and discretionary
   selling (30 days) from Form 4 filings filed by that day, plus the market's own last month.
 Target: the return from the next session's open over the next 20 sessions, minus the average of all
 stocks over the same days (so survivorship and the market's rise are taken out), as a percentile rank.
@@ -30,8 +30,10 @@ HORIZON = 20
 REFIT_WEEKS = 13
 MIN_TRAIN_WEEKS = 104
 MIN_TRAIN_ROWS = 5000
+# No index membership: the S&P 500 / 400 / 600 lists are today's, so "in the S&P 500" tells the model
+# which small companies of 2019 grew into big ones (alone it had the highest IC of all: a leak).
 FEATURES = ["mom_12_1", "mom_6_1", "ret_1m", "ret_1w", "vol_60", "off_high", "trend_200", "dollar_vol",
-            "index", "ins_buyers", "ins_buy", "ins_sell", "mkt_1m"]
+            "ins_buyers", "ins_buy", "ins_sell", "mkt_1m"]
 
 
 def panel(prices: dict, col: str) -> pd.DataFrame:
@@ -84,9 +86,6 @@ def dataset(prices: dict) -> pd.DataFrame:
         "trend_200": close / close.rolling(200, min_periods=150).mean() - 1,
         "dollar_vol": np.log1p((close * vol).rolling(20, min_periods=10).mean()),
     }
-    idx = wide.index_of()
-    f["index"] = pd.DataFrame({a: [{"sp500": 2, "sp400": 1}.get(idx.get(a), 0)] * len(days) for a in close},
-                              index=days).astype(float)
     mkt = close.pct_change(21, fill_method=None).mean(axis=1)
     f["mkt_1m"] = pd.DataFrame(np.repeat(mkt.to_numpy()[:, None], close.shape[1], axis=1), days, close.columns)
     # target: next open -> 20 sessions later, minus the average stock over the same days
@@ -101,7 +100,7 @@ def dataset(prices: dict) -> pd.DataFrame:
     long = long[long["mom_12_1"].notna() & np.isfinite(long["vol_60"])]
     # percentile ranks within each date for the stock-specific features
     for k in FEATURES:
-        if k not in ("index", "mkt_1m"):
+        if k != "mkt_1m":
             long[k] = long.groupby(level="date")[k].rank(pct=True)
     long["target_rank"] = long.groupby(level="date")["target"].rank(pct=True)
     return long

@@ -53,3 +53,7 @@ def test_target_is_relative_to_the_average_stock(monkeypatch):
     ds = R.dataset(_prices())
     m = ds["target"].groupby(level="date").mean().dropna()
     assert (m.abs() < 1e-9).all()
+
+
+def test_no_feature_uses_todays_index_membership():
+    assert "index" not in R.FEATURES  # today's S&P lists would tell the model which stocks grew
