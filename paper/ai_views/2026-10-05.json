@@ -1,0 +1,184 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Mixed headlines: treasury-company buying vs the Senate blocking the crypto bill; trend is up but crypto is no longer traded by the accounts. No edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.25,
+  "horizon_days": 10,
+  "key_events": [
+   "Oct 15 date flagged by one article (unspecified)"
+  ],
+  "reasoning": "Headlines say near record highs on Foxconn numbers; one article points to Oct 15 as a key date (unspecified catalyst). Nothing beyond the trend already in price."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.25,
+  "horizon_days": 10,
+  "key_events": [
+   "Oct 15 date flagged by one article (unspecified)"
+  ],
+  "reasoning": "Reported $42B financing deal with Anthropic lifted the stock; a one-day news reaction already in price, below its 200-day average. No call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Down 19% in a month; Disney licensing deal is a positive headline but the trend is down. Conflicting, no call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic market coverage; no scheduled events found in the next 7 days."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Yields at highest since 2007 per headlines and a Fed hike expected in December; trend down, but no new information beyond what the price shows."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [
+   "Middle East tension (oil gap risk)"
+  ],
+  "reasoning": "Brent above $100 on Middle East tension: headline-driven, can gap either way. No call; flag geopolitical gap risk."
+ }
+]
