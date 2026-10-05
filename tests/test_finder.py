@@ -294,3 +294,15 @@ def test_earnings_day_is_the_first_session_that_can_react(tmp_path, monkeypatch)
     e = wide.load_earnings().set_index("ticker")["day"]
     assert e["A"] == pd.Timestamp("2026-07-31")  # after the close: next session
     assert e["B"] == pd.Timestamp("2026-07-14")  # 6:30 New York, before the open: same day
+
+
+def test_recent_insider_file_with_mixed_date_formats(tmp_path, monkeypatch):
+    """A recent-filings file written in two runs mixes '2026-05-22' and '2026-06-29 00:00:00'."""
+    from algo import wide
+
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    pd.DataFrame({"accession": ["a", "b"], "filed": ["2026-05-22", "2026-06-29 00:00:00"], "traded": [None, None],
+                  "ticker": ["X", "X"], "owner": ["o1", "o2"], "code": ["P", "P"], "shares": [1, 2],
+                  "price": [1.0, 2.0]}).to_csv(tmp_path / "insider_recent.csv.gz", index=False)
+    t = wide.load_insider()
+    assert str(t["filed"].dtype).startswith("datetime64") and t["filed"].max() == pd.Timestamp("2026-06-29")

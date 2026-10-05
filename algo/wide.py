@@ -239,10 +239,19 @@ def update_insider() -> pd.DataFrame:
     return old
 
 
+def _read_trades(path) -> pd.DataFrame:
+    """A stored trades file with real dates (older files can mix '2026-05-22' and '2026-05-22 00:00:00')."""
+    df = pd.read_csv(path)
+    for col in ("filed", "traded"):
+        if col in df:
+            df[col] = pd.to_datetime(df[col], format="mixed", errors="coerce")
+    return df
+
+
 def load_insider() -> pd.DataFrame:
     """Quarterly SEC data sets plus the recent filings not in a published quarter yet."""
-    parts = [pd.read_csv(p, parse_dates=["filed", "traded"]) for p in
-             (WIDE_DIR / "insider.csv.gz", WIDE_DIR / "insider_recent.csv.gz") if p.exists()]
+    parts = [_read_trades(p) for p in (WIDE_DIR / "insider.csv.gz", WIDE_DIR / "insider_recent.csv.gz")
+             if p.exists()]
     if not parts:
         return pd.DataFrame()
     df = pd.concat(parts, ignore_index=True)
@@ -281,7 +290,7 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
     from . import insider as ins
 
     path, done_path = WIDE_DIR / "insider_recent.csv.gz", WIDE_DIR / "insider_recent_days.txt"
-    old = pd.read_csv(path) if path.exists() else pd.DataFrame()
+    old = _read_trades(path) if path.exists() else pd.DataFrame()
     done = set(done_path.read_text().split()) if done_path.exists() else set()
     cik_to_ticker = {}
     ins.cik("AAPL")  # makes sure company_tickers.json is there
@@ -298,7 +307,8 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
         df = pd.concat([old, new], ignore_index=True) if len(new) else old
         if len(df):
             df = df.drop_duplicates(["accession", "owner", "code", "shares", "price"])
-            df = df[pd.to_datetime(df["filed"]) > _bulk_end()]  # covered by a published quarter now
+            df["filed"] = pd.to_datetime(df["filed"], format="mixed")
+            df = df[df["filed"] > _bulk_end()]  # covered by a published quarter now
             WIDE_DIR.mkdir(parents=True, exist_ok=True)
             df.to_csv(path, index=False)
         done_path.write_text("\n".join(sorted(done)) + "\n")
