@@ -1,14 +1,17 @@
-# One-off / on-demand: recent Form 4 filings (after the last published SEC quarter) for one sector,
+# Twice a day and on demand: recent Form 4 filings (after the last published SEC quarter) for one sector,
 # from the SEC daily indexes. Resumes from data/wide/insider_recent_days.txt. Research data only: no
 # trading call, no Alpaca keys.
 name: insider-backfill
 
 on:
+  schedule:
+    - cron: "41 10 * * *"  # before the US open: the previous days' filings, for account E
+    - cron: "41 22 * * *"  # after the close
   workflow_dispatch:
     inputs:
       sector:
         description: "sector (Wikipedia GICS name)"
-        default: "Industrials"
+        default: "Industrials"  # account E's strategy
       days:
         description: "calendar days back from today (90 covers the insider-cluster window)"
         default: "100"
@@ -32,14 +35,17 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Download the filings
+        timeout-minutes: 280  # stops before the job's limit so the progress is still saved
+        continue-on-error: true
         env:
           SEC_PACE: "1.0"  # one request a second: faster paces get the runner blocked within minutes
+          SEC_PATIENT: "1"  # when blocked, wait it out (10 minutes at a time) instead of stopping
         run: |
           python -c "
           import logging; logging.basicConfig(level=logging.INFO, format='%(levelname)s %(message)s')
           from algo import wide
-          t = [a for a, s in wide.sectors().items() if s == '${{ inputs.sector }}']
-          df = wide.update_insider_recent(days=${{ inputs.days }}, tickers=t); print('rows', len(df))"
+          t = [a for a, s in wide.sectors().items() if s == '${{ inputs.sector || 'Industrials' }}']
+          df = wide.update_insider_recent(days=${{ inputs.days || '100' }}, tickers=t); print('rows', len(df))"
           tail -2 data/wide/insider_recent_days.txt
       - name: Save
         if: always()
@@ -48,7 +54,7 @@ jobs:
           git config user.email "paper-bot@users.noreply.github.com"
           git add data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt
           git diff --cached --quiet && exit 0
-          git commit -q -m "Recent Form 4 filings (${{ inputs.sector }}): backfill from GitHub Actions"
+          git commit -q -m "Recent Form 4 filings (${{ inputs.sector || 'Industrials' }}): backfill from GitHub Actions"
           git checkout -q -- .
           for i in 1 2 3 4 5; do
             git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q && exit 0

@@ -270,7 +270,9 @@ def _sec(url: str) -> bytes:
     """The SEC blocks bursts (HTTP 403 for a few minutes): slower pace, long waits on a refusal."""
     from . import insider as ins
 
-    for wait in (0, 60, 180, 600):
+    # SEC_PATIENT=1 (the backfill workflow): keep waiting out the blocks (they last ~10 minutes)
+    waits = (0, 60, 180, 600) + ((600,) * 12 if os.environ.get("SEC_PATIENT") else ())
+    for wait in waits:
         if wait:
             log.info("SEC asks to slow down: waiting %ds", wait)
             time.sleep(wait)
