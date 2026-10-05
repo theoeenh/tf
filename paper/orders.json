@@ -1,16 +1,5 @@
 [
   {
-    "asset": "BTC",
-    "ticker": "BTC-USD",
-    "strategy": "donchian_trend",
-    "qty": 0.596860140102801,
-    "stop": 85808.03106113788,
-    "target": 88442.76382158636,
-    "mark": 86064.05,
-    "entry": 86466.71425125,
-    "r": -0.6113170296352288
-  },
-  {
     "asset": "NVDA",
     "ticker": "NVDA",
     "strategy": "donchian_trend",
