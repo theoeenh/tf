@@ -20,7 +20,8 @@ ROOT_PAPER = Path(__file__).resolve().parent.parent / "paper"
 
 def account_configs() -> list[dict]:
     dirs = [ROOT_PAPER] + sorted(d for d in ROOT_PAPER.iterdir() if d.is_dir())
-    return [json.loads((d / "config.json").read_text()) for d in dirs if (d / "config.json").exists()]
+    cfgs = [json.loads((d / "config.json").read_text()) for d in dirs if (d / "config.json").exists()]
+    return [c for c in cfgs if "universe" in c]  # D / E / F trade from other plans: no bars of their own
 
 
 def main() -> None:

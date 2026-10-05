@@ -61,7 +61,8 @@ def accounts() -> list[dict]:
                 equity = float(e.iloc[-1, 1])
         trades = len(pd.read_csv(tr_path)) if tr_path.exists() and tr_path.stat().st_size else 0
         opened = json.loads((d / "orders.json").read_text()) if (d / "orders.json").exists() else []
-        rows.append({"name": cfg.get("name", cfg["variant"]), "variant": cfg["variant"],
+        variant = cfg.get("variant") or cfg.get("plan", "")[:60]  # D / E / F: their own plan
+        rows.append({"name": cfg.get("name", variant), "variant": variant,
                      "alpaca": cfg.get("alpaca_account", ""), "equity": equity,
                      "ret": equity / cfg["capital"] - 1, "trades": trades, "open": len(opened)})
     return rows
