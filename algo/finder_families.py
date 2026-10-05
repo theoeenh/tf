@@ -250,11 +250,14 @@ def insider_dip(prices: dict, buyers: int = 2, days: int = 30, drop: float = 0.1
     return out
 
 
-def earnings_reaction(prices: dict, z: float = 2.0, volume: float = 1.5) -> dict:
+def earnings_reaction(prices: dict, z: float = 2.0, volume: float = 1.5, side: str = "up") -> dict:
     """Post-earnings drift: a stock that reacts strongly to its earnings release (the first session that
     could react: the release day if it came out before the 9:30 open, else the next) keeps drifting the
     same way for weeks. Buy at that session's close when the move is at least `z` times the stock's
     usual daily move (60 sessions before) on at least `volume` times its usual volume (20 sessions).
+    side="down": the mirror image, buy the stocks that fell that hard (an overreaction that reverses:
+    the 'up' version showed a strongly negative edge in 2017-2022 and 2023-25, so this idea was chosen
+    after seeing the validation period; the vault is untouched).
     Release times: the SEC's 8-K item 2.02 filings (wide.load_earnings)."""
     from . import wide
 
@@ -270,10 +273,16 @@ def earnings_reaction(prices: dict, z: float = 2.0, volume: float = 1.5) -> dict
             usual = pd.Series(vol).rolling(20, min_periods=10).mean().shift(1).to_numpy()
             for p in np.unique(df.index.searchsorted(pd.DatetimeIndex(days), side="left")):
                 if 0 < p < len(df) and sd[p] > 0 and usual[p] > 0:
-                    if ret[p] / sd[p] >= z and vol[p] / usual[p] >= volume:
+                    move = ret[p] / sd[p] if side == "up" else -ret[p] / sd[p]
+                    if move >= z and vol[p] / usual[p] >= volume:
                         s[p] = 1
         out[a] = pd.Series(s, df.index)
     return out
+
+
+def earnings_overreaction(prices: dict, z: float = 2.0, volume: float = 1.5) -> dict:
+    """Buy the stocks that fell hard on their earnings (earnings_reaction with side='down')."""
+    return earnings_reaction(prices, z=z, volume=volume, side="down")
 
 
 def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02) -> dict:
@@ -303,6 +312,8 @@ WIDE_FAMILIES = {
     "insider_dip": (insider_dip, {"buyers": [2, 3], "days": [30, 90], "drop": [0.1, 0.2]}),
     "earnings_reaction": (earnings_reaction, {"z": [1.5, 2.5, 3.5], "volume": [1.5]},
                           {"rules": ["hold 20 days", "hold 40 days", "trailing 3 ATR, out in 60 days"]}),
+    "earnings_overreaction": (earnings_overreaction, {"z": [1.5, 2.5, 3.5], "volume": [1.5]},
+                              {"rules": ["hold 20 days", "hold 40 days", "trailing 3 ATR, out in 60 days"]}),
     # few versions on purpose (every one counts as a try): 2 models x 2 portfolio sizes, whole S&P 1500,
     # held one month (the horizon it is trained for)
     "ml_rank": (ml_rank, {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
