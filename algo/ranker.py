@@ -9,7 +9,8 @@ market regime reads the same scale in another):
   distance to the 52-week high, distance to the 200-day average, dollar volume (liquidity / size),
   insider buying (distinct buyers in 90 days, $ bought) and discretionary
   selling (30 days) from Form 4 filings filed by that day, the short share of off-exchange volume
-  (FINRA, 20-day average and its change vs 120 days, from the day after), plus the market's last month.
+  (FINRA, 20-day average and its change vs 120 days, from the day after), fundamentals from the SEC's
+  XBRL filings (from the session after the filing: algo/fundamentals.py), plus the market's last month.
 Target: the return from the next session's open over the next 20 sessions, minus the average of all
 stocks over the same days (so survivorship and the market's rise are taken out), as a percentile rank.
 Walk-forward: a refit every 13 weeks on every week whose target was fully known by then (no overlap
@@ -36,6 +37,9 @@ MIN_TRAIN_ROWS = 5000
 FEATURES = ["mom_12_1", "mom_6_1", "ret_1m", "ret_1w", "vol_60", "off_high", "trend_200", "dollar_vol",
             "ins_buyers", "ins_buy", "ins_sell", "mkt_1m"]
 SHORT_FEATURES = ["short_20", "short_chg"]  # added 2026-10-05 (FINRA data): a separate version, counted
+# added 2026-10-06 (SEC XBRL, algo/fundamentals.py): earnings yield, book to market, ROA, accruals,
+# revenue growth, SUE, each from the session after the filing. Again its own counted version.
+FUND_FEATURES = ["f_ey", "f_bm", "f_roa", "f_accr", "f_rev_g", "f_sue"]
 
 
 def panel(prices: dict, col: str) -> pd.DataFrame:
@@ -101,11 +105,14 @@ def dataset(prices: dict) -> pd.DataFrame:
     weeks = weeks[weeks >= days[0] + pd.Timedelta(days=380)]
     rows = {k: v.reindex(weeks) for k, v in f.items()}
     rows |= {k: v for k, v in insider_panel(weeks, list(close.columns)).items()}
+    from . import fundamentals
+
+    rows |= fundamentals.features(weeks, close)
     long = pd.concat({k: v.stack(future_stack=True) for k, v in rows.items()}, axis=1)
     long.index.names = ["date", "stock"]
     long = long[long["mom_12_1"].notna() & np.isfinite(long["vol_60"])]
     # percentile ranks within each date for the stock-specific features
-    for k in FEATURES + SHORT_FEATURES:
+    for k in FEATURES + SHORT_FEATURES + FUND_FEATURES:
         if k != "mkt_1m":
             long[k] = long.groupby(level="date")[k].rank(pct=True)
     long["target_rank"] = long.groupby(level="date")["target"].rank(pct=True)
@@ -147,10 +154,10 @@ def walk_forward(ds: pd.DataFrame, kind: str, features: list[str] | None = None)
 _CACHE: dict = {}
 
 
-def scores(prices: dict, kind: str, short: bool = False) -> pd.Series:
+def scores(prices: dict, kind: str, short: bool = False, fund: bool = False) -> pd.Series:
     """Cached walk-forward scores for this universe and data end."""
-    feats = FEATURES + (SHORT_FEATURES if short else [])
-    key = hashlib.sha1((kind + ("+short" if short else "") + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
+    feats = FEATURES + (SHORT_FEATURES if short else []) + (FUND_FEATURES if fund else [])
+    key = hashlib.sha1((kind + ("+short" if short else "") + ("+fund" if fund else "") + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
                        .encode()).hexdigest()[:12]
     if key in _CACHE:
         return _CACHE[key]
@@ -185,9 +192,10 @@ def main() -> None:
     prices = load(data="daily500")  # vault sealed
     ds = dataset(prices)
     print(f"{len(ds):,} stock-weeks, {ds.index.get_level_values('date').nunique()} weeks")
-    for kind, short in (("ridge", False), ("gbm", False), ("ridge", True), ("gbm", True)):
-        s = scores(prices, kind, short)
-        print(f"\n{kind}{' + short selling' if short else ''}: IC by year (20-session excess return; top10 = best decile minus average, per 20 sessions)")
+    for kind, short, fund in (("ridge", False, False), ("gbm", False, False), ("ridge", True, False),
+                              ("gbm", True, False), ("ridge", True, True), ("gbm", True, True)):
+        s = scores(prices, kind, short, fund)
+        print(f"\n{kind}{' + short selling' if short else ''}{' + fundamentals' if fund else ''}: IC by year (20-session excess return; top10 = best decile minus average, per 20 sessions)")
         print(ic_report(ds, s).round(4).to_string())
 
 

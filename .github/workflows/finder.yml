@@ -64,6 +64,10 @@ jobs:
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
         run: python -m algo.wide
+      # company fundamentals (SEC XBRL, ~1.4 GB download, ~6 min): rebuilt once a week
+      - name: Refresh the SEC fundamentals (weekly)
+        continue-on-error: true
+        run: python -m algo.fundamentals --if-stale 7
       - name: Run the loop
         env:  # market data only (the hourly bars are brought up to date); no trading call
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
@@ -92,7 +96,7 @@ jobs:
             git show "origin/$branch:paper/finder/registry.csv" > "$RUNNER_TEMP/remote.csv" 2>/dev/null || true
             python -m algo.finder merge "$RUNNER_TEMP/remote.csv"
             python -m algo.finder report
-            git add paper/finder paper/forward data/wide/members.csv
+            git add paper/finder paper/forward data/wide/members.csv data/wide/fundamentals.csv.gz
             git diff --cached --quiet || git commit -q -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
             git checkout -q -- .  # other files the run touched (downloaded data) are not saved here
             git clean -fdq data/  # nor new data files (they would block the rebase if committed meanwhile)

@@ -18,6 +18,9 @@ def _prices(n_stocks=40, n_days=900, seed=0):
 def _quiet(monkeypatch):
     monkeypatch.setattr(R.wide, "load_insider", lambda: pd.DataFrame())
     monkeypatch.setattr(R.wide, "index_of", lambda: {})
+    from algo import fundamentals
+
+    monkeypatch.setattr(fundamentals, "load", lambda: pd.DataFrame(columns=["ticker", "item", "end", "filed", "val"]))
     monkeypatch.setattr(R, "MIN_TRAIN_WEEKS", 30)
     monkeypatch.setattr(R, "REFIT_WEEKS", 8)
     monkeypatch.setattr(R, "MIN_TRAIN_ROWS", 300)
