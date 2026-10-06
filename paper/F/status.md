@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-06 17:57 UTC. **Equity $99,021** (-0.98% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-06 18:27 UTC. **Equity $98,948** (-1.05% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 0 | $+0 | $+976 | 0 / 0 |
-| long_put | 3 | 0 | $+0 | $-962 | 0 / 0 |
-| bull_put_spread | 3 | 0 | $+0 | $+170 | 0 / 0 |
-| bear_call_spread | 3 | 0 | $+0 | $-302 | 0 / 0 |
+| long_call | 3 | 0 | $+0 | $+1,026 | 0 / 0 |
+| long_put | 3 | 0 | $+0 | $-1,070 | 0 / 0 |
+| bull_put_spread | 3 | 0 | $+0 | $+223 | 0 / 0 |
+| bear_call_spread | 3 | 0 | $+0 | $-396 | 0 / 0 |
 
 ## Open positions
 
