@@ -343,3 +343,30 @@ def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     (other / "d.txt").write_text("20260702\n")
     assert wide.merge_insider_recent(other / "r.csv.gz", other / "d.txt") == 2
     assert (tmp_path / "insider_recent_days.txt").read_text().split() == ["20260701", "20260702"]
+
+
+def test_insider_recent_skips_days_missing_from_the_sec_listing(tmp_path, monkeypatch):
+    """A holiday has no daily index and the SEC answers 403 for it: the quarter listing tells."""
+    import json as _json
+    from algo import insider, wide
+
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    monkeypatch.setattr(wide, "_bulk_end", lambda: pd.Timestamp("2026-06-30"))
+    monkeypatch.setattr(insider, "cik", lambda t: 1)
+    (insider.INSIDER_DIR).mkdir(parents=True, exist_ok=True)
+    asked = []
+
+    def sec(url):
+        asked.append(url)
+        if url.endswith("index.json"):
+            return _json.dumps({"directory": {"item": [{"name": "form.20260702.idx"}, {"name": "form.20260706.idx"}]}}).encode()
+        if "form.2026070" in url:
+            return b"header\n"
+        raise OSError("SEC refused " + url)
+
+    monkeypatch.setattr(wide, "_sec", sec)
+    monkeypatch.setattr(pd.Timestamp, "now", classmethod(lambda cls, tz=None: pd.Timestamp("2026-07-20", tz=tz)))
+    wide.update_insider_recent(tickers=[])
+    assert not any("form.20260703" in u for u in asked)
+    done = (tmp_path / "insider_recent_days.txt").read_text().split()
+    assert "20260703" in done and "20260702" in done and "20260706" in done

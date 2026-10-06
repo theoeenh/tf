@@ -331,11 +331,29 @@ def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame
         done_path.write_text("\n".join(sorted(done)) + "\n")
         return df
 
+    listed: dict[tuple, set | None] = {}
+
+    def published(d) -> bool | None:
+        """Is the day's index on the SEC's quarter listing? (a missing day, e.g. a holiday, answers
+        403 like a block would). None when the listing itself cannot be read."""
+        yq = (d.year, (d.month - 1) // 3 + 1)
+        if yq not in listed:
+            try:
+                items = json.loads(_sec(f"https://www.sec.gov/Archives/edgar/daily-index/{yq[0]}/QTR{yq[1]}/index.json"))
+                listed[yq] = {i["name"] for i in items["directory"]["item"]}
+            except (OSError, ValueError, KeyError):
+                listed[yq] = None
+        return None if listed[yq] is None else f"form.{d:%Y%m%d}.idx" in listed[yq]
+
     for d in days_:
         key = d.strftime("%Y%m%d")
         if key in done and d < today - pd.Timedelta(days=3):  # the last days are read again (late index)
             continue
         q = (d.month - 1) // 3 + 1
+        if published(d) is False:
+            if d < today - pd.Timedelta(days=5):
+                done.add(key)  # a holiday: no index will come
+            continue
         try:
             raw = _sec(f"https://www.sec.gov/Archives/edgar/daily-index/{d.year}/QTR{q}/form.{key}.idx")
         except OSError as exc:
