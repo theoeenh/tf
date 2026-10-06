@@ -259,3 +259,60 @@ def test_verify_accepts_fractional_rest_without_stop_after_the_close(monkeypatch
     stop = {"symbol": "AMD", "side": "sell", "type": "stop", "qty": "32"}
     _fake_alpaca(monkeypatch, {"AMD": 33.82}, [stop], {"AMD": 33.82})
     assert alpaca.verify() == ["AMD: 33.82 held, only 32 covered by a stop"]
+
+
+def test_request_retries_a_read_after_a_timeout(monkeypatch):
+    import io
+    import urllib.request
+    from algo import alpaca
+
+    calls = []
+
+    def urlopen(req, timeout=30):
+        calls.append(req.get_method())
+        if len(calls) == 1:
+            raise TimeoutError("timed out")
+        return io.BytesIO(b'{"account_number": "X"}')
+
+    monkeypatch.setenv("ALPACA_API_KEY_ID", "k")
+    monkeypatch.setenv("ALPACA_API_SECRET_KEY", "s")
+    monkeypatch.setattr(urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(alpaca.time, "sleep", lambda s: None)
+    assert alpaca.request("GET", "/v2/account")["account_number"] == "X" and len(calls) == 2
+    calls.clear()
+
+    def down(req, timeout=30):
+        calls.append(req.get_method())
+        raise TimeoutError("timed out")
+
+    monkeypatch.setattr(urllib.request, "urlopen", down)
+    try:  # an order is never resent: it may have reached Alpaca
+        alpaca.request("POST", "/v2/orders", {"a": 1})
+    except TimeoutError:
+        pass
+    assert calls == ["POST"]
+
+
+def test_live_decisions_are_frozen(tmp_path):
+    import pandas as pd
+    from algo.paper import FrozenDecisions
+    from algo.journal import Verdict
+
+    class Learner:
+        skip = False
+
+        def judge(self, key):
+            key["pred"] = (0.5, 0.0)
+            return Verdict(self.skip, "skipped" if self.skip else "")
+
+    start = pd.Timestamp("2026-10-01")
+    key = lambda t: {"x": [1.0], "sleeve": ("QQQ", "s"), "strategy": "s", "time": pd.Timestamp(t), "pred": None}
+    lr = Learner()
+    f = FrozenDecisions(lr, start, tmp_path / "d.json")
+    assert not f.judge(key("2026-10-05 18:00")).skip
+    f.save()
+    lr.skip = True  # the model changed overnight
+    g = FrozenDecisions(lr, start, tmp_path / "d.json")
+    assert not g.judge(key("2026-10-05 18:00")).skip  # the past decision stands
+    assert g.judge(key("2026-10-06 14:00")).skip  # new candidates use the current model
+    assert g.judge(key("2026-09-01 14:00")).skip  # before the start: the learner, never stored

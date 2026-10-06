@@ -104,6 +104,48 @@ def init(capital: float, variant: str, interval: str, start: str | None = None, 
     return cfg
 
 
+class FrozenDecisions:
+    """A live decision is made once. The learner's verdict on every trade candidate from the start
+    date on is stored (paper/<account>/decisions.json) and reused by every later replay: the
+    replay must not re-decide the past when the model, the news features or the data are
+    revised later (on 2026-10-06 a refit flipped a borderline skip of 2 days before and
+    rewrote account C's history). Candidates before the start date are left to the learner."""
+
+    def __init__(self, learner, start: pd.Timestamp, path: Path):
+        self.learner, self.start, self.path = learner, start, path
+        self.cache = json.loads(path.read_text()) if path.exists() else {}
+        self.added = 0
+
+    def __getattr__(self, name):
+        return getattr(self.learner, name)
+
+    @staticmethod
+    def key_of(key: dict) -> str:
+        side = "+" if key["x"][0] >= 0 else "-"  # the first feature is the side
+        return f"{key['sleeve'][0]}|{key['strategy']}|{side}|{key['time']:%Y-%m-%d %H:%M}"
+
+    def judge(self, key):
+        from .journal import Verdict
+
+        t = key.get("time") if isinstance(key, dict) else None
+        if t is None or t < self.start:
+            return self.learner.judge(key)
+        k = self.key_of(key)
+        if k in self.cache:
+            d = self.cache[k]
+            if d.get("pred") is not None:
+                key["pred"] = tuple(d["pred"])
+            return Verdict(d["skip"], d["reason"], d["size"])
+        v = self.learner.judge(key)
+        self.cache[k] = {"skip": v.skip, "reason": v.reason, "size": v.size,
+                         "pred": list(key["pred"]) if key.get("pred") is not None else None}
+        self.added += 1
+        return v
+
+    def save(self) -> None:
+        self.path.write_text(json.dumps(dict(sorted(self.cache.items())), indent=0))
+
+
 def update(source: str | None = None) -> Path:
     """source: None = the one the account was started with (config.json)."""
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
@@ -130,8 +172,11 @@ def update(source: str | None = None) -> Path:
         lines += ["No complete bar since the start yet. Nothing to do."]
         res = None
     else:
+        frozen = FrozenDecisions(learner, start, PAPER_DIR / "decisions.json") if learner is not None else None
         res = run_variant(prices, v, cfg["risk_pct"], start, None, ctx, initial_capital=cfg["capital"],
-                          close_at_end=False, learner=learner, retired=cfg.get("retired"))
+                          close_at_end=False, learner=frozen or learner, retired=cfg.get("retired"))
+        if frozen is not None:
+            frozen.save()
         eq = res.equity
         st = equity_stats(eq, bars_per_year(eq.index)) if len(eq) > 2 else {}
         lines += [f"**Equity ${eq.iloc[-1]:,.0f}** ({eq.iloc[-1] / cfg['capital'] - 1:+.2%}) · "

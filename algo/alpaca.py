@@ -76,11 +76,19 @@ def request(method: str, path: str, body: dict | None = None, base: str = BASE_U
                                  data=json.dumps(body).encode() if body is not None else None,
                                  headers={"APCA-API-KEY-ID": key, "APCA-API-SECRET-KEY": secret,
                                           "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.loads(r.read() or b"{}")
-    except urllib.error.HTTPError as e:
-        raise AlpacaError(f"{method} {path} -> {e.code}: {e.read().decode(errors='replace')}") from None
+    # a network hiccup (timeout, reset) on a read or a cancel is retried; an order (POST) is never
+    # sent twice blindly: it may have reached Alpaca before the connection dropped
+    tries = 3 if method in ("GET", "DELETE") else 1
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.loads(r.read() or b"{}")
+        except urllib.error.HTTPError as e:
+            raise AlpacaError(f"{method} {path} -> {e.code}: {e.read().decode(errors='replace')}") from None
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if attempt == tries - 1:
+                raise
+            time.sleep(5 * (attempt + 1))
 
 
 def get_data(path: str, params: dict) -> dict:
