@@ -17,6 +17,15 @@
 0.15601971295964845
 ]
 },
+"AMD|opening_range|+|2026-10-06 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.05R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4508826416395427,
+-0.045060318850685566
+]
+},
 "AMD|squeeze_breakout|+|2026-10-02 14:00": {
 "skip": false,
 "reason": "",
@@ -359,6 +368,15 @@
 0.217811252625083
 ]
 },
+"USO|opening_range|+|2026-10-06 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 46% estimated chance of profit, expected -0.02R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.46222667330242523,
+-0.02239594961265362
+]
+},
 "USO|squeeze_breakout|+|2026-10-01 18:00": {
 "skip": false,
 "reason": "",
@@ -366,6 +384,15 @@
 "pred": [
 0.38665348343388584,
 0.07900706910298017
+]
+},
+"XOM|donchian_trend|+|2026-10-06 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.01R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.3219470539131404,
+-0.005140320709462909
 ]
 },
 "XOM|opening_range|+|2026-10-02 13:00": {
@@ -393,6 +420,15 @@
 "pred": [
 0.4606444593591663,
 -0.02555707275557617
+]
+},
+"XOM|opening_range|+|2026-10-06 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.10R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4253201432925453,
+-0.09613192358523359
 ]
 },
 "XOM|rsi2_reversion|+|2026-10-05 14:00": {
