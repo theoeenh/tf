@@ -134,6 +134,15 @@
 0.1258561198347964
 ]
 },
+"META|rsi2_reversion|+|2026-10-06 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3987915357651473,
+0.2963309451072309
+]
+},
 "META|squeeze_breakout|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
