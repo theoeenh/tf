@@ -5,8 +5,6 @@ Started 2026-10-05 with $100,000. Data through 2026-10-05. **Equity $100,000** (
 
 Early test of the finder's best candidate (13/14 checks, NOT graduated: it fails the luck check): buy an Industrials stock (S&P 1500) the day 3+ insiders have bought it in the open market within 90 days, hold 60 sessions, stop 2.5 ATR, 0.4% of equity at risk per trade. User's go 2026-10-05.
 
-**No new entries: insider filings missing between 2026-07-02 and 2026-09-25 (the data download is catching up).**
-
 ## Open positions
 
 None.
