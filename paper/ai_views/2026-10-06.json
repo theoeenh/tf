@@ -1,0 +1,180 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Rally headlines and Goldman's robotaxi focus vs a short-term rsi2 sell signal; below its 200-day average. Conflicting, no call."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.25,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Wells Fargo $1,000 target and a record Muse launch are positive, but already priced after +22% in a month. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [
+   "JPM earnings Tue 13 Oct"
+  ],
+  "reasoning": "Earnings on 13 Oct inside the horizon: gap risk either way, nothing in the headlines points a direction."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.2,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Headline: oil firms fell yesterday; no specific news. No call."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines stands out beyond generic coverage; no scheduled event for this asset in the next 7 days."
+ }
+]
