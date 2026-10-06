@@ -1,8 +1,8 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-06 09:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-06 10:20 UTC.
 
-**Equity $99,048** (-0.95%) · max drawdown -2.1% · 9 closed trades · 10 open
+**Equity $99,047** (-0.95%) · max drawdown -2.1% · 9 closed trades · 10 open
 
 ## Open positions
 
@@ -30,7 +30,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 ## Closed trades (newest first)
 
 - **2026-10-05 04:00 · LONG BTC · donchian_trend · -1.33R · $-522** (fees $257, event)  
-  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. AI analyst view +1: it agrees with this trade.  
+  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. News: neutral tone (+0.9σ vs usual), normal coverage. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.33R, best point +0.8R)
 - **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-362** (fees $86, event)  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.  
@@ -60,11 +60,11 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 ## Skipped by the learner (14)
 
 - 2026-10-02 02:00 SOL squeeze_breakout: would have made +0.51R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.11R (avg win +1.58R, avg loss -0.87R).
-- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.49R, avg loss -1.16R).
+- 2026-10-02 16:00 BTC rsi2_reversion: would have made -1.32R. SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.30R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.13R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.49R, avg loss -1.16R).
-- 2026-10-03 13:00 BTC squeeze_breakout: would have made +0.81R. SKIPPED by the ML learner: 33% estimated chance of profit, expected -0.05R (avg win +1.58R, avg loss -0.87R).
-- 2026-10-02 19:00 BTC rsi2_reversion: would have made +0.85R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.49R, avg loss -1.16R).
+- 2026-10-03 13:00 BTC squeeze_breakout: would have made +0.81R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.09R (avg win +1.58R, avg loss -0.87R).
+- 2026-10-02 19:00 BTC rsi2_reversion: would have made +0.85R. SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.28R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-04 23:00 ETH donchian_trend: would have made -1.67R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-04 01:00 ETH squeeze_breakout: would have made +0.21R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.12R (avg win +1.58R, avg loss -0.87R).
 - 2026-10-04 01:00 SOL squeeze_breakout: would have made -0.44R. SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.58R, avg loss -0.87R).

@@ -1,0 +1,299 @@
+{
+"AAPL|rsi2_reversion|+|2026-10-01 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35962011698793994,
+0.15401172455684142
+]
+},
+"AMD|donchian_trend|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3585156496669701,
+0.1270206710770565
+]
+},
+"AMD|squeeze_breakout|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3891947208306681,
+0.08476073880222734
+]
+},
+"BTC|donchian_trend|+|2026-10-02 05:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.09R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.29751902062430347,
+-0.09212124448180647
+]
+},
+"BTC|donchian_trend|+|2026-10-04 23:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.38135954683119644,
+0.2090916881474678
+]
+},
+"BTC|rsi2_reversion|+|2026-10-02 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.30R (avg win +2.49R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2357712895843582,
+-0.29682733289032903
+]
+},
+"BTC|rsi2_reversion|+|2026-10-02 19:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.28R (avg win +2.49R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.24059669409228568,
+-0.27926171789208454
+]
+},
+"BTC|squeeze_breakout|+|2026-10-03 13:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.09R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.3174307033964743,
+-0.09037875802618056
+]
+},
+"ETH|donchian_trend|+|2026-10-02 05:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.3113882195100819,
+-0.04229352680628784
+]
+},
+"ETH|donchian_trend|+|2026-10-04 23:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.30490825254421394,
+-0.06557403256448568
+]
+},
+"ETH|rsi2_reversion|+|2026-10-02 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.13R (avg win +2.49R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2815201610021345,
+-0.13029060822638938
+]
+},
+"ETH|squeeze_breakout|+|2026-10-02 03:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.12R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.30613940143939994,
+-0.11793508798099395
+]
+},
+"ETH|squeeze_breakout|+|2026-10-04 01:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.12R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.30503408410523625,
+-0.12063260588289587
+]
+},
+"GOOGL|rsi2_reversion|+|2026-10-01 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35959146535740877,
+0.15390742583739614
+]
+},
+"META|rsi2_reversion|+|2026-10-01 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3518855638873079,
+0.1258561198347964
+]
+},
+"META|squeeze_breakout|+|2026-10-05 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.41197836800517057,
+0.14036404314228024
+]
+},
+"MSFT|donchian_trend|+|2026-10-05 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3982068868061793,
+0.26961894042573153
+]
+},
+"MSFT|rsi2_reversion|+|2026-10-01 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3622957814009298,
+0.16375177658063955
+]
+},
+"MSFT|squeeze_breakout|+|2026-10-05 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.42840854974677045,
+0.18046176712577627
+]
+},
+"NVDA|donchian_trend|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35214241121347745,
+0.10412360766663686
+]
+},
+"NVDA|rsi2_reversion|+|2026-10-01 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.34527415046161897,
+0.1017890094735644
+]
+},
+"NVDA|squeeze_breakout|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.37440416781786534,
+0.04866451530343119
+]
+},
+"QQQ|donchian_trend|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3563020455518985,
+0.11906788001828406
+]
+},
+"QQQ|rsi2_reversion|+|2026-10-01 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3367986775912556,
+0.070936281350091
+]
+},
+"QQQ|squeeze_breakout|+|2026-10-02 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.41039891760768094,
+0.1365094073822991
+]
+},
+"SOL|donchian_trend|+|2026-10-02 05:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.33874124128604866,
+0.05597737246120704
+]
+},
+"SOL|rsi2_reversion|+|2026-10-02 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.49R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.27047994968862493,
+-0.17047959157768677
+]
+},
+"SOL|rsi2_reversion|+|2026-10-04 20:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.49R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2987016548984493,
+-0.06774590210247133
+]
+},
+"SOL|squeeze_breakout|+|2026-10-02 02:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.11R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.31053241598935316,
+-0.107213971948935
+]
+},
+"SOL|squeeze_breakout|+|2026-10-04 01:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.3373711952346783,
+-0.041714151000013744
+]
+},
+"USO|squeeze_breakout|+|2026-10-01 18:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3637363437761723,
+0.02262977809506128
+]
+},
+"XOM|rsi2_reversion|+|2026-10-05 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3286503300805014,
+0.04127436699437881
+]
+},
+"XOM|squeeze_breakout|+|2026-10-05 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 33% estimated chance of profit, expected -0.07R (avg win +1.58R, avg loss -0.87R).",
+"size": 1.0,
+"pred": [
+0.32764880655651596,
+-0.06544156094643949
+]
+}
+}
