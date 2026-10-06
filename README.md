@@ -1,177 +1,81 @@
-# tf – trading strategy research (BTC & Gold)
+# tf – a systematic trading research & paper-trading platform
 
-Backtesting toolkit to find a strategy that beats buy & hold on a
-risk-adjusted basis, for bitcoin (`BTC-USD`) and gold (`GLD`).
+An end-to-end quant pipeline, built and run like a small systematic fund: a strategy **finder** that
+searches for trading edges under strict anti-overfitting rules, **machine-learning** models trained
+walk-forward, and **six live paper-trading accounts** on [Alpaca](https://alpaca.markets) that execute
+automatically every 30 minutes through GitHub Actions — with stops at the broker, reconciliation
+checks and phone alerts.
 
-## Quick start
+> Paper money only. The goal is to find out, honestly, whether a retail-scale systematic edge exists —
+> and to have the infrastructure that would trade it safely if it does.
+
+## What it does
+
+| Part | What | Where |
+|---|---|---|
+| **Data** | Hourly / 5-min bars (Alpaca), daily S&P 1500 (2016→), SEC Form 4 insider trades (bulk + daily index), SEC 8-K earnings release times, FINRA short-sale volume, news & GDELT tone | `algo/data.py`, `algo/wide.py`, `algo/insider.py`, `algo/news.py` |
+| **Backtest engine** | Event-driven portfolio simulator: next-bar fills, ATR stops, OCO targets, trailing stops, real Alpaca fees and slippage, position sizing by risk, gross / open-risk limits | `algo/engine.py`, `algo/portfolio.py` |
+| **Strategy finder** | Grid + mutation search over strategy families, scored through **14 gates**; ideas are refined in *campaigns* (each round's best versions are improved, not replaced) | `algo/finder.py`, `algo/finder_families.py` |
+| **Machine learning** | Walk-forward meta-labeling learner on a shared pool of every signal's outcome (gradient boosting); cross-sectional stock ranker (ridge / GBM) on the S&P 1500; insider-cluster scorer | `algo/ml.py`, `algo/ranker.py`, `algo/insider_ml.py` |
+| **Live paper trading** | Six Alpaca accounts, each locked to its own keys: three hourly ML systems (A/B/C), a slot for a graduated strategy (D), the finder's best candidate on the S&P 1500 (E), and an options book — calls, puts and credit spreads (F) | `algo/paper.py`, `algo/runner.py`, `algo/options.py`, `algo/alpaca.py` |
+| **Operations** | GitHub Actions every 30 min, an all-day engine in shadow mode, nightly finder, twice-daily data jobs; reports, dashboard, ntfy phone alerts | `.github/workflows/`, `algo/daily.py`, `algo/dashboard.py` |
+
+## How a strategy earns real (paper) money
+
+Most backtested "edges" are luck found by trying many ideas. The finder is built to reject them:
+
+1. **Locked time splits** – a search period, a validation period, and a **vault** (the most recent
+   data) that no search ever loads. A candidate gets one vault test, ever.
+2. **14 gates** – at least 100 signals; positive information coefficient (IC) and stable ICIR;
+   beats *random entries* on the same assets; **deflated Sharpe ratio ≥ 0.90** (corrected for the
+   number of strategies tried — every attempt is counted in a registry); positive and profitable
+   after costs in validation; positive in ≥ 55% of months and in every market regime; works on most
+   assets / sectors; no decay; its parameter neighbours keep the edge (a plateau, not a spike).
+3. **Vault test**, then **6 weeks of forward paper trading** on data that did not exist at search
+   time — only then a live paper account.
+
+## Results so far (honest)
+
+- ~900 strategies tried. **None has passed all 14 gates yet.** The best — insider buying clusters
+  (3+ insiders buying in the open market within 90 days) in Industrials, held 60 sessions — passes
+  13/14 and fails only the deflated-Sharpe test. It trades in account E as a clearly labelled
+  early test.
+- The original hourly trend rules have **no edge** on a fair test (random stocks, ≈0R per trade);
+  crypto lost money after fees and was switched off. Kept running in A/B/C as a live baseline.
+- Adding FINRA short-sale data lifted the ML ranker from 8/14 to 10/14 gates: more data helped
+  more than more models.
+
+## Engineering practices
+
+- **No look-ahead**, enforced by tests: features use only data published before the decision
+  (e.g. short volume and insider filings from the next session; walk-forward refits only on
+  outcomes already known).
+- **Live decisions are never re-decided**: every ML verdict is stored, so replays can't rewrite
+  history when models or data are revised.
+- **Broker safety**: stops at the broker for every position, a reconciliation check after every
+  run, automatic stop restoration if a run fails, orders never re-sent blindly.
+- **Each account can only use its own API keys** (checked against the account number).
+- 135+ unit tests (`python -m pytest`).
+
+## Run it
 
 ```bash
 pip install -r requirements.txt
-python -m pytest              # engine correctness tests
-python -m algo.run            # downloads data from Yahoo, writes reports/<date>-auto/report.md
+python -m pytest                       # tests
+python -m algo.finder report           # finder leaderboard → paper/finder/report.md
+python -m algo.ranker                  # ML ranker walk-forward report
+PAPER_ACCOUNT=E python -m algo.runner update --no-fetch   # an account's plan, no orders sent
 ```
 
-No internet / Yahoo blocked? Put daily CSVs (`Date,Open,High,Low,Close,Volume`)
-in `data/BTC.csv`, `data/GOLD.csv`, `data/SPY.csv` and run `python -m algo.run --source csv`.
-`--source synthetic` runs on fake prices to check the pipeline only.
+Live trading needs Alpaca paper keys in the environment (`ALPACA_API_KEY_ID`,
+`ALPACA_API_SECRET_KEY`); in this repository they live only in GitHub secrets.
 
-## Test plan
-
-| Window | Use |
-|---|---|
-| Train: 10 years ago → 2022 | Tune the exit rule inside each exit family. |
-| Test: 2023–2025, 2026 YTD | Hold-out, never used for tuning. |
-| Last month | Context only: too few trades to judge anything. Use paper trading instead. |
-| Walk-forward 2020–2022 | Re-tune every January on the previous 4 years; used to **pick the finalist** per asset. |
-| Walk-forward 2023 → today | Same procedure, never used for any choice: **the real out-of-sample score**. |
-
-Benchmarks: the asset's own buy & hold, a 50/50 BTC + gold buy & hold for the
-portfolio, and the S&P 500 (`SPY`). Alpha is Jensen's alpha vs buy & hold.
-
-## Rules of the engine
-
-- $100,000 per asset (portfolio: $50k per asset), 1% of equity risked per trade, no leverage.
-- Signal on the daily close → fill on the next open (no look-ahead).
-- BTC is tested long-only and long/short; gold long-only. An opposite signal reverses the position.
-- Initial stop = entry ∓ k·ATR(14) (= 1R). Exit families:
-  - **fixed** – target at rr·R (2 ATR stop + 3:1 = "6:2").
-  - **trailing** – no target, stop trails the best close by t·ATR.
-  - **adaptive** – ~2:1 ("4:2") normally, 3:1 / 4:1 ("6:2" / "8:2") or no target + trailing
-    when ADX(14) ≥ 25 (strong trend) at entry.
-- Gaps through a level fill at the open; if a bar touches both levels the stop wins.
-- Costs on every fill: BTC 10 bps fee + 5 bps slippage, GLD 1 bp + 2 bps.
-  BTC shorts also pay 10%/yr borrow. Fees are reported in $ per strategy.
-
-## Strategies (`algo/strategies.py`)
-
-1. **donchian_trend** – breakout of the 55-day high/low, in the direction of the 200-day MA.
-2. **squeeze_breakout** – Bollinger band breakout (up or down) after a volatility squeeze.
-3. **rsi2_reversion** – RSI(2) < 10 in an uptrend (buy) / > 90 in a downtrend (sell).
-
-## Multi-asset system (`algo/system.py`, `algo/portfolio.py`)
-
-```bash
-python -m algo.portfolio_run   # daily (10 years) + hourly (2 years) study -> reports/<date>-portfolio/
-```
-
-- Universe: BTC, ETH, SOL, NVDA, TSLA, gold (GLD), silver (SLV).
-- One shared account; every asset runs all three strategies at once (21 "sleeves"), and on
-  hourly bars a strategy can trade many times a day.
-- Sized for ~20% yearly volatility (calibrated on training data), up to 2x leverage
-  (6%/yr on borrowed cash), max 15% of equity at risk across open trades.
-- **Skill test:** every result is compared with the same system using *random* entries.
-  Beating buy & hold in a bull market proves nothing; beating the random twin does.
-
-## Journal and learning (`algo/journal.py`)
-
-- Every trade records its **thinking** at entry (setup, trend, ADX regime, volatility, plan, $ at risk)
-  and a **diagnosis** at exit: `wrong_immediately`, `gave_back_profit`, `choppy_market`,
-  `counter_trend`, `gap_through_stop`, `fees_ate_edge`, `stop_too_tight`, `normal_loss`, or `none`.
-- The **learner** files each result under its setup (strategy, direction, regime, volatility,
-  trend alignment). If a setup's recent trades average below -0.1R, new trades with that setup
-  are skipped, but still followed without money, so a setup that starts working again is unblocked.
-  It only ever uses trades that had already closed: no look-ahead.
-
-## Paper trading (`algo/paper.py`)
-
-```bash
-python -m algo.paper init      # start a $100k paper account now (--interval 1h for hourly)
-python -m algo.paper update    # fetch new bars, trade them -> paper/status.md, trades.csv, orders.json
-```
-
-Deterministic replay from the start date on complete bars only, with the learner pre-trained on
-history. `paper/orders.json` holds the wanted positions with stops and targets, for a broker adapter.
-
-## Live paper trading on Alpaca (`algo/alpaca.py`, `.github/workflows/paper-hourly.yml`)
-
-```bash
-python -m algo.paper init --interval 1h --source alpaca   # hourly account on Alpaca's own prices
-python -m algo.alpaca check                                # keys + Alpaca paper balance
-python -m algo.alpaca sync                                 # dry run: orders it would send
-python -m algo.alpaca sync --send
-```
-
-- **Prices:** `--source alpaca` uses Alpaca's market data, the broker we trade on, since 2023. Hourly
-  stock bars are regular session only, cut on the clock hour (9:30-10:00, 10:00-11:00, … 15:00-16:00).
-  The free plan serves full-market stock data 15 minutes late, so a bar counts only once it is complete in
-  the data.
-- **Orders:** each sync cancels the last run's stops and targets, sends market orders for the difference
-  (one net position per symbol at Alpaca, the sum of our strategies), then protects every trade at the
-  broker: stop + target as one OCO order on whole shares, a stop on the fractional rest, a stop-limit on
-  crypto (Alpaca has no plain crypto stop). A stop therefore fires the moment the price gets there.
-- **Hourly job:** GitHub Actions runs `paper update` + `alpaca sync --send` at :20 past every hour and
-  commits `paper/status.md` etc. One-time setup: repo secrets `ALPACA_API_KEY_ID` and
-  `ALPACA_API_SECRET_KEY`; scheduled workflows only run from the default branch.
-- **Daily AI analyst:** a Claude routine at 9:20 New York refreshes the brief and writes the AI views.
-- Limits: no crypto shorts on Alpaca (held flat), stock shorts in whole shares, a stock order sent while
-  the market is closed is protected by the first run after it fills.
-
-## News, events and the AI analyst
-
-- `algo/news.py`: point-in-time news for backtests. GDELT daily news tone and coverage per asset since 2017
-  (day D only used from D+1), Fed decision dates (federalreserve.gov), earnings dates (Yahoo),
-  jobs-report dates; live Yahoo headlines for the brief.
-- The **news variant** (`long/short + learner + news`) adds a news-momentum strategy and lets the learner
-  judge news tone/coverage, upcoming events and AI views, each as its own "view".
-- `python -m algo.brief` writes `paper/brief.md`: events in the next 7 days, core holdings, per-asset
-  prices, signals, news and headlines, and the task for the AI analyst.
-- The **AI analyst** (a Claude session) reads the brief and writes `paper/ai_views/<date>.json`.
-  Views are scored against what the market did next (`algo/analyst.py`) and enter the learner.
-  They are **forward-only**: a language model already knows what happened after past headlines,
-  so a backtest of its past calls would be fake.
-- `python -m algo.daily` runs everything in order: paper update, then the brief.
-
-## Upgrades and the machine-learning learner (`algo/ml.py`, `algo/leaderboard.py`)
-
-```bash
-python -m algo.portfolio_run --source alpaca --hourly-only --upgrades   # test every version
-python -m algo.leaderboard                                            # daily race + strategy leaderboard
-```
-
-- **Daily trend filter** (`trend`): on hourly bars, take a signal only in the direction of the daily
-  trend (yesterday's close vs its 50-day average).
-- **Event blackout** (`blackout`): be flat through scheduled events that gap prices: earnings day and the
-  bar before it, the Fed decision afternoon, the jobs report. Dates are known in advance.
-- **Hourly news** (Alpaca / Benzinga): articles in the last hour, coverage over 24 h vs usual, headline tone.
-- **ML learner** (`ml`): meta-labelling. The strategies propose trades; gradient-boosted trees estimate each
-  trade's chance of profit from ~30 features (regime, volatility, momentum, trend, news, events, AI view,
-  time, how the strategy has done lately) and take it only if the expected result is positive. Refitted
-  every 30 days on trades that had already closed, so every prediction is out of sample. With `sizing`
-  it also bets more on trades with a better expected result (0.5x to 2x).
-- **The race** (`algo/leaderboard.py`, daily): every version is paper-traded side by side from the paper
-  start date and ranked, with the random-entry twins as the bar to beat, plus a leaderboard of every
-  strategy on every asset (last 7 / 30 days, skipped trades apart).
-
-## Core holdings (`algo/core.py`)
-
-Momentum: each month hold the 5 strongest of a fixed list (big tech of end-2016, crypto, metals) by
-12-month return, above their 200-day average, weighted by inverse volatility. The rule-based,
-hindsight-free way of "owning NVDA in 2017". Compared with 5 random picks under the same rules.
-
-## Layout
+## Repository map
 
 ```
-algo/data.py        download, cache and validate prices
-algo/indicators.py  ATR, RSI, Bollinger, SMA
-algo/strategies.py  entry signals
-algo/engine.py      backtester (bracket exits, costs, sizing)
-algo/metrics.py     Sharpe, Sortino, drawdown, alpha/beta, trade stats
-algo/research.py    periods, exit-rule grid search, walk-forward
-algo/run.py         single-asset study (BTC & gold) and its report
-algo/portfolio.py   multi-asset, multi-strategy portfolio engine
-algo/journal.py     trade reasoning, error diagnosis, learner
-algo/system.py      universe, costs, exit rules, risk settings
-algo/portfolio_run.py  multi-asset study and its report
-algo/paper.py       paper trading
-algo/news.py        GDELT news, Fed / earnings / jobs calendars, headlines
-algo/analyst.py     AI analyst views: storage, scoring, learner input
-algo/brief.py       daily brief (events ahead, news, signals, AI task)
-algo/core.py        momentum core holdings
-algo/daily.py       daily routine
-algo/alpaca.py      Alpaca paper account: market orders, broker-side stops and targets, live prices
-algo/ml.py          machine-learning learner (meta-labelling, walk-forward)
-algo/leaderboard.py daily race of all versions + strategy leaderboard
-tests/              engine & no-look-ahead tests
+algo/        the code (engine, finder, ML, accounts, broker adapter, reports)
+tests/       unit tests, incl. no-look-ahead tests
+paper/       live account state (status.md per account), finder registry & reports, daily reports
+.github/     the automation (hourly trading, nightly finder, data jobs)
+docs/        the first version of the project: a BTC & gold backtester
 ```
-
-Educational research project, not investment advice.
