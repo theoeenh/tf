@@ -333,6 +333,21 @@ def insider_low_short(prices: dict, buyers: int = 2, days: int = 90, max_rank: f
     return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
 
 
+def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
+    """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
+    (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
+    surprise vs a year earlier, f_ey = earnings yield) ranks in the top `1 - min_rank` of the S&P 1500
+    that day. Fundamentals count from the session after their 10-Q / 10-K was filed."""
+    from . import fundamentals
+
+    sig = insider_cluster(prices, buyers=buyers, days=90)
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    f = fundamentals.features(idx, close)[feature]
+    rank = f.rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) >= min_rank)).astype(int) for a, s in sig.items()}
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
@@ -358,6 +373,10 @@ WIDE_FAMILIES = {
     "insider_low_short": (insider_low_short, {"buyers": [2, 3], "max_rank": [0.5, 0.3]},
                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider clusters in companies that just beat (SUE) or are cheap on earnings (SEC XBRL, 2026-10-06)
+    "insider_fund": (insider_fund, {"buyers": [2, 3], "feature": ["f_sue", "f_ey"]},
+                     {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                      "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

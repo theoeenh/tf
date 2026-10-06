@@ -328,6 +328,30 @@ def test_insider_low_short_uses_only_published_short_data(monkeypatch):
     assert all(a[k].equals(b[k]) for k in a)
 
 
+def test_insider_fund_uses_only_filed_fundamentals(monkeypatch):
+    """The fundamentals filter on day t reads only filings made before t."""
+    from algo import finder_families as ff, fundamentals
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    rows = [(t, "eps_q", end, end + pd.Timedelta(days=30), v) for t, base in
+            (("AAA", 1.0), ("BBB", 0.5), ("CCC", 0.2), ("DDD", 0.1))
+            for k, (end, v) in enumerate((pd.Timestamp("2018-03-31") + pd.DateOffset(months=3 * i), base * i + (i % 3))
+                                         for i in range(10))]
+    fd = pd.DataFrame(rows, columns=["ticker", "item", "end", "filed", "val"])
+    monkeypatch.setattr(fundamentals, "load", lambda: fd)
+    a = ff.insider_fund(prices, feature="f_sue", min_rank=0.5)
+    # a filing made on the signal day (its numbers known from the next session) changes nothing
+    late = pd.DataFrame([("AAA", "eps_q", pd.Timestamp("2020-12-31"), sig_day, -100.0)], columns=fd.columns)
+    monkeypatch.setattr(fundamentals, "load", lambda: pd.concat([fd, late], ignore_index=True))
+    b = ff.insider_fund(prices, feature="f_sue", min_rank=0.5)
+    assert sum(int(a[k].loc[sig_day]) for k in a) >= 1
+    assert all(a[k].equals(b[k]) for k in a)
+
+
 def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     from algo import wide
 
