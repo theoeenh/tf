@@ -285,13 +285,13 @@ def earnings_overreaction(prices: dict, z: float = 2.0, volume: float = 1.5) -> 
     return earnings_reaction(prices, z=z, volume=volume, side="down")
 
 
-def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02, short: bool = False) -> dict:
+def ml_rank(prices: dict, model: str = "gbm", top: float = 0.02, short: bool = False, fund: bool = False) -> dict:
     """The ML ranker (algo/ranker.py): every Friday, buy the stocks in the top `top` share of the
     walk-forward score (each score from a model trained only on the past). A signal every week the
     stock is in the top; the exit rule decides the hold."""
     from . import ranker
 
-    s = ranker.scores(prices, model, short)  # short: + FINRA short-selling features
+    s = ranker.scores(prices, model, short, fund)  # short: + FINRA short selling; fund: + SEC fundamentals
     out = {}
     if s.empty:
         return {a: pd.Series(0, df.index) for a, df in prices.items()}
@@ -351,6 +351,9 @@ WIDE_FAMILIES = {
     # the same ranker with FINRA short-selling features added (2026-10-05): its own 4 tries
     "ml_rank_short": (lambda prices, **p: ml_rank(prices, short=True, **p), {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
                       {"rules": ["hold 20 days"], "segments": ["sp1500"], "trend": False}),
+    # the ranker with SEC fundamentals added too (2026-10-06): its own 4 tries
+    "ml_rank_fund": (lambda prices, **p: ml_rank(prices, short=True, fund=True, **p), {"model": ["ridge", "gbm"], "top": [0.02, 0.05]},
+                     {"rules": ["hold 20 days"], "segments": ["sp1500"], "trend": False}),
     # insider clusters where short sellers are not against the stock (FINRA short volume, 2026-10-05)
     "insider_low_short": (insider_low_short, {"buyers": [2, 3], "max_rank": [0.5, 0.3]},
                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
