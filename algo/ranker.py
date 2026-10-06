@@ -157,7 +157,12 @@ _CACHE: dict = {}
 def scores(prices: dict, kind: str, short: bool = False, fund: bool = False) -> pd.Series:
     """Cached walk-forward scores for this universe and data end."""
     feats = FEATURES + (SHORT_FEATURES if short else []) + (FUND_FEATURES if fund else [])
-    key = hashlib.sha1((kind + ("+short" if short else "") + ("+fund" if fund else "") + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
+    tag = ""
+    if fund:  # the fundamentals file changes weekly (and with any fix): part of the key
+        from . import fundamentals
+
+        tag = "+fund" + (hashlib.sha1(fundamentals.PATH.read_bytes()).hexdigest()[:8] if fundamentals.PATH.exists() else "")
+    key = hashlib.sha1((kind + ("+short" if short else "") + tag + str(max(df.index[-1] for df in prices.values())) + ",".join(sorted(prices)))
                        .encode()).hexdigest()[:12]
     if key in _CACHE:
         return _CACHE[key]

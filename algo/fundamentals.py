@@ -176,8 +176,9 @@ def _ttm(q: pd.DataFrame) -> pd.DataFrame:
     """Trailing 4 quarters (only when the 4 ends span about a year), filed when the last was."""
     q = q.sort_values("end").reset_index(drop=True)
     span = (q["end"] - q["end"].shift(3)).dt.days
-    out = q.assign(val=q["val"].rolling(4).sum().where(span.between(250, 290)),
-                   filed=pd.to_datetime(q["filed"].astype("int64").rolling(4).max()))
+    # the latest of the 4 filing dates (date math only: an int64 cast depends on the stored unit)
+    filed = pd.concat([q["filed"].shift(k) for k in range(4)], axis=1).max(axis=1, skipna=False)
+    out = q.assign(val=q["val"].rolling(4).sum().where(span.between(250, 290)), filed=filed)
     return out.dropna(subset=["val"])
 
 
@@ -220,7 +221,7 @@ def features(dates: pd.DatetimeIndex, close: pd.DataFrame) -> dict[str, pd.DataF
             yoy = (r["end"] - r["end"].shift(4)).dt.days.between(350, 380)
             prev = r["val"].shift(4).where(yoy)
             g_ = r.assign(val=(r["val"] / prev.where(prev > 0) - 1).clip(-1, 5),
-                          filed=pd.to_datetime(np.maximum(r["filed"].astype("int64"), r["filed"].shift(4).fillna(r["filed"]).astype("int64"))))
+                          filed=pd.concat([r["filed"], r["filed"].shift(4)], axis=1).max(axis=1))
             out["f_rev_g"][t] = _known(g_, dates)
         out["f_sue"][t] = _known(_sue(get("eps_q")), dates)
     return out

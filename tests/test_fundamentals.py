@@ -28,10 +28,13 @@ def test_features_only_after_the_filing_day():
     for k, (end, filed) in enumerate([("2020-03-31", "2020-05-01"), ("2020-06-30", "2020-08-03"),
                                       ("2020-09-30", "2020-11-02"), ("2020-12-31", "2021-02-19")]):
         rows += [("S", "ni_q", end, filed, 10.0 * (k + 1)), ("S", "cfo_q", end, filed, 10.0)]
-    rows += [("S", "assets", "2020-12-31", "2021-02-19", 1000.0), ("S", "shares", "2021-01-31", "2021-02-19", 10.0),
-             ("S", "equity", "2020-12-31", "2021-02-19", 500.0)]
+    rows += [("S", "assets", "2020-09-30", "2020-11-02", 1000.0), ("S", "shares", "2020-10-25", "2020-11-02", 10.0),
+             ("S", "equity", "2020-09-30", "2020-11-02", 500.0)]
     df = pd.DataFrame(rows, columns=["ticker", "item", "end", "filed", "val"])
-    df["end"], df["filed"] = pd.to_datetime(df["end"]), pd.to_datetime(df["filed"])
+    # dates in microseconds, as read from the CSV: an int64 cast that assumed nanoseconds once put
+    # every TTM filing date in 1970, i.e. the latest figures were known from the start (a leak)
+    df["end"] = pd.to_datetime(df["end"]).astype("datetime64[us]")
+    df["filed"] = pd.to_datetime(df["filed"]).astype("datetime64[us]")
     F_load = F.load
     try:
         F.load = lambda: df
