@@ -25,7 +25,7 @@
     "asset": "MSFT",
     "ticker": "MSFT",
     "strategy": "donchian_trend",
-    "qty": 31.291710442230215,
+    "qty": 31.41361657524413,
     "stop": 516.4298531226193,
     "target": 550.2350797547613,
     "mark": 525.5,
@@ -36,7 +36,7 @@
     "asset": "MSFT",
     "ticker": "MSFT",
     "strategy": "squeeze_breakout",
-    "qty": 26.07576913143862,
+    "qty": 26.1773550190508,
     "stop": 514.1761713471433,
     "target": null,
     "mark": 525.5,
@@ -47,7 +47,7 @@
     "asset": "META",
     "ticker": "META",
     "strategy": "squeeze_breakout",
-    "qty": 17.113284213092623,
+    "qty": 17.179954084189568,
     "stop": 722.2227495095349,
     "target": null,
     "mark": 742.0765,
@@ -80,7 +80,7 @@
     "asset": "XOM",
     "ticker": "XOM",
     "strategy": "rsi2_reversion",
-    "qty": 116.81148464609842,
+    "qty": 117.26655840792142,
     "stop": 160.1205430977192,
     "target": 172.19407870684233,
     "mark": 164.02,
@@ -110,14 +110,14 @@
     "r": 0.32669510078159403
   },
   {
-    "asset": "TSLA",
-    "ticker": "TSLA",
+    "asset": "QQQ",
+    "ticker": "QQQ",
     "strategy": "opening_range",
-    "qty": 53.80306245170927,
-    "stop": 373.2664606606845,
-    "target": 393.013840178631,
-    "mark": 378.84,
-    "entry": 379.8489205,
-    "r": -0.15327408364483994
+    "qty": 51.49831327774139,
+    "stop": 750.6616167822233,
+    "target": 764.4928390355531,
+    "mark": 756.21,
+    "entry": 755.2720241999999,
+    "r": 0.20344748630750378
   }
 ]
