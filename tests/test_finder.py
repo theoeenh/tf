@@ -326,3 +326,20 @@ def test_insider_low_short_uses_only_published_short_data(monkeypatch):
     b = ff.insider_low_short(prices, max_rank=0.5)
     assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
     assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
+    from algo import wide
+
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    cols = dict(traded=None, ticker="X", code="P", shares=1, price=1.0)
+    pd.DataFrame([dict(accession="a", owner="o1", filed="2026-07-01", **cols)]).to_csv(
+        tmp_path / "insider_recent.csv.gz", index=False)
+    (tmp_path / "insider_recent_days.txt").write_text("20260701\n")
+    other = tmp_path / "other"; other.mkdir()
+    pd.DataFrame([dict(accession="a", owner="o1", filed="2026-07-01 00:00:00", **cols),
+                  dict(accession="b", owner="o2", filed="2026-07-02", **cols)]).to_csv(
+        other / "r.csv.gz", index=False)
+    (other / "d.txt").write_text("20260702\n")
+    assert wide.merge_insider_recent(other / "r.csv.gz", other / "d.txt") == 2
+    assert (tmp_path / "insider_recent_days.txt").read_text().split() == ["20260701", "20260702"]

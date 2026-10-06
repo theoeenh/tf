@@ -52,12 +52,17 @@ jobs:
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt
-          git diff --cached --quiet && exit 0
-          git commit -q -m "Recent Form 4 filings (${{ inputs.sector || 'Industrials' }}): backfill from GitHub Actions"
-          git checkout -q -- .
+          mine="$RUNNER_TEMP/mine"; mkdir -p "$mine"
+          cp data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt "$mine/" 2>/dev/null || exit 0
           for i in 1 2 3 4 5; do
-            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q && exit 0
+            # the file is compressed (git cannot merge it): take the branch as it is now, add our rows
+            git fetch -q origin "${GITHUB_REF_NAME}"
+            git reset -q --hard "origin/${GITHUB_REF_NAME}"
+            python -c "from algo import wide; print(wide.merge_insider_recent('$mine/insider_recent.csv.gz', '$mine/insider_recent_days.txt'), 'rows')"
+            git add data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt
+            git diff --cached --quiet && exit 0
+            git commit -q -m "Recent Form 4 filings (${{ inputs.sector || 'Industrials' }}): backfill from GitHub Actions"
+            git push -q && exit 0
             sleep $((RANDOM % 10 + 3))
           done
           exit 1

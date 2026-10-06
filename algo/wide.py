@@ -248,6 +248,21 @@ def _read_trades(path) -> pd.DataFrame:
     return df
 
 
+def merge_insider_recent(other_csv, other_days) -> int:
+    """Union of another copy of the recent filings (e.g. a backfill run's) with ours: rows and days
+    read. Used when two runs saved the file at the same time (a binary file git cannot merge)."""
+    path, done_path = WIDE_DIR / "insider_recent.csv.gz", WIDE_DIR / "insider_recent_days.txt"
+    parts = [_read_trades(p) for p in (path, other_csv) if os.path.exists(p)]
+    df = pd.concat(parts, ignore_index=True).drop_duplicates(["accession", "owner", "code", "shares", "price"])
+    df.sort_values("filed").to_csv(path, index=False)
+    days = set()
+    for p in (done_path, other_days):
+        if os.path.exists(p):
+            days |= set(open(p).read().split())
+    done_path.write_text("\n".join(sorted(days)) + "\n")
+    return len(df)
+
+
 def load_insider() -> pd.DataFrame:
     """Quarterly SEC data sets plus the recent filings not in a published quarter yet."""
     parts = [_read_trades(p) for p in (WIDE_DIR / "insider.csv.gz", WIDE_DIR / "insider_recent.csv.gz")
