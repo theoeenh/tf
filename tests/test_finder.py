@@ -352,6 +352,28 @@ def test_insider_fund_uses_only_filed_fundamentals(monkeypatch):
     assert all(a[k].equals(b[k]) for k in a)
 
 
+def test_insider_after_earnings_uses_only_past_releases(monkeypatch):
+    """A cluster counts only after a release already out at the signal session (none from the future),
+    and only when that release's reaction was negative."""
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-04", periods=80)
+    close = pd.Series(100.0, days)
+    close.iloc[30] = 95.0  # reaction to the release of day 30: -5%
+    prices = {"AAA": pd.DataFrame({"Close": close}), "BBB": pd.DataFrame({"Close": pd.Series(100.0, days)})}
+    sig_day = days[45]
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    e = pd.DataFrame({"ticker": ["AAA", "AAA"], "day": [days[30], days[50]]})  # day 50: after the signal
+    monkeypatch.setattr(wide, "load_earnings", lambda: e)
+    a = ff.insider_after_earnings(prices, window=20)
+    assert a["AAA"].loc[sig_day] == 1 and a["BBB"].sum() == 0
+    monkeypatch.setattr(wide, "load_earnings", lambda: e.iloc[1:])  # only the future release
+    b = ff.insider_after_earnings(prices, window=20)
+    assert b["AAA"].sum() == 0
+    assert ff.insider_after_earnings(prices, window=10)["AAA"].sum() == 0  # 15 sessions after: too late
+
+
 def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     from algo import wide
 

@@ -333,6 +333,35 @@ def insider_low_short(prices: dict, buyers: int = 2, days: int = 90, max_rank: f
     return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
 
 
+def insider_after_earnings(prices: dict, buyers: int = 2, window: int = 30, max_reaction: float = 0.0) -> dict:
+    """Insiders buying right after their company's earnings: a cluster of open-market purchases
+    (insider_cluster, 90 days) that forms within `window` sessions after an earnings release whose
+    first-reaction session return was at most `max_reaction` (0.0: the market did not like it).
+    Insiders may only trade in the window after results; buying after a bad reaction says they think
+    the market got it wrong. Release times: SEC 8-K item 2.02 (wide.load_earnings); everything is
+    known at the signal session's close."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=90)
+    e = wide.load_earnings()
+    out = {}
+    for a, df in prices.items():
+        s = sig[a].to_numpy().copy()
+        days = e.loc[e["ticker"] == a, "day"] if len(e) else []
+        react = np.full(len(df), -1)  # the last earnings reaction session at or before each session
+        if len(days):
+            close = df["Close"].to_numpy()
+            ret = np.r_[np.nan, close[1:] / close[:-1] - 1]
+            for p in np.unique(df.index.searchsorted(pd.DatetimeIndex(days), side="left")):
+                if 0 < p < len(df) and ret[p] <= max_reaction:
+                    react[p] = p
+            react = np.maximum.accumulate(react)
+        idx = np.arange(len(df))
+        ok = (react >= 0) & (idx - react <= window)
+        out[a] = pd.Series((s.astype(bool) & ok).astype(int), df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -377,6 +406,10 @@ WIDE_FAMILIES = {
     "insider_fund": (insider_fund, {"buyers": [2, 3], "feature": ["f_sue", "f_ey"]},
                      {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                       "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider clusters right after an earnings release the market did not like (2026-10-07)
+    "insider_after_earnings": (insider_after_earnings, {"buyers": [2, 3], "window": [20, 40]},
+                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
