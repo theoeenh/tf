@@ -188,6 +188,15 @@
 -0.354539405412414
 ]
 },
+"GOOGL|opening_range|+|2026-10-07 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.08R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.43564231262549313,
+-0.07537819865247364
+]
+},
 "GOOGL|rsi2_reversion|+|2026-10-01 14:00": {
 "skip": false,
 "reason": "",
@@ -330,6 +339,15 @@
 "pred": [
 0.34108835099599183,
 0.0864278487726361
+]
+},
+"NVDA|rsi2_reversion|+|2026-10-07 18:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.33986715814498575,
+0.08198437179456064
 ]
 },
 "NVDA|squeeze_breakout|+|2026-10-02 14:00": {
