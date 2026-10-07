@@ -1,0 +1,200 @@
+[
+ {
+  "asset": "BTC",
+  "bias": -1,
+  "confidence": 0.3,
+  "horizon_days": 3,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Headlines today report bitcoin below $84,000 with ~$550M of leveraged positions liquidated and risk appetite fading; liquidation cascades can run a few more days, but the 1-month trend (+13%) is still up, so only a weak, short bearish lean."
+ },
+ {
+  "asset": "ETH",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 3,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Same crypto-wide liquidation headlines as BTC and news tone below usual (-1.1 sigma); weak short-term bearish lean against an up-trend."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Caught in the same crypto sell-off headlines but nothing specific to SOL; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Positive demand headlines (SpaceX seeking $40B to buy Nvidia chips) are already public and the stock is up 5% on the week; no edge beyond the trend."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Q3 deliveries beat is already known and priced (+7.9% on the week); the rsi2 short signal fights the news, so no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Down 6% on the month below its 200-day average, with rising-rate headlines; nothing new today."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Same as gold: weak trend, no fresh news."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Apple product event Oct 13 (per headlines)"
+  ],
+  "reasoning": "Product event on 13 Oct is a scheduled catalyst but rarely moves the stock much; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Strong trend (ADX 39) and routine news; the squeeze signal handles it, no extra edge."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Routine headlines; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "UK investigation into Instagram Instants is a small regulatory risk; no clear edge."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Routine news (Unity partnership); no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Very strong month (+36%) with bullish CEO comments but also valuation-concern headlines; balanced, no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Mixed headlines (AI revenue growth vs 'continues to disappoint'); no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down-trend with mixed headlines; no new information."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 6,
+  "key_events": [
+   "JPM earnings Tue 13 Oct"
+  ],
+  "reasoning": "Earnings on 13 Oct can gap the stock either way; no directional edge from the headlines."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Routine news; oil headlines mixed; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 3,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Headlines today: Coinbase and Robinhood fall as the crypto rally faces a 'perfect storm' with liquidations; weak short-term bearish lean tied to crypto prices."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Headlines say the Dow fell 400 points as yields jumped ahead of the Fed minutes, while the Nasdaq made records on narrow breadth; mixed, no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Rising yields usually weigh on small caps, but nothing clear enough for a call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed minutes today (7 Oct)"
+  ],
+  "reasoning": "Yields jumping and 'rates are going up' headlines continue the down-trend, but the Fed minutes can move bonds either way; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Middle East tension and diesel export headlines are older and mixed; no view."
+ }
+]
