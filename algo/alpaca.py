@@ -518,12 +518,15 @@ def verify(alert: bool = False) -> list[str]:
         elif abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):  # same 1-2% tolerance as plan()
             problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
         held = sum(q for s, q in have.items() if norm(s) == sym)
-        covered = stops.get(sym, 0.0)
+        # an exit decided after the close is a market order queued for the next open: those shares
+        # are on their way out, they need no stop
+        exiting = max(0.0, -math.copysign(1.0, held) * pending.get(sym, 0.0)) if held else 0.0
+        covered = stops.get(sym, 0.0) + exiting
         # the fractional rest's stop is a day order (Alpaca's rule), gone after the close until the next
         # run renews it: whole shares covered is enough
         whole_covered = abs(held) - covered < 1.0 and covered >= math.floor(abs(held) + 1e-9) > 0
         if abs(held) * px >= 1.0 and covered < 0.98 * abs(held) and not whole_covered:  # dust (< $1): no stop
-            problems.append(f"{sym}: {abs(held):g} held, only {stops.get(sym, 0.0):g} covered by a stop")
+            problems.append(f"{sym}: {abs(held):g} held, only {covered:g} covered by a stop")
     if alert and problems:
         from . import notify
 

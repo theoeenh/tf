@@ -182,6 +182,19 @@ def test_verify_all_good(monkeypatch):
     assert alpaca.verify() == []
 
 
+def test_verify_counts_a_queued_exit_as_covered(monkeypatch):
+    """An exit decided after the close is a market sell queued for the next open: those shares are on
+    their way out, not unprotected (2026-10-07: NVDA trailing stop hit on the last bar)."""
+    from algo import alpaca
+
+    stop = {"symbol": "NVDA", "side": "sell", "type": "stop", "qty": "68"}
+    exit_ = {"symbol": "NVDA", "side": "sell", "type": "market", "qty": "55.821786"}
+    _fake_alpaca(monkeypatch, {"NVDA": 123.98}, [stop, exit_], {"NVDA": 68.16})
+    assert alpaca.verify() == []
+    _fake_alpaca(monkeypatch, {"NVDA": 123.98}, [exit_], {"NVDA": 68.16})
+    assert alpaca.verify() == ["NVDA: 123.98 held, only 55.8218 covered by a stop"]  # the rest needs its stop
+
+
 def test_failed_run_puts_the_stops_back(monkeypatch):
     from algo import alpaca
 
