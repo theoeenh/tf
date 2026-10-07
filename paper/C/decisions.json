@@ -323,6 +323,15 @@
 0.07667331312553483
 ]
 },
+"NVDA|rsi2_reversion|+|2026-10-07 17:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.34108835099599183,
+0.0864278487726361
+]
+},
 "NVDA|squeeze_breakout|+|2026-10-02 14:00": {
 "skip": false,
 "reason": "",
