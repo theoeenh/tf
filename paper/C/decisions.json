@@ -53,6 +53,15 @@
 0.09970426066268245
 ]
 },
+"AVGO|opening_range|+|2026-10-07 16:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.4931257881008557,
+0.03946775361334903
+]
+},
 "AVGO|rsi2_reversion|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
@@ -188,6 +197,15 @@
 0.1253826211145137
 ]
 },
+"GOOGL|rsi2_reversion|+|2026-10-07 15:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.40378971712495815,
+0.31457533314285646
+]
+},
 "META|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",
@@ -251,6 +269,15 @@
 0.02662123806608141
 ]
 },
+"MSFT|rsi2_reversion|+|2026-10-07 15:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.33541751919329443,
+0.06579375274016763
+]
+},
 "MSFT|squeeze_breakout|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
@@ -287,6 +314,15 @@
 0.06452509722633049
 ]
 },
+"NVDA|rsi2_reversion|+|2026-10-07 15:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3384075293655659,
+0.07667331312553483
+]
+},
 "NVDA|squeeze_breakout|+|2026-10-02 14:00": {
 "skip": false,
 "reason": "",
@@ -312,6 +348,15 @@
 "pred": [
 0.4734,
 0.0
+]
+},
+"QQQ|opening_range|+|2026-10-07 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 47% estimated chance of profit, expected -0.00R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.47142893101525996,
+-0.0038802901951484614
 ]
 },
 "QQQ|rsi2_reversion|+|2026-10-01 13:00": {
