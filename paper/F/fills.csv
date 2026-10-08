@@ -55,3 +55,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-08 14:13:38,bear_call_spread,IWM,IWM261113C00302000,sell,4,4,0.44,filled,"close: half the credit earned (buy back $340 vs $696 received)"
 2026-10-08 15:27:47,bear_call_spread,IWM,IWM261120C00295000,buy,4,4,1.27,filled,"open: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9"
 2026-10-08 15:27:49,bear_call_spread,IWM,IWM261120C00286000,sell,4,4,3.2,filled,"open: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9"
+2026-10-08 18:27:12,bull_put_spread,NVDA,NVDA261120P00225000,buy,2,2,8.1,filled,"close: account A closed the stock"
+2026-10-08 18:27:14,bull_put_spread,NVDA,NVDA261120P00210000,sell,2,2,3.7,filled,"close: account A closed the stock"
+2026-10-08 18:27:17,long_call,NVDA,NVDA261106C00235000,sell,2,2,6.65,filled,"close: account A closed the stock"
+2026-10-08 18:27:20,long_call,USO,USO261113C00145500,buy,2,2,10.55,filled,"open: USO Nov 13 2026 145.5 Call, delta +0.60"
+2026-10-08 18:27:44,bull_put_spread,USO,USO261120P00128000,buy,3,0,,canceled,"open: sell 139 / buy 128 puts, 2026-11-20, credit 2.62 on width 11"

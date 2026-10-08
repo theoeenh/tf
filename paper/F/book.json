@@ -52,28 +52,6 @@
    "id": "long_put-NFLX-2026-10-05"
   },
   {
-   "playbook": "bull_put_spread",
-   "underlying": "NVDA",
-   "legs": [
-    {
-     "symbol": "NVDA261120P00210000",
-     "qty": 2,
-     "price": 2.83
-    },
-    {
-     "symbol": "NVDA261120P00225000",
-     "qty": -2,
-     "price": 6.15
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": -664.0,
-   "max_loss": 2344.0,
-   "desc": "sell 225 / buy 210 puts, 2026-11-20, credit 3.28 on width 15",
-   "opened": "2026-10-05 14:27",
-   "id": "bull_put_spread-NVDA-2026-10-05"
-  },
-  {
    "playbook": "bear_call_spread",
    "underlying": "NFLX",
    "legs": [
@@ -111,23 +89,6 @@
    "desc": "SLV Nov 20 2026 58 Put, delta -0.60",
    "opened": "2026-10-05 14:57",
    "id": "long_put-SLV-2026-10-05"
-  },
-  {
-   "playbook": "long_call",
-   "underlying": "NVDA",
-   "legs": [
-    {
-     "symbol": "NVDA261106C00235000",
-     "qty": 2,
-     "price": 9.9
-    }
-   ],
-   "expiry": "2026-11-06",
-   "cost": 1980.0,
-   "max_loss": 2016.0,
-   "desc": "NVDA Nov 06 2026 235 Call, delta +0.57",
-   "opened": "2026-10-05 15:25",
-   "id": "long_call-NVDA-2026-10-05"
   },
   {
    "playbook": "long_call",
@@ -233,6 +194,23 @@
    "desc": "sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9",
    "opened": "2026-10-08 15:27",
    "id": "bear_call_spread-IWM-2026-10-08"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "USO",
+   "legs": [
+    {
+     "symbol": "USO261113C00145500",
+     "qty": 2,
+     "price": 10.55
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": 2110.0,
+   "max_loss": 2146.0,
+   "desc": "USO Nov 13 2026 145.5 Call, delta +0.60",
+   "opened": "2026-10-08 18:27",
+   "id": "long_call-USO-2026-10-08"
   }
  ],
  "closed": [
@@ -260,6 +238,51 @@
    "closed": "2026-10-08 14:12",
    "why_closed": "half the credit earned (buy back $340 vs $696 received)",
    "pnl": 372.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "NVDA",
+   "legs": [
+    {
+     "symbol": "NVDA261120P00210000",
+     "qty": 2,
+     "price": 2.83
+    },
+    {
+     "symbol": "NVDA261120P00225000",
+     "qty": -2,
+     "price": 6.15
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -664.0,
+   "max_loss": 2344.0,
+   "desc": "sell 225 / buy 210 puts, 2026-11-20, credit 3.28 on width 15",
+   "opened": "2026-10-05 14:27",
+   "id": "bull_put_spread-NVDA-2026-10-05",
+   "closed": "2026-10-08 18:26",
+   "why_closed": "account A closed the stock",
+   "pnl": -216.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "NVDA",
+   "legs": [
+    {
+     "symbol": "NVDA261106C00235000",
+     "qty": 2,
+     "price": 9.9
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": 1980.0,
+   "max_loss": 2016.0,
+   "desc": "NVDA Nov 06 2026 235 Call, delta +0.57",
+   "opened": "2026-10-05 15:25",
+   "id": "long_call-NVDA-2026-10-05",
+   "closed": "2026-10-08 18:26",
+   "why_closed": "account A closed the stock",
+   "pnl": -650.0
   }
  ]
 }
