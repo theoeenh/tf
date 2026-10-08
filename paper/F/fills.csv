@@ -53,3 +53,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-08 13:58:01,bear_call_spread,IWM,IWM261113C00302000,sell,4,0,,canceled,"close: half the credit earned (buy back $344 vs $696 received)"
 2026-10-08 14:13:36,bear_call_spread,IWM,IWM261113C00294000,buy,4,4,1.25,filled,"close: half the credit earned (buy back $340 vs $696 received)"
 2026-10-08 14:13:38,bear_call_spread,IWM,IWM261113C00302000,sell,4,4,0.44,filled,"close: half the credit earned (buy back $340 vs $696 received)"
+2026-10-08 15:27:47,bear_call_spread,IWM,IWM261120C00295000,buy,4,4,1.27,filled,"open: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9"
+2026-10-08 15:27:49,bear_call_spread,IWM,IWM261120C00286000,sell,4,4,3.2,filled,"open: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9"
