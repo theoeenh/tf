@@ -113,11 +113,24 @@ def positions() -> dict[str, float]:
     return out
 
 
-def wanted() -> dict[str, float]:
-    """Net wanted quantity per Alpaca symbol, from paper/orders.json."""
+def through_stop(t: dict, live: dict[str, float] | None) -> bool:
+    """Is the live price already through this trade's stop? Then the trade is over: a stop at Alpaca
+    filled between two bars (the paper account only sees it when the bar closes) or the price
+    gapped through it. Such a trade is neither bought back nor protected."""
+    px = (live or {}).get(SYMBOLS[t["asset"]])
+    if px is None or t.get("stop") is None:
+        return False
+    return (px - float(t["stop"])) * (1 if float(t["qty"]) > 0 else -1) <= 0
+
+
+def wanted(live: dict[str, float] | None = None) -> dict[str, float]:
+    """Net wanted quantity per Alpaca symbol, from paper/orders.json; with `live` prices, without
+    the trades whose stop the price has already crossed."""
     orders = json.loads((PAPER_DIR / "orders.json").read_text())
     net: dict[str, float] = {}
     for o in orders:
+        if through_stop(o, live):
+            continue
         sym = SYMBOLS[o["asset"]]
         net[sym] = net.get(sym, 0.0) + float(o["qty"])
     return net
@@ -390,8 +403,20 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             print(f"No live prices for {', '.join(missing)} ({e}); closing them anyway.")
             prices |= {s: float("inf") for s in missing}
 
-    # 2) market orders for the difference (just before the open: the opening auction)
-    todo = plan(wanted(), have, prices)
+    # 2) market orders for the difference (just before the open: the opening auction). Trades whose
+    # stop the live price has crossed are over (their stop filled at Alpaca since the last bar): not
+    # bought back (2026-10-08: each run bought them back and sold them again at once)
+    try:
+        live0 = live_prices(sorted({SYMBOLS[t["asset"]] for t in trades}))
+    except (AlpacaError, OSError) as e:
+        print(f"No live prices ({e}); the plan is followed as it is.")
+        live0 = {}
+    over = [t for t in trades if through_stop(t, live0)]
+    for t in over:
+        print(f"{SYMBOLS[t['asset']]} {t.get('strategy', '')}: price already through its stop "
+              f"{t['stop']} (live {live0[SYMBOLS[t['asset']]]}): over, not bought back")
+    trades = [t for t in trades if not through_stop(t, live0)]
+    todo = plan(wanted(live0), have, prices)
     try:
         if opening_auction(request("GET", "/v2/clock")):
             todo = at_the_open(todo)
@@ -482,7 +507,11 @@ def verify(alert: bool = False) -> list[str]:
     """Does Alpaca hold what the plan wants, and is every position covered by a stop?
     Returns the problems (empty = all good); with `alert`, sends them to the phone."""
     problems = []
-    want = wanted()
+    try:  # trades whose stop the price has crossed are over (their stop filled at Alpaca)
+        live = live_prices(sorted(wanted()))
+    except (AlpacaError, OSError):
+        live = {}
+    want = wanted(live)
     have = positions()
     orders = request("GET", "/v2/orders?status=open&nested=true")
     norm = lambda s: s.replace("/", "")

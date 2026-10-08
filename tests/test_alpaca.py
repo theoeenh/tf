@@ -147,7 +147,8 @@ def _fake_alpaca(monkeypatch, positions, open_orders, plan, cash=1e6):
     from algo import alpaca, notify
 
     monkeypatch.setattr(alpaca, "positions", lambda: dict(positions))
-    monkeypatch.setattr(alpaca, "wanted", lambda: dict(plan))
+    monkeypatch.setattr(alpaca, "wanted", lambda live=None: dict(plan))
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {})
     monkeypatch.setattr(alpaca, "last_prices", lambda: {s: 100.0 for s in plan})
     sent, alerts = [], []
     monkeypatch.setattr(alpaca, "_send", lambda o: sent.append(o) or {"id": "x"})
@@ -242,7 +243,7 @@ def test_one_refused_order_does_not_stop_the_others(monkeypatch):
     from algo import alpaca
 
     monkeypatch.setattr(alpaca, "positions", lambda: {})
-    monkeypatch.setattr(alpaca, "wanted", lambda: {"NVDA": 10.0, "AMD": 5.0})
+    monkeypatch.setattr(alpaca, "wanted", lambda live=None: {"NVDA": 10.0, "AMD": 5.0})
     monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: 100.0 for s in syms})
     sent = []
 
@@ -261,6 +262,27 @@ def test_one_refused_order_does_not_stop_the_others(monkeypatch):
     with pytest.raises(alpaca.AlpacaError, match="AMD"):
         alpaca._trade_and_protect(True, [], {"NVDA": 100.0, "AMD": 100.0})
     assert any(o["symbol"] == "NVDA" for o in sent)
+
+
+def test_a_trade_stopped_out_between_bars_is_not_bought_back(monkeypatch, tmp_path):
+    """2026-10-08: NVDA's stop filled at Alpaca at 13:05 NY; the paper account sees it only when the
+    bar closes, so each run bought the shares back and the stop check sold them again at once."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "NVDA", "strategy": "donchian_trend", "qty": 67.6, "stop": 231.56, "target": 249.15},
+              {"asset": "AMD", "strategy": "rsi2_reversion", "qty": 10.0, "stop": 598.89, "target": 658.16}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"AMD": 10.0})  # NVDA: stopped out at Alpaca
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"NVDA": 230.1, "AMD": 618.0})
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: {"is_open": True})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    out = alpaca._trade_and_protect(False, trades, {"NVDA": 230.1, "AMD": 618.0})
+    assert not any(o["symbol"] == "NVDA" for o in out)  # no buy back, no market sell
+    assert any(o["symbol"] == "AMD" and o.get("order_class") == "oco" for o in out)  # AMD still protected
+    assert alpaca.wanted({"NVDA": 230.1}) == {"AMD": 10.0} and alpaca.wanted()["NVDA"] == 67.6
 
 
 def test_verify_accepts_fractional_rest_without_stop_after_the_close(monkeypatch):
