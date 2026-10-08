@@ -351,7 +351,6 @@ CTAS,Industrials,sp500
 CTRE,Real Estate,sp400
 CTS,Information Technology,sp600
 CTSH,Information Technology,sp500
-CTVA,Materials,sp500
 CUBE,Real Estate,sp400
 CUBI,Financials,sp600
 CURB,Real Estate,sp600
@@ -1100,7 +1099,6 @@ PRSU,Consumer Discretionary,sp600
 PRU,Financials,sp500
 PRVA,Health Care,sp600
 PSA,Real Estate,sp500
-PSKY,Communication Services,sp500
 PSMT,Consumer Staples,sp600
 PSN,Industrials,sp400
 PSX,Energy,sp500
@@ -1219,6 +1217,7 @@ SITM,Information Technology,sp400
 SJM,Consumer Staples,sp500
 SKT,Real Estate,sp600
 SKY,Consumer Discretionary,sp600
+SKYD,Communication Services,sp500
 SKYW,Industrials,sp600
 SLAB,Information Technology,sp400
 SLB,Energy,sp500
@@ -1341,7 +1340,7 @@ TTC,Industrials,sp400
 TTEK,Industrials,sp400
 TTMI,Information Technology,sp400
 TTWO,Communication Services,sp500
-TWLO,Information Technology,sp400
+TWLO,Information Technology,sp500
 TXN,Information Technology,sp500
 TXNM,Utilities,sp400
 TXRH,Consumer Discretionary,sp400
@@ -1427,6 +1426,7 @@ VTR,Real Estate,sp500
 VTRS,Health Care,sp500
 VVV,Consumer Discretionary,sp400
 VVX,Industrials,sp600
+VYLR,Consumer Staples,sp500
 VYX,Information Technology,sp600
 VZ,Communication Services,sp500
 WAB,Industrials,sp500
@@ -1435,7 +1435,6 @@ WAFD,Financials,sp600
 WAL,Financials,sp400
 WAT,Health Care,sp500
 WAY,Health Care,sp600
-WBD,Communication Services,sp500
 WCC,Industrials,sp400
 WD,Financials,sp600
 WDAY,Information Technology,sp500
