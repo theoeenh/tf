@@ -1,4 +1,13 @@
 {
+"AAPL|donchian_trend|+|2026-10-08 19:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.08R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.3021000633152131,
+-0.07566645365677127
+]
+},
 "AAPL|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",
@@ -62,6 +71,15 @@
 0.19553920643853462
 ]
 },
+"AMZN|rsi2_reversion|+|2026-10-08 19:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35784016858135315,
+0.14701957500403562
+]
+},
 "AVGO|rsi2_reversion|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
@@ -78,6 +96,15 @@
 "pred": [
 0.35175475707673276,
 0.12487279353554026
+]
+},
+"AVGO|rsi2_reversion|+|2026-10-08 19:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.34956562564651733,
+0.11690583594294623
 ]
 },
 "BTC|donchian_trend|+|2026-10-02 05:00": {
