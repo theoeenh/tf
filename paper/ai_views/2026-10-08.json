@@ -1,0 +1,204 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Headlines: bitcoin ETF outflows as yields rise and BTC below $83K after Iran-strike reports, but the rsi2 buy signal already bets on a bounce after two down days; risk news and the bounce signal cancel out, no view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Same crypto risk-off headlines as BTC; no edge beyond the rsi2 signal."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Network-growth headline is long-term; nothing for the next days."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Routine supplier headlines (Samsung HBM4E); no view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Q3 deliveries known; headlines say margins will decide the earnings reaction (date not in the brief); no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Geopolitical risk would normally help gold, but rising yields and a weak trend (-6% on the month) work against it; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Weak trend, no fresh news."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Apple smart-home event Oct 13 (headlines)"
+  ],
+  "reasoning": "Near buy points ahead of a product event; no edge."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "4-day winning streak and positive product headlines, already in the price; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Mixed headlines (AI capex 'cash-flow sink' vs growth story); no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Small regulatory headline (Florida infinite-scroll case) against strong 1-month trend; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Enterprise Gemini push vs a halted Finnish data-center project; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "TSMC upbeat but chip stocks fell anyway; balanced."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Large OpenAI financing headline, already public; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Got $2.8B break fee and jumped yesterday; no further edge."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 4,
+  "key_events": [
+   "JPM earnings Tue 13 Oct"
+  ],
+  "reasoning": "Earnings on 13 Oct can gap the stock either way; previews give no direction."
+ },
+ {
+  "asset": "XOM",
+  "bias": 1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)",
+   "Gulf hurricane risk to production (headline)"
+  ],
+  "reasoning": "Headlines today: oil prices surge on reported possible US strikes on Iran and a hurricane threat to Gulf production; oil producers usually follow oil in such moves. Weak, short-term lean only."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Crypto risk-off headlines vs an already -4% week; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Headlines: Dow down 350 after Trump remarks, yields and oil surging; risk-off but the size of any follow-through is unclear; no call."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Rising long yields (JPMorgan warns on SMid caps) weigh on small caps, but not enough for a call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)"
+  ],
+  "reasoning": "Yields jump on oil vs options traders betting on falling rates; conflicting, no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 1,
+  "confidence": 0.3,
+  "horizon_days": 5,
+  "key_events": [
+   "Reported possible US strikes on Iran (headlines 8 Oct)",
+   "Gulf hurricane risk to production (headline)"
+  ],
+  "reasoning": "Headlines: oil prices surging today on reported possible US strikes on Iran, with Brent already near $100 and a hurricane threatening Gulf output; a short-term bullish lean with headline risk both ways."
+ }
+]
