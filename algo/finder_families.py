@@ -362,6 +362,34 @@ def insider_after_earnings(prices: dict, buyers: int = 2, window: int = 30, max_
     return out
 
 
+def insider_conviction(prices: dict, buyers: int = 2, min_bp: float = 5.0) -> dict:
+    """Insider clusters where the insiders put real money in relative to the company's size: the day a
+    cluster forms (insider_cluster, 90 days) and the dollars bought by insiders in those 90 days
+    (filings up to that day) are at least `min_bp` basis points of the market value (shares outstanding
+    from the last 10-Q / 10-K filed before that day, algo/fundamentals.py, times that day's close)."""
+    from . import fundamentals
+
+    sig = insider_cluster(prices, buyers=buyers, days=90)
+    t = _insider("P")
+    fd = fundamentals.load()
+    shares = fd[fd["item"] == "shares"] if len(fd) else fd
+    out = {}
+    for a, df in prices.items():
+        s = sig[a]
+        days = s.index[s.to_numpy() > 0]
+        keep = pd.Series(0, s.index)
+        if len(days):
+            g = t[t["ticker"] == a]
+            sh = fundamentals._known(shares[shares["ticker"] == a], pd.DatetimeIndex(days)) if len(shares) else None
+            for d in days:
+                bought = g.loc[(g["filed"] > d - pd.Timedelta(days=90)) & (g["filed"] <= d), "value"].sum()
+                n = sh.loc[d] if sh is not None else np.nan
+                if n > 0 and bought / (n * df.at[d, "Close"]) * 1e4 >= min_bp:
+                    keep.loc[d] = 1
+        out[a] = keep.astype(int)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -410,6 +438,10 @@ WIDE_FAMILIES = {
     "insider_after_earnings": (insider_after_earnings, {"buyers": [2, 3], "window": [20, 40]},
                                {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                 "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider clusters with real money relative to the company's size (2026-10-08)
+    "insider_conviction": (insider_conviction, {"buyers": [2, 3], "min_bp": [2.0, 10.0]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

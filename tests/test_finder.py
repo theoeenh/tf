@@ -374,6 +374,26 @@ def test_insider_after_earnings_uses_only_past_releases(monkeypatch):
     assert ff.insider_after_earnings(prices, window=10)["AAA"].sum() == 0  # 15 sessions after: too late
 
 
+def test_insider_conviction_uses_only_known_shares_and_purchases(monkeypatch):
+    """Size uses shares outstanding filed before the signal day, and purchases filed up to it."""
+    from algo import finder_families as ff, fundamentals
+
+    days = pd.bdate_range("2021-01-04", periods=60)
+    prices = {"AAA": pd.DataFrame({"Close": 10.0}, index=days)}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    buys = pd.DataFrame({"ticker": "AAA", "filed": [days[30], days[45]], "owner": ["o1", "o2"],
+                         "value": [60_000.0, 1e9], "code": "P"})  # the second is filed after the signal
+    monkeypatch.setattr(ff, "_insider", lambda code="P": buys)
+    sh = pd.DataFrame({"ticker": "AAA", "item": "shares", "end": pd.to_datetime(["2020-09-30", "2020-12-31"]),
+                       "filed": [days[0], sig_day], "val": [1e6, 1e9]})  # the 2nd known only from the next day
+    monkeypatch.setattr(fundamentals, "load", lambda: sh)
+    # $60k on 1M shares x $10 = 60 bp: kept at 10 bp; the later purchase and share count change nothing
+    assert ff.insider_conviction(prices, min_bp=10.0)["AAA"].loc[sig_day] == 1
+    assert ff.insider_conviction(prices, min_bp=100.0)["AAA"].sum() == 0
+
+
 def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     from algo import wide
 
