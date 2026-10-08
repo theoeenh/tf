@@ -211,7 +211,9 @@
    "desc": "sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2",
    "opened": "2026-10-05 17:26",
    "id": "bear_call_spread-TLT-2026-10-05"
-  },
+  }
+ ],
+ "closed": [
   {
    "playbook": "bear_call_spread",
    "underlying": "IWM",
@@ -232,8 +234,10 @@
    "max_loss": 2528.0,
    "desc": "sell 294 / buy 302 calls, 2026-11-13, credit 1.68 on width 8",
    "opened": "2026-10-05 18:39",
-   "id": "bear_call_spread-IWM-2026-10-05"
+   "id": "bear_call_spread-IWM-2026-10-05",
+   "closed": "2026-10-08 14:12",
+   "why_closed": "half the credit earned (buy back $340 vs $696 received)",
+   "pnl": 372.0
   }
- ],
- "closed": []
+ ]
 }
