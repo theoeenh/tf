@@ -61,3 +61,6 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-08 18:27:20,long_call,USO,USO261113C00145500,buy,2,2,10.55,filled,"open: USO Nov 13 2026 145.5 Call, delta +0.60"
 2026-10-08 18:27:44,bull_put_spread,USO,USO261120P00128000,buy,3,0,,canceled,"open: sell 139 / buy 128 puts, 2026-11-20, credit 2.62 on width 11"
 2026-10-08 18:58:06,bull_put_spread,USO,USO261113P00130000,buy,4,0,,canceled,"open: sell 139 / buy 130 puts, 2026-11-13, credit 2.12 on width 9"
+2026-10-08 19:19:36,bull_put_spread,USO,USO261113P00130000,buy,4,4,2.13,filled,"open: sell 139 / buy 130 puts, 2026-11-13, credit 2.07 on width 9"
+2026-10-08 19:19:58,bull_put_spread,USO,USO261113P00139000,sell,4,0,,canceled,"open: sell 139 / buy 130 puts, 2026-11-13, credit 2.07 on width 9"
+2026-10-08 19:20:00,bull_put_spread,USO,USO261113P00130000,sell,4,4,1.98,filled,"unwind"
