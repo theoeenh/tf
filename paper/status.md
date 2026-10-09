@@ -1,8 +1,8 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-09 08:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-09 09:14 UTC.
 
-**Equity $96,913** (-3.09%) · max drawdown -4.9% · 20 closed trades · 14 open
+**Equity $96,912** (-3.09%) · max drawdown -4.9% · 20 closed trades · 14 open
 
 ## Open positions
 
