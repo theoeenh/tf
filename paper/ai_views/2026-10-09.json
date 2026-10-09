@@ -1,0 +1,182 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [],
+  "reasoning": "Headlines describe an aggressive crypto sell-off (BTC -3.6% on the week, lowest in ~3 weeks), but the rsi2 buy already bets on a bounce; no edge either way."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [],
+  "reasoning": "Down 8% on the week with mixed signals (squeeze sell vs rsi2 buy); no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [],
+  "reasoning": "Down 8.5% on the week; SEC tokenization sandbox headline is long-term; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Large director sale (last quarter) is old news; no edge."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Europe FSD headlines, small; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Weak trend, no fresh news."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 10,
+  "key_events": [],
+  "reasoning": "Weak trend (-12% on the month), no fresh news."
+ },
+ {
+  "asset": "AAPL",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "Apple smart-home event Oct 13 (earlier headlines)"
+  ],
+  "reasoning": "Headline today: Apple falls on a report it is cutting component orders on soft iPhone 18 Pro demand; demand news like this tends to weigh for a few days. Weak bearish lean; the stock is still above its 200-day average."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Routine headlines; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nuclear power deal and Blue Origin IPO talk are long-term; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "ByteDance ad ban and 'fully priced' commentary; mixed, no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing specific; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "CEO warning on the chip market's future vs foundry-partnership talk; unclear direction."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Mixed opinion pieces and AI-debt repricing headline; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Layoffs of 5% (cost cut) vs a downtrend; the rsi2 sell signal already covers the short-term move; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "JPM earnings Tue 13 Oct"
+  ],
+  "reasoning": "Earnings on 13 Oct can gap the stock either way; no direction from headlines."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Oil stayed high but no new catalyst today; yesterday's lean not repeated."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 3,
+  "key_events": [],
+  "reasoning": "Price-target hikes vs the crypto sell-off; balanced."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Headlines: Dow rising while Apple sells off; mixed, no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No fresh news."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No fresh news."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Gulf hurricane and Iran headlines from yesterday are already in the price; no fresh catalyst."
+ }
+]
