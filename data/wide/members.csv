@@ -351,6 +351,7 @@ CTAS,Industrials,sp500
 CTRE,Real Estate,sp400
 CTS,Information Technology,sp600
 CTSH,Information Technology,sp500
+CTVA,Materials,sp400
 CUBE,Real Estate,sp400
 CUBI,Financials,sp600
 CURB,Real Estate,sp600
@@ -547,7 +548,7 @@ FN,Information Technology,sp400
 FNB,Financials,sp400
 FND,Consumer Discretionary,sp400
 FNF,Financials,sp400
-FORM,Information Technology,sp600
+FORM,Information Technology,sp400
 FOUR,Financials,sp400
 FOX,Communication Services,sp500
 FOXA,Communication Services,sp500
@@ -996,7 +997,6 @@ OKE,Energy,sp500
 OKTA,Information Technology,sp400
 OLED,Information Technology,sp400
 OLLI,Consumer Discretionary,sp400
-OLN,Materials,sp400
 OMC,Communication Services,sp500
 OMCL,Health Care,sp600
 ON,Information Technology,sp500
