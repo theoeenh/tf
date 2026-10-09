@@ -390,6 +390,27 @@ def insider_conviction(prices: dict, buyers: int = 2, min_bp: float = 5.0) -> di
     return out
 
 
+def insider_confirm(prices: dict, buyers: int = 2, wait: int = 20, ma: int = 50) -> dict:
+    """Insider clusters, bought only once the price confirms them: after a cluster forms
+    (insider_cluster, 90 days), the first session within `wait` sessions (the cluster day included)
+    whose close crosses above its `ma`-session average. Insiders are often early; waiting for the
+    turn should cut the trades that keep falling. One signal per cluster; closes up to that day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=90)
+    out = {}
+    for a, df in prices.items():
+        close = df["Close"]
+        avg = close.rolling(ma, min_periods=ma).mean()
+        cross = ((close > avg) & (close.shift(1) <= avg.shift(1))).to_numpy()
+        above = (close > avg).to_numpy()
+        s = np.zeros(len(df), int)
+        for p in np.flatnonzero(sig[a].to_numpy() > 0):
+            hit = [q for q in range(p, min(p + wait, len(df))) if cross[q] or (q == p and above[q])]
+            if hit:
+                s[hit[0]] = 1
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -442,6 +463,10 @@ WIDE_FAMILIES = {
     "insider_conviction": (insider_conviction, {"buyers": [2, 3], "min_bp": [2.0, 10.0]},
                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider clusters bought once the price turns up through its average (2026-10-09)
+    "insider_confirm": (insider_confirm, {"buyers": [2, 3], "wait": [10, 30]},
+                        {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

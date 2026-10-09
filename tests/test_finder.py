@@ -394,6 +394,24 @@ def test_insider_conviction_uses_only_known_shares_and_purchases(monkeypatch):
     assert ff.insider_conviction(prices, min_bp=100.0)["AAA"].sum() == 0
 
 
+def test_insider_confirm_waits_for_the_cross_and_uses_no_future_close(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=120)
+    close = pd.Series(100.0, days)
+    close.iloc[60:70] = 90.0          # below its average after the cluster on day 60
+    close.iloc[70:] = 105.0           # crosses back above on day 70
+    prices = {"AAA": pd.DataFrame({"Close": close})}
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == p[a].index[60]).astype(int), p[a].index) for a in p})
+    a = ff.insider_confirm(prices, wait=20, ma=50)["AAA"]
+    assert a.sum() == 1 and a.iloc[70] == 1
+    assert ff.insider_confirm(prices, wait=5, ma=50)["AAA"].sum() == 0  # no cross within 5 sessions
+    # the signal on day 70 does not change when later closes change
+    cut = {"AAA": pd.DataFrame({"Close": close.iloc[:71]})}
+    assert ff.insider_confirm(cut, wait=20, ma=50)["AAA"].iloc[70] == 1
+
+
 def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     from algo import wide
 
