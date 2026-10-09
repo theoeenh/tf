@@ -26,6 +26,15 @@
 0.1490317251629184
 ]
 },
+"AAPL|rsi2_reversion|+|2026-10-09 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3215241469075301,
+0.015240820131068755
+]
+},
 "AAPL|squeeze_breakout|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
@@ -620,6 +629,15 @@
 -0.36140068934079383
 ]
 },
+"TSLA|donchian_trend|+|2026-10-09 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3731709153740796,
+0.17876328485213755
+]
+},
 "TSLA|opening_range|+|2026-10-05 18:00": {
 "skip": true,
 "reason": "Not taken by the live account on 2026-10-05 (decision restored after the 2026-10-06 replay drift).",
@@ -645,6 +663,15 @@
 "pred": [
 0.3697628518060707,
 0.19095466029071073
+]
+},
+"TSLA|squeeze_breakout|+|2026-10-09 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.4047673418643271,
+0.12328640592136186
 ]
 },
 "USO|opening_range|+|2026-10-01 16:00": {
