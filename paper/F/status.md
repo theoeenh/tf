@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-09 14:03 UTC. **Equity $94,987** (-5.01% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-09 14:07 UTC. **Equity $95,232** (-4.77% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 1 | $-650 | $-904 | 0 / 1 |
-| long_put | 3 | 0 | $+0 | $-1,836 | 0 / 0 |
-| bull_put_spread | 2 | 1 | $-216 | $-11 | 0 / 1 |
-| bear_call_spread | 3 | 1 | $+372 | $-1,273 | 1 / 1 |
+| long_call | 3 | 1 | $-650 | $-814 | 0 / 1 |
+| long_put | 3 | 0 | $+0 | $-1,699 | 0 / 0 |
+| bull_put_spread | 3 | 1 | $-216 | $-193 | 0 / 1 |
+| bear_call_spread | 3 | 1 | $+372 | $-1,169 | 1 / 1 |
 
 ## Open positions
 
@@ -22,3 +22,4 @@ Updated 2026-10-09 14:03 UTC. **Equity $94,987** (-5.01% since start). A test of
 - **bear_call_spread** TLT: sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2 (opened 2026-10-05 17:26, cost $-629, most it can lose $2,839)
 - **bear_call_spread** IWM: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9 (opened 2026-10-08 15:27, cost $-772, most it can lose $2,860)
 - **long_call** USO: USO Nov 13 2026 145.5 Call, delta +0.60 (opened 2026-10-08 18:27, cost $+2,110, most it can lose $2,146)
+- **bull_put_spread** AMZN: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15 (opened 2026-10-09 14:07, cost $-644, most it can lose $2,364)

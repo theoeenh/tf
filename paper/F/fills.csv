@@ -68,3 +68,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-08 19:58:36,bull_put_spread,GOOGL,GOOGL261120P00310000,buy,1,0,,canceled,"open: sell 330 / buy 310 puts, 2026-11-20, credit 4.56 on width 20"
 2026-10-09 13:37:23,bull_put_spread,AMZN,AMZN261113P00240000,buy,6,0,,canceled,"open: sell 245 / buy 240 puts, 2026-11-13, credit 0.88 on width 5"
 2026-10-09 14:03:39,bull_put_spread,AMZN,AMZN261113P00230000,buy,2,0,,canceled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.24 on width 15"
+2026-10-09 14:07:33,bull_put_spread,AMZN,AMZN261113P00230000,buy,2,2,2.88,filled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15"
+2026-10-09 14:07:36,bull_put_spread,AMZN,AMZN261113P00245000,sell,2,2,6.1,filled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15"

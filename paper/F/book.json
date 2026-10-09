@@ -211,6 +211,28 @@
    "desc": "USO Nov 13 2026 145.5 Call, delta +0.60",
    "opened": "2026-10-08 18:27",
    "id": "long_call-USO-2026-10-08"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "AMZN",
+   "legs": [
+    {
+     "symbol": "AMZN261113P00230000",
+     "qty": 2,
+     "price": 2.88
+    },
+    {
+     "symbol": "AMZN261113P00245000",
+     "qty": -2,
+     "price": 6.1
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -644.0,
+   "max_loss": 2364.0,
+   "desc": "sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15",
+   "opened": "2026-10-09 14:07",
+   "id": "bull_put_spread-AMZN-2026-10-09"
   }
  ],
  "closed": [
