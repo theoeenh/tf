@@ -261,6 +261,32 @@ def protect(sym: str, held: float, trades: list[dict], price: float | None = Non
     return out
 
 
+def _stop_of(o: dict) -> float:
+    return float(o.get("stop_price") or o["stop_loss"]["stop_price"])
+
+
+def _below_reference(o: dict, err: Exception) -> dict | None:
+    """Before the open Alpaca checks a sell stop against its reference price (the last close): a
+    trailing stop raised above it is refused ("stop price must be less than current price") although
+    the stock trades higher pre-market. The same order with its stop just under that price (1 cent),
+    so the position is never unprotected; the next run puts the planned stop back. None: another error."""
+    msg = str(err)
+    if o.get("side") != "sell" or "stop price must be less than current price" not in msg:
+        return None
+    try:
+        ref = float(json.loads(msg[msg.index("{"):])["market_price"])
+    except (ValueError, KeyError):
+        return None
+    new = {k: (dict(v) if isinstance(v, dict) else v) for k, v in o.items()}
+    stop = _px(ref - 0.01)
+    if "stop_loss" in new:
+        new["stop_loss"]["stop_price"] = stop
+    else:
+        new["stop_price"] = stop
+    new["note"] = o.get("note", "") + " (stop under Alpaca's reference price until the next run)"
+    return new
+
+
 def _send(o: dict) -> dict:
     body = {k: (str(v) if k == "qty" else v) for k, v in o.items() if k != "note"}
     return request("POST", "/v2/orders", body)
@@ -484,7 +510,15 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             try:
                 line += f"  -> sent, id {_send(o).get('id', '?')}"
             except AlpacaError as e:
-                line += f"  -> REJECTED: {e}"
+                lower = _below_reference(o, e)
+                if lower is None:
+                    line += f"  -> REJECTED: {e}"
+                else:  # before the open: Alpaca checks the stop against yesterday's close
+                    try:
+                        line += (f"  -> refused above Alpaca's reference price; stop put at "
+                                 f"{_stop_of(lower)} until the next run, sent, id {_send(lower).get('id', '?')}")
+                    except AlpacaError as e2:
+                        line += f"  -> REJECTED: {e2}"
         print(line)
     if unfilled:
         print(f"Not filled yet (market closed?), protected once filled, on the next run: {', '.join(unfilled)}")

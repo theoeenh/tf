@@ -285,6 +285,35 @@ def test_a_trade_stopped_out_between_bars_is_not_bought_back(monkeypatch, tmp_pa
     assert alpaca.wanted({"NVDA": 230.1}) == {"AMD": 10.0} and alpaca.wanted()["NVDA"] == 67.6
 
 
+def test_stop_above_the_reference_price_before_the_open_is_put_just_under_it(monkeypatch, tmp_path):
+    """2026-10-09 9:26 NY: AAPL's trailing stop 333.2 was above yesterday's close 331.7 (Alpaca's
+    reference before the open) and refused: AAPL stayed without a stop. Now the stop goes in at 331.69."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "AAPL", "strategy": "squeeze_breakout", "qty": 59.09, "stop": 333.2, "target": None}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"AAPL": 59.09})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"AAPL": 340.43})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: {"is_open": False})
+    sent = []
+
+    def send(o):
+        if o["stop_price"] > 331.7:
+            raise alpaca.AlpacaError('POST /v2/orders -> 422: {"code":42210000,"market_price":"331.7",'
+                                     '"message":"stop price must be less than current price","stop_price":"333.2"}')
+        sent.append(o)
+        return {"id": "ok"}
+
+    monkeypatch.setattr(alpaca, "_send", send)
+    alpaca._trade_and_protect(True, trades, {"AAPL": 340.43})
+    assert [(o["qty"], o["stop_price"]) for o in sent] == [(59, 331.69), (0.09, 331.69)]
+    assert alpaca._below_reference({"side": "sell", "stop_price": 1.0}, RuntimeError("403 forbidden")) is None
+
+
 def test_verify_accepts_fractional_rest_without_stop_after_the_close(monkeypatch):
     from algo import alpaca
 
