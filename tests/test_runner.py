@@ -49,3 +49,28 @@ def test_insider_coverage_needs_the_whole_window():
     assert not ok and "2026-07-31" in why
     stale = {d for d in days if d < "20260925"}
     assert not insider_coverage(stale, pd.Timestamp("2026-03-31"), today)[0]
+
+
+def test_short_coverage_needs_the_previous_session():
+    from algo.runner import short_coverage
+
+    fri, mon = pd.Timestamp("2026-10-09"), pd.Timestamp("2026-10-12")
+    assert short_coverage(fri, mon)[0]                       # Monday: Friday's file is the latest
+    assert short_coverage(pd.Timestamp("2026-10-08"), pd.Timestamp("2026-10-09"))[0]
+    assert not short_coverage(pd.Timestamp("2026-10-01"), mon)[0]  # a week behind: no new entries
+    assert not short_coverage(None, mon)[0]
+
+
+def test_each_universe_has_its_own_recent_filings_and_both_are_loaded(tmp_path, monkeypatch):
+    from algo import wide
+
+    monkeypatch.setattr(wide, "WIDE_DIR", tmp_path)
+    row = dict(traded=None, code="P", shares=1, price=1.0, value=1.0, plan=0, role="", title="")
+    pd.DataFrame([dict(accession="a", owner="o1", filed="2026-07-01", ticker="GE", **row)]).to_csv(
+        wide.recent_paths("insider_recent")[0], index=False)
+    pd.DataFrame([dict(accession="a", owner="o1", filed="2026-07-01", ticker="GE", **row),
+                  dict(accession="b", owner="o2", filed="2026-07-02", ticker="AAPL", **row)]).to_csv(
+        wide.recent_paths("insider_recent_all")[0], index=False)
+    t = wide.load_insider()
+    assert sorted(t["accession"]) == ["a", "b"]  # union, the shared filing once
+    assert wide.recent_paths("insider_recent_all")[1].name == "insider_recent_all_days.txt"

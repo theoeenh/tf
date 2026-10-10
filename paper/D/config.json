@@ -1,7 +1,11 @@
 {
-  "name": "D – Graduates",
+  "name": "D – Insider + low short (early test)",
   "alpaca_account": "PA3NSRCFNGRZ",
   "capital": 100000.0,
-  "status": "waiting",
-  "plan": "Trades the finder's graduates (strategies that passed all 14 checks and their vault test). None yet: flat until the first one."
+  "status": "early test of a 13/14 candidate",
+  "plan": "Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT graduated: it fails only the luck check): buy an S&P 1500 stock the day an insider buys it in the open market (first purchase in 90 days) while short sellers are not betting against it (20-day short share of off-exchange volume, FINRA, in the lowest 30% of the S&P 1500). Stop 3 ATR trailing, out after 60 sessions, 0.4% of equity at risk per trade. About 230 trades a year in the backtest (search avg +0.14R, validation +0.20R). User's go 2026-10-10; a finder graduate would take this account over.",
+  "candidate": "{\"family\": \"insider_low_short\", \"params\": {\"buyers\": 1, \"max_rank\": 0.3}, \"rule\": {\"stop_atr\": 3.0, \"rr\": null, \"trail_atr\": 3.0, \"max_bars\": 60}, \"short\": false, \"trend\": false, \"assets\": \"sp1500\", \"data\": \"daily500\", \"notes\": \"from e69a1d7653: parameter neighbour\"}",
+  "start": "2026-10-12",
+  "insider_file": "insider_recent_all",
+  "bars_days": 500
 }

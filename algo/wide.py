@@ -248,10 +248,17 @@ def _read_trades(path) -> pd.DataFrame:
     return df
 
 
-def merge_insider_recent(other_csv, other_days) -> int:
+def recent_paths(name: str = "insider_recent"):
+    """The recent-filings file and its days-read file. Each universe has its own pair (insider_recent:
+    Industrials, account E; insider_recent_all: the S&P 1500, account D): a day read for one universe
+    is not read for another."""
+    return WIDE_DIR / f"{name}.csv.gz", WIDE_DIR / f"{name}_days.txt"
+
+
+def merge_insider_recent(other_csv, other_days, name: str = "insider_recent") -> int:
     """Union of another copy of the recent filings (e.g. a backfill run's) with ours: rows and days
     read. Used when two runs saved the file at the same time (a binary file git cannot merge)."""
-    path, done_path = WIDE_DIR / "insider_recent.csv.gz", WIDE_DIR / "insider_recent_days.txt"
+    path, done_path = recent_paths(name)
     parts = [_read_trades(p) for p in (path, other_csv) if os.path.exists(p)]
     df = pd.concat(parts, ignore_index=True).drop_duplicates(["accession", "owner", "code", "shares", "price"])
     df.sort_values("filed").to_csv(path, index=False)
@@ -265,8 +272,8 @@ def merge_insider_recent(other_csv, other_days) -> int:
 
 def load_insider() -> pd.DataFrame:
     """Quarterly SEC data sets plus the recent filings not in a published quarter yet."""
-    parts = [_read_trades(p) for p in (WIDE_DIR / "insider.csv.gz", WIDE_DIR / "insider_recent.csv.gz")
-             if p.exists()]
+    files = [WIDE_DIR / "insider.csv.gz"] + sorted(WIDE_DIR.glob("insider_recent*.csv.gz"))
+    parts = [_read_trades(p) for p in files if p.exists()]
     if not parts:
         return pd.DataFrame()
     df = pd.concat(parts, ignore_index=True)
@@ -300,13 +307,13 @@ def _sec(url: str) -> bytes:
     raise OSError(f"SEC refused {url}")
 
 
-def update_insider_recent(days: int | None = None, tickers=None) -> pd.DataFrame:
+def update_insider_recent(days: int | None = None, tickers=None, name: str = "insider_recent") -> pd.DataFrame:
     """Form 4 filings since the last published quarter, from the SEC's daily indexes: the filings of
     our companies (issuer CIK), parsed like the insider module (open-market P / S). Days already read
-    are kept in data/wide/insider_recent_days.txt."""
+    are kept in data/wide/<name>_days.txt (see recent_paths)."""
     from . import insider as ins
 
-    path, done_path = WIDE_DIR / "insider_recent.csv.gz", WIDE_DIR / "insider_recent_days.txt"
+    path, done_path = recent_paths(name)
     old = _read_trades(path) if path.exists() else pd.DataFrame()
     done = set(done_path.read_text().split()) if done_path.exists() else set()
     cik_to_ticker = {}
@@ -482,12 +489,13 @@ def _short_day(day: str, tickers: set[str]) -> pd.DataFrame | None:
     return df.rename(columns={"Symbol": "ticker", "ShortVolume": "short", "TotalVolume": "total"}).assign(date=day)
 
 
-def update_short_volume(start: str = START) -> pd.DataFrame:
+def update_short_volume(start: str = START, name: str = "short_volume", keep_days: int | None = None) -> pd.DataFrame:
     """FINRA daily short sale volume of the S&P 1500 (published each evening for that day): one row per
-    stock and day. Downloads only the days not stored yet."""
+    stock and day. Downloads only the days not stored yet. name="short_volume_recent", keep_days=150:
+    the small rolling copy kept in git for the trading jobs (the full history lives in the finder's cache)."""
     from concurrent.futures import ThreadPoolExecutor
 
-    path, done_path = WIDE_DIR / "short_volume.csv.gz", WIDE_DIR / "short_volume_days.txt"
+    path, done_path = WIDE_DIR / f"{name}.csv.gz", WIDE_DIR / f"{name}_days.txt"
     old = pd.read_csv(path, dtype={"date": str}) if path.exists() else pd.DataFrame()
     done = set(done_path.read_text().split()) if done_path.exists() else set()
     tickers = set(members())
@@ -502,7 +510,12 @@ def update_short_volume(start: str = START) -> pd.DataFrame:
                 done.add(d)
             elif d < recent:
                 done.add(d)  # holiday: no file will come
-    if rows:
+    if keep_days is not None:
+        cut = (pd.Timestamp.now() - pd.Timedelta(days=keep_days)).strftime("%Y%m%d")
+        done = {d for d in done if d >= cut}
+        if len(old):
+            old = old[old["date"].astype(str) >= cut]
+    if rows or (keep_days is not None and len(old)):
         old = pd.concat([old, *rows], ignore_index=True).drop_duplicates(["date", "ticker"], keep="last")
         WIDE_DIR.mkdir(parents=True, exist_ok=True)
         old.sort_values(["date", "ticker"]).to_csv(path, index=False)
@@ -514,10 +527,11 @@ def update_short_volume(start: str = START) -> pd.DataFrame:
 def load_short_volume() -> pd.DataFrame:
     """Short share of off-exchange volume per (day, stock) as a wide table, usable from the NEXT session
     (FINRA publishes it after the close)."""
-    path = WIDE_DIR / "short_volume.csv.gz"
-    if not path.exists():
+    parts = [pd.read_csv(p, dtype={"date": str}) for p in (WIDE_DIR / "short_volume.csv.gz",
+                                                          WIDE_DIR / "short_volume_recent.csv.gz") if p.exists()]
+    if not parts:
         return pd.DataFrame()
-    df = pd.read_csv(path, dtype={"date": str})
+    df = pd.concat(parts, ignore_index=True).drop_duplicates(["date", "ticker"], keep="last")
     df["date"] = pd.to_datetime(df["date"])
     df = df[df["total"] > 0]
     return (df.assign(ratio=df["short"] / df["total"]).pivot(index="date", columns="ticker", values="ratio")

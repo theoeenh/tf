@@ -47,19 +47,43 @@ jobs:
           t = [a for a, s in wide.sectors().items() if s == '${{ inputs.sector || 'Industrials' }}']
           df = wide.update_insider_recent(days=${{ inputs.days || '100' }}, tickers=t); print('rows', len(df))"
           tail -2 data/wide/insider_recent_days.txt
+      # account D: the whole S&P 1500 (its own files: insider_recent_all*; the first run reads ~100 days)
+      - name: Download the filings (S&P 1500, account D)
+        if: ${{ !inputs.sector || inputs.sector == 'Industrials' }}
+        timeout-minutes: 200
+        continue-on-error: true
+        env:
+          SEC_PACE: "1.0"
+          SEC_PATIENT: "1"
+        run: |
+          python -c "
+          import logging; logging.basicConfig(level=logging.INFO, format='%(levelname)s %(message)s')
+          from algo import wide
+          df = wide.update_insider_recent(days=${{ inputs.days || '100' }}, name='insider_recent_all'); print('rows', len(df))"
+          tail -2 data/wide/insider_recent_all_days.txt
+      # FINRA short volume since August (account D's filter, used from the next session); never pruned so
+      # the account's replay from its start always sees the same data
+      - name: FINRA short volume
+        continue-on-error: true
+        run: python -c "from algo import wide; wide.update_short_volume(start='2026-08-01', name='short_volume_recent')"
       - name: Save
         if: always()
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
           mine="$RUNNER_TEMP/mine"; mkdir -p "$mine"
-          cp data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt "$mine/" 2>/dev/null || exit 0
+          cp data/wide/insider_recent*.csv.gz data/wide/insider_recent*_days.txt data/wide/short_volume_recent* "$mine/" 2>/dev/null || true
           for i in 1 2 3 4 5; do
-            # the file is compressed (git cannot merge it): take the branch as it is now, add our rows
+            # the files are compressed (git cannot merge them): take the branch as it is now, add our rows
             git fetch -q origin "${GITHUB_REF_NAME}"
             git reset -q --hard "origin/${GITHUB_REF_NAME}"
-            python -c "from algo import wide; print(wide.merge_insider_recent('$mine/insider_recent.csv.gz', '$mine/insider_recent_days.txt'), 'rows')"
-            git add data/wide/insider_recent.csv.gz data/wide/insider_recent_days.txt
+            for n in insider_recent insider_recent_all; do
+              if [ -f "$mine/$n.csv.gz" ]; then
+                python -c "from algo import wide; print('$n', wide.merge_insider_recent('$mine/$n.csv.gz', '$mine/${n}_days.txt', name='$n'), 'rows')"
+              fi
+            done
+            cp "$mine"/short_volume_recent* data/wide/ 2>/dev/null || true  # only this job writes it
+            git add data/wide/insider_recent*.csv.gz data/wide/insider_recent*_days.txt data/wide/short_volume_recent* 2>/dev/null || true
             git diff --cached --quiet && exit 0
             git commit -q -m "Recent Form 4 filings (${{ inputs.sector || 'Industrials' }}): backfill from GitHub Actions"
             git push -q && exit 0

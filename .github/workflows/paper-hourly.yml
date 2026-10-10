@@ -94,6 +94,10 @@ jobs:
           - account: C
             folder: C
             update: python -m algo.paper update
+          # D: early test of the most active 13/14 candidate, insider + low short selling (daily runner)
+          - account: D
+            folder: D
+            update: python -m algo.runner update --no-fetch  # filings + FINRA: workflow insider-backfill
           # E: the finder's best candidate on the S&P 1500 (daily runner, algo/runner.py)
           - account: E
             folder: E
@@ -118,6 +122,8 @@ jobs:
           SECRET_B: ${{ secrets.ALPACA_B_API_SECRET_KEY }}
           KEY_C: ${{ secrets.ALPACA_C_API_KEY_ID }}
           SECRET_C: ${{ secrets.ALPACA_C_API_SECRET_KEY }}
+          KEY_D: ${{ secrets.ALPACA_D_API_KEY_ID }}
+          SECRET_D: ${{ secrets.ALPACA_D_API_SECRET_KEY }}
           KEY_E: ${{ secrets.ALPACA_E_API_KEY_ID }}
           SECRET_E: ${{ secrets.ALPACA_E_API_SECRET_KEY }}
         run: |

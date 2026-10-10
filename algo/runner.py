@@ -32,7 +32,9 @@ from .portfolio import PortfolioConfig, Sleeve, run_portfolio
 from .system import MAX_GROSS, MAX_OPEN_RISK
 
 log = logging.getLogger(__name__)
-INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml"}
+INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml", "insider_low_short",
+                    "insider_after_earnings", "insider_fund", "insider_conviction", "insider_confirm"}
+SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund"}  # FINRA short volume
 
 
 def complete_sessions(df: pd.DataFrame, now_ny: pd.Timestamp) -> pd.DataFrame:
@@ -42,8 +44,8 @@ def complete_sessions(df: pd.DataFrame, now_ny: pd.Timestamp) -> pd.DataFrame:
     return df if done else df[df.index < today]
 
 
-def load_bars(symbols: list[str], now_ny: pd.Timestamp) -> dict[str, pd.DataFrame]:
-    raw = pd.concat([wide._bars(symbols[i:i + 50], wide.START) for i in range(0, len(symbols), 50)],
+def load_bars(symbols: list[str], now_ny: pd.Timestamp, since: str = wide.START) -> dict[str, pd.DataFrame]:
+    raw = pd.concat([wide._bars(symbols[i:i + 50], since) for i in range(0, len(symbols), 50)],
                     ignore_index=True)
     out = {}
     for sym, g in raw.groupby("symbol"):
@@ -69,6 +71,17 @@ def insider_coverage(done_days: set[str], bulk_end: pd.Timestamp, today: pd.Time
     if (worst[1] - worst[0]).days > 5:
         return False, f"insider filings missing between {worst[0].date()} and {worst[1].date()}"
     return True, f"insider filings read through {days[-1].date()}"
+
+
+def short_coverage(newest: pd.Timestamp | None, today: pd.Timestamp) -> tuple[bool, str]:
+    """Is the FINRA short volume fresh enough? FINRA publishes each day's file that evening and the
+    strategies use it from the next session: the newest day stored must be the previous session."""
+    if newest is None or pd.isna(newest):
+        return False, "no FINRA short volume stored"
+    prev = pd.bdate_range(end=today - pd.Timedelta(days=1), periods=1)[0]
+    if newest < prev - pd.Timedelta(days=3):  # a holiday on the way leaves a short gap
+        return False, f"FINRA short volume stops at {newest.date()}"
+    return True, f"FINRA short volume through {newest.date()}"
 
 
 def pending_entries(c: F.Candidate, sig: dict, prices: dict, held: set, equity: float) -> list[dict]:
@@ -99,16 +112,24 @@ def update(fetch_insider: bool = True) -> dict:
     now_ny = pd.Timestamp.now(tz="America/New_York").tz_localize(None)
     universe = [a for a in wide.members() if wide.segment(c.assets)(a)]
     if fetch_insider and c.family in INSIDER_FAMILIES:
-        wide.update_insider_recent(days=10, tickers=universe)
+        wide.update_insider_recent(days=10, tickers=universe, name=cfg.get("insider_file", "insider_recent"))
     blocked = ""
     if c.family in INSIDER_FAMILIES:
-        done_path = wide.WIDE_DIR / "insider_recent_days.txt"
+        done_path = wide.recent_paths(cfg.get("insider_file", "insider_recent"))[1]
         done = set(done_path.read_text().split()) if done_path.exists() else set()
         ok, why = insider_coverage(done, wide._bulk_end(), now_ny.normalize())
         log.info(why)
         if not ok:
             blocked = f"No new entries: {why} (the data download is catching up)."
-    prices = load_bars(universe, now_ny)
+    if c.family in SHORT_FAMILIES and not blocked:
+        sv = wide.load_short_volume()
+        ok, why = short_coverage(sv.index.max() if len(sv) else None, now_ny.normalize())
+        log.info(why)
+        if not ok:
+            blocked = f"No new entries: {why} (the data download is catching up)."
+    since = ((start - pd.Timedelta(days=int(cfg["bars_days"]))).strftime("%Y-%m-%d") if cfg.get("bars_days")
+             else wide.START)
+    prices = load_bars(universe, now_ny, since)
     sig = F.signals(c, prices)
     lo = start - pd.Timedelta(days=400)
     active = {a: s for a, s in sig.items() if (s[s.index >= lo] != 0).any()}
