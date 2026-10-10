@@ -288,8 +288,24 @@ def _below_reference(o: dict, err: Exception) -> dict | None:
 
 
 def _send(o: dict) -> dict:
+    """POST an order with its own client_order_id, retried once after a network timeout: if the first
+    try did reach Alpaca, the retry is refused as a duplicate id and the order placed is returned, so
+    an order is never sent twice (2026-10-10: a timeout left account B's stops out for 30 minutes)."""
+    import uuid
+
     body = {k: (str(v) if k == "qty" else v) for k, v in o.items() if k != "note"}
-    return request("POST", "/v2/orders", body)
+    body.setdefault("client_order_id", f"tf-{uuid.uuid4().hex[:24]}")
+    try:
+        return request("POST", "/v2/orders", body)
+    except (urllib.error.URLError, TimeoutError, ConnectionError):
+        time.sleep(5)
+    try:
+        return request("POST", "/v2/orders", body)
+    except AlpacaError as e:
+        if "client_order_id must be unique" not in str(e):
+            raise
+        q = urllib.parse.urlencode({"client_order_id": body["client_order_id"]})
+        return request("GET", f"/v2/orders:by_client_order_id?{q}")
 
 
 CRYPTO_LIMIT_WAIT = 120  # seconds a crypto order waits on the book before the rest goes at market

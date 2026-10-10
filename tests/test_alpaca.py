@@ -380,3 +380,42 @@ def test_live_decisions_are_frozen(tmp_path):
     assert not g.judge(key("2026-10-05 18:00")).skip  # the past decision stands
     assert g.judge(key("2026-10-06 14:00")).skip  # new candidates use the current model
     assert g.judge(key("2026-09-01 14:00")).skip  # before the start: the learner, never stored
+
+
+def test_an_order_with_its_own_id_is_retried_once_safely(monkeypatch):
+    """2026-10-10 03:56 UTC: Alpaca timed out while B's stops went in. An order carrying a
+    client_order_id is retried: if the first try did reach Alpaca, the retry is refused as a duplicate
+    and the order already placed is returned, never sent twice."""
+    import io
+    import urllib.error
+    import urllib.request
+    from algo import alpaca
+
+    monkeypatch.setenv("ALPACA_API_KEY_ID", "k")
+    monkeypatch.setenv("ALPACA_API_SECRET_KEY", "s")
+    monkeypatch.setattr(alpaca.time, "sleep", lambda s: None)
+    calls = []
+
+    def flaky(req, timeout=30):
+        calls.append((req.get_method(), req.full_url))
+        if len(calls) == 1:
+            raise TimeoutError("timed out")
+        return io.BytesIO(b'{"id": "o1"}')
+
+    monkeypatch.setattr(urllib.request, "urlopen", flaky)
+    assert alpaca._send({"symbol": "NVDA", "qty": 1, "side": "sell", "type": "stop", "stop_price": 1.0})["id"] == "o1"
+    assert [m for m, _ in calls] == ["POST", "POST"]
+    calls.clear()
+
+    def reached(req, timeout=30):  # the first try got through, its answer was lost
+        calls.append((req.get_method(), req.full_url))
+        if len(calls) == 1:
+            raise TimeoutError("timed out")
+        if req.get_method() == "POST":
+            raise urllib.error.HTTPError(req.full_url, 422, "dup", {}, io.BytesIO(
+                b'{"code":40010001,"message":"client_order_id must be unique"}'))
+        return io.BytesIO(b'{"id": "first"}')
+
+    monkeypatch.setattr(urllib.request, "urlopen", reached)
+    assert alpaca._send({"symbol": "NVDA", "qty": 1, "side": "sell", "type": "stop", "stop_price": 1.0})["id"] == "first"
+    assert [m for m, _ in calls] == ["POST", "POST", "GET"] and "by_client_order_id" in calls[2][1]
