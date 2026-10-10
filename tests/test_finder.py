@@ -412,6 +412,22 @@ def test_insider_confirm_waits_for_the_cross_and_uses_no_future_close(monkeypatc
     assert ff.insider_confirm(cut, wait=20, ma=50)["AAA"].iloc[70] == 1
 
 
+def test_insider_sector_wave_counts_only_past_clusters(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-04", periods=80)
+    names = ["A1", "A2", "A3", "B1"]
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in names}
+    when = {"A1": days[10], "A2": days[20], "A3": days[30], "B1": days[25]}  # A3's comes after A1's signal
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == when[a]).astype(int), p[a].index) for a in p})
+    monkeypatch.setattr(wide, "sectors", lambda: {"A1": "Ind", "A2": "Ind", "A3": "Ind", "B1": "Tech"})
+    out = ff.insider_sector_wave(prices, companies=3, window=60)
+    assert out["A1"].sum() == 0 and out["A2"].sum() == 0  # not yet 3 companies on their day
+    assert out["A3"].loc[days[30]] == 1                     # the third of the wave
+    assert out["B1"].sum() == 0                             # another sector does not count
+
+
 def test_merge_insider_recent_unions_rows_and_days(tmp_path, monkeypatch):
     from algo import wide
 

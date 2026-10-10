@@ -411,6 +411,32 @@ def insider_confirm(prices: dict, buyers: int = 2, wait: int = 20, ma: int = 50)
     return out
 
 
+def insider_sector_wave(prices: dict, buyers: int = 2, companies: int = 3, window: int = 30) -> dict:
+    """Insider clusters that come in a sector-wide wave: the day a cluster forms (insider_cluster,
+    90 days) and at least `companies` different companies of the same sector (this one included) had a
+    cluster form within the last `window` calendar days. Insiders across a whole sector buying at once
+    says more about the sector's next months than one company alone. Signals up to that day only."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=90)
+    sector = wide.sectors()
+    days = {a: s.index[s.to_numpy() > 0] for a, s in sig.items()}
+    by_sector: dict[str, list] = {}
+    for a, ds in days.items():
+        for d in ds:
+            by_sector.setdefault(sector.get(a, "?"), []).append((d, a))
+    out = {}
+    for a, s in sig.items():
+        keep = pd.Series(0, s.index)
+        events = by_sector.get(sector.get(a, "?"), [])
+        for d in days[a]:
+            names = {b for (e, b) in events if d - pd.Timedelta(days=window) < e <= d}
+            if len(names) >= companies and sector.get(a):
+                keep.loc[d] = 1
+        out[a] = keep.astype(int)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -467,6 +493,10 @@ WIDE_FAMILIES = {
     "insider_confirm": (insider_confirm, {"buyers": [2, 3], "wait": [10, 30]},
                         {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider clusters in a sector-wide wave of insider buying (2026-10-10)
+    "insider_sector_wave": (insider_sector_wave, {"buyers": [2, 3], "companies": [3, 5]},
+                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
