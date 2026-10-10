@@ -55,6 +55,13 @@ class PortfolioConfig:
     learner: journal.Learner | None = None
     brake: float | None = None  # stop for good once equity is this far below its peak (0.10 = -10%)
     max_positions: int | None = None  # at most this many positions open at once (best-ranked first)
+    # concentration limits (fractions of equity at risk, like risk_pct): open risk to the stops in one
+    # asset across all strategies, and in one group of assets that move together (group_of: asset ->
+    # group name). None: no limit. Added 2026-10-10 after 8 Oct, when 6 trades in 3 chip stocks
+    # stopped out in the same hour.
+    max_asset_risk: float | None = None
+    max_group_risk: float | None = None
+    group_of: dict | None = None
 
 
 @dataclass
@@ -212,6 +219,22 @@ def run_portfolio(
             size = min(size, max(0.0, cfg.max_gross * eq - grs) / (px * (1 + fee)))
             if cfg.max_open_risk is not None:
                 size = min(size, max(0.0, cfg.max_open_risk * eq - open_risk) / dist)
+            if cfg.max_asset_risk is not None or cfg.max_group_risk is not None:
+                group = (cfg.group_of or {}).get(s.asset)
+                in_asset = in_group = 0.0
+                for k2, p2 in pos.items():
+                    if p2 is None or p2.shadow:
+                        continue
+                    a2 = sleeves[k2].asset
+                    m2 = assets[a2].mark
+                    m2 = p2.entry_px if not np.isfinite(m2) else m2
+                    r2 = abs(p2.q) * max(0.0, p2.side * (m2 - p2.stop))
+                    in_asset += r2 if a2 == s.asset else 0.0
+                    in_group += r2 if group is not None and (cfg.group_of or {}).get(a2) == group else 0.0
+                if cfg.max_asset_risk is not None:
+                    size = min(size, max(0.0, cfg.max_asset_risk * eq - in_asset) / dist)
+                if cfg.max_group_risk is not None and group is not None:
+                    size = min(size, max(0.0, cfg.max_group_risk * eq - in_group) / dist)
             if size * px < 1e-6 * eq:
                 return  # no room left in the account
         p = _Position()

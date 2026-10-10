@@ -210,14 +210,14 @@ def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=No
                learner=None, news: bool = False, context: dict | None = None,
                trend: bool = False, blackout: bool = False, ml: bool = False,
                sizing: bool = False, intraday: bool = False, brake: float | None = None,
-               retired: dict | None = None) -> PortfolioResult:
+               retired: dict | None = None, concentration: dict | None = None) -> PortfolioResult:
     """retired: asset -> time from which the account no longer trades it (flat from that bar on,
     no new entries); earlier bars are untouched, so the account's history stays the same."""
     if learner is None and learn:
         learner = new_learner(learn, news, ml, sizing, prices=prices, context=context)
     cfg = PortfolioConfig(initial_capital=initial_capital, risk_pct=risk_pct, max_gross=MAX_GROSS,
                           max_open_risk=MAX_OPEN_RISK, learner=learner if learn else None,
-                          brake=brake or None)
+                          brake=brake or None, **(concentration or {}))
     ctx = context if (news or ml) else None  # the ML learner uses news / event features too
     return run_portfolio(prices, build_sleeves(prices, allow_short, context if news else None, news, trend,
                                                intraday),

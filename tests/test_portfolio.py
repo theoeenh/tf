@@ -115,3 +115,26 @@ def test_results_do_not_depend_on_hash_seed():
     outs = {subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env={"PYTHONHASHSEED": str(k),
             "PATH": ""}, cwd=str(__import__("pathlib").Path(__file__).parent.parent)).stdout for k in (1, 2, 3)}
     assert len(outs) == 1 and outs.pop().strip()
+
+
+def test_concentration_caps_limit_risk_per_asset_and_per_group():
+    """Off by default; with a cap, a second trade in the same asset (or group) only gets the risk
+    left under the cap."""
+    prices = two_assets()
+    sleeves = [Sleeve("A", "one", signal_at(prices["A"], 19), ExitRule(10.0, 10.0)),
+               Sleeve("A", "two", signal_at(prices["A"], 20), ExitRule(10.0, 10.0)),
+               Sleeve("B", "one", signal_at(prices["B"], 20), ExitRule(10.0, 10.0))]
+    costs = {"A": Costs(), "B": Costs()}
+
+    def qty(cfg):
+        res = run_portfolio(prices, sleeves, costs, cfg)
+        return {(t.asset, t.strategy): t.qty for t in res.trades}
+
+    free = qty(PortfolioConfig(risk_pct=0.001, max_gross=5.0))
+    per_asset = qty(PortfolioConfig(risk_pct=0.001, max_gross=5.0, max_asset_risk=0.0015))
+    assert per_asset[("A", "one")] == pytest.approx(free[("A", "one")])
+    assert per_asset[("A", "two")] == pytest.approx(free[("A", "two")] / 2, rel=0.02)  # 0.5R left under 1.5R
+    assert per_asset[("B", "one")] == pytest.approx(free[("B", "one")])  # another asset: untouched
+    group = qty(PortfolioConfig(risk_pct=0.001, max_gross=5.0, max_group_risk=0.0015, group_of={"A": "g", "B": "g"}))
+    assert group[("A", "two")] == pytest.approx(free[("A", "two")] / 2, rel=0.02)
+    assert ("B", "one") not in group  # the group is full (1R + 0.5R): no room left for B
