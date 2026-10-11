@@ -138,3 +138,18 @@ def test_concentration_caps_limit_risk_per_asset_and_per_group():
     group = qty(PortfolioConfig(risk_pct=0.001, max_gross=5.0, max_group_risk=0.0015, group_of={"A": "g", "B": "g"}))
     assert group[("A", "two")] == pytest.approx(free[("A", "two")] / 2, rel=0.02)
     assert ("B", "one") not in group  # the group is full (1R + 0.5R): no room left for B
+
+
+def test_caps_apply_only_from_their_start_date():
+    """A live account's earlier trades keep their size (its history never changes)."""
+    prices = two_assets()
+    sleeves = [Sleeve("A", "one", signal_at(prices["A"], 19), ExitRule(10.0, 10.0)),
+               Sleeve("A", "two", signal_at(prices["A"], 20), ExitRule(10.0, 10.0))]
+    costs = {"A": Costs()}
+    base = dict(risk_pct=0.001, max_gross=5.0, max_asset_risk=0.0015)
+    later = run_portfolio({"A": prices["A"]}, sleeves, costs,
+                          PortfolioConfig(**base, caps_from=prices["A"].index[30]))
+    free = run_portfolio({"A": prices["A"]}, sleeves, costs, PortfolioConfig(risk_pct=0.001, max_gross=5.0))
+    assert sorted(t.qty for t in later.trades) == pytest.approx(sorted(t.qty for t in free.trades))
+    now = run_portfolio({"A": prices["A"]}, sleeves, costs, PortfolioConfig(**base, caps_from=prices["A"].index[0]))
+    assert min(t.qty for t in now.trades) < min(t.qty for t in free.trades)

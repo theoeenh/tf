@@ -205,6 +205,26 @@ def blackout_masks(context: dict | None) -> dict | None:
     return {a: c["blackout"] for a, c in context.items() if "blackout" in c}
 
 
+# Assets that move together (daily return correlations 2023-24, research of 2026-10-10): the
+# concentration caps count open risk per group.
+GROUPS = {"NVDA": "chips", "AMD": "chips", "AVGO": "chips",
+          "AAPL": "tech", "MSFT": "tech", "GOOGL": "tech", "META": "tech", "AMZN": "tech", "NFLX": "tech",
+          "QQQ": "tech", "XOM": "oil", "USO": "oil", "GOLD": "metals", "SILVER": "metals", "COIN": "crypto",
+          "BTC": "crypto", "ETH": "crypto", "SOL": "crypto"}
+
+
+def concentration_caps(cfg: dict) -> dict | None:
+    """The engine's concentration settings from an account config's "concentration" entry
+    ({"asset_r": 1.5, "group_r": 3, "from": "..."}: in R, 1R = the account's risk per trade)."""
+    c = cfg.get("concentration")
+    if not c:
+        return None
+    r = cfg["risk_pct"]
+    return {"max_asset_risk": c.get("asset_r") and c["asset_r"] * r,
+            "max_group_risk": c.get("group_r") and c["group_r"] * r,
+            "group_of": GROUPS, "caps_from": pd.Timestamp(c["from"]) if c.get("from") else None}
+
+
 def run_system(prices, allow_short: bool, learn: bool, risk_pct: float, start=None, end=None,
                initial_capital: float = 100_000.0, close_at_end: bool = True,
                learner=None, news: bool = False, context: dict | None = None,

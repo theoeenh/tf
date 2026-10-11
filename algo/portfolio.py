@@ -45,6 +45,15 @@ class Sleeve:
     allow_short: bool = True
 
 
+def _same_tz(t: pd.Timestamp, index: pd.DatetimeIndex) -> pd.Timestamp:
+    """A config time (naive = UTC) comparable with the bars' index."""
+    if index.tz is not None and t.tzinfo is None:
+        return t.tz_localize("UTC")
+    if index.tz is None and t.tzinfo is not None:
+        return t.tz_convert("UTC").tz_localize(None)
+    return t
+
+
 @dataclass
 class PortfolioConfig:
     initial_capital: float = 100_000.0
@@ -62,6 +71,8 @@ class PortfolioConfig:
     max_asset_risk: float | None = None
     max_group_risk: float | None = None
     group_of: dict | None = None
+    caps_from: pd.Timestamp | None = None  # the caps apply to entries from this bar on (a live account's
+                                           # earlier trades stay as they were: its history never changes)
 
 
 @dataclass
@@ -219,7 +230,8 @@ def run_portfolio(
             size = min(size, max(0.0, cfg.max_gross * eq - grs) / (px * (1 + fee)))
             if cfg.max_open_risk is not None:
                 size = min(size, max(0.0, cfg.max_open_risk * eq - open_risk) / dist)
-            if cfg.max_asset_risk is not None or cfg.max_group_risk is not None:
+            if ((cfg.max_asset_risk is not None or cfg.max_group_risk is not None)
+                    and (cfg.caps_from is None or A.index[i] >= _same_tz(cfg.caps_from, A.index))):
                 group = (cfg.group_of or {}).get(s.asset)
                 in_asset = in_group = 0.0
                 for k2, p2 in pos.items():

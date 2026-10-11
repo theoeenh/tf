@@ -32,7 +32,8 @@ from . import data
 from .metrics import equity_stats
 from . import analyst, news
 from .system import (
-    ALL_VARIANTS, OPTIONS, TARGET_VOL, UNIVERSES, bars_per_year, build_context, calibrate_risk, load_prices,
+    ALL_VARIANTS, OPTIONS, TARGET_VOL, UNIVERSES, bars_per_year, build_context, calibrate_risk, concentration_caps,
+    load_prices,
     new_learner, run_variant,
 )
 
@@ -174,7 +175,8 @@ def update(source: str | None = None) -> Path:
     else:
         frozen = FrozenDecisions(learner, start, PAPER_DIR / "decisions.json") if learner is not None else None
         res = run_variant(prices, v, cfg["risk_pct"], start, None, ctx, initial_capital=cfg["capital"],
-                          close_at_end=False, learner=frozen or learner, retired=cfg.get("retired"))
+                          close_at_end=False, learner=frozen or learner, retired=cfg.get("retired"),
+                          concentration=concentration_caps(cfg))
         if frozen is not None:
             frozen.save()
         eq = res.equity
