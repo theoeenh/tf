@@ -488,3 +488,23 @@ def test_a_strategy_passing_every_gate_alerts_the_phone_before_its_vault_test(mo
     F.promote()
     assert sent[0] == f"finder: a strategy passed all {len(F.GATES)} checks" and order[:2] == ["alert", "vault"]
     assert len(sent) == 2  # only the 14/14 one: its alert, then its vault result
+
+
+def test_insider_fresh_counts_only_first_buys_in_the_gap_and_known_filings(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=300)
+    prices = {"AAA": pd.DataFrame({"Close": 10.0}, index=days)}
+    rows = [("r", "2021-01-05"), ("r", "2021-06-01"),  # routine: bought 5 months before
+            ("f", "2021-06-03"),                         # fresh
+            ("g", "2021-12-01")]                         # fresh, but the next cluster window
+    t = pd.DataFrame([dict(ticker="AAA", owner=o, filed=pd.Timestamp(d), code="P") for o, d in rows])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_fresh(prices, buyers=2, gap=365)["AAA"]
+    # 2021-01-05 (r, first ever) + 2021-06-03 (f) are > 90 days apart; r's June buy is not fresh
+    assert out.sum() == 0
+    t.loc[len(t)] = dict(ticker="AAA", owner="h", filed=pd.Timestamp("2021-06-10"), code="P")
+    out = ff.insider_fresh(prices, buyers=2, gap=365)["AAA"]
+    assert out.loc["2021-06-10"] == 1 and out.sum() == 1   # f + h, on the day the second is filed
+    early = ff.insider_fresh({"AAA": prices["AAA"].loc[:"2021-06-09"]}, buyers=2, gap=365)["AAA"]
+    assert early.sum() == 0                                # later filings never count

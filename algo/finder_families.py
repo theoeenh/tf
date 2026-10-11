@@ -437,6 +437,33 @@ def insider_sector_wave(prices: dict, buyers: int = 2, companies: int = 3, windo
     return out
 
 
+def insider_fresh(prices: dict, buyers: int = 2, gap: int = 730) -> dict:
+    """Clusters of "opportunistic" insiders (Cohen, Malloy and Pomorski 2012): only purchases by an insider
+    who had not bought this stock in the `gap` calendar days before count. Routine buyers (every year, same
+    month) carry little news; an insider buying for the first time in years does. The day the number of
+    distinct fresh buyers within 90 days reaches `buyers` (one signal per cluster). Filings up to that day
+    only (the data starts in 2016: in the first `gap` days everyone looks fresh)."""
+    t = _insider("P").sort_values("filed")
+    if len(t):
+        t = t.drop_duplicates(["ticker", "owner", "filed"])
+        prev = t.groupby(["ticker", "owner"])["filed"].shift(1)
+        t = t[prev.isna() | (t["filed"] - prev > pd.Timedelta(days=gap))]
+    out = {}
+    for a, df in prices.items():
+        g = t[t["ticker"] == a] if len(t) else t
+        s = np.zeros(len(df), int)
+        last = pd.Timestamp("1900-01-01")
+        for f in g["filed"].drop_duplicates() if len(g) else []:
+            win = g[(g["filed"] > f - pd.Timedelta(days=90)) & (g["filed"] <= f)]
+            if win["owner"].nunique() >= buyers and f - last > pd.Timedelta(days=90):
+                p_ = _on_days(pd.Series([f]), df.index)[0]
+                if p_ < len(df):
+                    s[p_] = 1
+                last = f
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -497,6 +524,10 @@ WIDE_FAMILIES = {
     "insider_sector_wave": (insider_sector_wave, {"buyers": [2, 3], "companies": [3, 5]},
                             {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                              "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # clusters of insiders buying for the first time in 1-2 years ("opportunistic", 2026-10-11)
+    "insider_fresh": (insider_fresh, {"buyers": [1, 2], "gap": [365, 730]},
+                      {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                       "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
