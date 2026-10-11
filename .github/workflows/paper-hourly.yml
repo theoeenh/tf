@@ -227,6 +227,17 @@ jobs:
           restore-keys: market-data-
       - name: Option playbooks (calls, puts, put and call spreads)
         run: python -m algo.options sync --send | tee options_sync.txt
+      # once a day (first run from 15:00 New York): the option market, saved for the learner (algo/optiondata.py).
+      # Read-only: it never trades, and a failure here never stops F's trading.
+      - name: Record the option market (once a day)
+        id: optrec
+        continue-on-error: true
+        run: python -m algo.optiondata record | tee -a options_sync.txt
+      - name: Alert the phone if the option record failed
+        if: steps.optrec.outcome == 'failure'
+        run: >
+          python -c "from algo import notify; notify.send('[F – Options] option record failed',
+          'See GitHub Actions run ${{ github.run_id }}. Trading is not affected; the next run retries.', 'warning')"
       - name: Alert the phone if this run failed
         if: failure()
         run: >
@@ -241,7 +252,7 @@ jobs:
         run: |
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add paper/F
+          git add paper/F data/options 2>/dev/null || git add paper/F
           git diff --cached --quiet && exit 0
           git commit -m "Paper account F $(date -u +'%Y-%m-%d %H:%M') UTC"
           for i in 1 2 3 4 5 6; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
