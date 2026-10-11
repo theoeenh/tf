@@ -33,6 +33,10 @@ If A, B and C do not meet them: the hourly system is retired and the work goes t
 and the finder. F is a test of option mechanics, not of an edge: judged on execution (fills, spreads, assignment
 handling), not on profit.
 
+F also records the option market once a day from 12 October (data/options/), read-only, as future learner data.
+After the freeze (from 7 December), F gets a fifth playbook that aims for profit: systematic SPY put spreads
+(paper/research/2026-10-11-account-F-put-selling.md), judged against SPY from then on.
+
 ## Real money
 
 Only after a strategy has passed all 14 checks, its vault test and 6 weeks of forward trading, and its live
