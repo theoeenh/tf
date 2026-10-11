@@ -691,6 +691,10 @@ def promote() -> list[dict]:
     for r in reg[reg["gates_passed"] == len(GATES)].itertuples():
         if r.id in used:
             continue
+        # the user wants to know at once (2026-10-11), before the vault test runs
+        notify.send(f"finder: a strategy passed all {len(GATES)} checks",
+                    f"{r.label}. Its one vault test runs now; the result follows in a second alert.",
+                    "rotating_light", "urgent")
         res = vault(r.id)
         out.append(res | {"id": r.id})
         msg = (f"{r.label}: vault (data from {VAULT_START}, never seen) return {res['return']:+.1%}, "

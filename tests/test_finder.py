@@ -470,3 +470,21 @@ def test_insider_recent_skips_days_missing_from_the_sec_listing(tmp_path, monkey
     assert not any("form.20260703" in u for u in asked)
     done = (tmp_path / "insider_recent_days.txt").read_text().split()
     assert "20260703" in done and "20260702" in done and "20260706" in done
+
+
+def test_a_strategy_passing_every_gate_alerts_the_phone_before_its_vault_test(monkeypatch, tmp_path):
+    from algo import finder as F, forward, notify
+
+    reg = pd.DataFrame({"id": ["g1", "g2"], "label": ["graduate", "almost"],
+                        "gates_passed": [len(F.GATES), len(F.GATES) - 1]})
+    monkeypatch.setattr(F, "OUT", tmp_path)
+    monkeypatch.setattr(F, "registry", lambda: reg)
+    monkeypatch.setattr(F, "score", lambda r: r)
+    sent, order = [], []
+    monkeypatch.setattr(notify, "send", lambda title, *a, **k: sent.append(title) or order.append("alert") or True)
+    monkeypatch.setattr(F, "vault", lambda i: order.append("vault") or {
+        "result": "FAIL", "return": 0.0, "avg_r": 0.0, "icir": 0.0, "search_icir": 0.0})
+    monkeypatch.setattr(forward, "start", lambda i: None)
+    F.promote()
+    assert sent[0] == f"finder: a strategy passed all {len(F.GATES)} checks" and order[:2] == ["alert", "vault"]
+    assert len(sent) == 2  # only the 14/14 one: its alert, then its vault result
