@@ -419,3 +419,26 @@ def test_an_order_with_its_own_id_is_retried_once_safely(monkeypatch):
     monkeypatch.setattr(urllib.request, "urlopen", reached)
     assert alpaca._send({"symbol": "NVDA", "qty": 1, "side": "sell", "type": "stop", "stop_price": 1.0})["id"] == "first"
     assert [m for m, _ in calls] == ["POST", "POST", "GET"] and "by_client_order_id" in calls[2][1]
+
+
+def test_a_trade_whose_target_filled_between_bars_is_not_bought_back(monkeypatch, tmp_path):
+    """2026-10-12: XOM's OCO target (rsi2, 130 shares) filled at 13:49 UTC; the paper account sees it only
+    when the bar closes, so the 13:55 run bought the 130 shares back and the target sold them again."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "XOM", "strategy": "rsi2_reversion", "qty": 130.0, "stop": 160.12, "target": 172.19},
+              {"asset": "XOM", "strategy": "donchian_trend", "qty": 26.0, "stop": 162.57, "target": 173.82}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"XOM": 26.0})  # the rsi2 shares went at the target
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"XOM": 172.20})
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: {"is_open": True})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    assert alpaca.wanted({"XOM": 172.20}) == {"XOM": 26.0}
+    out = alpaca._trade_and_protect(False, trades, {"XOM": 172.20})
+    assert not any(o["side"] == "buy" for o in out)                    # no buy back
+    assert [o.get("qty") for o in out if o.get("order_class") == "oco"] == [26]  # the trend trade keeps its OCO
+    short = {"asset": "XOM", "qty": -5.0, "stop": 180.0, "target": 165.0}
+    assert alpaca.through_stop(short, {"XOM": 164.9}) and not alpaca.through_stop(short, {"XOM": 170.0})

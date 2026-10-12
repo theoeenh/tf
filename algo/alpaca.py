@@ -114,18 +114,23 @@ def positions() -> dict[str, float]:
 
 
 def through_stop(t: dict, live: dict[str, float] | None) -> bool:
-    """Is the live price already through this trade's stop? Then the trade is over: a stop at Alpaca
-    filled between two bars (the paper account only sees it when the bar closes) or the price
-    gapped through it. Such a trade is neither bought back nor protected."""
+    """Is the live price already through this trade's stop, or at / past its target? Then the trade is
+    over: its stop or target filled at Alpaca between two bars (the paper account only sees it when the
+    bar closes) or the price gapped through it. Such a trade is neither bought back nor protected."""
     px = (live or {}).get(SYMBOLS[t["asset"]])
-    if px is None or t.get("stop") is None:
+    if px is None:
         return False
-    return (px - float(t["stop"])) * (1 if float(t["qty"]) > 0 else -1) <= 0
+    side = 1 if float(t["qty"]) > 0 else -1
+    if t.get("stop") is not None and (px - float(t["stop"])) * side <= 0:
+        return True
+    # the same for a target reached between two bars: the OCO's limit filled at Alpaca (2026-10-12: XOM
+    # sold at its target at 13:49 UTC, bought back by the 13:55 run, sold again at 13:58)
+    return t.get("target") is not None and (px - float(t["target"])) * side >= 0
 
 
 def wanted(live: dict[str, float] | None = None) -> dict[str, float]:
     """Net wanted quantity per Alpaca symbol, from paper/orders.json; with `live` prices, without
-    the trades whose stop the price has already crossed."""
+    the trades whose stop or target the price has already reached."""
     orders = json.loads((PAPER_DIR / "orders.json").read_text())
     net: dict[str, float] = {}
     for o in orders:
