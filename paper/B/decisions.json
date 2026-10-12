@@ -296,6 +296,15 @@
 0.14036404314228024
 ]
 },
+"META|squeeze_breakout|+|2026-10-12 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.11R (avg win +1.56R, avg loss -0.86R).",
+"size": 1.0,
+"pred": [
+0.31177590681569023,
+-0.10743408776595265
+]
+},
 "MSFT|donchian_trend|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
@@ -539,6 +548,15 @@
 0.17204877174108046
 ]
 },
+"TSLA|rsi2_reversion|+|2026-10-12 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35784687667094434,
+0.14608777278283236
+]
+},
 "TSLA|squeeze_breakout|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
@@ -546,6 +564,15 @@
 "pred": [
 0.3717294107141884,
 0.04233015960274911
+]
+},
+"USO|donchian_trend|+|2026-10-12 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.34777262881021054,
+0.08642078711899781
 ]
 },
 "USO|squeeze_breakout|+|2026-10-01 18:00": {
