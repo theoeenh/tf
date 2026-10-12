@@ -1,0 +1,190 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI report this week"
+  ],
+  "reasoning": "Headlines flag this week's CPI print as a test for crowded crypto longs and weak ETF flows; no clear direction from the brief, so no view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI report this week"
+  ],
+  "reasoning": "Down 6% on the week with CPI ahead; headlines mixed (ETH outpacing BTC on the bounce vs. crowded longs); no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI report this week"
+  ],
+  "reasoning": "Solana ETFs had their largest weekly outflow, ending a 14-week buying streak; negative flow news but already priced in a -8% week; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Mixed: Microsoft's own AI chip and a Chinese memory design weighed on chips, against strong demand headlines; the rsi2 buy already bets on the dip; no view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings Oct 29"
+  ],
+  "reasoning": "Product launch headlines, earnings on Oct 29 outside the horizon; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Gapped below Friday's close on chip-sector weakness (Microsoft Maia 300, Chinese memory progress); new product launch is not enough for a call; no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "NFLX earnings ~Oct 20"
+  ],
+  "reasoning": "Earnings around Oct 20 flagged in headlines; falling viewership vs. analyst support; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "JPM earnings Tue 13 Oct"
+  ],
+  "reasoning": "Earnings tomorrow can gap the price either way; no edge in the brief."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Headlines on sliding oil prices vs. supply risks; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out beyond normal news flow; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Oil above $100 with Middle East and hurricane risk, but headlines also mention an 'energy ceasefire' and sliding oil; two-sided risk, no view."
+ }
+]
