@@ -508,3 +508,16 @@ def test_insider_fresh_counts_only_first_buys_in_the_gap_and_known_filings(monke
     assert out.loc["2021-06-10"] == 1 and out.sum() == 1   # f + h, on the day the second is filed
     early = ff.insider_fresh({"AAA": prices["AAA"].loc[:"2021-06-09"]}, buyers=2, gap=365)["AAA"]
     assert early.sum() == 0                                # later filings never count
+
+
+def test_insider_fresh_officer_counts_only_officers(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=120)
+    prices = {"AAA": pd.DataFrame({"Close": 10.0}, index=days)}
+    t = pd.DataFrame([dict(ticker="AAA", owner="d", filed=pd.Timestamp("2021-02-01"), code="P", role="Director"),
+                      dict(ticker="AAA", owner="c", filed=pd.Timestamp("2021-03-01"), code="P", role="Officer")])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_fresh_officer(prices, buyers=1, gap=365)["AAA"]
+    assert out.sum() == 1 and out.loc["2021-03-01"] == 1  # the director's buy does not count
+    assert ff.insider_fresh_officer(prices, buyers=2, gap=365)["AAA"].sum() == 0

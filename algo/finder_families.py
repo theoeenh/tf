@@ -443,7 +443,11 @@ def insider_fresh(prices: dict, buyers: int = 2, gap: int = 730) -> dict:
     month) carry little news; an insider buying for the first time in years does. The day the number of
     distinct fresh buyers within 90 days reaches `buyers` (one signal per cluster). Filings up to that day
     only (the data starts in 2016: in the first `gap` days everyone looks fresh)."""
-    t = _insider("P").sort_values("filed")
+    return _fresh(prices, _insider("P"), buyers, gap)
+
+
+def _fresh(prices: dict, t: pd.DataFrame, buyers: int, gap: int) -> dict:
+    t = t.sort_values("filed") if len(t) else t
     if len(t):
         t = t.drop_duplicates(["ticker", "owner", "filed"])
         prev = t.groupby(["ticker", "owner"])["filed"].shift(1)
@@ -462,6 +466,16 @@ def insider_fresh(prices: dict, buyers: int = 2, gap: int = 730) -> dict:
                 last = f
         out[a] = pd.Series(s, df.index)
     return out
+
+
+def insider_fresh_officer(prices: dict, buyers: int = 1, gap: int = 365) -> dict:
+    """insider_fresh, counting only officers (CEO, CFO, ... per the Form 4 role): the people who run the
+    company and know its next quarters best. An officer buying for the first time in `gap` days, alone
+    (`buyers`=1) or with another fresh officer within 90 days. Filings up to that day only."""
+    t = _insider("P")
+    if len(t):
+        t = t[t["role"].fillna("").str.contains("Officer", case=False)]
+    return _fresh(prices, t, buyers, gap)
 
 
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
@@ -528,6 +542,10 @@ WIDE_FAMILIES = {
     "insider_fresh": (insider_fresh, {"buyers": [1, 2], "gap": [365, 730]},
                       {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                        "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # the same, officers only (CEO, CFO...) (2026-10-12)
+    "insider_fresh_officer": (insider_fresh_officer, {"buyers": [1, 2], "gap": [180, 365]},
+                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                               "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
