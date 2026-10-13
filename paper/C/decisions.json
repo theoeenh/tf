@@ -80,6 +80,15 @@
 -0.045060318850685566
 ]
 },
+"AMD|opening_range|+|2026-10-13 17:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.08R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4326612841473144,
+-0.08139744815125899
+]
+},
 "AMD|rsi2_reversion|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
@@ -240,6 +249,15 @@
 "pred": [
 0.29231908956251607,
 -0.38485593918209937
+]
+},
+"COIN|opening_range|+|2026-10-13 17:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 46% estimated chance of profit, expected -0.02R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.46117232741024716,
+-0.024438305665267113
 ]
 },
 "ETH|donchian_trend|+|2026-10-02 05:00": {
@@ -528,6 +546,15 @@
 "pred": [
 0.44464812045116314,
 -0.057516339288120166
+]
+},
+"NVDA|opening_range|+|2026-10-13 17:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.07R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.43668192809326895,
+-0.07336503666455607
 ]
 },
 "NVDA|rsi2_reversion|+|2026-10-01 13:00": {
