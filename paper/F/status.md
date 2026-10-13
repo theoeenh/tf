@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-13 15:28 UTC. **Equity $96,558** (-3.44% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-13 15:58 UTC. **Equity $96,713** (-3.29% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 1 | $-650 | $+9 | 0 / 1 |
-| long_put | 3 | 0 | $+0 | $-1,565 | 0 / 0 |
-| bull_put_spread | 2 | 2 | $+124 | $-204 | 1 / 2 |
-| bear_call_spread | 3 | 1 | $+372 | $-756 | 1 / 1 |
+| long_call | 3 | 1 | $-650 | $-51 | 0 / 1 |
+| long_put | 3 | 0 | $+0 | $-1,396 | 0 / 0 |
+| bull_put_spread | 3 | 2 | $+124 | $-269 | 1 / 2 |
+| bear_call_spread | 3 | 1 | $+372 | $-816 | 1 / 1 |
 
 ## Open positions
 
@@ -22,3 +22,4 @@ Updated 2026-10-13 15:28 UTC. **Equity $96,558** (-3.44% since start). A test of
 - **bear_call_spread** IWM: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9 (opened 2026-10-08 15:27, cost $-772, most it can lose $2,860)
 - **long_call** USO: USO Nov 13 2026 145.5 Call, delta +0.60 (opened 2026-10-08 18:27, cost $+2,110, most it can lose $2,146)
 - **bull_put_spread** AMZN: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15 (opened 2026-10-09 14:07, cost $-644, most it can lose $2,364)
+- **bull_put_spread** AAPL: sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15 (opened 2026-10-13 15:58, cost $-530, most it can lose $2,478)

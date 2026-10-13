@@ -211,6 +211,28 @@
    "desc": "sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15",
    "opened": "2026-10-09 14:07",
    "id": "bull_put_spread-AMZN-2026-10-09"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261127P00315000",
+     "qty": 2,
+     "price": 2.9
+    },
+    {
+     "symbol": "AAPL261127P00330000",
+     "qty": -2,
+     "price": 5.55
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": -530.0,
+   "max_loss": 2478.0,
+   "desc": "sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15",
+   "opened": "2026-10-13 15:58",
+   "id": "bull_put_spread-AAPL-2026-10-13"
   }
  ],
  "closed": [
