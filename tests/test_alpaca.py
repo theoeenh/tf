@@ -147,7 +147,8 @@ def _fake_alpaca(monkeypatch, positions, open_orders, plan, cash=1e6):
     from algo import alpaca, notify
 
     monkeypatch.setattr(alpaca, "positions", lambda: dict(positions))
-    monkeypatch.setattr(alpaca, "wanted", lambda live=None: dict(plan))
+    monkeypatch.setattr(alpaca, "wanted", lambda live=None, seen=None: dict(plan))
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
     monkeypatch.setattr(alpaca, "live_prices", lambda syms: {})
     monkeypatch.setattr(alpaca, "last_prices", lambda: {s: 100.0 for s in plan})
     sent, alerts = [], []
@@ -243,7 +244,8 @@ def test_one_refused_order_does_not_stop_the_others(monkeypatch):
     from algo import alpaca
 
     monkeypatch.setattr(alpaca, "positions", lambda: {})
-    monkeypatch.setattr(alpaca, "wanted", lambda live=None: {"NVDA": 10.0, "AMD": 5.0})
+    monkeypatch.setattr(alpaca, "wanted", lambda live=None, seen=None: {"NVDA": 10.0, "AMD": 5.0})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
     monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: 100.0 for s in syms})
     sent = []
 
@@ -442,3 +444,51 @@ def test_a_trade_whose_target_filled_between_bars_is_not_bought_back(monkeypatch
     assert [o.get("qty") for o in out if o.get("order_class") == "oco"] == [26]  # the trend trade keeps its OCO
     short = {"asset": "XOM", "qty": -5.0, "stop": 180.0, "target": 165.0}
     assert alpaca.through_stop(short, {"XOM": 164.9}) and not alpaca.through_stop(short, {"XOM": 170.0})
+
+
+def test_a_stop_or_target_reached_earlier_in_the_bar_counts_although_the_price_came_back(monkeypatch, tmp_path):
+    """2026-10-13: AMD gapped through its stop at the open (sold at 578.00, stop 577.57), the price came
+    back to 588 and the 13:57 run bought it back; MSFT reached its target, fell back, bought back too."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "AMD", "strategy": "rsi2_reversion", "qty": 7.69, "stop": 577.57, "target": 634.0},
+              {"asset": "MSFT", "strategy": "donchian_trend", "qty": 34.0, "stop": 520.0, "target": 550.20},
+              {"asset": "AAPL", "strategy": "donchian_trend", "qty": 10.0, "stop": 330.0, "target": 360.0}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    live = {"AMD": 588.66, "MSFT": 549.86, "AAPL": 345.0}         # the last prices alone look fine
+    seen = {"AMD": (575.10, 590.0), "MSFT": (546.0, 550.40), "AAPL": (340.0, 346.0)}
+    assert alpaca.wanted(live) == {"AMD": 7.69, "MSFT": 34.0, "AAPL": 10.0}
+    assert alpaca.wanted(live, seen) == {"AAPL": 10.0}
+    monkeypatch.setattr(alpaca, "positions", lambda: {"AAPL": 10.0})  # AMD and MSFT went at Alpaca
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: live)
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: seen)
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: {"is_open": True})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    out = alpaca._trade_and_protect(False, trades, dict(live))
+    assert not any(o["side"] == "buy" for o in out)
+    short = {"asset": "AMD", "qty": -5.0, "stop": 600.0, "target": 560.0}
+    assert alpaca.through_stop(short, {"AMD": 580.0}, {"AMD": (579.0, 601.0)})
+    assert not alpaca.through_stop(short, {"AMD": 580.0}, {"AMD": (565.0, 590.0)})
+
+
+def test_bar_range_starts_after_the_last_processed_bar(monkeypatch, tmp_path):
+    from algo import alpaca
+
+    (tmp_path / "equity.csv").write_text(",equity\n2026-10-13 13:00:00,97000\n")
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    calls = []
+
+    def fake(path, params):
+        calls.append(params)
+        return {"bars": {"AMD": [{"t": "2026-10-13T13:20:00Z", "l": 570.0, "h": 600.0},  # pre-market: ignored
+                                 {"t": "2026-10-13T14:01:00Z", "l": 578.0, "h": 589.0},
+                                 {"t": "2026-10-13T14:02:00Z", "l": 585.0, "h": 590.5}]}}
+
+    monkeypatch.setattr(alpaca, "get_data", fake)
+    assert alpaca.bar_range(["AMD", "BTC/USD"]) == {"AMD": (578.0, 590.5)}
+    assert calls[0]["start"] == "2026-10-13T14:00:00Z" and calls[0]["symbols"] == "AMD"
+    (tmp_path / "equity.csv").write_text(",equity\n2026-10-13,97000\n")  # a daily account
+    assert alpaca.bar_range(["AMD"]) == {}

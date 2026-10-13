@@ -85,7 +85,7 @@ def request(method: str, path: str, body: dict | None = None, base: str = BASE_U
                 return json.loads(r.read() or b"{}")
         except urllib.error.HTTPError as e:
             raise AlpacaError(f"{method} {path} -> {e.code}: {e.read().decode(errors='replace')}") from None
-        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
             if attempt == tries - 1:
                 raise
             time.sleep(5 * (attempt + 1))
@@ -113,28 +113,82 @@ def positions() -> dict[str, float]:
     return out
 
 
-def through_stop(t: dict, live: dict[str, float] | None) -> bool:
-    """Is the live price already through this trade's stop, or at / past its target? Then the trade is
-    over: its stop or target filled at Alpaca between two bars (the paper account only sees it when the
-    bar closes) or the price gapped through it. Such a trade is neither bought back nor protected."""
-    px = (live or {}).get(SYMBOLS[t["asset"]])
-    if px is None:
+def through_stop(t: dict, live: dict[str, float] | None,
+                 seen: dict[str, tuple[float, float]] | None = None) -> bool:
+    """Has this trade's stop or target been reached since the last bar the paper account processed?
+    Then the trade is over: its stop or target filled at Alpaca between two bars (the paper account only
+    sees it when the bar closes, and will close it then) or the price gapped through it. Such a trade is
+    neither bought back nor protected. `live`: last prices; `seen`: (low, high) per symbol since that
+    bar (2026-10-13: AMD, QQQ, TSLA gapped through their stops at the open and MSFT reached its target,
+    the price came back, and the 13:57 run bought them back because the last price alone looked fine)."""
+    sym = SYMBOLS[t["asset"]]
+    px = (live or {}).get(sym)
+    lo, hi = (seen or {}).get(sym, (px, px))
+    if px is not None:
+        lo, hi = min(lo, px), max(hi, px)
+    if lo is None or hi is None:
         return False
-    side = 1 if float(t["qty"]) > 0 else -1
-    if t.get("stop") is not None and (px - float(t["stop"])) * side <= 0:
+    long_ = float(t["qty"]) > 0
+    stop, target = t.get("stop"), t.get("target")
+    if stop is not None and (lo <= float(stop) if long_ else hi >= float(stop)):
         return True
-    # the same for a target reached between two bars: the OCO's limit filled at Alpaca (2026-10-12: XOM
-    # sold at its target at 13:49 UTC, bought back by the 13:55 run, sold again at 13:58)
-    return t.get("target") is not None and (px - float(t["target"])) * side >= 0
+    # the same for a target: the OCO's limit filled at Alpaca (2026-10-12: XOM sold at its target at
+    # 13:49 UTC, bought back by the 13:55 run, sold again at 13:58)
+    return target is not None and (hi >= float(target) if long_ else lo <= float(target))
 
 
-def wanted(live: dict[str, float] | None = None) -> dict[str, float]:
-    """Net wanted quantity per Alpaca symbol, from paper/orders.json; with `live` prices, without
-    the trades whose stop or target the price has already reached."""
+def _regular_hours(t: str | None) -> bool:
+    """Is this bar time (ISO, UTC) inside the regular US session, 9:30-16:00 New York? (No `t`: kept.)"""
+    if not t:
+        return True
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    ny = datetime.fromisoformat(t.replace("Z", "+00:00")).astimezone(ZoneInfo("America/New_York"))
+    return (9, 30) <= (ny.hour, ny.minute) < (16, 0)
+
+
+def bar_range(symbols) -> dict[str, tuple[float, float]]:
+    """(low, high) of each stock since the end of the last bar the paper account processed (the last
+    line of its equity.csv, hourly accounts only): the prices its next bar will contain. IEX minute bars
+    (the free real-time feed)."""
+    path = PAPER_DIR / "equity.csv"
+    stocks = sorted(s for s in symbols if "/" not in s)
+    if not stocks or not path.exists():
+        return {}
+    last = path.read_text().strip().splitlines()[-1].split(",")[0]
+    if len(last) < 16:  # a daily account: not used
+        return {}
+    from datetime import datetime, timedelta, timezone
+
+    start = (datetime.fromisoformat(last[:19]).replace(tzinfo=timezone.utc) + timedelta(hours=1))
+    if start > datetime.now(timezone.utc):
+        return {}
+    start = start.strftime("%Y-%m-%dT%H:%M:%SZ")
+    out: dict[str, tuple[float, float]] = {}
+    params = {"symbols": ",".join(stocks), "timeframe": "1Min", "start": start, "feed": "iex", "limit": 10000}
+    for _ in range(20):
+        d = get_data("/v2/stocks/bars", params)
+        for s, bars in (d.get("bars") or {}).items():
+            bars = [b for b in bars if _regular_hours(b.get("t"))]  # the paper's hourly bars: 9:30-16:00 only
+            if bars:
+                lo, hi = min(b["l"] for b in bars), max(b["h"] for b in bars)
+                o = out.get(s, (lo, hi))
+                out[s] = (min(o[0], lo), max(o[1], hi))
+        if not d.get("next_page_token"):
+            break
+        params["page_token"] = d["next_page_token"]
+    return out
+
+
+def wanted(live: dict[str, float] | None = None,
+           seen: dict[str, tuple[float, float]] | None = None) -> dict[str, float]:
+    """Net wanted quantity per Alpaca symbol, from paper/orders.json; with `live` prices (and `seen`
+    ranges), without the trades whose stop or target the price has already reached."""
     orders = json.loads((PAPER_DIR / "orders.json").read_text())
     net: dict[str, float] = {}
     for o in orders:
-        if through_stop(o, live):
+        if through_stop(o, live, seen):
             continue
         sym = SYMBOLS[o["asset"]]
         net[sym] = net.get(sym, 0.0) + float(o["qty"])
@@ -453,17 +507,24 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
     # 2) market orders for the difference (just before the open: the opening auction). Trades whose
     # stop the live price has crossed are over (their stop filled at Alpaca since the last bar): not
     # bought back (2026-10-08: each run bought them back and sold them again at once)
+    syms = sorted({SYMBOLS[t["asset"]] for t in trades})
     try:
-        live0 = live_prices(sorted({SYMBOLS[t["asset"]] for t in trades}))
+        live0 = live_prices(syms)
     except (AlpacaError, OSError) as e:
         print(f"No live prices ({e}); the plan is followed as it is.")
         live0 = {}
-    over = [t for t in trades if through_stop(t, live0)]
+    try:
+        seen0 = bar_range(syms)
+    except (AlpacaError, OSError, ValueError) as e:
+        print(f"No minute bars since the last bar ({e}); last prices only.")
+        seen0 = {}
+    over = [t for t in trades if through_stop(t, live0, seen0)]
     for t in over:
-        print(f"{SYMBOLS[t['asset']]} {t.get('strategy', '')}: price already through its stop "
-              f"{t['stop']} (live {live0[SYMBOLS[t['asset']]]}): over, not bought back")
-    trades = [t for t in trades if not through_stop(t, live0)]
-    todo = plan(wanted(live0), have, prices)
+        sym = SYMBOLS[t["asset"]]
+        print(f"{sym} {t.get('strategy', '')}: stop {t['stop']} or target {t.get('target')} reached since "
+              f"the last bar (live {live0.get(sym)}, range {seen0.get(sym)}): over, not bought back")
+    trades = [t for t in trades if not through_stop(t, live0, seen0)]
+    todo = plan(wanted(live0, seen0), have, prices)
     try:
         if opening_auction(request("GET", "/v2/clock")):
             todo = at_the_open(todo)
@@ -562,11 +623,15 @@ def verify(alert: bool = False) -> list[str]:
     """Does Alpaca hold what the plan wants, and is every position covered by a stop?
     Returns the problems (empty = all good); with `alert`, sends them to the phone."""
     problems = []
-    try:  # trades whose stop the price has crossed are over (their stop filled at Alpaca)
+    try:  # trades whose stop or target the price has reached are over (filled at Alpaca)
         live = live_prices(sorted(wanted()))
     except (AlpacaError, OSError):
         live = {}
-    want = wanted(live)
+    try:
+        seen = bar_range(sorted(wanted()))
+    except (AlpacaError, OSError, ValueError):
+        seen = {}
+    want = wanted(live, seen)
     have = positions()
     orders = request("GET", "/v2/orders?status=open&nested=true")
     norm = lambda s: s.replace("/", "")
