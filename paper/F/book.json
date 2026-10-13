@@ -109,28 +109,6 @@
   },
   {
    "playbook": "bull_put_spread",
-   "underlying": "MSFT",
-   "legs": [
-    {
-     "symbol": "MSFT261120P00470000",
-     "qty": 1,
-     "price": 5.0
-    },
-    {
-     "symbol": "MSFT261120P00500000",
-     "qty": -1,
-     "price": 11.5
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": -650.0,
-   "max_loss": 2377.0,
-   "desc": "sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30",
-   "opened": "2026-10-05 16:25",
-   "id": "bull_put_spread-MSFT-2026-10-05"
-  },
-  {
-   "playbook": "bull_put_spread",
    "underlying": "QQQ",
    "legs": [
     {
@@ -305,6 +283,31 @@
    "closed": "2026-10-08 18:26",
    "why_closed": "account A closed the stock",
    "pnl": -650.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261120P00470000",
+     "qty": 1,
+     "price": 5.0
+    },
+    {
+     "symbol": "MSFT261120P00500000",
+     "qty": -1,
+     "price": 11.5
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -650.0,
+   "max_loss": 2377.0,
+   "desc": "sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30",
+   "opened": "2026-10-05 16:25",
+   "id": "bull_put_spread-MSFT-2026-10-05",
+   "closed": "2026-10-13 13:58",
+   "why_closed": "half the credit earned (buy back $314 vs $650 received)",
+   "pnl": 339.99999999999994
   }
  ]
 }

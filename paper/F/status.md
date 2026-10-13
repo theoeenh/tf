@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-13 13:27 UTC. **Equity $96,164** (-3.84% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-13 13:59 UTC. **Equity $96,288** (-3.71% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 1 | $-650 | $-187 | 0 / 1 |
-| long_put | 3 | 0 | $+0 | $-1,650 | 0 / 0 |
-| bull_put_spread | 3 | 1 | $-216 | $+120 | 0 / 1 |
-| bear_call_spread | 3 | 1 | $+372 | $-809 | 1 / 1 |
+| long_call | 3 | 1 | $-650 | $+328 | 0 / 1 |
+| long_put | 3 | 0 | $+0 | $-1,625 | 0 / 0 |
+| bull_put_spread | 2 | 2 | $+124 | $-134 | 1 / 2 |
+| bear_call_spread | 3 | 1 | $+372 | $-1,212 | 1 / 1 |
 
 ## Open positions
 
@@ -17,7 +17,6 @@ Updated 2026-10-13 13:27 UTC. **Equity $96,164** (-3.84% since start). A test of
 - **bear_call_spread** NFLX: sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6 (opened 2026-10-05 14:28, cost $-505, most it can lose $2,520)
 - **long_put** SLV: SLV Nov 20 2026 58 Put, delta -0.60 (opened 2026-10-05 14:57, cost $+2,520, most it can lose $2,562)
 - **long_call** MSFT: MSFT Nov 20 2026 520 Call, delta +0.58 (opened 2026-10-05 15:55, cost $+2,795, most it can lose $2,798)
-- **bull_put_spread** MSFT: sell 500 / buy 470 puts, 2026-11-20, credit 6.23 on width 30 (opened 2026-10-05 16:25, cost $-650, most it can lose $2,377)
 - **bull_put_spread** QQQ: sell 732 / buy 700 puts, 2026-11-13, credit 5.34 on width 32 (opened 2026-10-05 17:26, cost $-543, most it can lose $2,666)
 - **bear_call_spread** TLT: sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2 (opened 2026-10-05 17:26, cost $-629, most it can lose $2,839)
 - **bear_call_spread** IWM: sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9 (opened 2026-10-08 15:27, cost $-772, most it can lose $2,860)

@@ -70,3 +70,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-09 14:03:39,bull_put_spread,AMZN,AMZN261113P00230000,buy,2,0,,canceled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.24 on width 15"
 2026-10-09 14:07:33,bull_put_spread,AMZN,AMZN261113P00230000,buy,2,2,2.88,filled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15"
 2026-10-09 14:07:36,bull_put_spread,AMZN,AMZN261113P00245000,sell,2,2,6.1,filled,"open: sell 245 / buy 230 puts, 2026-11-13, credit 3.18 on width 15"
+2026-10-13 13:58:52,bull_put_spread,MSFT,MSFT261120P00500000,buy,1,1,4.9,filled,"close: half the credit earned (buy back $314 vs $650 received)"
+2026-10-13 13:58:54,bull_put_spread,MSFT,MSFT261120P00470000,sell,1,1,1.8,filled,"close: half the credit earned (buy back $314 vs $650 received)"
+2026-10-13 13:58:56,bull_put_spread,NVDA,NVDA261113P00205000,buy,3,3,1.92,filled,"open: sell 215 / buy 205 puts, 2026-11-13, credit 2.05 on width 10"
+2026-10-13 13:59:19,bull_put_spread,NVDA,NVDA261113P00215000,sell,3,0,,canceled,"open: sell 215 / buy 205 puts, 2026-11-13, credit 2.05 on width 10"
+2026-10-13 13:59:21,bull_put_spread,NVDA,NVDA261113P00205000,sell,3,3,1.88,filled,"unwind"
