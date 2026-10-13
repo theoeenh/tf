@@ -1,46 +1,54 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-13 13:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-13 14:23 UTC.
 
-**Equity $97,366** (-2.63%) · max drawdown -4.9% · 24 closed trades · 16 open
+**Equity $97,442** (-2.56%) · max drawdown -4.9% · 32 closed trades · 8 open
 
 ## Open positions
 
-- **LONG 78.8542 NVDA** (rsi2_reversion) since 2026-10-12 15:00, entry 226.09, stop 221.75, target 234.77, now +0.08R  
+- **LONG 78.8542 NVDA** (rsi2_reversion) since 2026-10-12 15:00, entry 226.09, stop 221.75, target 234.77, now -0.15R  
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, low volatility (ATR 0.8% of price). Plan: entry 226.09, stop 221.75, target 234.77 (2:1); risking $342.
-- **LONG 41.1068 TSLA** (donchian_trend) since 2026-10-09 14:00, entry 385.35, stop 375.92, target 404.20, now -0.77R  
-  *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 22 = trend market, low volatility (ATR 1.0% of price). Plan: entry 385.35, stop 375.92, target 404.20 (2:1); risking $388.
-- **LONG 10.6474 TSLA** (squeeze_breakout) since 2026-10-09 14:00, entry 385.35, stop 375.80, target none (trailing), now -0.65R  
-  *Thinking:* LONG TSLA (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 22 = trend market, low volatility (ATR 1.0% of price). Plan: entry 385.35, stop 374.03, no target, trailing stop lets it run; risking $120.
-- **LONG 43.9666 TSLA** (rsi2_reversion) since 2026-10-12 14:00, entry 380.19, stop 371.31, target 397.96, now -0.24R  
-  *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, low volatility (ATR 0.9% of price). Plan: entry 380.19, stop 371.31, target 397.96 (2:1); risking $390.
-- **LONG 34.8483 MSFT** (donchian_trend) since 2026-10-05 14:00, entry 527.70, stop 516.43, target 550.24, now +1.20R  
-  *Thinking:* LONG MSFT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 14 = chop market, high volatility (ATR 0.9% of price). Plan: entry 527.70, stop 516.43, target 550.24 (2:1); risking $393. AI analyst view +1: it agrees with this trade.
-- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +1.65R  
+- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +2.62R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 30 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 526.39, stop 517.42, target 553.30 (3:1); risking $139. Strong trend, so the target was widened.
-- **LONG 1.5141 AMZN** (rsi2_reversion) since 2026-10-08 19:00, entry 254.55, stop 249.77, target 264.09, now +1.04R  
+- **LONG 1.5141 AMZN** (rsi2_reversion) since 2026-10-08 19:00, entry 254.55, stop 249.77, target 264.09, now +1.65R  
   *Thinking:* LONG AMZN (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 23 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 254.55, stop 249.77, target 264.09 (2:1); risking $7.
-- **LONG 25.7071 META** (rsi2_reversion) since 2026-10-07 14:00, entry 723.40, stop 708.09, target 754.01, now +1.29R  
-  *Thinking:* LONG META (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 17 = chop market, low volatility (ATR 0.8% of price). Plan: entry 723.40, stop 708.09, target 754.01 (2:1); risking $393.
-- **LONG 38.1582 GOOGL** (squeeze_breakout) since 2026-10-08 13:00, entry 353.51, stop 346.26, target none (trailing), now -0.11R  
+- **LONG 38.1582 GOOGL** (squeeze_breakout) since 2026-10-08 13:00, entry 353.51, stop 346.35, target none (trailing), now +0.51R  
   *Thinking:* LONG GOOGL (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 0.7% of price). Plan: entry 353.51, stop 346.26, no target, trailing stop lets it run; risking $276.
-- **LONG 56.0210 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now +0.78R  
+- **LONG 56.0210 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now +1.43R  
   *Thinking:* LONG GOOGL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 0.8% of price). Plan: entry 347.34, stop 340.47, target 361.07 (2:1); risking $385.
-- **LONG 7.6935 AMD** (rsi2_reversion) since 2026-10-12 14:00, entry 596.45, stop 577.57, target 653.10, now -0.12R  
-  *Thinking:* LONG AMD (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 26 = trend market, low volatility (ATR 1.3% of price). Plan: entry 596.45, stop 577.57, target 653.10 (3:1); risking $145.
-- **LONG 26.2642 XOM** (donchian_trend) since 2026-10-06 16:00, entry 165.38, stop 162.57, target 173.82, now +2.40R  
-  *Thinking:* LONG XOM (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 31 = strong market, low volatility (ATR 0.7% of price). Plan: entry 165.38, stop 162.57, target 173.82 (3:1); risking $74. Strong trend, so the target was widened.
-- **LONG 40.4865 QQQ** (donchian_trend) since 2026-10-02 14:00, entry 752.37, stop 742.58, target 771.96, now -0.65R  
-  *Thinking:* LONG QQQ (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, high volatility (ATR 0.5% of price). Plan: entry 752.37, stop 742.58, target 771.96 (2:1); risking $397. Warning: jobs report coming up while in the trade.
-- **LONG 11.3910 QQQ** (rsi2_reversion) since 2026-10-08 18:00, entry 746.01, stop 737.59, target 762.85, now -0.00R  
+- **LONG 11.3910 QQQ** (rsi2_reversion) since 2026-10-08 18:00, entry 746.01, stop 737.59, target 762.85, now -0.27R  
   *Thinking:* LONG QQQ (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.5% of price). Plan: entry 746.01, stop 737.59, target 762.85 (2:1); risking $96.
-- **LONG 88.2258 USO** (donchian_trend) since 2026-10-12 14:00, entry 151.91, stop 147.48, target 160.76, now -0.19R  
+- **LONG 88.2258 USO** (donchian_trend) since 2026-10-12 14:00, entry 151.91, stop 147.48, target 160.76, now -0.20R  
   *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 9 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 151.91, stop 147.48, target 160.76 (2:1); risking $390.
-- **LONG 0.1766 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 146.35, target none (trailing), now +0.23R  
+- **LONG 0.1766 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 146.40, target none (trailing), now +0.22R  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 149.83, stop 144.55, no target, trailing stop lets it run; risking $1.
 
 ## Closed trades (newest first)
 
+- **2026-10-13 13:00 · LONG XOM · donchian_trend · +2.98R · $+220** (fees $0, target)  
+  *Thinking:* LONG XOM (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 31 = strong market, low volatility (ATR 0.7% of price). Plan: entry 165.38, stop 162.57, target 173.82 (3:1); risking $74. Strong trend, so the target was widened.  
+  *Lesson:* Plan worked. Target hit (+2.98R).
+- **2026-10-13 13:00 · LONG META · rsi2_reversion · +1.98R · $+780** (fees $1, target)  
+  *Thinking:* LONG META (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 17 = chop market, low volatility (ATR 0.8% of price). Plan: entry 723.40, stop 708.09, target 754.01 (2:1); risking $393.  
+  *Lesson:* Plan worked. Target hit (+1.98R). Peak was +3.1R, kept +2.0R.
+- **2026-10-13 13:00 · LONG MSFT · donchian_trend · +1.98R · $+779** (fees $1, target)  
+  *Thinking:* LONG MSFT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 14 = chop market, high volatility (ATR 0.9% of price). Plan: entry 527.70, stop 516.43, target 550.24 (2:1); risking $393. AI analyst view +1: it agrees with this trade.  
+  *Lesson:* Plan worked. Target hit (+1.98R).
+- **2026-10-13 13:00 · LONG TSLA · rsi2_reversion · -1.01R · $-396** (fees $1, stop)  
+  *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, low volatility (ATR 0.9% of price). Plan: entry 380.19, stop 371.31, target 397.96 (2:1); risking $390.  
+  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-1.01R, best point +0.1R)
+- **2026-10-13 13:00 · LONG QQQ · donchian_trend · -1.33R · $-527** (fees $1, stop)  
+  *Thinking:* LONG QQQ (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, high volatility (ATR 0.5% of price). Plan: entry 752.37, stop 742.58, target 771.96 (2:1); risking $397. Warning: jobs report coming up while in the trade.  
+  *Lesson:* Held through a scheduled event (earnings / Fed) and price gapped through the stop. (-1.33R, best point +1.1R)
+- **2026-10-13 13:00 · LONG AMD · rsi2_reversion · -1.01R · $-147** (fees $0, stop)  
+  *Thinking:* LONG AMD (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 26 = trend market, low volatility (ATR 1.3% of price). Plan: entry 596.45, stop 577.57, target 653.10 (3:1); risking $145.  
+  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-1.01R, best point +0.1R)
+- **2026-10-13 13:00 · LONG TSLA · squeeze_breakout · -1.16R · $-140** (fees $0, trail)  
+  *Thinking:* LONG TSLA (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 22 = trend market, low volatility (ATR 1.0% of price). Plan: entry 385.35, stop 374.03, no target, trailing stop lets it run; risking $120.  
+  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-1.16R, best point +0.2R)
+- **2026-10-13 13:00 · LONG TSLA · donchian_trend · -1.39R · $-540** (fees $1, stop)  
+  *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 22 = trend market, low volatility (ATR 1.0% of price). Plan: entry 385.35, stop 375.92, target 404.20 (2:1); risking $388.  
+  *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.39R, best point +0.3R)
 - **2026-10-12 14:00 · LONG NVDA · rsi2_reversion · -1.02R · $-391** (fees $1, stop)  
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.46, stop 225.61, target 240.16 (2:1); risking $385.  
   *Lesson:* Valid setup, planned 1R loss. Normal variance, no clear mistake. (-1.02R, best point +0.7R)
