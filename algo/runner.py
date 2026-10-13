@@ -33,7 +33,7 @@ from .system import MAX_GROSS, MAX_OPEN_RISK
 
 log = logging.getLogger(__name__)
 INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml", "insider_low_short",
-                    "insider_after_earnings", "insider_fund", "insider_conviction", "insider_confirm", "insider_fresh", "insider_fresh_officer"}
+                    "insider_after_earnings", "insider_fund", "insider_conviction", "insider_confirm", "insider_fresh", "insider_fresh_officer", "insider_fresh_wave"}
 SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund"}  # FINRA short volume
 
 

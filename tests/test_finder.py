@@ -521,3 +521,21 @@ def test_insider_fresh_officer_counts_only_officers(monkeypatch):
     out = ff.insider_fresh_officer(prices, buyers=1, gap=365)["AAA"]
     assert out.sum() == 1 and out.loc["2021-03-01"] == 1  # the director's buy does not count
     assert ff.insider_fresh_officer(prices, buyers=2, gap=365)["AAA"].sum() == 0
+
+
+def test_insider_fresh_wave_needs_a_past_sector_wave(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-04", periods=80)
+    names = ["A1", "A2", "A3", "B1"]
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in names}
+    on = lambda when: (lambda p, **k: {a: pd.Series((p[a].index == when.get(a)).astype(int), p[a].index)  # noqa: E731
+                                       for a in p})
+    monkeypatch.setattr(ff, "insider_fresh", on({"A3": days[30], "B1": days[30]}))
+    monkeypatch.setattr(ff, "insider_cluster", on({"A1": days[10], "A2": days[20], "A3": days[40]}))
+    monkeypatch.setattr(wide, "sectors", lambda: {"A1": "Ind", "A2": "Ind", "A3": "Ind", "B1": "Tech"})
+    out = ff.insider_fresh_wave(prices, buyers=1, companies=3, window=60)
+    assert out["A3"].loc[days[30]] == 1   # A1 + A2 clusters before, A3 itself: 3 companies
+    assert out["B1"].sum() == 0           # no wave in its sector
+    out = ff.insider_fresh_wave(prices, buyers=1, companies=4, window=60)
+    assert out["A3"].sum() == 0           # A3's own later cluster (day 40) never counts
