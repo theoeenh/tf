@@ -8,6 +8,15 @@
 -0.10940444969166241
 ]
 },
+"AAPL|donchian_trend|+|2026-10-13 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3621373651990988,
+0.1378066478473864
+]
+},
 "AAPL|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",
@@ -224,6 +233,15 @@
 -0.12063260588289587
 ]
 },
+"GOOGL|donchian_trend|+|2026-10-13 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.06R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.3074626341918178,
+-0.058353398044745375
+]
+},
 "GOOGL|rsi2_reversion|+|2026-10-01 14:00": {
 "skip": false,
 "reason": "",
@@ -258,6 +276,15 @@
 "pred": [
 0.4181839852961121,
 0.1554396362524213
+]
+},
+"META|donchian_trend|+|2026-10-13 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.31173072768045745,
+-0.04304048476325206
 ]
 },
 "META|rsi2_reversion|+|2026-10-01 13:00": {
@@ -312,6 +339,15 @@
 "pred": [
 0.3982068868061793,
 0.26961894042573153
+]
+},
+"MSFT|donchian_trend|+|2026-10-13 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2923387785620052,
+-0.1126142267631336
 ]
 },
 "MSFT|rsi2_reversion|+|2026-10-01 13:00": {
@@ -566,6 +602,15 @@
 0.14608777278283236
 ]
 },
+"TSLA|rsi2_reversion|+|2026-10-13 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.34913200427360597,
+0.11387090751387241
+]
+},
 "TSLA|squeeze_breakout|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
@@ -618,6 +663,15 @@
 "pred": [
 0.3333196854129171,
 0.03566058357769841
+]
+},
+"XOM|donchian_trend|+|2026-10-13 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2849371845344538,
+-0.13916940129021182
 ]
 },
 "XOM|rsi2_reversion|+|2026-10-05 14:00": {
