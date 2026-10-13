@@ -79,3 +79,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-13 14:57:30,bull_put_spread,NVDA,NVDA261120P00200000,buy,2,2,2.58,filled,"open: sell 215 / buy 200 puts, 2026-11-20, credit 3.46 on width 15"
 2026-10-13 14:57:55,bull_put_spread,NVDA,NVDA261120P00215000,sell,2,0,,canceled,"open: sell 215 / buy 200 puts, 2026-11-20, credit 3.46 on width 15"
 2026-10-13 14:57:57,bull_put_spread,NVDA,NVDA261120P00200000,sell,2,2,2.52,filled,"unwind"
+2026-10-13 15:28:25,bull_put_spread,AAPL,AAPL261113P00320000,buy,2,0,,canceled,"open: sell 335 / buy 320 puts, 2026-11-13, credit 3.13 on width 15"
