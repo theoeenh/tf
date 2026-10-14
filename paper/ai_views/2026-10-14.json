@@ -1,0 +1,222 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Crypto headlines mixed after an $800M liquidation; CPI today can swing it; no view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "ETH ETFs broke a ten-day outflow streak, but the month is flat and CPI is due; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Solana ETFs still see outflows; no clear edge; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "TSLA earnings Wed 21 Oct"
+  ],
+  "reasoning": "Earnings next week can gap the price; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings Oct 29"
+  ],
+  "reasoning": "HomeView launch coverage is positive but already well known; earnings outside the horizon; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "NFLX earnings Tue 20 Oct"
+  ],
+  "reasoning": "Earnings next Tuesday can gap the price; headlines split; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "CPI is due this morning and headlines flag rising rates as a threat to AI stocks; the print can move the index either way; no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Long bonds react most directly to today's CPI; direction unknowable from the brief; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "CPI inflation report today"
+  ],
+  "reasoning": "Nothing specific in the brief beyond today's CPI risk for the whole market; no view."
+ }
+]
