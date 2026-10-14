@@ -386,6 +386,15 @@
 0.1653299474296649
 ]
 },
+"GOOGL|vwap_reversion|+|2026-10-14 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 49% estimated chance of profit, expected -0.09R (avg win +0.64R, avg loss -0.81R).",
+"size": 1.0,
+"pred": [
+0.4926921919290542,
+-0.09455444487326142
+]
+},
 "META|donchian_trend|+|2026-10-13 14:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).",
