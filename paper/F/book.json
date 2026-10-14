@@ -211,6 +211,28 @@
    "desc": "AAPL Nov 27 2026 340 Call, delta +0.60",
    "opened": "2026-10-14 14:57",
    "id": "long_call-AAPL-2026-10-14"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "GOOGL",
+   "legs": [
+    {
+     "symbol": "GOOGL261127P00305000",
+     "qty": 1,
+     "price": 3.15
+    },
+    {
+     "symbol": "GOOGL261127P00330000",
+     "qty": -1,
+     "price": 7.85
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": -470.0,
+   "max_loss": 2042.0000000000002,
+   "desc": "sell 330 / buy 305 puts, 2026-11-27, credit 4.58 on width 25",
+   "opened": "2026-10-14 17:29",
+   "id": "bull_put_spread-GOOGL-2026-10-14"
   }
  ],
  "closed": [
