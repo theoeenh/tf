@@ -505,6 +505,42 @@ def insider_fresh_wave(prices: dict, buyers: int = 2, companies: int = 3, window
     return out
 
 
+def insider_underwater(prices: dict, buyers: int = 2, discount: float = 0.10) -> dict:
+    """Buy below the insiders' own price: the first close at least `discount` under the average price
+    (value-weighted) that `buyers` or more distinct insiders paid in open-market purchases filed in the
+    last 90 calendar days. Insiders rarely buy to lose; a stock trading well below where several of them
+    just bought is either a mistake by them or a bargain. One signal per 90 days per stock; filings and
+    closes up to that day only."""
+    t = _insider("P")
+    if len(t):
+        t = t[(t["price"] > 0) & (t["shares"] > 0)].sort_values("filed")
+    by = dict(tuple(t.groupby("ticker"))) if len(t) else {}
+    out = {}
+    for a, df in prices.items():
+        s = np.zeros(len(df), int)
+        g = by.get(a)
+        if g is not None:
+            filed = pd.DatetimeIndex(g["filed"]).normalize().to_numpy()
+            val = np.concatenate([[0.0], np.cumsum((g["price"] * g["shares"]).to_numpy(float))])
+            sh = np.concatenate([[0.0], np.cumsum(g["shares"].to_numpy(float))])
+            owners = g["owner"].to_numpy()
+            idx = df.index.to_numpy()
+            hi = np.searchsorted(filed, idx, side="right")                            # filed <= d
+            lo = np.searchsorted(filed, idx - np.timedelta64(90, "D"), side="right")  # filed > d - 90
+            close = df["Close"].to_numpy(float)
+            last = None
+            for i in np.flatnonzero(hi > lo):
+                d = df.index[i]
+                if last is not None and d - last <= pd.Timedelta(days=90):
+                    continue
+                vwap = (val[hi[i]] - val[lo[i]]) / (sh[hi[i]] - sh[lo[i]])
+                if close[i] <= vwap * (1 - discount) and len(set(owners[lo[i]:hi[i]])) >= buyers:
+                    s[i] = 1
+                    last = d
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -575,6 +611,10 @@ WIDE_FAMILIES = {
                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # fresh insider buyers during a sector-wide wave of insider clusters (2026-10-13)
     "insider_fresh_wave": (insider_fresh_wave, {"buyers": [1, 2], "companies": [3, 5]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # buying below the price several insiders just paid (2026-10-14)
+    "insider_underwater": (insider_underwater, {"buyers": [1, 2], "discount": [0.05, 0.15]},
                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is

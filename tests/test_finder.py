@@ -539,3 +539,20 @@ def test_insider_fresh_wave_needs_a_past_sector_wave(monkeypatch):
     assert out["B1"].sum() == 0           # no wave in its sector
     out = ff.insider_fresh_wave(prices, buyers=1, companies=4, window=60)
     assert out["A3"].sum() == 0           # A3's own later cluster (day 40) never counts
+
+
+def test_insider_underwater_uses_only_filed_purchases_and_past_closes(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=60)
+    close = pd.Series(100.0, index=days)
+    close.iloc[30:] = 88.0                                   # 12% under the insiders' price from day 30
+    prices = {"AAA": pd.DataFrame({"Close": close})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[10], code="P", price=100.0, shares=1000),
+                      dict(ticker="AAA", owner="o2", filed=days[20], code="P", price=100.0, shares=500),
+                      dict(ticker="AAA", owner="o3", filed=days[40], code="P", price=50.0, shares=99999)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_underwater(prices, buyers=2, discount=0.10)["AAA"]
+    assert out.loc[days[30]] == 1 and out.sum() == 1         # o3's later cheap purchase changes nothing before
+    assert ff.insider_underwater(prices, buyers=3, discount=0.10)["AAA"].iloc[:40].sum() == 0
+    assert ff.insider_underwater(prices, buyers=2, discount=0.15)["AAA"].sum() == 0
