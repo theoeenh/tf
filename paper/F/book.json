@@ -1,23 +1,6 @@
 {
  "open": [
   {
-   "playbook": "long_call",
-   "underlying": "QQQ",
-   "legs": [
-    {
-     "symbol": "QQQ261113C00744000",
-     "qty": 1,
-     "price": 26.42
-    }
-   ],
-   "expiry": "2026-11-13",
-   "cost": 2642.0,
-   "max_loss": 2678.0,
-   "desc": "QQQ Nov 13 2026 744 Call, delta +0.60",
-   "opened": "2026-10-05 13:56",
-   "id": "long_call-QQQ-2026-10-05"
-  },
-  {
    "playbook": "long_put",
    "underlying": "JPM",
    "legs": [
@@ -106,28 +89,6 @@
    "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
    "opened": "2026-10-05 15:55",
    "id": "long_call-MSFT-2026-10-05"
-  },
-  {
-   "playbook": "bull_put_spread",
-   "underlying": "QQQ",
-   "legs": [
-    {
-     "symbol": "QQQ261113P00700000",
-     "qty": 1,
-     "price": 4.87
-    },
-    {
-     "symbol": "QQQ261113P00732000",
-     "qty": -1,
-     "price": 10.3
-    }
-   ],
-   "expiry": "2026-11-13",
-   "cost": -543.0,
-   "max_loss": 2666.0,
-   "desc": "sell 732 / buy 700 puts, 2026-11-13, credit 5.34 on width 32",
-   "opened": "2026-10-05 17:26",
-   "id": "bull_put_spread-QQQ-2026-10-05"
   },
   {
    "playbook": "bear_call_spread",
@@ -330,6 +291,51 @@
    "closed": "2026-10-13 13:58",
    "why_closed": "half the credit earned (buy back $314 vs $650 received)",
    "pnl": 339.99999999999994
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "QQQ",
+   "legs": [
+    {
+     "symbol": "QQQ261113C00744000",
+     "qty": 1,
+     "price": 26.42
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": 2642.0,
+   "max_loss": 2678.0,
+   "desc": "QQQ Nov 13 2026 744 Call, delta +0.60",
+   "opened": "2026-10-05 13:56",
+   "id": "long_call-QQQ-2026-10-05",
+   "closed": "2026-10-14 14:26",
+   "why_closed": "account A closed the stock",
+   "pnl": -1359.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "QQQ",
+   "legs": [
+    {
+     "symbol": "QQQ261113P00700000",
+     "qty": 1,
+     "price": 4.87
+    },
+    {
+     "symbol": "QQQ261113P00732000",
+     "qty": -1,
+     "price": 10.3
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -543.0,
+   "max_loss": 2666.0,
+   "desc": "sell 732 / buy 700 puts, 2026-11-13, credit 5.34 on width 32",
+   "opened": "2026-10-05 17:26",
+   "id": "bull_put_spread-QQQ-2026-10-05",
+   "closed": "2026-10-14 14:26",
+   "why_closed": "account A closed the stock",
+   "pnl": -232.0
   }
  ]
 }

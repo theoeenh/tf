@@ -82,3 +82,7 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-13 15:28:25,bull_put_spread,AAPL,AAPL261113P00320000,buy,2,0,,canceled,"open: sell 335 / buy 320 puts, 2026-11-13, credit 3.13 on width 15"
 2026-10-13 15:58:28,bull_put_spread,AAPL,AAPL261127P00315000,buy,2,2,2.9,filled,"open: sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15"
 2026-10-13 15:58:30,bull_put_spread,AAPL,AAPL261127P00330000,sell,2,2,5.55,filled,"open: sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15"
+2026-10-14 14:27:48,long_call,QQQ,QQQ261113C00744000,sell,1,1,12.83,filled,"close: account A closed the stock"
+2026-10-14 14:27:51,bull_put_spread,QQQ,QQQ261113P00732000,buy,1,1,13.28,filled,"close: account A closed the stock"
+2026-10-14 14:27:53,bull_put_spread,QQQ,QQQ261113P00700000,sell,1,1,5.53,filled,"close: account A closed the stock"
+2026-10-14 14:28:19,long_call,AAPL,AAPL261120C00340000,buy,1,0,,canceled,"open: AAPL Nov 20 2026 340 Call, delta +0.62"
