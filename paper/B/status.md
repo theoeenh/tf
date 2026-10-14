@@ -1,24 +1,26 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-14 14:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-14 15:22 UTC.
 
-**Equity $96,607** (-3.39%) · max drawdown -4.8% · 33 closed trades · 7 open
+**Equity $96,381** (-3.62%) · max drawdown -4.8% · 33 closed trades · 8 open
 
 ## Open positions
 
-- **LONG 78.2278 NVDA** (rsi2_reversion) since 2026-10-12 15:00, entry 226.09, stop 221.75, target 234.77, now -0.39R  
+- **LONG 78.2278 NVDA** (rsi2_reversion) since 2026-10-12 15:00, entry 226.09, stop 221.75, target 234.77, now -0.42R  
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, low volatility (ATR 0.8% of price). Plan: entry 226.09, stop 221.75, target 234.77 (2:1); risking $340.
-- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now +1.50R  
+- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now +1.19R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 35 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 528.04, stop 518.64, target 556.25 (3:1); risking $25. Strong trend, so the target was widened.
-- **LONG 75.0563 AMZN** (rsi2_reversion) since 2026-10-09 13:00, entry 256.40, stop 251.73, target 265.72, now +0.33R  
+- **LONG 75.0563 AMZN** (rsi2_reversion) since 2026-10-09 13:00, entry 256.40, stop 251.73, target 265.72, now -0.00R  
   *Thinking:* LONG AMZN (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 23 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 256.40, stop 251.73, target 265.72 (2:1); risking $350.
-- **LONG 38.1464 GOOGL** (squeeze_breakout) since 2026-10-08 13:00, entry 353.51, stop 346.66, target none (trailing), now +0.20R  
+- **LONG 5.1983 META** (rsi2_reversion) since 2026-10-14 14:00, entry 751.64, stop 728.25, target 821.82, now -0.22R  
+  *Thinking:* LONG META (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 35 = strong market, mid volatility (ATR 1.2% of price). Plan: entry 751.64, stop 728.25, target 821.82 (3:1); risking $122. Strong trend, so the target was widened.
+- **LONG 38.1464 GOOGL** (squeeze_breakout) since 2026-10-08 13:00, entry 353.51, stop 346.66, target none (trailing), now +0.08R  
   *Thinking:* LONG GOOGL (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 0.7% of price). Plan: entry 353.51, stop 346.26, no target, trailing stop lets it run; risking $276.
-- **LONG 12.9741 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now +1.11R  
+- **LONG 12.9741 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now +0.98R  
   *Thinking:* LONG GOOGL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 0.8% of price). Plan: entry 347.34, stop 340.47, target 361.07 (2:1); risking $89.
-- **LONG 41.6831 USO** (donchian_trend) since 2026-10-12 14:00, entry 151.91, stop 147.48, target 160.76, now +0.44R  
+- **LONG 41.6831 USO** (donchian_trend) since 2026-10-12 14:00, entry 151.91, stop 147.48, target 160.76, now +0.33R  
   *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 9 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 151.91, stop 147.48, target 160.76 (2:1); risking $184.
-- **LONG 0.3308 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 148.79, target none (trailing), now +0.76R  
+- **LONG 0.3308 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 148.82, target none (trailing), now +0.67R  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 149.83, stop 144.55, no target, trailing stop lets it run; risking $2.
 
 ## Closed trades (newest first)
@@ -96,7 +98,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
   *Thinking:* LONG META (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 14 = chop market, low volatility (ATR 0.9% of price). Plan: entry 738.17, stop 717.57, no target, trailing stop lets it run; risking $393. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.70R, best point +0.5R)
 - **2026-10-05 04:00 · LONG BTC · donchian_trend · -1.33R · $-522** (fees $257, event)  
-  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. AI analyst view +1: it agrees with this trade.  
+  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. News: neutral tone (+0.9σ vs usual), normal coverage. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.33R, best point +0.8R)
 - **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-362** (fees $86, event)  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.  
@@ -123,10 +125,8 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $399. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (21)
+## Skipped by the learner (22)
 
-- 2026-10-02 15:00 ETH rsi2_reversion: would have made -1.28R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.13R (avg win +2.49R, avg loss -1.16R).
-- 2026-10-02 16:00 SOL rsi2_reversion: would have made -1.25R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-03 13:00 BTC squeeze_breakout: would have made +0.81R. SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.09R (avg win +1.58R, avg loss -0.87R).
 - 2026-10-02 19:00 BTC rsi2_reversion: would have made +0.85R. SKIPPED by the ML learner: 24% estimated chance of profit, expected -0.28R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-04 23:00 ETH donchian_trend: would have made -1.67R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.43R, avg loss -1.16R).
@@ -135,3 +135,5 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 - 2026-10-04 20:00 SOL rsi2_reversion: would have made -1.19R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.49R, avg loss -1.16R).
 - 2026-10-07 14:00 QQQ rsi2_reversion: would have made -1.02R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.03R (avg win +2.48R, avg loss -1.16R).
 - 2026-10-08 19:00 AAPL donchian_trend: would have made -1.93R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.43R, avg loss -1.16R).
+- 2026-10-13 14:00 MSFT donchian_trend: would have made -1.02R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.43R, avg loss -1.16R).
+- 2026-10-13 14:00 META donchian_trend: would have made -1.01R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).
