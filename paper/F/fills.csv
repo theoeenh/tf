@@ -97,3 +97,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-15 14:28:43,bull_put_spread,AMZN,AMZN261113P00230000,sell,2,0,,canceled,"close: account A closed the stock"
 2026-10-15 14:57:42,bull_put_spread,AMZN,AMZN261113P00245000,buy,2,2,7.9,filled,"close: account A closed the stock"
 2026-10-15 14:58:04,bull_put_spread,AMZN,AMZN261113P00230000,sell,2,0,,canceled,"close: account A closed the stock"
+2026-10-15 15:13:06,bull_put_spread,AMZN,AMZN261113P00245000,buy,2,2,7.25,filled,"close: account A closed the stock"
+2026-10-15 15:13:08,bull_put_spread,AMZN,AMZN261113P00230000,sell,2,2,2.9,filled,"close: account A closed the stock"
