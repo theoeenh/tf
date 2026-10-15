@@ -556,3 +556,35 @@ def test_insider_underwater_uses_only_filed_purchases_and_past_closes(monkeypatc
     assert out.loc[days[30]] == 1 and out.sum() == 1         # o3's later cheap purchase changes nothing before
     assert ff.insider_underwater(prices, buyers=3, discount=0.10)["AAA"].iloc[:40].sum() == 0
     assert ff.insider_underwater(prices, buyers=2, discount=0.15)["AAA"].sum() == 0
+
+
+def test_insider_clean_skips_stocks_with_recent_insider_sales(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=300)
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    buys = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[10], code="P", price=100.0, shares=10),
+                         dict(ticker="AAA", owner="o2", filed=days[200], code="P", price=100.0, shares=10)])
+    sells = pd.DataFrame([dict(ticker="AAA", owner="o9", filed=days[150], code="S", price=100.0, shares=10),
+                          dict(ticker="AAA", owner="o9", filed=days[250], code="S", price=100.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": buys if code == "P" else sells)
+    out = ff.insider_clean(prices, buyers=1, quiet=180)["AAA"]
+    assert out.loc[days[10]] == 1 and out.sum() == 1        # day 200: a sale 50 sessions before; day 250's is later
+    assert ff.insider_clean(prices, buyers=1, quiet=30)["AAA"].loc[days[200]] == 1
+    assert ff.insider_clean(prices, buyers=2, quiet=30)["AAA"].sum() == 0
+
+
+def test_insider_repeat_fires_on_the_same_owners_second_buy(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=200)
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[10], code="P", price=100.0, shares=10),
+                      dict(ticker="AAA", owner="o2", filed=days[15], code="P", price=100.0, shares=10),
+                      dict(ticker="AAA", owner="o1", filed=days[30], code="P", price=100.0, shares=10),
+                      dict(ticker="AAA", owner="o2", filed=days[150], code="P", price=100.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_repeat(prices, buys=2, window=60)["AAA"]
+    assert out.loc[days[30]] == 1 and out.sum() == 1         # o1 again 20 sessions later; o2's second is too late
+    assert ff.insider_repeat(prices, buys=2, window=20)["AAA"].sum() == 0
+    assert ff.insider_repeat(prices, buys=3, window=60)["AAA"].sum() == 0

@@ -541,6 +541,65 @@ def insider_underwater(prices: dict, buyers: int = 2, discount: float = 0.10) ->
     return out
 
 
+def _once_per(days_sig: list, index: pd.DatetimeIndex, gap: int = 90) -> np.ndarray:
+    """1 on each signal position (sorted, < len(index)), keeping one per `gap` calendar days."""
+    s = np.zeros(len(index), int)
+    last = None
+    for i in sorted(set(days_sig)):
+        if i >= len(index):
+            break
+        if last is None or index[i] - last > pd.Timedelta(days=gap):
+            s[i] = 1
+            last = index[i]
+    return s
+
+
+def insider_clean(prices: dict, buyers: int = 1, quiet: int = 180) -> dict:
+    """Insider buying with no insider selling: the day `buyers` or more distinct insiders have filed
+    open-market purchases within 30 days, while no insider sale (Form 4 code S) was filed in the `quiet`
+    calendar days up to that day. Buying while colleagues also sell is often diversification noise; buying
+    while nobody sells is a cleaner vote. One signal per 90 days per stock; filings up to that day only."""
+    buys, sells = _insider("P"), _insider("S")
+    bb = dict(tuple(buys.sort_values("filed").groupby("ticker"))) if len(buys) else {}
+    ss = {a: pd.DatetimeIndex(g["filed"]).normalize().sort_values()
+          for a, g in sells.groupby("ticker")} if len(sells) else {}
+    out = {}
+    for a, df in prices.items():
+        g, hits = bb.get(a), []
+        if g is not None:
+            filed = pd.DatetimeIndex(g["filed"]).normalize()
+            owners = g["owner"].to_numpy()
+            sold = ss.get(a, pd.DatetimeIndex([]))
+            for j, d in enumerate(filed):
+                if len(set(owners[(filed > d - pd.Timedelta(days=30)) & (filed <= d)])) < buyers:
+                    continue
+                if ((sold > d - pd.Timedelta(days=quiet)) & (sold <= d)).any():
+                    continue
+                hits.append(int(_on_days(pd.Series([d]), df.index)[0]))
+        out[a] = pd.Series(_once_per(hits, df.index), df.index)
+    return out
+
+
+def insider_repeat(prices: dict, buys: int = 2, window: int = 60) -> dict:
+    """One insider coming back for more: the day the same person files their `buys`-th open-market
+    purchase of the stock within `window` calendar days (separate filing days). Adding again after a
+    first buy shows more conviction than a single purchase. One signal per 90 days per stock; filings up
+    to that day only."""
+    t = _insider("P")
+    by = dict(tuple(t.sort_values("filed").groupby("ticker"))) if len(t) else {}
+    out = {}
+    for a, df in prices.items():
+        g, hits = by.get(a), []
+        if g is not None:
+            for _, h in g.groupby("owner"):
+                days = pd.DatetimeIndex(h["filed"]).normalize().unique().sort_values()
+                for k in range(buys - 1, len(days)):
+                    if days[k] - days[k - buys + 1] <= pd.Timedelta(days=window):
+                        hits.append(int(_on_days(pd.Series([days[k]]), df.index)[0]))
+        out[a] = pd.Series(_once_per(hits, df.index), df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -617,6 +676,14 @@ WIDE_FAMILIES = {
     "insider_underwater": (insider_underwater, {"buyers": [1, 2], "discount": [0.05, 0.15]},
                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider buying while no insider sells (2026-10-15)
+    "insider_clean": (insider_clean, {"buyers": [1, 2], "quiet": [180, 365]},
+                      {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                       "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # the same insider buying again within weeks (2026-10-15)
+    "insider_repeat": (insider_repeat, {"buys": [2, 3], "window": [30, 90]},
+                       {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                        "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
