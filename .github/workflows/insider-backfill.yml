@@ -7,6 +7,7 @@ on:
   schedule:
     - cron: "41 10 * * *"  # before the US open: the previous days' filings, for account E
     - cron: "41 22 * * *"  # after the close
+    - cron: "17 4 * * *"   # after the SEC posts the day's Form 4 index (around 02:00-03:00 UTC)
   workflow_dispatch:
     inputs:
       sector:
