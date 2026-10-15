@@ -39,6 +39,19 @@ WIDE_DIR = DATA_DIR / "wide"
 START = "2016-01-01"
 UA = {"User-Agent": "tf-research theoeenhoorn@gmail.com"}
 SEC_BULK = "https://www.sec.gov/files/structureddata/data/insider-transactions-data-sets/{q}_form345.zip"
+# the SEC moved the newer quarters (2026q2 on) to another folder; the old one answers 404 for them
+SEC_BULK_NEW = "https://www.sec.gov/files/datastandardsinnovation/data/insider-transactions-data-sets/{q}_form345.zip"
+
+
+def _bulk_zip(q: str) -> bytes:
+    """One quarter's Form 3/4/5 zip, from whichever SEC folder has it (OSError when neither does)."""
+    err = None
+    for url in (SEC_BULK, SEC_BULK_NEW):
+        try:
+            return _get(url.format(q=q), UA)
+        except OSError as exc:
+            err = exc
+    raise err
 
 
 def _get(url: str, headers=None, tries: int = 4) -> bytes:
@@ -221,7 +234,7 @@ def update_insider() -> pd.DataFrame:
         if q in done:
             continue
         try:
-            raw = _get(SEC_BULK.format(q=q), UA)
+            raw = _bulk_zip(q)
         except OSError as exc:
             log.info("%s not published yet (%s)", q, exc)
             continue
