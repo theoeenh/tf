@@ -1,0 +1,184 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Bitcoin testing $81k on rate-hike fears; no clear edge; no view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "TSLA earnings Wed 21 Oct"
+  ],
+  "reasoning": "Earnings next week and merger speculation (Barclays) can gap the price; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings Oct 29"
+  ],
+  "reasoning": "China launch news positive but known; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "JPMorgan sees 24% upside; a broker target is not an edge on a 1-20 day horizon; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [
+   "NFLX earnings Tue 20 Oct"
+  ],
+  "reasoning": "Earnings next Tuesday; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Yesterday's hot inflation print revived rate-hike fears (headlines); already priced after a -2% day; no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Rate-hike fears after the hot CPI are already in yesterday's move; no edge from the brief."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.1,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief stands out; no view."
+ }
+]
