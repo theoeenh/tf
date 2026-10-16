@@ -588,3 +588,37 @@ def test_insider_repeat_fires_on_the_same_owners_second_buy(monkeypatch):
     assert out.loc[days[30]] == 1 and out.sum() == 1         # o1 again 20 sessions later; o2's second is too late
     assert ff.insider_repeat(prices, buys=2, window=20)["AAA"].sum() == 0
     assert ff.insider_repeat(prices, buys=3, window=60)["AAA"].sum() == 0
+
+
+def test_insider_market_stress_needs_a_falling_market_up_to_that_day(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=80)
+    fall = pd.Series(100.0, index=days)
+    fall.iloc[30:] = 90.0                                    # every stock -10% from day 30
+    prices = {a: pd.DataFrame({"Close": fall.copy()}) for a in ("AAA", "BBB", "CCC")}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[25], code="P", price=100.0, shares=10),
+                      dict(ticker="BBB", owner="o2", filed=days[35], code="P", price=90.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_market_stress(prices, buyers=1, drop=0.05)
+    assert out["AAA"].sum() == 0                             # the fall came after AAA's buy
+    assert out["BBB"].loc[days[35]] == 1 and out["BBB"].sum() == 1
+    assert ff.insider_market_stress(prices, buyers=1, drop=0.15)["BBB"].sum() == 0
+
+
+def test_insider_top_exec_filters_on_title_and_value(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=200)
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    row = dict(ticker="AAA", code="P", price=100.0, shares=1000)
+    t = pd.DataFrame([row | dict(owner="o1", filed=days[10], title="Director", value=900_000),
+                      row | dict(owner="o2", filed=days[20], title="EVP, Chief Financial Officer", value=150_000),
+                      row | dict(owner="o3", filed=days[150], title="President and CEO", value=60_000),
+                      row | dict(owner="o3", filed=days[150], title="President and CEO", value=60_000)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    ceo = ff.insider_top_exec(prices, min_value=100_000, who="ceo")["AAA"]
+    assert ceo.loc[days[150]] == 1 and ceo.sum() == 1        # two filings that day add up to 120k
+    both = ff.insider_top_exec(prices, min_value=100_000, who="ceo_cfo")["AAA"]
+    assert both.loc[days[20]] == 1 and both.loc[days[150]] == 1 and both.sum() == 2
+    assert ff.insider_top_exec(prices, min_value=500_000, who="ceo_cfo")["AAA"].sum() == 0

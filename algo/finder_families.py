@@ -600,6 +600,44 @@ def insider_repeat(prices: dict, buys: int = 2, window: int = 60) -> dict:
     return out
 
 
+def insider_market_stress(prices: dict, buyers: int = 1, drop: float = 0.05) -> dict:
+    """Insiders buying while the whole market is falling: an insider cluster (insider_cluster, 30 days)
+    kept only when the median stock of the universe lost at least `drop` over the last 20 sessions
+    (closes up to the signal day). Insiders who buy into a broad sell-off are betting on their own
+    company, not on the market; forced selling by funds can push good stocks too low."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    market = (close / close.shift(20) - 1).median(axis=1)
+    stressed = market <= -drop
+    return {a: (s.astype(bool) & stressed.reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
+TOP_TITLES = {"ceo": r"\bCEO\b|CHIEF EXECUTIVE",
+              "ceo_cfo": r"\bCEO\b|CHIEF EXECUTIVE|\bCFO\b|CHIEF FINANCIAL"}
+
+
+def insider_top_exec(prices: dict, min_value: float = 100_000, who: str = "ceo") -> dict:
+    """The boss buys: an open-market purchase of at least `min_value` dollars (one filing day, summed)
+    by the chief executive (who='ceo') or the chief executive or finance officer (who='ceo_cfo'), from
+    the Form 4 title. They know the company best and buy with their own money. One signal per 90 days
+    per stock; filings up to that day only."""
+    t = _insider("P")
+    if len(t):
+        t = t[t["title"].fillna("").str.upper().str.contains(TOP_TITLES[who], regex=True)]
+        t = t.assign(day=pd.DatetimeIndex(t["filed"]).normalize())
+        t = t.groupby(["ticker", "owner", "day"], as_index=False)["value"].sum()
+        t = t[t["value"] >= min_value]
+    by = {a: g["day"] for a, g in t.groupby("ticker")} if len(t) else {}
+    out = {}
+    for a, df in prices.items():
+        d = by.get(a)
+        hits = list(_on_days(d, df.index)) if d is not None else []
+        out[a] = pd.Series(_once_per(hits, df.index), df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -684,6 +722,14 @@ WIDE_FAMILIES = {
     "insider_repeat": (insider_repeat, {"buys": [2, 3], "window": [30, 90]},
                        {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                         "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying while the whole market sells off (2026-10-16)
+    "insider_market_stress": (insider_market_stress, {"buyers": [1, 2], "drop": [0.03, 0.06]},
+                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                               "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # the CEO (or CFO) buying with their own money (2026-10-16)
+    "insider_top_exec": (insider_top_exec, {"min_value": [100_000, 500_000], "who": ["ceo", "ceo_cfo"]},
+                         {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                          "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
