@@ -485,6 +485,15 @@
 0.05097124796256458
 ]
 },
+"META|rsi2_reversion|+|2026-10-16 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35883913209407453,
+0.15101649018762942
+]
+},
 "META|squeeze_breakout|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
@@ -1023,6 +1032,15 @@
 "pred": [
 0.43037292307740077,
 -0.08603691767149574
+]
+},
+"USO|rsi2_reversion|+|2026-10-16 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.10R (avg win +2.48R, avg loss -1.15R).",
+"size": 1.0,
+"pred": [
+0.2899907158049129,
+-0.09949787575039504
 ]
 },
 "USO|squeeze_breakout|+|2026-10-01 18:00": {
