@@ -1,8 +1,8 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-16 17:02 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-16 17:15 UTC.
 
-**Equity $95,391** (-4.61%) · max drawdown -5.9% · 49 closed trades · 6 open
+**Equity $95,589** (-4.41%) · max drawdown -5.9% · 50 closed trades · 5 open
 
 ## Open positions
 
@@ -16,11 +16,12 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG META (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 728.50, stop 707.98, target 769.53 (2:1); risking $345.
 - **LONG 50.6044 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now -0.47R  
   *Thinking:* LONG GOOGL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 0.8% of price). Plan: entry 347.34, stop 340.47, target 361.07 (2:1); risking $347.
-- **LONG 80.2550 USO** (donchian_trend) since 2026-10-12 14:00, entry 151.91, stop 147.48, target 160.76, now +1.43R  
-  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 9 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 151.91, stop 147.48, target 160.76 (2:1); risking $355.
 
 ## Closed trades (newest first)
 
+- **2026-10-16 16:00 · LONG USO · donchian_trend · +1.99R · $+707** (fees $1, target)  
+  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 9 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 151.91, stop 147.48, target 160.76 (2:1); risking $355.  
+  *Lesson:* Plan worked. Target hit (+1.99R).
 - **2026-10-15 13:00 · LONG AMZN · rsi2_reversion · -1.02R · $-269** (fees $1, stop)  
   *Thinking:* LONG AMZN (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 254.50, stop 249.71, target 264.08 (2:1); risking $265.  
   *Lesson:* Was at least 1R in profit, then gave it all back: exit management failed. (-1.02R, best point +1.9R)
@@ -169,7 +170,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (56)
+## Skipped by the learner (57)
 
 - 2026-10-14 16:00 AMD rsi2_reversion: would have made -1.72R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.48R, avg loss -1.15R).
 - 2026-10-14 18:00 GOOGL vwap_reversion: would have made -1.02R. SKIPPED by the ML learner: 49% estimated chance of profit, expected -0.09R (avg win +0.64R, avg loss -0.81R).
