@@ -100,3 +100,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-15 15:13:06,bull_put_spread,AMZN,AMZN261113P00245000,buy,2,2,7.25,filled,"close: account A closed the stock"
 2026-10-15 15:13:08,bull_put_spread,AMZN,AMZN261113P00230000,sell,2,2,2.9,filled,"close: account A closed the stock"
 2026-10-16 16:28:52,bull_put_spread,MSFT,MSFT261127P00495000,buy,3,0,,canceled,"open: sell 505 / buy 495 puts, 2026-11-27, credit 1.82 on width 10"
+2026-10-16 17:01:08,bull_put_spread,MSFT,MSFT261120P00475000,buy,1,0,,canceled,"open: sell 505 / buy 475 puts, 2026-11-20, credit 5.83 on width 30"
