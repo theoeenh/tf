@@ -1,18 +1,18 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-16 17:15 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-16 17:22 UTC.
 
-**Equity $95,539** (-4.46%) · max drawdown -5.8% · 38 closed trades · 5 open
+**Equity $95,425** (-4.57%) · max drawdown -5.8% · 38 closed trades · 5 open
 
 ## Open positions
 
-- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +0.52R  
+- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +0.43R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 342.03, stop 335.99, target 360.16 (3:1); risking $382.
-- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now +0.04R  
+- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now +0.00R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 35 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 528.04, stop 518.64, target 556.25 (3:1); risking $25. Strong trend, so the target was widened.
-- **LONG 18.5919 META** (rsi2_reversion) since 2026-10-16 14:00, entry 728.50, stop 707.98, target 769.53, now -0.45R  
+- **LONG 18.5919 META** (rsi2_reversion) since 2026-10-16 14:00, entry 728.50, stop 707.98, target 769.53, now -0.61R  
   *Thinking:* LONG META (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 728.50, stop 707.98, target 769.53 (2:1); risking $381.
-- **LONG 12.9741 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now -0.47R  
+- **LONG 12.9741 GOOGL** (rsi2_reversion) since 2026-10-08 18:00, entry 347.34, stop 340.47, target 361.07, now -0.67R  
   *Thinking:* LONG GOOGL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 0.8% of price). Plan: entry 347.34, stop 340.47, target 361.07 (2:1); risking $89.
 - **LONG 0.3308 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 155.58, target none (trailing), now +2.12R  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 149.83, stop 144.55, no target, trailing stop lets it run; risking $2.
