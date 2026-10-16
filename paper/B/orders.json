@@ -48,7 +48,7 @@
     "ticker": "USO",
     "strategy": "squeeze_breakout",
     "qty": 0.33079321342046675,
-    "stop": 153.25790039902517,
+    "stop": 153.4743419157129,
     "target": null,
     "mark": 157.31,
     "entry": 149.834961,
