@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-16 19:00 UTC. **Equity $101,097** (+1.10% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-16 19:29 UTC. **Equity $100,503** (+0.50% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 2 | $-2,009 | $+657 | 0 / 2 |
-| long_put | 3 | 0 | $+0 | $-149 | 0 / 0 |
-| bull_put_spread | 2 | 4 | $-334 | $-508 | 1 / 4 |
-| bear_call_spread | 3 | 1 | $+372 | $-1,151 | 1 / 1 |
+| long_call | 3 | 2 | $-2,009 | $+748 | 0 / 2 |
+| long_put | 3 | 0 | $+0 | $-185 | 0 / 0 |
+| bull_put_spread | 1 | 5 | $-579 | $-190 | 1 / 5 |
+| bear_call_spread | 3 | 1 | $+372 | $-1,142 | 1 / 1 |
 
 ## Open positions
 
@@ -21,4 +21,3 @@ Updated 2026-10-16 19:00 UTC. **Equity $101,097** (+1.10% since start). A test o
 - **long_call** USO: USO Nov 13 2026 145.5 Call, delta +0.60 (opened 2026-10-08 18:27, cost $+2,110, most it can lose $2,146)
 - **bull_put_spread** AAPL: sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15 (opened 2026-10-13 15:58, cost $-530, most it can lose $2,478)
 - **long_call** AAPL: AAPL Nov 27 2026 340 Call, delta +0.60 (opened 2026-10-14 14:57, cost $+1,535, most it can lose $1,563)
-- **bull_put_spread** GOOGL: sell 330 / buy 305 puts, 2026-11-27, credit 4.58 on width 25 (opened 2026-10-14 17:29, cost $-470, most it can lose $2,042)
