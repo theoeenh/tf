@@ -638,6 +638,15 @@
 -0.016106601692686073
 ]
 },
+"MSFT|vwap_reversion|+|2026-10-16 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 50% estimated chance of profit, expected -0.09R (avg win +0.64R, avg loss -0.81R).",
+"size": 1.0,
+"pred": [
+0.4979937609046063,
+-0.08687350677524874
+]
+},
 "NVDA|donchian_trend|+|2026-10-02 14:00": {
 "skip": false,
 "reason": "",
