@@ -35,7 +35,8 @@ log = logging.getLogger(__name__)
 INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml", "insider_low_short",
                     "insider_after_earnings", "insider_fund", "insider_conviction", "insider_confirm", "insider_fresh", "insider_fresh_officer", "insider_fresh_wave", "insider_underwater",
                     "insider_clean", "insider_repeat",
-                    "insider_market_stress", "insider_top_exec"}
+                    "insider_market_stress", "insider_top_exec",
+                    "insider_consensus", "insider_deep_value"}
 SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund"}  # FINRA short volume
 
 

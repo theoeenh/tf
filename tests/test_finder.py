@@ -622,3 +622,36 @@ def test_insider_top_exec_filters_on_title_and_value(monkeypatch):
     both = ff.insider_top_exec(prices, min_value=100_000, who="ceo_cfo")["AAA"]
     assert both.loc[days[20]] == 1 and both.loc[days[150]] == 1 and both.sum() == 2
     assert ff.insider_top_exec(prices, min_value=500_000, who="ceo_cfo")["AAA"].sum() == 0
+
+
+def test_insider_consensus_counts_only_votes_already_fired(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=60)
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+
+    def one(i):
+        return {"AAA": pd.Series((np.arange(60) == i).astype(int), days)}
+
+    comp = {"fresh": one(10), "underwater": one(15), "top_exec": one(40),
+            "clean": one(59), "after_earnings": {"AAA": pd.Series(0, days)}}
+    monkeypatch.setattr(ff, "_insider_votes", lambda p: comp)
+    out = ff.insider_consensus(prices, votes=2, window=10)["AAA"]
+    assert out.loc[days[15]] == 1 and out.sum() == 1           # 10 and 15 agree; 40 is alone
+    assert ff.insider_consensus(prices, votes=2, window=5)["AAA"].sum() == 0
+    assert ff.insider_consensus(prices, votes=3, window=60)["AAA"].iloc[:40].sum() == 0
+
+
+def test_insider_deep_value_needs_the_fall_before_the_buy(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=400)
+    close = pd.Series(100.0, index=days)
+    close.iloc[300:] = 60.0                                   # -40% from day 300
+    prices = {"AAA": pd.DataFrame({"Close": close})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[250], code="P", price=100.0, shares=10),
+                      dict(ticker="AAA", owner="o2", filed=days[350], code="P", price=60.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_deep_value(prices, buyers=1, below=0.3)["AAA"]
+    assert out.loc[days[350]] == 1 and out.sum() == 1
+    assert ff.insider_deep_value(prices, buyers=1, below=0.5)["AAA"].sum() == 0

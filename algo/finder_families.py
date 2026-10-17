@@ -638,6 +638,56 @@ def insider_top_exec(prices: dict, min_value: float = 100_000, who: str = "ceo")
     return out
 
 
+_VOTES_CACHE: dict = {}
+
+
+def _insider_votes(prices: dict) -> dict:
+    """Signals of five different insider ideas (one version each, chosen before this family existed),
+    computed once per price panel."""
+    key = (id(prices), len(prices))
+    if key not in _VOTES_CACHE:
+        _VOTES_CACHE.clear()
+        _VOTES_CACHE[key] = {
+            "fresh": insider_fresh(prices, buyers=2, gap=365),
+            "underwater": insider_underwater(prices, buyers=1, discount=0.10),
+            "top_exec": insider_top_exec(prices, min_value=100_000, who="ceo_cfo"),
+            "clean": insider_clean(prices, buyers=1, quiet=180),
+            "after_earnings": insider_after_earnings(prices, buyers=2, window=30)}
+    return _VOTES_CACHE[key]
+
+
+def insider_consensus(prices: dict, votes: int = 2, window: int = 20) -> dict:
+    """Several insider ideas agree: the day at least `votes` of five different insider signals
+    (fresh buyers, buying under the insiders' price, the CEO/CFO buying, buying while nobody sells,
+    buying after a bad earnings reaction) have fired on the stock within the last `window` sessions.
+    Each idea alone is close but fails the luck check; stocks where several agree should carry more
+    edge per trade. One signal per 90 days per stock; every vote uses data up to its own day."""
+    comp = _insider_votes(prices)
+    out = {}
+    for a, df in prices.items():
+        fired = np.zeros(len(df), int)
+        for c in comp.values():
+            v = c[a].to_numpy() > 0
+            fired += pd.Series(v).rolling(window, min_periods=1).max().to_numpy().astype(int)
+        hits = list(np.flatnonzero(fired >= votes))
+        out[a] = pd.Series(_once_per(hits, df.index), df.index)
+    return out
+
+
+def insider_deep_value(prices: dict, buyers: int = 1, below: float = 0.3) -> dict:
+    """Insiders buying a stock far below its one-year high: an insider cluster (insider_cluster, 30
+    days) on a day the close is at least `below` under the highest close of the last 252 sessions.
+    Insiders buying after a long, deep fall are the classic contrarian signal (different from a
+    short 20-day dip). Closes up to the signal day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    out = {}
+    for a, df in prices.items():
+        c = df["Close"]
+        deep = (c <= c.rolling(252, min_periods=126).max() * (1 - below)).to_numpy()
+        out[a] = pd.Series((sig[a].to_numpy().astype(bool) & deep).astype(int), df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -730,6 +780,14 @@ WIDE_FAMILIES = {
     "insider_top_exec": (insider_top_exec, {"min_value": [100_000, 500_000], "who": ["ceo", "ceo_cfo"]},
                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                           "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # several insider ideas agreeing on the same stock (2026-10-17)
+    "insider_consensus": (insider_consensus, {"votes": [2, 3], "window": [10, 30]},
+                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying 30-50% under the one-year high (2026-10-17)
+    "insider_deep_value": (insider_deep_value, {"buyers": [1, 2], "below": [0.3, 0.5]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
