@@ -11,4 +11,6 @@ None.
 
 ## New signals (bought at the next open)
 
-None.
+- **FIS** 125.93 shares around 36.01, stop 32.83
+- **PEP** 48.91 shares around 131.49, stop 123.31
+- **PRIM** 32.32 shares around 73.21, stop 60.83
