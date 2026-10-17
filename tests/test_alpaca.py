@@ -492,3 +492,62 @@ def test_bar_range_starts_after_the_last_processed_bar(monkeypatch, tmp_path):
     assert calls[0]["start"] == "2026-10-13T14:00:00Z" and calls[0]["symbols"] == "AMD"
     (tmp_path / "equity.csv").write_text(",equity\n2026-10-13,97000\n")  # a daily account
     assert alpaca.bar_range(["AMD"]) == {}
+
+
+def test_closed_market_leaves_matching_queued_orders_alone(monkeypatch, tmp_path):
+    """2026-10-17: account D's 3 buys for Monday were cancelled and sent again by every weekend run."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "FIS", "ticker": "FIS", "strategy": "insider_low_short", "qty": 125.932423,
+               "stop": 32.83, "target": None, "mark": 36.01}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setitem(alpaca.SYMBOLS, "FIS", "FIS")
+    monkeypatch.setattr(alpaca, "positions", lambda: {})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"FIS": 36.0})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    queued = [{"id": "1", "symbol": "FIS", "side": "buy", "qty": "125.932423", "type": "market",
+               "time_in_force": "day", "order_class": "", "legs": None}]
+    state = {"open": False, "orders": queued}
+
+    def request(m, p, b=None, base=None):
+        if p == "/v2/clock":
+            return {"is_open": state["open"]}
+        if p.startswith("/v2/orders?status=open"):
+            return state["orders"]
+        raise AssertionError(f"unexpected {m} {p}")
+
+    monkeypatch.setattr(alpaca, "request", request)
+    prices = {"FIS": 36.01}
+    assert alpaca.already_queued(trades, prices)
+    state["orders"] = queued + queued                        # a duplicate: clean up the normal way
+    assert not alpaca.already_queued(trades, prices)
+    state["orders"] = [dict(queued[0], qty="100")]            # the plan changed
+    assert not alpaca.already_queued(trades, prices)
+    state["orders"], state["open"] = queued, True            # market open: always the normal path
+    assert not alpaca.already_queued(trades, prices)
+
+
+def test_closed_market_match_includes_the_stops_of_held_positions(monkeypatch):
+    from algo import alpaca
+
+    trades = [{"asset": "NVDA", "strategy": "donchian_trend", "qty": 10.4, "stop": 190.12, "target": 240.0}]
+    monkeypatch.setattr(alpaca, "positions", lambda: {"NVDA": 10.4})
+    monkeypatch.setattr(alpaca, "wanted", lambda live=None, seen=None: {"NVDA": 10.4})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"NVDA": 200.0})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: False)
+    oco = {"id": "1", "symbol": "NVDA", "side": "sell", "qty": "10", "type": "limit", "limit_price": "240",
+           "time_in_force": "gtc", "order_class": "oco",
+           "legs": [{"id": "2", "symbol": "NVDA", "side": "sell", "qty": "10", "type": "stop", "stop_price": "190.12"}]}
+    frac = {"id": "3", "symbol": "NVDA", "side": "sell", "qty": "0.4", "type": "stop", "stop_price": "190.12",
+            "time_in_force": "day", "order_class": "", "legs": None}
+    orders = [oco, frac]
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
+                        {"is_open": False} if p == "/v2/clock" else orders)
+    assert alpaca.already_queued(trades, {"NVDA": 200.0})
+    orders.remove(frac)                                       # the fractional day stop expired: re-send
+    assert not alpaca.already_queued(trades, {"NVDA": 200.0})

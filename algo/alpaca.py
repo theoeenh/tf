@@ -446,6 +446,9 @@ def sync(send: bool = False) -> list[dict]:
     print(f"Alpaca account {acct}: {json.loads((PAPER_DIR / 'config.json').read_text()).get('name', '')}")
     trades = json.loads((PAPER_DIR / "orders.json").read_text())
     prices = last_prices()
+    if send and already_queued(trades, prices):
+        print("Market closed and Alpaca's open orders already match the plan: left as they are.")
+        return []
     if send:  # 1) cancel the stops and targets of the last run
         request("DELETE", "/v2/orders")
         _wait(lambda: not request("GET", "/v2/orders?status=open"))
@@ -455,6 +458,53 @@ def sync(send: bool = False) -> list[dict]:
         if send:  # the old stops are gone: never leave what is held unprotected
             emergency_protect(trades, exc)
         raise
+
+
+def _order_key(o: dict) -> tuple:
+    """What an order does, the same for an order we would send and one Alpaca lists as open."""
+    r = lambda x: round(float(x), 4)  # noqa: E731
+    sym, side, qty = o["symbol"].replace("/", ""), o["side"], round(float(o["qty"]), 6)
+    if o.get("order_class") == "oco":
+        if "take_profit" in o:  # ours
+            return ("oco", sym, side, qty, r(o["take_profit"]["limit_price"]), r(o["stop_loss"]["stop_price"]))
+        stop = next((x for x in o.get("legs") or [] if x.get("type") == "stop"), {})
+        return ("oco", sym, side, qty, r(o.get("limit_price") or 0), r(stop.get("stop_price") or 0))
+    if o["type"] == "market":
+        return ("market", sym, side, qty, o["time_in_force"])
+    if o["type"] == "stop":
+        return ("stop", sym, side, qty, r(o["stop_price"]), o["time_in_force"])
+    return ("other", sym, o.get("id"))  # never matches what we would send: the normal path runs
+
+
+def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
+    """While the market is closed (and outside the opening-auction window) the orders a run sends cannot
+    fill, so a run that would send exactly the orders already open has nothing to do. Cancelling and
+    re-sending them each hour (2026-10-17: account D's 3 weekend buys) only fills the order list with
+    cancelled copies. Crypto trades 24/7: any crypto in play keeps the normal path. On any doubt
+    (an error, an order we would not send) the answer is False and the run cancels and re-sends."""
+    from collections import Counter
+
+    try:
+        clock = request("GET", "/v2/clock")
+        if clock.get("is_open") or opening_auction(clock):
+            return False
+        have = positions()
+        syms = sorted({SYMBOLS[t["asset"]] for t in trades})
+        if any("/" in s for s in list(have) + syms):
+            return False
+        live = live_prices(syms + [s for s in have if s not in syms])
+        seen = bar_range(syms)
+        todo = plan(wanted(live, seen), have, dict(prices))
+        alive = [t for t in trades if not through_stop(t, live, seen)]
+        protective = []
+        for sym, q in sorted(have.items()):
+            if abs(q) > 1e-9:
+                protective += protect(sym, q, [t for t in alive if SYMBOLS[t["asset"]] == sym], live.get(sym))
+        want = Counter(_order_key(o) for o in todo + protective)
+        open_ = Counter(_order_key(o) for o in request("GET", "/v2/orders?status=open&nested=true"))
+    except (AlpacaError, OSError, KeyError, ValueError, TypeError):
+        return False
+    return bool(want) and want == open_
 
 
 def emergency_protect(trades: list[dict], exc: Exception) -> None:
