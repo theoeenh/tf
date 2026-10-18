@@ -688,6 +688,42 @@ def insider_deep_value(prices: dict, buyers: int = 1, below: float = 0.3) -> dic
     return out
 
 
+def insider_sector_laggard(prices: dict, buyers: int = 1, lag: float = 0.10) -> dict:
+    """Insiders buying the laggard of its sector: an insider cluster (insider_cluster, 30 days) on a day
+    the stock's 60-session return trails the median of its sector (wide.sectors) by at least `lag`.
+    A stock that fell behind its peers is more likely company-specific bad news; insiders buying it
+    say the news is overdone. Closes up to the signal day only."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    sector = wide.sectors()
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    r60 = close / close.shift(60) - 1
+    groups: dict[str, list] = {}
+    for a in r60.columns:
+        groups.setdefault(sector.get(a, "?"), []).append(a)
+    by_group = {g: r60[cols].median(axis=1) for g, cols in groups.items()}
+    med = pd.DataFrame({a: by_group[sector.get(a, "?")] for a in r60.columns})
+    behind = (r60 <= med - lag) & pd.Series({a: bool(sector.get(a)) for a in r60.columns})
+    return {a: (s.astype(bool) & behind[a].reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
+def insider_low_vol(prices: dict, buyers: int = 1, max_rank: float = 0.3) -> dict:
+    """Insiders buying a quiet stock: an insider cluster (insider_cluster, 30 days) in a stock whose
+    60-session volatility of daily returns ranks in the calmest `max_rank` of the universe that day.
+    The same insider edge with less day-to-day noise should give a steadier result per trade (the luck
+    check rewards a higher Sharpe, not a bigger average). Closes up to the signal day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    calm = vol.rank(axis=1, pct=True) <= max_rank
+    return {a: (s.astype(bool) & calm[a].reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -788,6 +824,14 @@ WIDE_FAMILIES = {
     "insider_deep_value": (insider_deep_value, {"buyers": [1, 2], "below": [0.3, 0.5]},
                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying the laggard of its sector (2026-10-18)
+    "insider_sector_laggard": (insider_sector_laggard, {"buyers": [1, 2], "lag": [0.10, 0.20]},
+                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying calm, low-volatility stocks (2026-10-18)
+    "insider_low_vol": (insider_low_vol, {"buyers": [1, 2], "max_rank": [0.3, 0.5]},
+                        {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

@@ -655,3 +655,38 @@ def test_insider_deep_value_needs_the_fall_before_the_buy(monkeypatch):
     out = ff.insider_deep_value(prices, buyers=1, below=0.3)["AAA"]
     assert out.loc[days[350]] == 1 and out.sum() == 1
     assert ff.insider_deep_value(prices, buyers=1, below=0.5)["AAA"].sum() == 0
+
+
+def test_insider_sector_laggard_compares_with_its_sector_up_to_that_day(monkeypatch):
+    from algo import finder_families as ff
+    from algo import wide
+
+    days = pd.bdate_range("2021-01-04", periods=150)
+    up = pd.Series(np.linspace(100, 130, 150), index=days)
+    lag = up.copy()
+    lag.iloc[100:] = up.iloc[100:] * 0.8                      # AAA falls 20% behind its peers from day 100
+    prices = {"AAA": pd.DataFrame({"Close": lag}), "BBB": pd.DataFrame({"Close": up}),
+              "CCC": pd.DataFrame({"Close": up.copy()})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[80], code="P", price=100.0, shares=10),
+                      dict(ticker="AAA", owner="o2", filed=days[120], code="P", price=100.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    monkeypatch.setattr(wide, "sectors", lambda: {"AAA": "Tech", "BBB": "Tech", "CCC": "Tech"})
+    out = ff.insider_sector_laggard(prices, buyers=1, lag=0.10)["AAA"]
+    assert out.loc[days[120]] == 1 and out.sum() == 1        # day 80: not behind yet
+    assert ff.insider_sector_laggard(prices, buyers=1, lag=0.30)["AAA"].sum() == 0
+
+
+def test_insider_low_vol_ranks_volatility_known_that_day(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=150)
+    rng = np.random.default_rng(0)
+    calm = pd.Series(100 * np.cumprod(1 + rng.normal(0, 0.002, 150)), index=days)
+    wild = pd.Series(100 * np.cumprod(1 + rng.normal(0, 0.03, 150)), index=days)
+    prices = {"CALM": pd.DataFrame({"Close": calm}), "WILD": pd.DataFrame({"Close": wild}),
+              "MID": pd.DataFrame({"Close": pd.Series(100 * np.cumprod(1 + rng.normal(0, 0.01, 150)), days)})}
+    t = pd.DataFrame([dict(ticker=a, owner="o" + a, filed=days[100], code="P", price=100.0, shares=10)
+                      for a in prices])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_low_vol(prices, buyers=1, max_rank=0.4)
+    assert out["CALM"].loc[days[100]] == 1 and out["WILD"].sum() == 0 and out["MID"].sum() == 0
