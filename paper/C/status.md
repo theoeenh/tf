@@ -1,16 +1,16 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-19 16:51 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-19 17:21 UTC.
 
-**Equity $95,051** (-4.95%) · max drawdown -6.6% · 53 closed trades · 3 open
+**Equity $94,995** (-5.01%) · max drawdown -6.6% · 53 closed trades · 3 open
 
 ## Open positions
 
-- **LONG 57.0632 AAPL** (donchian_trend) since 2026-10-13 14:00, entry 345.27, stop 339.08, target 357.66, now -0.54R  
+- **LONG 57.0632 AAPL** (donchian_trend) since 2026-10-13 14:00, entry 345.27, stop 339.08, target 357.66, now -0.56R  
   *Thinking:* LONG AAPL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 23 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 345.27, stop 339.08, target 357.66 (2:1); risking $353.
-- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +1.45R  
+- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +1.43R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, high volatility (ATR 0.8% of price). Plan: entry 332.61, stop 326.18, target 351.89 (3:1); risking $199.
-- **LONG 35.5354 MSFT** (rsi2_reversion) since 2026-10-16 18:00, entry 527.11, stop 517.50, target 546.33, now +0.77R  
+- **LONG 35.5354 MSFT** (rsi2_reversion) since 2026-10-16 18:00, entry 527.11, stop 517.50, target 546.33, now +0.65R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 527.11, stop 517.50, target 546.33 (2:1); risking $342.
 
 ## Closed trades (newest first)
@@ -175,7 +175,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (60)
+## Skipped by the learner (61)
 
 - 2026-10-14 17:00 USO opening_range: would have made +0.59R. SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.07R (avg win +1.05R, avg loss -0.95R).
 - 2026-10-15 16:00 TSLA opening_range: would have made +0.70R. SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.04R (avg win +1.05R, avg loss -0.95R).
