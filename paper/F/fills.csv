@@ -119,3 +119,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-19 13:59:40,bull_put_spread,MSFT,MSFT261218P00470000,sell,1,1,5.5,filled,"unwind"
 2026-10-19 14:56:48,bear_call_spread,IWM,IWM261120C00286000,buy,4,4,1.22,filled,"close: half the credit earned (buy back $380 vs $772 received)"
 2026-10-19 14:57:10,bear_call_spread,IWM,IWM261120C00295000,sell,4,0,,canceled,"close: half the credit earned (buy back $380 vs $772 received)"
+2026-10-19 17:26:43,bear_call_spread,IWM,IWM261120C00286000,buy,4,0,,canceled,"close: half the credit earned (buy back $384 vs $772 received)"
