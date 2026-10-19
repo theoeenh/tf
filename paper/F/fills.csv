@@ -113,3 +113,7 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-16 19:28:47,bull_put_spread,GOOGL,GOOGL261127P00305000,sell,1,1,4.2,filled,"close: account A closed the stock"
 2026-10-16 19:29:13,bull_put_spread,MSFT,MSFT261127P00465000,buy,1,0,,canceled,"open: sell 500 / buy 465 puts, 2026-11-27, credit 6.36 on width 35"
 2026-10-16 19:58:38,bull_put_spread,MSFT,MSFT261120P00475000,buy,1,0,,canceled,"open: sell 505 / buy 475 puts, 2026-11-20, credit 5.72 on width 30"
+2026-10-19 13:59:12,bear_call_spread,IWM,IWM261120C00286000,buy,4,0,,canceled,"close: half the credit earned (buy back $340 vs $772 received)"
+2026-10-19 13:59:15,bull_put_spread,MSFT,MSFT261218P00470000,buy,1,1,5.9,filled,"open: sell 505 / buy 470 puts, 2026-12-18, credit 7.40 on width 35"
+2026-10-19 13:59:38,bull_put_spread,MSFT,MSFT261218P00505000,sell,1,0,,canceled,"open: sell 505 / buy 470 puts, 2026-12-18, credit 7.40 on width 35"
+2026-10-19 13:59:40,bull_put_spread,MSFT,MSFT261218P00470000,sell,1,1,5.5,filled,"unwind"
