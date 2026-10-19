@@ -1,0 +1,182 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Rejected near $83,000 but no clear catalyst in the headlines. No edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Third week of ETF outflows is already known and priced; no edge over 1-20 days."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "TSLA earnings Wed 21 Oct"
+  ],
+  "reasoning": "Earnings on 21 Oct can gap the price either way; headlines give no direction. No edge."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "One analyst says iPhone demand is weakening while the foldable is delayed by strong pre-orders: mixed signals, no edge."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "A price-target raise and a dropped data-centre deal point both ways; earnings are not in the 7-day window. No edge."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "NFLX earnings Tue 20 Oct"
+  ],
+  "reasoning": "Earnings tomorrow (20 Oct) can gap the price; previews are mixed. No edge."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief or headlines stands out; no view."
+ }
+]
