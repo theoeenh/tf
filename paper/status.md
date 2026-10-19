@@ -1,18 +1,18 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-19 15:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-19 16:21 UTC.
 
-**Equity $94,985** (-5.01%) · max drawdown -6.7% · 41 closed trades · 4 open
+**Equity $94,714** (-5.29%) · max drawdown -6.7% · 41 closed trades · 4 open
 
 ## Open positions
 
-- **LONG 62.8307 AAPL** (donchian_trend) since 2026-10-13 14:00, entry 345.27, stop 339.08, target 357.66, now -0.21R  
+- **LONG 62.8307 AAPL** (donchian_trend) since 2026-10-13 14:00, entry 345.27, stop 339.08, target 357.66, now -0.54R  
   *Thinking:* LONG AAPL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 23 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 345.27, stop 339.08, target 357.66 (2:1); risking $389.
-- **LONG 68.7534 AAPL** (rsi2_reversion) since 2026-10-14 13:00, entry 344.71, stop 339.06, target 361.65, now -0.13R  
+- **LONG 68.7534 AAPL** (rsi2_reversion) since 2026-10-14 13:00, entry 344.71, stop 339.06, target 361.65, now -0.49R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 26 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 344.71, stop 339.06, target 361.65 (3:1); risking $388.
-- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +0.94R  
+- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +0.90R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 30 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 526.39, stop 517.42, target 553.30 (3:1); risking $139. Strong trend, so the target was widened.
-- **LONG 0.1766 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 156.51, target none (trailing), now +1.85R  
+- **LONG 0.1766 USO** (squeeze_breakout) since 2026-10-08 15:00, entry 149.83, stop 156.51, target none (trailing), now +2.03R  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 13 = chop market, mid volatility (ATR 1.2% of price). Plan: entry 149.83, stop 144.55, no target, trailing stop lets it run; risking $1.
 
 ## Closed trades (newest first)
@@ -114,7 +114,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
   *Thinking:* LONG META (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 14 = chop market, low volatility (ATR 0.9% of price). Plan: entry 738.17, stop 717.57, no target, trailing stop lets it run; risking $393. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.70R, best point +0.5R)
 - **2026-10-05 04:00 · LONG BTC · donchian_trend · -1.33R · $-522** (fees $257, event)  
-  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. AI analyst view +1: it agrees with this trade.  
+  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $393. Strong trend, so the target was widened. News: neutral tone (+0.9σ vs usual), normal coverage. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.33R, best point +0.8R)
 - **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-362** (fees $86, event)  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $398. Warning: jobs report coming up while in the trade.  
