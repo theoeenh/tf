@@ -690,3 +690,40 @@ def test_insider_low_vol_ranks_volatility_known_that_day(monkeypatch):
     monkeypatch.setattr(ff, "_insider", lambda code="P": t)
     out = ff.insider_low_vol(prices, buyers=1, max_rank=0.4)
     assert out["CALM"].loc[days[100]] == 1 and out["WILD"].sum() == 0 and out["MID"].sum() == 0
+
+
+def test_insider_high_short_uses_only_published_short_data(monkeypatch):
+    """Same rule as insider_low_short, the other end of the ranking: day t reads ratios up to t-1."""
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_high_short(prices, min_rank=0.75)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_high_short(prices, min_rank=0.75)
+    assert a["DDD"].loc[sig_day] == 1 and a["AAA"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_insider_momentum_ranks_past_returns_only(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=200)
+    up = pd.Series(np.linspace(100, 200, 200), index=days)
+    flat = pd.Series(100.0, index=days)
+    late = flat.copy()
+    late.iloc[151:] = 300.0                                   # jumps after the signal day
+    prices = {"UP": pd.DataFrame({"Close": up}), "FLAT": pd.DataFrame({"Close": flat}),
+              "LATE": pd.DataFrame({"Close": late})}
+    t = pd.DataFrame([dict(ticker=a, owner="o" + a, filed=days[150], code="P", price=100.0, shares=10)
+                      for a in prices])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_momentum(prices, buyers=1, min_rank=0.9)
+    assert out["UP"].loc[days[150]] == 1 and out["LATE"].sum() == 0 and out["FLAT"].sum() == 0

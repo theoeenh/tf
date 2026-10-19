@@ -724,6 +724,37 @@ def insider_low_vol(prices: dict, buyers: int = 1, max_rank: float = 0.3) -> dic
             for a, s in sig.items()}
 
 
+def insider_high_short(prices: dict, buyers: int = 1, min_rank: float = 0.7) -> dict:
+    """The opposite bet of insider_low_short: insiders buying a stock that short sellers ARE betting
+    against, i.e. its 20-day short share of off-exchange volume (FINRA, known from the next session)
+    ranks in the top `1 - min_rank` of the universe that day. When the insiders are right the shorts
+    have to buy back (a squeeze). Insider cluster over 30 days; data up to the signal day only."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) >= min_rank)).astype(int) for a, s in sig.items()}
+
+
+def insider_momentum(prices: dict, buyers: int = 1, min_rank: float = 0.7) -> dict:
+    """Insiders adding to a winner: an insider cluster (30 days) in a stock whose 120-session return
+    ranks in the top `1 - min_rank` of the universe that day. Most insider ideas so far buy weakness;
+    this one tests whether insiders buying strength (momentum + insider conviction) is steadier.
+    Closes up to the signal day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    rank = (close / close.shift(120) - 1).rank(axis=1, pct=True)
+    strong = rank >= min_rank
+    return {a: (s.astype(bool) & strong[a].reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -832,6 +863,14 @@ WIDE_FAMILIES = {
     "insider_low_vol": (insider_low_vol, {"buyers": [1, 2], "max_rank": [0.3, 0.5]},
                         {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying heavily shorted stocks: the squeeze (2026-10-19)
+    "insider_high_short": (insider_high_short, {"buyers": [1, 2], "min_rank": [0.7, 0.9]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying the year's strong performers (2026-10-19)
+    "insider_momentum": (insider_momentum, {"buyers": [1, 2], "min_rank": [0.7, 0.9]},
+                         {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                          "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
