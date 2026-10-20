@@ -194,6 +194,51 @@
    "desc": "sell 327.5 / buy 310 puts, 2026-11-20, credit 3.09 on width 17.5",
    "opened": "2026-10-20 18:28",
    "id": "bull_put_spread-AAPL-2026-10-20"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "FIS",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "FIS261120P00032500",
+     "qty": 14,
+     "price": 0.55
+    },
+    {
+     "symbol": "FIS261120P00035000",
+     "qty": -14,
+     "price": 1.15
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -839.9999999999997,
+   "max_loss": 2716.0,
+   "desc": "sell 35 / buy 32.5 puts, 2026-11-20, credit 0.56 on width 2.5",
+   "opened": "2026-10-20 19:27",
+   "id": "bull_put_spread-FIS-2026-10-20"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261127P00715000",
+     "qty": 1,
+     "price": 2.98
+    },
+    {
+     "symbol": "SPY261127P00746000",
+     "qty": -1,
+     "price": 6.19
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": -321.0,
+   "max_loss": 2800.0,
+   "desc": "sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31",
+   "opened": "2026-10-20 19:28",
+   "id": "spy_put_spread-SPY-2026-10-20"
   }
  ],
  "closed": [
