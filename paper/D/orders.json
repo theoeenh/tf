@@ -31,5 +31,17 @@
   "mark": 74.51,
   "entry": 75.47304,
   "r": -0.07781886168049205
+ },
+ {
+  "asset": "EME",
+  "ticker": "EME",
+  "strategy": "insider_low_short",
+  "qty": 5.039161444942144,
+  "stop": 637.3123129534868,
+  "target": null,
+  "mark": 716.79,
+  "entry": 716.79,
+  "r": 0.0,
+  "pending": true
  }
 ]

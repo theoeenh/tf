@@ -13,4 +13,4 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **EME** 5.04 shares around 716.79, stop 637.31
