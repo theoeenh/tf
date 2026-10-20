@@ -1,4 +1,4 @@
-# E – Aggressive
+# E – Insider clusters (Industrials)
 
 Strategy: `5aca4825d9` insider_cluster(buyers=3, days=90) | stop_atr=2.5, rr=None, max_bars=60 | no trend filter | sector Industrials, daily
 Started 2026-10-05 with $100,000. Data through 2026-10-19. **Equity $100,000** (+0.00%).
