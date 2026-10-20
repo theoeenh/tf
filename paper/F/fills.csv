@@ -140,3 +140,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-20 14:29:30,bear_call_spread,NFLX,NFLX261218C00085000,buy,4,4,0.8,filled,"open: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7"
 2026-10-20 14:29:53,bear_call_spread,NFLX,NFLX261218C00078000,sell,4,0,,canceled,"open: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7"
 2026-10-20 14:30:16,bear_call_spread,NFLX,NFLX261218C00085000,sell,4,0,,canceled,"unwind"
+2026-10-20 14:59:38,long_put,NFLX,NFLX261106P00070000,sell,5,5,3.45,filled,"close: 15 days held"
+2026-10-20 15:00:04,bull_put_spread,AAPL,AAPL261127P00330000,buy,2,0,,canceled,"close: account A closed the stock"
+2026-10-20 15:00:09,long_put,NFLX,NFLX261218P00075000,buy,3,3,7.3,filled,"open: NFLX Dec 18 2026 75 Put, delta -0.60"
+2026-10-20 15:00:12,bear_call_spread,NFLX,NFLX261218C00085000,buy,4,4,0.82,filled,"open: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7"
+2026-10-20 15:00:14,bear_call_spread,NFLX,NFLX261218C00078000,sell,4,4,1.96,filled,"open: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7"

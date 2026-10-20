@@ -1,23 +1,6 @@
 {
  "open": [
   {
-   "playbook": "long_put",
-   "underlying": "NFLX",
-   "legs": [
-    {
-     "symbol": "NFLX261106P00070000",
-     "qty": 5,
-     "price": 5.35
-    }
-   ],
-   "expiry": "2026-11-06",
-   "cost": 2675.0,
-   "max_loss": 2705.0,
-   "desc": "NFLX Nov 06 2026 70 Put, delta -0.59",
-   "opened": "2026-10-05 14:27",
-   "id": "long_put-NFLX-2026-10-05"
-  },
-  {
    "playbook": "long_call",
    "underlying": "MSFT",
    "legs": [
@@ -133,6 +116,45 @@
    "desc": "sell 505 / buy 470 puts, 2026-12-18, credit 6.91 on width 35",
    "opened": "2026-10-20 14:29",
    "id": "bull_put_spread-MSFT-2026-10-20"
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261218P00075000",
+     "qty": 3,
+     "price": 7.3
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": 2190.0,
+   "max_loss": 2214.0,
+   "desc": "NFLX Dec 18 2026 75 Put, delta -0.60",
+   "opened": "2026-10-20 15:00",
+   "id": "long_put-NFLX-2026-10-20"
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261218C00085000",
+     "qty": 4,
+     "price": 0.82
+    },
+    {
+     "symbol": "NFLX261218C00078000",
+     "qty": -4,
+     "price": 1.96
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -456.0,
+   "max_loss": 2356.0,
+   "desc": "sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7",
+   "opened": "2026-10-20 15:00",
+   "id": "bear_call_spread-NFLX-2026-10-20"
   }
  ],
  "closed": [
@@ -435,6 +457,26 @@
    "closed": "2026-10-20 14:27",
    "why_closed": "account A closed the stock",
    "pnl": -265.0
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261106P00070000",
+     "qty": 5,
+     "price": 5.35
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": 2675.0,
+   "max_loss": 2705.0,
+   "desc": "NFLX Nov 06 2026 70 Put, delta -0.59",
+   "opened": "2026-10-05 14:27",
+   "id": "long_put-NFLX-2026-10-05",
+   "closed": "2026-10-20 14:56",
+   "why_closed": "15 days held",
+   "pnl": -950.0
   }
  ]
 }
