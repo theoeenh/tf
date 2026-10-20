@@ -1,4 +1,4 @@
-# Leaderboard – 2026-10-19 13:30 UTC
+# Leaderboard – 2026-10-20 13:26 UTC
 
 All versions paper-traded side by side since 2026-09-30 19:00:00 UTC (1h bars), same bars, same $100,000 and 0.40% risk per trade. The live account trades **long + trend + blackout + ML**. Early days are noise: look for a version that stays ahead for weeks, and that beats the random-entry twins.
 
@@ -6,27 +6,27 @@ All versions paper-traded side by side since 2026-09-30 19:00:00 UTC (1h bars), 
 
 | version | return | max_dd | trades | win_rate | avg_r | open | skipped |
 |---|---|---|---|---|---|---|---|
-| L/S + trend + blackout + intraday + ML | -4.55% | -6.28% | 50 | 24% | -0.30 | 4 | 171 |
-| L/S + news + trend + blackout + ML | -5.45% | -6.45% | 44 | 18% | -0.38 | 4 | 80 |
-| random entries, long only (avg of 5) | -5.59% | -10.44% | 122 | 26% | -0.48 | 0 | 0 |
-| L/S + news + blackout | -5.60% | -6.66% | 52 | 19% | -0.46 | 11 | 125 |
-| long + trend + blackout + ML + brake 10% | -5.71% | -7.25% | 42 | 17% | -0.42 | 3 | 27 |
-| long + trend + blackout + ML | -5.77% | -7.30% | 42 | 14% | -0.52 | 3 | 27 |
-| long + trend + blackout + intraday + ML + global | -6.11% | -7.98% | 54 | 26% | -0.40 | 2 | 59 |
-| long + trend + blackout + ML + insider | -6.69% | -7.84% | 44 | 14% | -0.53 | 3 | 25 |
-| long + trend + blackout + intraday + ML | -6.81% | -7.78% | 50 | 20% | -0.48 | 3 | 62 |
-| long + trend + blackout + ML + global | -6.89% | -8.21% | 43 | 16% | -0.52 | 2 | 26 |
-| long/short + learner + news | -7.15% | -7.45% | 49 | 16% | -0.53 | 11 | 119 |
-| L/S + news + trend + blackout + ML sizing | -7.25% | -8.86% | 38 | 18% | -0.44 | 5 | 82 |
-| long + trend + blackout + intraday + ML + insider | -7.74% | -8.62% | 51 | 18% | -0.48 | 3 | 61 |
-| long/short + learner | -7.75% | -8.40% | 64 | 19% | -0.57 | 15 | 89 |
-| L/S + news + ML | -8.14% | -9.11% | 46 | 20% | -0.46 | 7 | 116 |
-| long/short | -8.16% | -8.48% | 96 | 23% | -0.44 | 20 | 0 |
-| L/S + news + trend + blackout | -8.81% | -9.31% | 52 | 13% | -0.62 | 14 | 70 |
-| long only | -9.79% | -11.27% | 61 | 18% | -0.60 | 12 | 0 |
-| long only + learner | -10.65% | -10.81% | 44 | 11% | -0.72 | 8 | 36 |
-| random entries, long/short (avg of 5) | -10.94% | -11.62% | 198 | 34% | -0.25 | 0 | 0 |
-| L/S + news + trend | -12.25% | -13.89% | 50 | 8% | -0.85 | 9 | 71 |
+| L/S + trend + blackout + intraday + ML | -5.02% | -7.10% | 53 | 23% | -0.34 | 4 | 179 |
+| long + trend + blackout + ML + brake 10% | -5.70% | -7.25% | 42 | 17% | -0.42 | 3 | 29 |
+| L/S + news + trend + blackout + ML | -5.74% | -6.97% | 46 | 17% | -0.43 | 3 | 82 |
+| L/S + news + blackout | -5.85% | -6.66% | 55 | 20% | -0.41 | 6 | 131 |
+| long + trend + blackout + ML | -6.44% | -7.98% | 42 | 14% | -0.52 | 3 | 29 |
+| L/S + news + trend + blackout + ML sizing | -6.78% | -8.77% | 39 | 18% | -0.45 | 5 | 86 |
+| long + trend + blackout + ML + insider | -6.81% | -8.34% | 42 | 14% | -0.52 | 3 | 29 |
+| long + trend + blackout + ML + global | -6.84% | -7.84% | 43 | 21% | -0.38 | 2 | 29 |
+| long + trend + blackout + intraday + ML | -6.96% | -8.53% | 53 | 19% | -0.48 | 3 | 65 |
+| long + trend + blackout + intraday + ML + insider | -7.06% | -8.39% | 53 | 19% | -0.46 | 3 | 61 |
+| long/short + learner + news | -7.76% | -8.07% | 50 | 16% | -0.54 | 8 | 127 |
+| long + trend + blackout + intraday + ML + global | -7.78% | -9.50% | 60 | 27% | -0.39 | 2 | 55 |
+| random entries, long only (avg of 5) | -8.16% | -11.62% | 124 | 27% | -0.43 | 0 | 0 |
+| L/S + news + ML | -8.35% | -9.11% | 48 | 21% | -0.42 | 5 | 123 |
+| L/S + news + trend + blackout | -8.49% | -9.31% | 53 | 13% | -0.60 | 12 | 73 |
+| long/short + learner | -8.84% | -9.30% | 68 | 19% | -0.56 | 15 | 93 |
+| long/short | -9.35% | -9.90% | 101 | 22% | -0.47 | 22 | 0 |
+| long only | -10.42% | -11.75% | 65 | 18% | -0.60 | 8 | 0 |
+| random entries, long/short (avg of 5) | -11.59% | -11.78% | 218 | 32% | -0.29 | 0 | 0 |
+| long only + learner | -11.61% | -11.61% | 48 | 12% | -0.69 | 4 | 37 |
+| L/S + news + trend | -12.83% | -13.89% | 51 | 8% | -0.85 | 9 | 74 |
 
 ## Strategy leaderboard (long + trend + blackout + ML)
 
@@ -36,14 +36,14 @@ Sum of R (1R = the planned loss) per strategy and asset. *Skipped* = trades the 
 |---|---|---|---|---|---|---|---|---|---|
 | rsi2_reversion | XOM | +0.00 | +2.98 | +2.98 | 1 | 100% | +2.98 | 0 | – |
 | donchian_trend | USO | +1.99 | +1.99 | +1.99 | 1 | 100% | +1.99 | 0 | – |
-| donchian_trend | MSFT | +1.98 | +1.98 | +1.98 | 1 | 100% | +1.98 | 1 | -1.02 |
+| donchian_trend | MSFT | +0.00 | +1.98 | +1.98 | 1 | 100% | +1.98 | 1 | -1.02 |
 | donchian_trend | GOOGL | +0.00 | +0.00 | +0.00 | 0 | – | – | 1 | -1.02 |
 | donchian_trend | META | +0.00 | +0.00 | +0.00 | 0 | – | – | 1 | -1.01 |
 | donchian_trend | ETH | +0.00 | +0.00 | +0.00 | 0 | – | – | 2 | -1.00 |
 | donchian_trend | AAPL | +0.00 | +0.00 | +0.00 | 0 | – | – | 1 | -1.93 |
 | squeeze_breakout | ETH | +0.00 | +0.00 | +0.00 | 0 | – | – | 2 | -0.19 |
 | squeeze_breakout | BTC | +0.00 | +0.00 | +0.00 | 0 | – | – | 4 | -0.88 |
-| rsi2_reversion | BTC | +0.00 | +0.00 | +0.00 | 0 | – | – | 2 | -1.31 |
+| rsi2_reversion | BTC | +0.00 | +0.00 | +0.00 | 0 | – | – | 3 | -1.36 |
 | donchian_trend | XOM | +0.00 | +0.00 | +0.00 | 0 | – | – | 1 | +2.98 |
 | rsi2_reversion | ETH | +0.00 | +0.00 | +0.00 | 0 | – | – | 2 | -1.43 |
 | squeeze_breakout | QQQ | +0.00 | -0.05 | -0.05 | 1 | 0% | -0.05 | 0 | – |
@@ -62,20 +62,20 @@ Sum of R (1R = the planned loss) per strategy and asset. *Skipped* = trades the 
 | donchian_trend | NVDA | +0.00 | -1.01 | -1.01 | 1 | 0% | -1.01 | 0 | – |
 | rsi2_reversion | AVGO | +0.00 | -1.01 | -1.01 | 1 | 0% | -1.01 | 0 | – |
 | rsi2_reversion | AMZN | -1.02 | -1.02 | -1.02 | 1 | 0% | -1.02 | 0 | – |
-| squeeze_breakout | TSLA | -1.16 | -1.16 | -1.16 | 1 | 0% | -1.16 | 0 | – |
-| rsi2_reversion | META | -0.14 | -1.23 | -1.23 | 5 | 20% | -0.25 | 0 | – |
-| donchian_trend | QQQ | -1.33 | -1.33 | -1.33 | 1 | 0% | -1.33 | 0 | – |
+| squeeze_breakout | TSLA | +0.00 | -1.16 | -1.16 | 1 | 0% | -1.16 | 0 | – |
+| rsi2_reversion | META | -2.12 | -1.23 | -1.23 | 5 | 20% | -0.25 | 0 | – |
+| donchian_trend | QQQ | +0.00 | -1.33 | -1.33 | 1 | 0% | -1.33 | 0 | – |
 | squeeze_breakout | SOL | +0.00 | -1.33 | -1.33 | 1 | 0% | -1.33 | 3 | -0.55 |
-| donchian_trend | TSLA | -1.39 | -1.39 | -1.39 | 1 | 0% | -1.39 | 0 | – |
+| donchian_trend | TSLA | +0.00 | -1.39 | -1.39 | 1 | 0% | -1.39 | 0 | – |
 | rsi2_reversion | SOL | +0.00 | -1.45 | -1.45 | 1 | 0% | -1.45 | 2 | -1.41 |
 | rsi2_reversion | GOOGL | -1.02 | -1.56 | -1.56 | 2 | 0% | -0.78 | 0 | – |
-| donchian_trend | BTC | +0.00 | -1.72 | -1.72 | 1 | 0% | -1.72 | 1 | -0.60 |
-| rsi2_reversion | TSLA | -2.03 | -2.03 | -2.03 | 2 | 0% | -1.02 | 0 | – |
-| rsi2_reversion | NVDA | -2.03 | -2.62 | -2.62 | 4 | 25% | -0.66 | 0 | – |
-| rsi2_reversion | AMD | -1.01 | -3.04 | -3.04 | 3 | 0% | -1.01 | 1 | -1.72 |
+| donchian_trend | BTC | +0.00 | -1.72 | -1.72 | 1 | 0% | -1.72 | 2 | -1.06 |
+| rsi2_reversion | TSLA | -1.02 | -2.03 | -2.03 | 2 | 0% | -1.02 | 0 | – |
+| rsi2_reversion | NVDA | -1.02 | -2.62 | -2.62 | 4 | 25% | -0.66 | 0 | – |
+| rsi2_reversion | AMD | +0.00 | -3.04 | -3.04 | 3 | 0% | -1.01 | 1 | -1.72 |
 
 ## ML learner, out of sample
 
-Refitted 44 times. 5196 trades judged before their outcome was known.
-AUC 0.53 (0.50 = no better than chance). Taken: 2336 trades, avg +0.04R. Skipped: 2860, avg -0.03R.
+Refitted 44 times. 5199 trades judged before their outcome was known.
+AUC 0.53 (0.50 = no better than chance). Taken: 2333 trades, avg +0.04R. Skipped: 2866, avg -0.03R.
 
