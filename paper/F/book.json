@@ -40,45 +40,6 @@
    "id": "bear_call_spread-IWM-2026-10-08"
   },
   {
-   "playbook": "long_call",
-   "underlying": "USO",
-   "legs": [
-    {
-     "symbol": "USO261113C00145500",
-     "qty": 2,
-     "price": 10.55
-    }
-   ],
-   "expiry": "2026-11-13",
-   "cost": 2110.0,
-   "max_loss": 2146.0,
-   "desc": "USO Nov 13 2026 145.5 Call, delta +0.60",
-   "opened": "2026-10-08 18:27",
-   "id": "long_call-USO-2026-10-08"
-  },
-  {
-   "playbook": "bull_put_spread",
-   "underlying": "AAPL",
-   "legs": [
-    {
-     "symbol": "AAPL261127P00315000",
-     "qty": 2,
-     "price": 2.9
-    },
-    {
-     "symbol": "AAPL261127P00330000",
-     "qty": -2,
-     "price": 5.55
-    }
-   ],
-   "expiry": "2026-11-27",
-   "cost": -530.0,
-   "max_loss": 2478.0,
-   "desc": "sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15",
-   "opened": "2026-10-13 15:58",
-   "id": "bull_put_spread-AAPL-2026-10-13"
-  },
-  {
    "playbook": "long_put",
    "underlying": "IWM",
    "legs": [
@@ -177,6 +138,23 @@
    "desc": "sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20",
    "opened": "2026-10-20 15:35",
    "id": "bear_call_spread-AVGO-2026-10-20"
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "AVGO",
+   "legs": [
+    {
+     "symbol": "AVGO261120P00347500",
+     "qty": 1,
+     "price": 22.1
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2210.0,
+   "max_loss": 2218.0,
+   "desc": "AVGO Nov 20 2026 347.5 Put, delta -0.59",
+   "opened": "2026-10-20 15:39",
+   "id": "long_put-AVGO-2026-10-20"
   }
  ],
  "closed": [
@@ -499,6 +477,51 @@
    "closed": "2026-10-20 14:56",
    "why_closed": "15 days held",
    "pnl": -950.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "USO",
+   "legs": [
+    {
+     "symbol": "USO261113C00145500",
+     "qty": 2,
+     "price": 10.55
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": 2110.0,
+   "max_loss": 2146.0,
+   "desc": "USO Nov 13 2026 145.5 Call, delta +0.60",
+   "opened": "2026-10-08 18:27",
+   "id": "long_call-USO-2026-10-08",
+   "closed": "2026-10-20 15:37",
+   "why_closed": "account A closed the stock",
+   "pnl": 810.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261127P00315000",
+     "qty": 2,
+     "price": 2.9
+    },
+    {
+     "symbol": "AAPL261127P00330000",
+     "qty": -2,
+     "price": 5.55
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": -530.0,
+   "max_loss": 2478.0,
+   "desc": "sell 330 / buy 315 puts, 2026-11-27, credit 2.61 on width 15",
+   "opened": "2026-10-13 15:58",
+   "id": "bull_put_spread-AAPL-2026-10-13",
+   "closed": "2026-10-20 15:37",
+   "why_closed": "account A closed the stock",
+   "pnl": -230.0
   }
  ]
 }
