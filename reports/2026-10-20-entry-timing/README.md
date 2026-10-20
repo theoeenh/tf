@@ -59,3 +59,14 @@ than buying at market.
   opening auction. Expected return effect: none on average; benefit: paper and Alpaca agree to ~20 minutes.
 
 Reproduce: `python reports/2026-10-20-entry-timing/entry_timing.py` (needs data/*_5m_alpaca.csv).
+
+## Follow-up (same evening)
+
+- **A model that learns when to enter?** Trained on 2025's signals (7,257) to predict whether waiting 20 or 60
+  minutes gives a better price (features: the last 1/5/20 bars' move, distance from the 20-bar average, RSI-2,
+  volatility, bar range, volume, hour, weekday, QQQ's last 5 bars, strategy), tested on 2026's (5,225):
+  AUC 0.50-0.52, a coin flip; following it loses 0.001-0.008R per signal. The next hour's price is not
+  predictable from what the system sees (15-minute-late data, hourly bars).
+- **Overnight signals:** entering at the open vs an hour later: +0.013R for the open (1,011 signals), vs
+  +0.001R intraday. Small, but in the open's favour.
+- **The fix (user's go):** orders now go out at the first run after the signal bar; see paper/PLAN.md.

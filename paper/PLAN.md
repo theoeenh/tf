@@ -49,3 +49,10 @@ account meets the criteria above. Then small, with the repository made private f
   puts and bear call spreads pause until a bearish signal passes the finder. E renamed "E – Insider clusters
   (Industrials)"; its rule stays at 3+ insiders (the 2+ version is weaker: 12/14, its edge fades). Accounts A,
   B, C and D are unchanged.
+- **2026-10-20 (user's go):** A, B and C send their orders one hour earlier. The paper booked an entry (or a
+  signal exit) only once the bar after the signal had closed, so the Alpaca order went out about 80 minutes
+  after the paper's price, and overnight signals at 10:20 New York instead of the 9:30 opening auction. Now
+  each run also trades the open of the bar forming now (at the last close), so the order goes out at the first
+  run after the signal bar (about 20 minutes after it), overnight signals queue for the opening auction. The
+  strategies, the learner and the books are unchanged: replays of A on 13 and 20 October give the same
+  equity, trades and decisions on every closed bar (reports/2026-10-20-entry-timing/README.md).

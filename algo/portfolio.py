@@ -123,7 +123,11 @@ def run_portfolio(
     close_at_end: bool = True,
     context: dict[str, pd.DataFrame] | None = None,
     blocked: dict[str, pd.Series] | None = None,
+    next_open: frozenset | set = frozenset(),
 ) -> PortfolioResult:
+    """next_open (live): the assets whose last row is the bar forming now, known only at its open
+    (priced at the last close). Its exits at the open and its entries are done, nothing after the
+    open, so the orders for that bar can go out as soon as the bar before it has closed."""
     # Fixed processing order (sleeve order): a set's order changes between runs,
     # and the order matters when several assets trade on the same bar.
     context = context or {}
@@ -316,6 +320,8 @@ def run_portfolio(
 
         # 3) during the bar: stops, targets, time stops; then trailing stops on the close
         for a, A, i in live:
+            if a in next_open and i == len(A.index) - 1:
+                continue  # only its open is known
             for k in by_asset[a]:
                 s, p = sleeves[k], pos[k]
                 if p is not None:

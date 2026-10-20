@@ -153,3 +153,33 @@ def test_caps_apply_only_from_their_start_date():
     assert sorted(t.qty for t in later.trades) == pytest.approx(sorted(t.qty for t in free.trades))
     now = run_portfolio({"A": prices["A"]}, sleeves, costs, PortfolioConfig(**base, caps_from=prices["A"].index[0]))
     assert min(t.qty for t in now.trades) < min(t.qty for t in free.trades)
+
+
+def test_next_open_trades_only_the_open_of_the_bar_forming_now():
+    """Live: a signal on the last closed bar opens at the open of the bar forming now (priced at the last
+    close), so its order can go out at once; nothing after that open is simulated (no stop, target or
+    time exit on it), and every closed bar gives the same result as without it."""
+    real = flat_bars(n=40)
+    nxt = real.index[-1] + pd.Timedelta(days=1)
+    c = real["Close"].iloc[-1]
+    prices = pd.concat([real, pd.DataFrame({"Open": c, "High": c, "Low": c, "Close": c, "Volume": 0.0},
+                                           index=pd.DatetimeIndex([nxt]))])
+    sig = signal_at(prices, 39).astype(int) | signal_at(prices, 30).astype(int)
+    rule = ExitRule(1.0, 3.0, max_bars=10)  # the trade of bar 30 would time out on bar 40 (the new one)
+    cfg = PortfolioConfig(risk_pct=0.01)
+    old = run_portfolio({"A": real}, [Sleeve("A", "s", sig.iloc[:40], rule)], {"A": Costs()}, cfg, close_at_end=False)
+    new = run_portfolio({"A": prices}, [Sleeve("A", "s", sig, rule)], {"A": Costs()}, cfg, close_at_end=False,
+                        next_open={"A"})
+    assert new.equity.iloc[:40].equals(old.equity) and len(new.trades) == len(old.trades)
+    (p_old,) = old.open_positions
+    assert p_old["entry_time"] == real.index[31]
+    (p_new,) = new.open_positions                              # not timed out on the new bar
+    assert p_new["entry_time"] == real.index[31]
+    plain = run_portfolio({"A": prices}, [Sleeve("A", "s", sig, rule)], {"A": Costs()}, cfg, close_at_end=False)
+    assert [t.reason for t in plain.trades][-1:] == ["time"]   # without next_open it would be
+    sig2 = signal_at(prices, 39).astype(int)
+    new2 = run_portfolio({"A": prices}, [Sleeve("A", "s", sig2, rule)], {"A": Costs()}, cfg, close_at_end=False,
+                         next_open={"A"})
+    (p,) = new2.open_positions
+    assert p["entry_time"] == nxt and p["entry"] == pytest.approx(c)
+    assert p["stop"] == pytest.approx(c - 1.0 * 2.0, rel=1e-3)  # stop from the ATR of the closed bar
