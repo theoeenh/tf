@@ -172,6 +172,28 @@
    "desc": "AAPL Dec 18 2026 335 Call, delta +0.61",
    "opened": "2026-10-20 16:56",
    "id": "long_call-AAPL-2026-10-20"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261120P00310000",
+     "qty": 1,
+     "price": 2.35
+    },
+    {
+     "symbol": "AAPL261120P00327500",
+     "qty": -1,
+     "price": 5.5
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -315.0,
+   "max_loss": 1441.0,
+   "desc": "sell 327.5 / buy 310 puts, 2026-11-20, credit 3.09 on width 17.5",
+   "opened": "2026-10-20 18:28",
+   "id": "bull_put_spread-AAPL-2026-10-20"
   }
  ],
  "closed": [
