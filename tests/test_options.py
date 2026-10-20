@@ -66,3 +66,74 @@ def test_close_cost_buys_back_short_legs_at_ask():
     p = {"legs": [{"symbol": "L", "qty": 2}, {"symbol": "S", "qty": -2}]}
     q = {"L": {"bp": 1.0, "ap": 1.1}, "S": {"bp": 3.0, "ap": 3.2}}
     assert abs(O.close_cost(p, q) - (2 * 3.2 * 100 - 2 * 1.0 * 100)) < 1e-9
+
+
+def test_spy_put_spread_sells_025_and_buys_010_with_a_smaller_credit_floor():
+    cs = [_c("P700", 700, -0.26, 9.0, 9.2, "2026-11-20"), _c("P670", 670, -0.10, 4.6, 4.7, "2026-11-20"),
+          _c("P720", 720, -0.40, 14.0, 14.3, "2026-11-20")]
+    d = O.design("spy_put_spread", cs, 100_000)
+    legs = {leg["symbol"]: leg["qty"] for leg in d["legs"]}
+    assert legs["P700"] < 0 < legs["P670"] and d["cost"] < 0      # credit 4.3 on width 30: 14%
+    assert d["max_loss"] <= 3000
+
+
+def test_spy_put_spread_opens_once_a_week_up_to_four():
+    def chain_for(und, kind, spot, dte=None):
+        assert und == "SPY" and dte == (30, 45)
+        return [_c("P700", 700, -0.25, 9.0, 9.2, "2026-11-20"), _c("P670", 670, -0.10, 4.6, 4.7, "2026-11-20")]
+
+    def run(book, day):
+        return [e for e in O.entries(book, {}, {}, 100_000, chain_for, ["spy_put_spread"], pd.Timestamp(day),
+                                     {"SPY": 760.0}) if e["playbook"] == "spy_put_spread"]
+
+    assert len(run({"open": [], "closed": []}, "2026-10-21")) == 1
+    recent = {"playbook": "spy_put_spread", "underlying": "SPY", "opened": "2026-10-19 14:30"}
+    assert run({"open": [recent], "closed": []}, "2026-10-21") == []               # 2 days later: wait
+    assert len(run({"open": [recent], "closed": []}, "2026-10-26")) == 1          # a week later: next one
+    old = [dict(recent, opened=f"2026-09-{d} 14:30") for d in (1, 8, 15, 22)]
+    assert run({"open": old, "closed": []}, "2026-10-21") == []                    # 4 open: full
+    assert run({"open": [], "closed": [recent]}, "2026-10-21") == []               # counts closed ones too
+
+
+def test_inactive_playbooks_open_nothing_and_new_positions_record_their_source():
+    bull = {"PEP": {"r": 0.1, "spot": 130}}
+    bear = {"TSLA": {"spot": 400}}
+
+    def chain_for(und, kind, spot, dte=None):
+        k = spot / 100
+        if kind == "call":
+            return [_c(f"{und}C", spot, 0.6, 4.9 * k, 5.0 * k)]
+        return [_c(f"{und}P2", spot * 0.95, -0.3, 2.0 * k, 2.05 * k), _c(f"{und}P3", spot * 0.9, -0.15, 0.7 * k, 0.72 * k)]
+
+    got = O.entries({"open": [], "closed": []}, bull, bear, 100_000, chain_for,
+                    ["long_call", "bull_put_spread"], TODAY, {}, "D")
+    assert {(e["playbook"], e["underlying"]) for e in got} == {("long_call", "PEP"), ("bull_put_spread", "PEP")}
+    assert all(e["source"] == "D" for e in got)
+
+
+def test_exits_follow_the_source_account_and_spy_spreads_only_their_own_rules():
+    book = {"open": [
+        {"playbook": "long_call", "underlying": "MSFT", "expiry": "2026-12-18", "opened": "2026-10-05", "legs": [], "cost": 2800},
+        {"playbook": "long_call", "underlying": "PEP", "source": "D", "expiry": "2026-12-18", "opened": "2026-10-20",
+         "legs": [], "cost": 2000},
+        {"playbook": "spy_put_spread", "underlying": "SPY", "expiry": "2026-11-20", "opened": "2026-10-20",
+         "legs": [1, 2], "cost": -500},
+        {"playbook": "spy_put_spread", "underlying": "SPY", "expiry": "2026-10-25", "opened": "2026-09-20",
+         "legs": [1, 2], "cost": -500}]}
+    bulls = {"A": {"MSFT": {"r": 0, "spot": 1}}, "D": {}}
+    out = {(p["underlying"], p["expiry"]): why for p, why in
+           O.exits(book, bulls["A"], {}, TODAY, lambda p: 400.0, bulls)}
+    assert ("MSFT", "2026-12-18") not in out                         # A still holds it: an old A position stays
+    assert "account D closed the stock" in out[("PEP", "2026-12-18")]
+    assert ("SPY", "2026-11-20") not in out                          # no signal exit; 400 > half the credit
+    assert "days to expiry" in out[("SPY", "2026-10-25")]            # 20 days left < 21
+
+
+def test_spy_put_spread_narrows_the_protection_to_fit_the_budget():
+    """2026-10-20, real SPY quotes: a 0.25 / 0.10 spread is 34 points wide and risks ~$3,080 per spread,
+    more than 3% of $95,000; the protective leg moves up until one spread fits."""
+    cs = [_c("P747", 747, -0.249, 5.56, 5.59, "2026-11-20"), _c("P713", 713, -0.10, 2.30, 2.35, "2026-11-20"),
+          _c("P720", 720, -0.12, 2.74, 2.76, "2026-11-20"), _c("P730", 730, -0.154, 3.42, 3.52, "2026-11-20")]
+    d = O.design("spy_put_spread", cs, 95_000)
+    legs = {leg["symbol"]: leg["qty"] for leg in d["legs"]}
+    assert legs == {"P747": -1, "P720": 1} and d["max_loss"] <= 0.03 * 95_000

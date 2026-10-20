@@ -41,3 +41,11 @@ After the freeze (from 7 December), F gets a fifth playbook that aims for profit
 
 Only after a strategy has passed all 14 checks, its vault test and 6 weeks of forward trading, and its live
 account meets the criteria above. Then small, with the repository made private first.
+
+## Changes agreed during the freeze
+
+- **2026-10-20 (user's go):** F starts the SPY put-spread playbook now instead of 7 December, and its call /
+  put-spread playbooks follow account D's insider signals instead of A's (A's signals have no edge); F's long
+  puts and bear call spreads pause until a bearish signal passes the finder. E renamed "E – Insider clusters
+  (Industrials)"; its rule stays at 3+ insiders (the 2+ version is weaker: 12/14, its edge fades). Accounts A,
+  B, C and D are unchanged.

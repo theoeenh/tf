@@ -1,7 +1,14 @@
 {
-  "name": "F – Options",
+  "name": "F \u2013 Options",
   "alpaca_account": "PA3AOX0V1LBZ",
   "capital": 100000.0,
   "status": "trading",
-  "plan": "Four option playbooks side by side (a test of option mechanics; the signals have no proven edge yet): long calls and bull put spreads on account A's fresh longs, long puts and bear call spreads on fresh short signals; ~3% of equity at risk each, max 3 per playbook. See algo/options.py."
+  "plan": "User's go 2026-10-20: (1) spy_put_spread, the income idea of paper/research/2026-10-11-account-F-put-selling.md: sell a ~0.25 delta SPY put, buy a ~0.10 delta put below, 30-45 days out, one a week, at most 4 open, ~3% of equity at risk each, out at 50% of the credit or 21 days before expiry; (2) long calls and bull put spreads follow account D's insider signals instead of account A's (A's signals have no edge); (3) long puts and bear call spreads paused until a bearish signal passes the finder. Judged against SPY.",
+  "signals": "D",
+  "playbooks": [
+    "spy_put_spread",
+    "long_call",
+    "bull_put_spread"
+  ],
+  "summary": "From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules."
 }

@@ -1,9 +1,10 @@
 {
-  "name": "E – Aggressive",
+  "name": "E – Insider clusters (Industrials)",
   "alpaca_account": "PA3MISAL2QI0",
   "capital": 100000.0,
   "status": "waiting for the insider backfill",
   "plan": "Early test of the finder's best candidate (13/14 checks, NOT graduated: it fails the luck check): buy an Industrials stock (S&P 1500) the day 3+ insiders have bought it in the open market within 90 days, hold 60 sessions, stop 2.5 ATR, 0.4% of equity at risk per trade. User's go 2026-10-05.",
   "candidate": "{\"family\": \"insider_cluster\", \"params\": {\"buyers\": 3, \"days\": 90}, \"rule\": {\"stop_atr\": 2.5, \"rr\": null, \"max_bars\": 60}, \"short\": false, \"trend\": false, \"assets\": \"sector:Industrials\", \"data\": \"daily500\", \"notes\": \"from 8f2d51923b: edge peaks at 60 bars, exit at 5 -> hold 60\"}",
-  "start": "2026-10-05"
+  "start": "2026-10-05",
+  "note": "Renamed 2026-10-20 (was 'E – Aggressive', the 5 Oct idea of pushing the live rules harder, dropped after the study in paper/research/2026-10-05-account-E.md). Rule unchanged: 3+ insiders in 90 days, Industrials. The 2+ insiders version was checked: 12/14 (also fails the shelf-life check, its edge fades), validation +0.16R a trade vs +0.44R; kept at 3+."
 }

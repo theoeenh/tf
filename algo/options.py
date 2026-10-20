@@ -25,6 +25,14 @@ Alpaca allows no naked short options: a spread buys its protective leg first, th
 orders, only while the market is open. Prices: Alpaca's free 'indicative' option feed.
 The book of positions (which playbook each contract belongs to) is paper/F/book.json; every order
 goes to paper/F/fills.csv; paper/F/status.md has the score per playbook.
+
+From 2026-10-20 (user's go): a fifth playbook, `spy_put_spread`, the income idea of
+paper/research/2026-10-11-account-F-put-selling.md: one new SPY put spread a week (sell ~0.25 delta,
+buy ~0.10 delta below, or nearer if one spread would risk more than ~3% of equity; 30-45 days
+out), at most 4 open, ~3% of equity at risk each, out at half the
+credit earned or 21 days before expiry. The account's config.json chooses the active playbooks
+("playbooks") and whose stock signals the others follow ("signals": "A" = account A, "D" = account D,
+the insider candidate). Positions opened before a switch keep the source they were opened on.
 """
 from __future__ import annotations
 
@@ -42,6 +50,7 @@ from .paper import PAPER_DIR
 
 ROOT = Path(__file__).resolve().parent.parent
 SIGNALS = ROOT / "paper" / "orders.json"  # account A's plan
+SOURCES = {"A": ROOT / "paper" / "orders.json", "D": ROOT / "paper" / "D" / "orders.json"}
 DTE_MIN, DTE_MAX, DTE_EXIT = 30, 60, 10
 MAX_SPREAD = 0.15
 RISK = 0.03  # most a position can lose, share of equity
@@ -54,6 +63,10 @@ PLAYBOOKS = {
     "long_put": {"bias": -1, "type": "put", "legs": [(+1, -0.60)]},
     "bull_put_spread": {"bias": 1, "type": "put", "legs": [(-1, -0.30), (+1, -0.15)]},
     "bear_call_spread": {"bias": -1, "type": "call", "legs": [(-1, 0.30), (+1, 0.15)]},
+    # selling insurance on the S&P 500 on a timetable, no stock signal (see the docstring)
+    "spy_put_spread": {"bias": 1, "type": "put", "legs": [(-1, -0.25), (+1, -0.10)], "underlying": "SPY",
+                       "dte": (30, 45), "exit_dte": 21, "min_credit": 0.08, "short_tol": 0.10, "fit_width": True,
+                       "max_open": 4, "every_days": 7},
 }
 
 
@@ -94,11 +107,12 @@ def trends(prices: dict) -> dict[str, int]:
 
 # ------------------------------------------------------------------ contracts
 
-def chain(und: str, kind: str, spot: float, today: pd.Timestamp) -> list[dict]:
-    """Option contracts 30-60 days out around the price, with their quote and delta."""
+def chain(und: str, kind: str, spot: float, today: pd.Timestamp, dte: tuple[int, int] | None = None) -> list[dict]:
+    """Option contracts 30-60 days out (or `dte`) around the price, with their quote and delta."""
+    lo, hi = dte or (DTE_MIN, DTE_MAX)
     q = (f"/v2/options/contracts?underlying_symbols={und}&type={kind}&status=active"
-         f"&expiration_date_gte={(today + pd.Timedelta(days=DTE_MIN)).date()}"
-         f"&expiration_date_lte={(today + pd.Timedelta(days=DTE_MAX)).date()}"
+         f"&expiration_date_gte={(today + pd.Timedelta(days=lo)).date()}"
+         f"&expiration_date_lte={(today + pd.Timedelta(days=hi)).date()}"
          f"&strike_price_gte={spot * 0.75:.2f}&strike_price_lte={spot * 1.25:.2f}&limit=500")
     cs = request("GET", q).get("option_contracts", [])
     snaps = {}
@@ -137,17 +151,20 @@ def design(playbook: str, cs: list[dict], equity: float) -> dict | None:
                 "desc": f"{c['name']}, delta {c['delta']:+.2f}"}
     (s_side, s_delta), (l_side, l_delta) = pb["legs"]
     short = nearest(cs, s_delta)
-    if short is None or abs(short["delta"] - s_delta) > 0.12:
+    if short is None or abs(short["delta"] - s_delta) > pb.get("short_tol", 0.12):
         return None
     longs = [c for c in cs if c["expiry"] == short["expiry"]
              and (c["strike"] < short["strike"] if pb["type"] == "put" else c["strike"] > short["strike"])]
+    if pb.get("fit_width"):  # the protective leg nearest its delta among those where one spread fits the budget
+        longs = [c for c in longs
+                 if (abs(short["strike"] - c["strike"]) - (short["bid"] - c["ask"])) * 100 <= RISK * equity]
     long = nearest(longs, l_delta)
     if long is None:
         return None
     credit = short["bid"] - long["ask"]
     width = abs(short["strike"] - long["strike"])
-    if credit < 0.15 * width:  # too little reward for the risk (a fair 0.30/0.15 spread brings ~18%)
-        return None
+    if credit < pb.get("min_credit", 0.15) * width:  # too little reward for the risk (a fair 0.30/0.15
+        return None                                     # spread brings ~18%, a 0.25/0.10 one ~12-15%)
     loss_each = (width - credit) * 100
     n = math.floor(RISK * equity / loss_each)
     if n < 1:
@@ -170,17 +187,24 @@ def save_book(book: dict) -> None:
     (PAPER_DIR / "book.json").write_text(json.dumps(book, indent=1))
 
 
-def exits(book: dict, bull: dict, trend: dict, today: pd.Timestamp, close_cost) -> list[tuple[dict, str]]:
-    """Open positions to close now, with the reason. close_cost(pos) -> what closing costs now ($)."""
+def exits(book: dict, bull: dict, trend: dict, today: pd.Timestamp, close_cost,
+          bulls: dict[str, dict] | None = None) -> list[tuple[dict, str]]:
+    """Open positions to close now, with the reason. close_cost(pos) -> what closing costs now ($).
+    `bulls`: the bullish signals of each source account; a position follows the source it was opened on
+    (positions from before the switch: account A, i.e. `bull`)."""
     out = []
     for p in book["open"]:
         pb = PLAYBOOKS[p["playbook"]]
         dte = (pd.Timestamp(p["expiry"]) - today).days
+        src = p.get("source", "A")
+        held = (bulls or {}).get(src, bull)
         why = None
-        if dte <= DTE_EXIT:
+        if dte <= pb.get("exit_dte", DTE_EXIT):
             why = f"{dte} days to expiry"
-        elif pb["bias"] > 0 and p["underlying"] not in bull:
-            why = "account A closed the stock"
+        elif pb.get("underlying"):  # a timetable playbook: no stock signal to follow
+            pass
+        elif pb["bias"] > 0 and p["underlying"] not in held:
+            why = f"account {src} closed the stock"
         elif pb["bias"] < 0 and (trend.get(p["underlying"], 0) > 0
                                  or (today - pd.Timestamp(p["opened"]).normalize()).days >= BEAR_DAYS):
             why = "daily trend turned up" if trend.get(p["underlying"], 0) > 0 else f"{BEAR_DAYS} days held"
@@ -193,11 +217,25 @@ def exits(book: dict, bull: dict, trend: dict, today: pd.Timestamp, close_cost) 
     return out
 
 
-def entries(book: dict, bull: dict, bear: dict, equity: float, chain_for) -> list[dict]:
-    """New positions: fresh signals, playbook limits, one position per stock and playbook."""
+def entries(book: dict, bull: dict, bear: dict, equity: float, chain_for, active=None,
+            today: pd.Timestamp | None = None, spots: dict | None = None, source: str = "A") -> list[dict]:
+    """New positions: fresh signals, playbook limits, one position per stock and playbook; timetable
+    playbooks (a fixed underlying) open one position every `every_days` days, up to `max_open`."""
     out = []
     for name, pb in PLAYBOOKS.items():
+        if active is not None and name not in active:
+            continue
         held = [p for p in book["open"] if p["playbook"] == name]
+        if pb.get("underlying"):
+            und, spot = pb["underlying"], (spots or {}).get(pb["underlying"])
+            mine = held + [p for p in book["closed"] if p["playbook"] == name]
+            last = max((pd.Timestamp(p["opened"]).normalize() for p in mine), default=None)
+            if (spot and today is not None and len(held) < pb["max_open"]
+                    and (last is None or (today - last).days >= pb["every_days"])):
+                d = design(name, chain_for(und, pb["type"], spot, pb["dte"]), equity)
+                if d is not None:
+                    out.append({"playbook": name, "underlying": und, **d})
+            continue
         busy = {p["underlying"] for p in held}
         room = MAX_PER_BOOK - len(held)
         signals = ({u: v for u, v in bull.items() if FRESH_R[0] <= v["r"] <= FRESH_R[1]} if pb["bias"] > 0 else bear)
@@ -209,7 +247,7 @@ def entries(book: dict, bull: dict, bear: dict, equity: float, chain_for) -> lis
             d = design(name, chain_for(und, pb["type"], v["spot"]), equity)
             if d is None:
                 continue
-            out.append({"playbook": name, "underlying": und, **d})
+            out.append({"playbook": name, "underlying": und, "source": source, **d})
             room -= 1
     return out
 
@@ -297,13 +335,22 @@ def close_position(p: dict, why: str) -> float | None:
 
 # ------------------------------------------------------------------ run
 
+def config() -> dict:
+    p = PAPER_DIR / "config.json"
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
 def write_status(acct: dict, book: dict, q: dict) -> None:
     eq = float(acct.get("equity", 0))
-    lines = [f"# {json.loads((PAPER_DIR / 'config.json').read_text()).get('name', 'F')}", "",
+    cfg = config()
+    active = cfg.get("playbooks", list(PLAYBOOKS))
+    lines = [f"# {cfg.get('name', 'F')}", "",
              f"Updated {time.strftime('%Y-%m-%d %H:%M', time.gmtime())} UTC. **Equity ${eq:,.0f}** "
-             f"({eq / 100_000 - 1:+.2%} since start). A test of option mechanics on signals with no proven edge.",
+             f"({eq / 100_000 - 1:+.2%} since start). {cfg.get('summary', '')}".rstrip(),
+             "", f"Active playbooks: {', '.join(active)}; stock signals from account {cfg.get('signals', 'A')}.",
              "", "| playbook | open | closed | realised P&L | open P&L | wins / closed |", "|---|---|---|---|---|---|"]
-    for name in PLAYBOOKS:
+    shown = [n for n in PLAYBOOKS if n in active or any(p["playbook"] == n for p in book["open"] + book["closed"])]
+    for name in shown:
         op = [p for p in book["open"] if p["playbook"] == name]
         cl = [p for p in book["closed"] if p["playbook"] == name]
         real = sum(p.get("pnl", 0) for p in cl)
@@ -320,25 +367,41 @@ def sync(send: bool = False) -> None:
     from .paper import complete_bars
     from .system import UNIVERSE_WIDE, load_prices
 
+    from .alpaca import live_prices
+
     num = check_account()
     acct = request("GET", "/v2/account")
     equity = float(acct["equity"])
     today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
     now = pd.Timestamp.now(tz="UTC").tz_localize(None)
-    plan = json.loads(SIGNALS.read_text())
-    prices = {a: complete_bars(df, a, "1h", now) for a, df in
-              load_prices("alpaca", "1h", [a for a in UNIVERSE_WIDE if a not in CRYPTO]).items()}
-    bull, bear, trend = bullish(plan), bearish(prices), trends(prices)
+    cfg = config()
+    active = cfg.get("playbooks", list(PLAYBOOKS))
+    source = cfg.get("signals", "A")
+    bulls = {k: bullish(json.loads(f.read_text())) if f.exists() else {} for k, f in SOURCES.items()}
+    bull = bulls.get(source, {})
     book = load_book()
+    bear_play = any(PLAYBOOKS[n]["bias"] < 0 for n in active) or any(
+        PLAYBOOKS[p["playbook"]]["bias"] < 0 for p in book["open"])
+    bear, trend = {}, {}
+    if bear_play:  # the bearish playbooks (signals and daily-trend exits) need the hourly prices
+        prices = {a: complete_bars(df, a, "1h", now) for a, df in
+                  load_prices("alpaca", "1h", [a for a in UNIVERSE_WIDE if a not in CRYPTO]).items()}
+        bear, trend = bearish(prices), trends(prices)
+    fixed = sorted({PLAYBOOKS[n]["underlying"] for n in active if PLAYBOOKS[n].get("underlying")})
+    try:
+        spots = live_prices(fixed) if fixed else {}
+    except AlpacaError as e:
+        print(f"No price for {', '.join(fixed)} ({e}); timetable playbooks wait.")
+        spots = {}
     q = quotes(sorted({leg["symbol"] for p in book["open"] for leg in p["legs"]})) if book["open"] else {}
-    print(f"Alpaca account {num}: F – Options, equity ${equity:,.0f}; bullish {sorted(bull)}, "
-          f"bearish {sorted(bear)}; {len(book['open'])} open position(s)")
+    print(f"Alpaca account {num}: {cfg.get('name', 'F')}, equity ${equity:,.0f}; active {active}; "
+          f"bullish ({source}) {sorted(bull)}, bearish {sorted(bear)}; {len(book['open'])} open position(s)")
     is_open = request("GET", "/v2/clock").get("is_open")
     if send and not is_open:
         print("Market closed: option orders wait for a run during market hours.")
     trade = send and is_open
 
-    for p, why in exits(book, bull, trend, today, lambda p: close_cost(p, q)):
+    for p, why in exits(book, bulls.get("A", {}), trend, today, lambda p: close_cost(p, q), bulls):
         print(f"CLOSE {p['playbook']} {p['underlying']}: {why}")
         if trade:
             got = close_position(p, why)
@@ -347,14 +410,14 @@ def sync(send: bool = False) -> None:
                 book["closed"].append(p | {"closed": str(now)[:16], "why_closed": why, "pnl": got - p["cost"]})
                 save_book(book)
 
-    def chain_for(und, kind, spot):
+    def chain_for(und, kind, spot, dte=None):
         try:
-            return chain(und, kind, spot, today)
+            return chain(und, kind, spot, today, dte)
         except AlpacaError as e:
             print(f"  no option chain for {und} ({e})")
             return []
 
-    for pos in entries(book, bull, bear, equity, chain_for):
+    for pos in entries(book, bull, bear, equity, chain_for, active, today, spots, source):
         print(f"OPEN  {pos['playbook']} {pos['underlying']}: {pos['desc']}, cost ${pos['cost']:+,.0f}, "
               f"most it can lose ${pos['max_loss']:,.0f}")
         if trade:
