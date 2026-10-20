@@ -149,9 +149,11 @@ def _regular_hours(t: str | None) -> bool:
 
 
 def bar_range(symbols) -> dict[str, tuple[float, float]]:
-    """(low, high) of each stock since the end of the last bar the paper account processed (the last
-    line of its equity.csv, hourly accounts only): the prices its next bar will contain. IEX minute bars
-    (the free real-time feed)."""
+    """(low, high) of each stock since the end of the last bar the paper account processed for it (its
+    "bar" in orders.json; else the last line of equity.csv, hourly accounts only): the prices its next
+    bar will contain. IEX minute bars (the free real-time feed). Per stock because equity.csv already
+    has the hour that just ended when only crypto's bar is final (stock data is 15 minutes late):
+    2026-10-20 14:01 UTC, a range from 14:00 missed AAPL's stop at the 13:30 open (engine, shadow)."""
     path = PAPER_DIR / "equity.csv"
     stocks = sorted(s for s in symbols if "/" not in s)
     if not stocks or not path.exists():
@@ -161,16 +163,27 @@ def bar_range(symbols) -> dict[str, tuple[float, float]]:
         return {}
     from datetime import datetime, timedelta, timezone
 
-    start = (datetime.fromisoformat(last[:19]).replace(tzinfo=timezone.utc) + timedelta(hours=1))
+    def end_of(bar: str) -> datetime:
+        return datetime.fromisoformat(bar[:19]).replace(tzinfo=timezone.utc) + timedelta(hours=1)
+
+    starts = {s: end_of(last) for s in stocks}
+    orders = PAPER_DIR / "orders.json"
+    for o in json.loads(orders.read_text()) if orders.exists() else []:
+        sym = SYMBOLS.get(o.get("asset"), o.get("asset"))
+        if sym in starts and o.get("bar"):
+            starts[sym] = min(starts[sym], end_of(str(o["bar"])))
+    start = min(starts.values())
     if start > datetime.now(timezone.utc):
         return {}
-    start = start.strftime("%Y-%m-%dT%H:%M:%SZ")
     out: dict[str, tuple[float, float]] = {}
-    params = {"symbols": ",".join(stocks), "timeframe": "1Min", "start": start, "feed": "iex", "limit": 10000}
+    params = {"symbols": ",".join(stocks), "timeframe": "1Min", "start": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "feed": "iex", "limit": 10000}
     for _ in range(20):
         d = get_data("/v2/stocks/bars", params)
         for s, bars in (d.get("bars") or {}).items():
-            bars = [b for b in bars if _regular_hours(b.get("t"))]  # the paper's hourly bars: 9:30-16:00 only
+            since = starts.get(s, start)
+            bars = [b for b in bars if _regular_hours(b.get("t"))  # the paper's hourly bars: 9:30-16:00 only
+                    and (not b.get("t") or datetime.fromisoformat(b["t"].replace("Z", "+00:00")) >= since)]
             if bars:
                 lo, hi = min(b["l"] for b in bars), max(b["h"] for b in bars)
                 o = out.get(s, (lo, hi))

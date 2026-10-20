@@ -216,7 +216,9 @@ def update(source: str | None = None) -> Path:
                 continue
             orders.append({"asset": p["asset"], "ticker": data.TICKERS[p["asset"]], "strategy": p["strategy"],
                            "qty": p["side"] * p["qty"], "stop": p["stop"], "target": p["target"],
-                           "mark": p["mark"], "entry": p["entry"], "r": p["unrealised_r"]})
+                           "mark": p["mark"], "entry": p["entry"], "r": p["unrealised_r"],
+                           # its last bar processed: the stop check in algo.alpaca starts after it
+                           "bar": str(prices[p["asset"]].index[-1]) if p["asset"] in prices else None})
         lines += ["", "## Closed trades (newest first)", ""]
         for t in reversed(res.trades):
             lines += [f"- **{t.exit_date:%Y-%m-%d %H:%M} · {'LONG' if t.side > 0 else 'SHORT'} {t.asset} · "

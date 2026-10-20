@@ -551,3 +551,49 @@ def test_closed_market_match_includes_the_stops_of_held_positions(monkeypatch):
     assert alpaca.already_queued(trades, {"NVDA": 200.0})
     orders.remove(frac)                                       # the fractional day stop expired: re-send
     assert not alpaca.already_queued(trades, {"NVDA": 200.0})
+
+
+def test_stop_range_starts_after_each_stocks_own_last_bar(monkeypatch, tmp_path):
+    """2026-10-20: at 14:01 UTC the crypto bar of 13:00 was final, so equity.csv's last line was 13:00,
+    but AAPL's 13:30-14:00 bar was not (stock data is 15 minutes late). The range started at 14:00,
+    missed AAPL's stop at the 13:30 open, and the engine would have bought the shares back."""
+    import json
+
+    from algo import alpaca
+
+    (tmp_path / "equity.csv").write_text("Date,equity\n2026-10-20 12:00:00,1\n2026-10-20 13:00:00,1\n")
+    (tmp_path / "orders.json").write_text(json.dumps([
+        {"asset": "AAPL", "qty": 62.8, "stop": 339.08, "target": 357.66, "bar": "2026-10-19 19:00:00"},
+        {"asset": "MSFT", "qty": 15.4, "stop": 517.42, "target": 553.3, "bar": "2026-10-20 13:00:00"}]))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    asked = []
+
+    def get_data(path, params):
+        asked.append(dict(params))
+        bar = lambda t, lo, hi: {"t": t, "l": lo, "h": hi}
+        return {"bars": {"AAPL": [bar("2026-10-19T19:59:00Z", 330.0, 331.0),   # before the open: ignored
+                                  bar("2026-10-20T13:30:00Z", 338.85, 341.2),  # the opening dip
+                                  bar("2026-10-20T14:02:00Z", 341.5, 342.0)],
+                         "MSFT": [bar("2026-10-20T13:30:00Z", 500.0, 530.0),   # its 13:00 bar was processed
+                                  bar("2026-10-20T14:01:00Z", 528.0, 529.0)]}}
+
+    monkeypatch.setattr(alpaca, "get_data", get_data)
+    seen = alpaca.bar_range(["AAPL", "MSFT"])
+    assert asked[0]["start"] == "2026-10-19T20:00:00Z"
+    assert seen == {"AAPL": (338.85, 342.0), "MSFT": (528.0, 529.0)}
+    assert alpaca.through_stop({"asset": "AAPL", "qty": 62.8, "stop": 339.08, "target": 357.66},
+                               {"AAPL": 341.6}, seen)
+
+
+def test_stop_range_without_bar_times_starts_after_the_last_equity_line(monkeypatch, tmp_path):
+    import json
+
+    from algo import alpaca
+
+    (tmp_path / "equity.csv").write_text("Date,equity\n2026-10-20 13:00:00,1\n")
+    (tmp_path / "orders.json").write_text(json.dumps([{"asset": "AAPL", "qty": 1.0, "stop": 1.0, "target": None}]))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    asked = []
+    monkeypatch.setattr(alpaca, "get_data", lambda path, params: asked.append(dict(params)) or {"bars": {}})
+    assert alpaca.bar_range(["AAPL"]) == {}
+    assert asked[0]["start"] == "2026-10-20T14:00:00Z"

@@ -755,6 +755,48 @@ def insider_momentum(prices: dict, buyers: int = 1, min_rank: float = 0.7) -> di
             for a, s in sig.items()}
 
 
+def insider_turn(prices: dict, buyers: int = 1, window: int = 20) -> dict:
+    """Insiders bought a falling stock; wait for the turn: an insider cluster (30 days) on a day the
+    close is under its 50-session average, then the signal is the first close back above the 20-session
+    average within `window` sessions after it (none: no trade). The near-misses buy weakness at once and
+    fail on decay and shelf life; waiting for the price to agree should skip the falling knives.
+    Closes up to the signal day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    out = {}
+    for a, df in prices.items():
+        c = df["Close"]
+        ma20 = c.rolling(20, min_periods=20).mean()
+        weak = (c < c.rolling(50, min_periods=50).mean()).to_numpy()
+        cross = ((c > ma20) & (c.shift(1) <= ma20.shift(1))).to_numpy()
+        s = np.zeros(len(df), int)
+        for i in np.flatnonzero(sig[a].to_numpy().astype(bool) & weak):
+            after = np.flatnonzero(cross[i + 1:i + 1 + window])
+            if len(after):
+                s[i + 1 + after[0]] = 1
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
+def insider_accumulation(prices: dict, buyers: int = 1, volume: float = 2.0) -> dict:
+    """Insiders bought and the market follows: within 10 sessions after an insider cluster (30 days),
+    the first up day (close above the day before) on at least `volume` times the stock's usual volume
+    (average of the 50 sessions before that day). Big buyers joining the insiders is a second, independent
+    vote. Closes and volumes up to the signal day only."""
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    out = {}
+    for a, df in prices.items():
+        c, v = df["Close"], df["Volume"].astype(float)
+        usual = v.rolling(50, min_periods=50).mean().shift(1)
+        heavy = ((v >= volume * usual) & (c > c.shift(1))).to_numpy()
+        s = np.zeros(len(df), int)
+        for i in np.flatnonzero(sig[a].to_numpy().astype(bool)):
+            after = np.flatnonzero(heavy[i + 1:i + 11])
+            if len(after):
+                s[i + 1 + after[0]] = 1
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
 def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank: float = 0.5) -> dict:
     """Insider clusters in companies whose last filed fundamentals look good: the day a cluster forms
     (insider_cluster, 90 days) and the stock's `feature` (algo/fundamentals.py: f_sue = earnings
@@ -871,6 +913,14 @@ WIDE_FAMILIES = {
     "insider_momentum": (insider_momentum, {"buyers": [1, 2], "min_rank": [0.7, 0.9]},
                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                           "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders bought a falling stock: buy when the price turns back up (2026-10-20)
+    "insider_turn": (insider_turn, {"buyers": [1, 2], "window": [10, 20]},
+                     {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                      "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders bought, then a heavy-volume up day: big buyers follow (2026-10-20)
+    "insider_accumulation": (insider_accumulation, {"buyers": [1, 2], "volume": [1.5, 2.5]},
+                             {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                              "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # insider clusters filtered by the ML scorer: 2 models x 2 shares kept, held the 60 sessions it is
     # trained for (wide stop: the model bets on the 3 months, not the first days)
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},

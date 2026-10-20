@@ -727,3 +727,46 @@ def test_insider_momentum_ranks_past_returns_only(monkeypatch):
     monkeypatch.setattr(ff, "_insider", lambda code="P": t)
     out = ff.insider_momentum(prices, buyers=1, min_rank=0.9)
     assert out["UP"].loc[days[150]] == 1 and out["LATE"].sum() == 0 and out["FLAT"].sum() == 0
+
+
+def test_insider_turn_waits_for_the_close_back_above_its_average(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=200)
+    close = pd.Series(100.0, index=days)
+    close.iloc[60:110] = np.linspace(99, 80, 50)              # falling: the insider buys on day 100
+    close.iloc[110:] = 90.0                                   # day 110: back above the 20-day average
+    prices = {"AAA": pd.DataFrame({"Close": close})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[100], code="P", price=81.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_turn(prices, buyers=1, window=20)["AAA"]
+    assert out.loc[days[110]] == 1 and out.sum() == 1
+    assert ff.insider_turn(prices, buyers=1, window=5)["AAA"].sum() == 0    # the turn came too late
+    later = close.copy()
+    later.iloc[111:] = 50.0                                   # what happens after the signal changes nothing
+    out2 = ff.insider_turn({"AAA": pd.DataFrame({"Close": later})}, buyers=1, window=20)["AAA"]
+    assert out2.loc[days[110]] == 1 and out2.sum() == 1
+    up = pd.Series(np.linspace(100, 150, 200), index=days)    # a cluster in a rising stock: not weakness
+    assert ff.insider_turn({"AAA": pd.DataFrame({"Close": up})}, buyers=1, window=20)["AAA"].sum() == 0
+
+
+def test_insider_accumulation_needs_a_heavy_up_day_after_the_buy(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2021-01-04", periods=120)
+    close = pd.Series(100.0, index=days)
+    vol = pd.Series(1000.0, index=days)
+    close.iloc[85:] = 103.0                                   # day 85: up on 3x the usual volume
+    vol.iloc[85] = 3000.0
+    vol.iloc[70] = 5000.0                                     # heavy day before the buy: does not count
+    prices = {"AAA": pd.DataFrame({"Close": close, "Volume": vol})}
+    t = pd.DataFrame([dict(ticker="AAA", owner="o1", filed=days[80], code="P", price=100.0, shares=10)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    out = ff.insider_accumulation(prices, buyers=1, volume=2.0)["AAA"]
+    assert out.loc[days[85]] == 1 and out.sum() == 1
+    assert ff.insider_accumulation(prices, buyers=1, volume=3.5)["AAA"].sum() == 0
+    later = vol.copy()
+    later.iloc[86:] = 100_000.0                               # future volume does not move the signal
+    out2 = ff.insider_accumulation({"AAA": pd.DataFrame({"Close": close, "Volume": later})}, buyers=1,
+                                   volume=2.0)["AAA"]
+    assert out2.loc[days[85]] == 1 and out2.sum() == 1
