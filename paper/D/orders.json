@@ -1,47 +1,46 @@
 [
  {
+  "asset": "EME",
+  "ticker": "EME",
+  "strategy": "insider_low_short",
+  "qty": 5.039161444942144,
+  "stop": 623.5233877425235,
+  "target": null,
+  "mark": 702.48,
+  "entry": 702.83124,
+  "r": -0.004419353570196415
+ },
+ {
   "asset": "FIS",
   "ticker": "FIS",
   "strategy": "insider_low_short",
   "qty": 125.9324226729349,
-  "stop": 32.93842947724932,
+  "stop": 33.41068451458866,
   "target": null,
-  "mark": 35.98,
+  "mark": 36.43,
   "entry": 35.75787,
-  "r": 0.06993342262084756
+  "r": 0.21160739812790022
  },
  {
   "asset": "PEP",
   "ticker": "PEP",
   "strategy": "insider_low_short",
   "qty": 48.929604107919786,
-  "stop": 125.21762304987493,
+  "stop": 125.93207854631245,
   "target": null,
-  "mark": 133.57,
+  "mark": 134.02,
   "entry": 130.9404375,
-  "r": 0.3215568212488218
+  "r": 0.37658520318002736
  },
  {
   "asset": "PRIM",
   "ticker": "PRIM",
   "strategy": "insider_low_short",
   "qty": 32.34105574366755,
-  "stop": 63.43302023538081,
+  "stop": 63.51087878999646,
   "target": null,
-  "mark": 74.51,
+  "mark": 72.14,
   "entry": 75.47304,
-  "r": -0.07781886168049205
- },
- {
-  "asset": "EME",
-  "ticker": "EME",
-  "strategy": "insider_low_short",
-  "qty": 5.039161444942144,
-  "stop": 637.3123129534868,
-  "target": null,
-  "mark": 716.79,
-  "entry": 716.79,
-  "r": 0.0,
-  "pending": true
+  "r": -0.26932773169914964
  }
 ]
