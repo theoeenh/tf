@@ -154,3 +154,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-20 15:38:54,bull_put_spread,AAPL,AAPL261127P00330000,buy,2,2,6.95,filled,"close: account A closed the stock"
 2026-10-20 15:38:57,bull_put_spread,AAPL,AAPL261127P00315000,sell,2,2,3.15,filled,"close: account A closed the stock"
 2026-10-20 15:39:00,long_put,AVGO,AVGO261120P00347500,buy,1,1,22.1,filled,"open: AVGO Nov 20 2026 347.5 Put, delta -0.59"
+2026-10-20 16:27:37,long_call,AAPL,AAPL261218C00335000,buy,1,0,,canceled,"open: AAPL Dec 18 2026 335 Call, delta +0.61"
+2026-10-20 16:28:00,bull_put_spread,AAPL,AAPL261218P00305000,buy,1,0,,canceled,"open: sell 325 / buy 305 puts, 2026-12-18, credit 3.88 on width 20"
