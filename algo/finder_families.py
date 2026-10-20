@@ -117,6 +117,20 @@ def volume_breakout(prices: dict, n: int = 20, m: float = 2.0) -> dict:
     return out
 
 
+def liquidity_sweep(prices: dict, n: int = 7, k: float = 0.0) -> dict:
+    """Liquidity sweep (stop hunt, false breakout): the bar trades below the lowest low of the previous
+    `n` bars, where the longs' stops sit, then closes back above it by at least `k` ATR: the selling
+    ran out, buy (the mirror above the highs: sell). n=7 is about the previous session on stock bars."""
+    out = {}
+    for a, df in prices.items():
+        lo, hi = df["Low"].rolling(n).min().shift(1), df["High"].rolling(n).max().shift(1)
+        room = k * atr(df)
+        up = (df["Low"] < lo) & (df["Close"] > lo + room)
+        dn = (df["High"] > hi) & (df["Close"] < hi - room)
+        out[a] = (up.astype(int) - dn.astype(int)).fillna(0).astype(int)
+    return out
+
+
 def btc_lead(prices: dict, k: float = 1.0) -> dict:
     """Crypto: when bitcoin jumps more than `k` of its hourly ATR, buy the alt coins that have not
     followed yet (moved less than half as much)."""
@@ -145,6 +159,8 @@ PANEL_FAMILIES = {
     "earnings_drift": (earnings_drift, {"x": [0.5, 1.0, 2.0]}),
     "volume_breakout": (volume_breakout, {"n": [10, 20], "m": [1.5, 2.5]}),
     "btc_lead": (btc_lead, {"k": [0.75, 1.5]}),
+    # stop hunt below the recent lows / above the highs, then back inside (2026-10-20, user's idea)
+    "liquidity_sweep": (liquidity_sweep, {"n": [7, 35], "k": [0.0, 0.25]}),
 }
 
 

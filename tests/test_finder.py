@@ -770,3 +770,17 @@ def test_insider_accumulation_needs_a_heavy_up_day_after_the_buy(monkeypatch):
     out2 = ff.insider_accumulation({"AAA": pd.DataFrame({"Close": close, "Volume": later})}, buyers=1,
                                    volume=2.0)["AAA"]
     assert out2.loc[days[85]] == 1 and out2.sum() == 1
+
+
+def test_liquidity_sweep_needs_the_close_back_inside():
+    from algo.finder_families import liquidity_sweep
+
+    idx = pd.date_range("2025-01-02 14:00", periods=40, freq="h")
+    df = pd.DataFrame({"Open": 100.0, "High": 101.0, "Low": 99.0, "Close": 100.0, "Volume": 1.0}, index=idx)
+    df.iloc[20, df.columns.get_loc("Low")] = 97.0             # sweeps the 7-bar low (99), closes at 100
+    df.iloc[30, df.columns.get_loc("Low")] = 97.0             # breaks the low and stays below: no signal
+    df.iloc[30, df.columns.get_loc("Close")] = 98.0
+    df.iloc[25, df.columns.get_loc("High")] = 103.0           # sweeps the highs, closes back at 100: sell
+    s = liquidity_sweep({"X": df}, n=7)["X"]
+    assert s.iloc[20] == 1 and s.iloc[25] == -1 and s.iloc[30] == 0
+    assert set(s.iloc[:20]) == {0}
