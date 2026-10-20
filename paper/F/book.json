@@ -155,6 +155,23 @@
    "desc": "AVGO Nov 20 2026 347.5 Put, delta -0.59",
    "opened": "2026-10-20 15:39",
    "id": "long_put-AVGO-2026-10-20"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261218C00335000",
+     "qty": 1,
+     "price": 18.05
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": 1805.0,
+   "max_loss": 1807.0,
+   "desc": "AAPL Dec 18 2026 335 Call, delta +0.61",
+   "opened": "2026-10-20 16:56",
+   "id": "long_call-AAPL-2026-10-20"
   }
  ],
  "closed": [

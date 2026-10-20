@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-20 16:28 UTC. **Equity $95,567** (-4.43% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-20 16:56 UTC. **Equity $95,509** (-4.49% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 1 | 4 | $-1,464 | $-77 | 1 / 4 |
-| long_put | 3 | 3 | $-520 | $-7 | 1 / 3 |
-| bull_put_spread | 1 | 6 | $-809 | $-108 | 1 / 6 |
-| bear_call_spread | 3 | 3 | $-1,280 | $+79 | 1 / 3 |
+| long_call | 2 | 4 | $-1,464 | $-106 | 1 / 4 |
+| long_put | 3 | 3 | $-520 | $+84 | 1 / 3 |
+| bull_put_spread | 1 | 6 | $-809 | $-60 | 1 / 6 |
+| bear_call_spread | 3 | 3 | $-1,280 | $+69 | 1 / 3 |
 
 ## Open positions
 
@@ -19,3 +19,4 @@ Updated 2026-10-20 16:28 UTC. **Equity $95,567** (-4.43% since start). A test of
 - **bear_call_spread** NFLX: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7 (opened 2026-10-20 15:00, cost $-456, most it can lose $2,356)
 - **bear_call_spread** AVGO: sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20 (opened 2026-10-20 15:35, cost $-355, most it can lose $1,657)
 - **long_put** AVGO: AVGO Nov 20 2026 347.5 Put, delta -0.59 (opened 2026-10-20 15:39, cost $+2,210, most it can lose $2,218)
+- **long_call** AAPL: AAPL Dec 18 2026 335 Call, delta +0.61 (opened 2026-10-20 16:56, cost $+1,805, most it can lose $1,807)
