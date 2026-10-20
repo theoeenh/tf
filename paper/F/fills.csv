@@ -163,3 +163,6 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-20 17:29:01,bull_put_spread,AAPL,AAPL261218P00325000,sell,1,0,,canceled,"open: sell 325 / buy 305 puts, 2026-12-18, credit 3.66 on width 20"
 2026-10-20 17:29:03,bull_put_spread,AAPL,AAPL261218P00305000,sell,1,1,2.98,filled,"unwind"
 2026-10-20 17:58:22,bull_put_spread,AAPL,AAPL261218P00305000,buy,1,0,,canceled,"open: sell 325 / buy 305 puts, 2026-12-18, credit 4.03 on width 20"
+2026-10-20 18:02:40,bull_put_spread,AAPL,AAPL261120P00310000,buy,2,2,2.3,filled,"open: sell 327.5 / buy 310 puts, 2026-11-20, credit 3.34 on width 17.5"
+2026-10-20 18:03:04,bull_put_spread,AAPL,AAPL261120P00327500,sell,2,0,,canceled,"open: sell 327.5 / buy 310 puts, 2026-11-20, credit 3.34 on width 17.5"
+2026-10-20 18:03:29,bull_put_spread,AAPL,AAPL261120P00310000,sell,2,0,,canceled,"unwind"
