@@ -155,6 +155,28 @@
    "desc": "sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7",
    "opened": "2026-10-20 15:00",
    "id": "bear_call_spread-NFLX-2026-10-20"
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "AVGO",
+   "legs": [
+    {
+     "symbol": "AVGO261120C00380000",
+     "qty": 1,
+     "price": 3.1
+    },
+    {
+     "symbol": "AVGO261120C00360000",
+     "qty": -1,
+     "price": 6.65
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -355.0,
+   "max_loss": 1657.0,
+   "desc": "sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20",
+   "opened": "2026-10-20 15:35",
+   "id": "bear_call_spread-AVGO-2026-10-20"
   }
  ],
  "closed": [

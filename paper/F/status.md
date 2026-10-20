@@ -1,13 +1,13 @@
 # F – Options
 
-Updated 2026-10-20 15:00 UTC. **Equity $94,982** (-5.02% since start). A test of option mechanics on signals with no proven edge.
+Updated 2026-10-20 15:35 UTC. **Equity $95,600** (-4.40% since start). A test of option mechanics on signals with no proven edge.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 2 | 3 | $-2,274 | $+396 | 0 / 3 |
-| long_put | 2 | 3 | $-520 | $-266 | 1 / 3 |
-| bull_put_spread | 2 | 5 | $-579 | $-310 | 1 / 5 |
-| bear_call_spread | 2 | 3 | $-1,280 | $-36 | 1 / 3 |
+| long_call | 2 | 3 | $-2,274 | $+630 | 0 / 3 |
+| long_put | 2 | 3 | $-520 | $-80 | 1 / 3 |
+| bull_put_spread | 2 | 5 | $-579 | $-352 | 1 / 5 |
+| bear_call_spread | 3 | 3 | $-1,280 | $+69 | 1 / 3 |
 
 ## Open positions
 
@@ -19,3 +19,4 @@ Updated 2026-10-20 15:00 UTC. **Equity $94,982** (-5.02% since start). A test of
 - **bull_put_spread** MSFT: sell 505 / buy 470 puts, 2026-12-18, credit 6.91 on width 35 (opened 2026-10-20 14:29, cost $-710, most it can lose $2,809)
 - **long_put** NFLX: NFLX Dec 18 2026 75 Put, delta -0.60 (opened 2026-10-20 15:00, cost $+2,190, most it can lose $2,214)
 - **bear_call_spread** NFLX: sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7 (opened 2026-10-20 15:00, cost $-456, most it can lose $2,356)
+- **bear_call_spread** AVGO: sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20 (opened 2026-10-20 15:35, cost $-355, most it can lose $1,657)
