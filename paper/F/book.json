@@ -18,28 +18,6 @@
    "id": "long_put-NFLX-2026-10-05"
   },
   {
-   "playbook": "bear_call_spread",
-   "underlying": "NFLX",
-   "legs": [
-    {
-     "symbol": "NFLX261113C00079000",
-     "qty": 5,
-     "price": 0.73
-    },
-    {
-     "symbol": "NFLX261113C00073000",
-     "qty": -5,
-     "price": 1.74
-    }
-   ],
-   "expiry": "2026-11-13",
-   "cost": -504.9999999999999,
-   "max_loss": 2520.0,
-   "desc": "sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6",
-   "opened": "2026-10-05 14:28",
-   "id": "bear_call_spread-NFLX-2026-10-05"
-  },
-  {
    "playbook": "long_call",
    "underlying": "MSFT",
    "legs": [
@@ -55,28 +33,6 @@
    "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
    "opened": "2026-10-05 15:55",
    "id": "long_call-MSFT-2026-10-05"
-  },
-  {
-   "playbook": "bear_call_spread",
-   "underlying": "TLT",
-   "legs": [
-    {
-     "symbol": "TLT261106C00081000",
-     "qty": 17,
-     "price": 0.26
-    },
-    {
-     "symbol": "TLT261106C00079000",
-     "qty": -17,
-     "price": 0.63
-    }
-   ],
-   "expiry": "2026-11-06",
-   "cost": -629.0,
-   "max_loss": 2839.0,
-   "desc": "sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2",
-   "opened": "2026-10-05 17:26",
-   "id": "bear_call_spread-TLT-2026-10-05"
   },
   {
    "playbook": "bear_call_spread",
@@ -140,21 +96,43 @@
    "id": "bull_put_spread-AAPL-2026-10-13"
   },
   {
-   "playbook": "long_call",
-   "underlying": "AAPL",
+   "playbook": "long_put",
+   "underlying": "IWM",
    "legs": [
     {
-     "symbol": "AAPL261127C00340000",
-     "qty": 1,
-     "price": 15.35
+     "symbol": "IWM261218P00284000",
+     "qty": 2,
+     "price": 12.615
     }
    ],
-   "expiry": "2026-11-27",
-   "cost": 1535.0,
-   "max_loss": 1563.0,
-   "desc": "AAPL Nov 27 2026 340 Call, delta +0.60",
-   "opened": "2026-10-14 14:57",
-   "id": "long_call-AAPL-2026-10-14"
+   "expiry": "2026-12-18",
+   "cost": 2523.0,
+   "max_loss": 2528.0,
+   "desc": "IWM Dec 18 2026 284 Put, delta -0.60",
+   "opened": "2026-10-20 14:29",
+   "id": "long_put-IWM-2026-10-20"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261218P00470000",
+     "qty": 1,
+     "price": 5.9
+    },
+    {
+     "symbol": "MSFT261218P00505000",
+     "qty": -1,
+     "price": 13.0
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -710.0,
+   "max_loss": 2809.0,
+   "desc": "sell 505 / buy 470 puts, 2026-12-18, credit 6.91 on width 35",
+   "opened": "2026-10-20 14:29",
+   "id": "bull_put_spread-MSFT-2026-10-20"
   }
  ],
  "closed": [
@@ -387,6 +365,76 @@
    "closed": "2026-10-20 13:57",
    "why_closed": "15 days held",
    "pnl": 1320.0
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261113C00079000",
+     "qty": 5,
+     "price": 0.73
+    },
+    {
+     "symbol": "NFLX261113C00073000",
+     "qty": -5,
+     "price": 1.74
+    }
+   ],
+   "expiry": "2026-11-13",
+   "cost": -504.9999999999999,
+   "max_loss": 2520.0,
+   "desc": "sell 73 / buy 79 calls, 2026-11-13, credit 0.96 on width 6",
+   "opened": "2026-10-05 14:28",
+   "id": "bear_call_spread-NFLX-2026-10-05",
+   "closed": "2026-10-20 14:27",
+   "why_closed": "15 days held",
+   "pnl": -360.0000000000001
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "TLT",
+   "legs": [
+    {
+     "symbol": "TLT261106C00081000",
+     "qty": 17,
+     "price": 0.26
+    },
+    {
+     "symbol": "TLT261106C00079000",
+     "qty": -17,
+     "price": 0.63
+    }
+   ],
+   "expiry": "2026-11-06",
+   "cost": -629.0,
+   "max_loss": 2839.0,
+   "desc": "sell 79 / buy 81 calls, 2026-11-06, credit 0.33 on width 2",
+   "opened": "2026-10-05 17:26",
+   "id": "bear_call_spread-TLT-2026-10-05",
+   "closed": "2026-10-20 14:27",
+   "why_closed": "15 days held",
+   "pnl": -1292.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261127C00340000",
+     "qty": 1,
+     "price": 15.35
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": 1535.0,
+   "max_loss": 1563.0,
+   "desc": "AAPL Nov 27 2026 340 Call, delta +0.60",
+   "opened": "2026-10-14 14:57",
+   "id": "long_call-AAPL-2026-10-14",
+   "closed": "2026-10-20 14:27",
+   "why_closed": "account A closed the stock",
+   "pnl": -265.0
   }
  ]
 }
