@@ -149,3 +149,38 @@ def test_old_gdelt_cache_does_not_stop_trading(tmp_path, monkeypatch):
     monkeypatch.setattr(news, "jobs_report_dates", lambda: [])
     out = news.load_all(["BTC"], strict=True)  # a week stale: used anyway
     assert len(out["gdelt"]["BTC"]) == len(days)
+
+
+def test_refresh_earnings_moves_a_stale_next_date_and_keeps_the_cache_on_failure(monkeypatch, tmp_path):
+    """2026-10-21: META's next report was cached as 28 Oct since 30 Sep; it was confirmed for 21 Oct."""
+    import sys
+    import types
+
+    import pandas as pd
+
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setitem(news.ASSET_CLASS, "AAA", "stock")
+    monkeypatch.setitem(news.ASSET_CLASS, "BBB", "stock")
+    soon = pd.Timestamp.now(tz="America/New_York").normalize() + pd.Timedelta(days=3)
+    later = soon + pd.Timedelta(days=7)
+    for a in ("AAA", "BBB"):
+        pd.DataFrame({"date": [later.tz_localize(None)]}).to_csv(tmp_path / f"{a}_earnings.csv", index=False)
+
+    class Ticker:
+        def __init__(self, t):
+            self.t = t
+
+        def get_earnings_dates(self, limit=60):
+            if self.t == "BBB":
+                raise ValueError("429 too many requests")
+            return pd.DataFrame({"EPS Estimate": [1.0]}, index=pd.DatetimeIndex([soon + pd.Timedelta(hours=16)]))
+
+    monkeypatch.setitem(sys.modules, "yfinance", types.SimpleNamespace(Ticker=Ticker))
+    monkeypatch.setitem(news.TICKERS, "AAA", "AAA")
+    monkeypatch.setitem(news.TICKERS, "BBB", "BBB")
+    moved = news.refresh_earnings(["AAA", "BBB", "BTC"])
+    assert moved == [f"AAA: {later:%Y-%m-%d} -> {soon:%Y-%m-%d}"]
+    assert news.earnings_dates("AAA") == [soon.tz_localize(None)]
+    assert news.earnings_dates("BBB") == [later.tz_localize(None)]       # download failed: cache kept

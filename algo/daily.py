@@ -2,7 +2,7 @@
 
     python -m algo.daily
 
-1. Refresh prices and news (only the missing days are downloaded).
+1. Refresh prices and news (only the missing days are downloaded) and the earnings calendars.
 2. Trade the new bars in the paper account (paper/status.md, trades.csv, orders.json).
 3. Write the daily brief with events ahead, news and signals (paper/brief.md).
 4. Race every version of the system side by side and rank the strategies
@@ -17,11 +17,14 @@ from __future__ import annotations
 
 import logging
 
-from . import brief, leaderboard, learner_report, paper
+from . import brief, leaderboard, learner_report, news, paper
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    stocks = [a for a, c in news.ASSET_CLASS.items() if c == "stock"]
+    moved = news.refresh_earnings(stocks)  # the hourly accounts' blackout reads these files
+    print("Earnings dates refreshed" + (": " + "; ".join(moved) if moved else ", none moved"))
     print(f"Paper account: {paper.update()}")
     print(f"Brief: {brief.write_brief('auto')}")
     print(f"Leaderboard: {leaderboard.write()}")

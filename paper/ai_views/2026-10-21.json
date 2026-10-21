@@ -1,0 +1,209 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Spot bitcoin ETFs lost $681M in a week while JPMorgan published a long-term 10%-a-year view; flows and a 10-year forecast pull in opposite directions, no 1-20 day edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Headlines mention ETF outflows and a warning of a possible sell-off, but the price is flat over the week; commentary, not an edge."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down 10.6% in a month with mixed opinion pieces; nothing specific enough for a call."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "GTC / AI-factory announcements, earnings 17 Nov"
+  ],
+  "reasoning": "Down 5.3% in a week; mixed headlines (support for struggling data centres as AI deals collapse vs AI-factory deployment). No clear short-term edge."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings today 21 Oct after the close"
+  ],
+  "reasoning": "Earnings tonight plus confirmed SpaceX merger talks: a large overnight gap in either direction is likely. Event risk, no directional edge."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Below its 200-day average and down 5% in a month; inflows to a cheaper gold fund are a product switch, not a signal."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down 12.6% in a month and below its 200-day average; headlines are old. No new information."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 2 Nov (calendar refreshed today)"
+  ],
+  "reasoning": "A valuation downgrade (Loop Capital) and iPhone Duo reviews; both are already in today's pre-market price. No edge."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 28 Oct",
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Earnings and the Fed decision on the same day next week make 28 Oct a gap risk; no directional view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 29 Oct"
+  ],
+  "reasoning": "Investment and holiday-hiring headlines are routine; earnings 29 Oct. No edge."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings today 21 Oct after the close (our cached calendar said 28 Oct; corrected this morning)"
+  ],
+  "reasoning": "Down 9% in a week with an RSI-2 dip-buy signal, but it reports tonight: buying the dip into earnings is a coin flip on the gap. Event risk, no directional view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 28 Oct",
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Below its 200-day average; OpenAI expanding Google Cloud access is mildly positive but small against earnings next week. No call."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 3 Nov"
+  ],
+  "reasoning": "Down 11.7% in a week; 'buy the dip before Nov 3' pieces are opinion. No edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 9 Dec"
+  ],
+  "reasoning": "Down 6.4% in a week, below its 200-day average; product headlines only. No edge."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "reported 20 Oct"
+  ],
+  "reasoning": "Fell 7% on a soft Q4 outlook with price-target cuts. Following the reaction (post-earnings drift) did not pass our own tests (5/14 gates), so no call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Headlines are about JPMorgan's bitcoin research, not the bank's business. No edge."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 30 Oct"
+  ],
+  "reasoning": "New all-time high with oil at a 5-month high; strong trend but no new information beyond the price."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 29 Oct"
+  ],
+  "reasoning": "Down 15% in a month with crypto ETF outflows; rule-change speculation is not specific. No call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "META and TSLA earnings tonight",
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Futures higher on SpaceX/Supermicro AI news after a -3.5% week; tonight's two big reports can move the index. No directional edge."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Below its 200-day average; debt-cliff commentary is old. No edge."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Treasuries rallied as tech slid (+2.2% in a week); the Fed next week is the event. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Brent at a 5-month high on Middle East shipping attacks; the move is news-driven and can reverse on any de-escalation. No call."
+ }
+]

@@ -199,6 +199,30 @@ def earnings_dates(name: str, refresh: bool = False) -> list[pd.Timestamp]:
     return dates
 
 
+def refresh_earnings(names) -> list[str]:
+    """Download the stocks' earnings calendars again (once a day, by algo.daily; the hourly runs read
+    the committed files). A cached next date is the estimate of the day it was fetched and moves when
+    the company confirms it (2026-10-21: META cached as 28 Oct since 30 Sep, reported on 21 Oct, so the
+    blackout would have let the accounts hold it through the report). A failed download keeps the
+    cached dates. Returns the stocks whose next date changed."""
+    today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
+
+    def next_date(dates):
+        return min((d for d in dates if d >= today), default=None)
+
+    changed = []
+    for a in names:
+        if ASSET_CLASS.get(a) != "stock":
+            continue
+        before = next_date(earnings_dates(a)) if (NEWS_DIR / f"{a}_earnings.csv").exists() else None
+        earnings_dates(a, refresh=True)
+        after = next_date(earnings_dates(a)) if (NEWS_DIR / f"{a}_earnings.csv").exists() else None
+        if before != after:
+            changed.append(f"{a}: {before:%Y-%m-%d} -> {after:%Y-%m-%d}" if before is not None and after is not None
+                           else f"{a}: {before} -> {after}")
+    return changed
+
+
 def event_features(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list) -> pd.DataFrame:
     """Days until the next scheduled event, as known at each bar (dates are public in advance)."""
     day = index.normalize()
