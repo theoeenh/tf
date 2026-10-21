@@ -1,16 +1,16 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-21 16:51 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-21 17:21 UTC.
 
-**Equity $94,625** (-5.37%) · max drawdown -7.0% · 44 closed trades · 3 open
+**Equity $94,691** (-5.31%) · max drawdown -7.0% · 44 closed trades · 3 open
 
 ## Open positions
 
-- **LONG 61.1348 AAPL** (rsi2_reversion) since 2026-10-20 15:00, entry 340.75, stop 334.60, target 353.06, now +0.60R  
+- **LONG 61.1348 AAPL** (rsi2_reversion) since 2026-10-20 15:00, entry 340.75, stop 334.60, target 353.06, now +0.54R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 0.7% of price). Plan: entry 340.75, stop 334.60, target 353.06 (2:1); risking $376.
-- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +0.59R  
+- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now +0.71R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 30 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 526.39, stop 517.42, target 553.30 (3:1); risking $139. Strong trend, so the target was widened.
-- **LONG 70.1572 AMZN** (rsi2_reversion) since 2026-10-21 14:00, entry 260.40, stop 255.04, target 271.12, now +0.33R  
+- **LONG 70.1572 AMZN** (rsi2_reversion) since 2026-10-21 14:00, entry 260.40, stop 255.04, target 271.12, now +0.53R  
   *Thinking:* LONG AMZN (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, high volatility (ATR 0.8% of price). Plan: entry 260.40, stop 255.04, target 271.12 (2:1); risking $376.
 
 ## Closed trades (newest first)
