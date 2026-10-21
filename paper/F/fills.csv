@@ -175,3 +175,6 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-20 19:28:00,spy_put_spread,SPY,SPY261127P00746000,sell,1,1,6.19,filled,"open: sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31"
 2026-10-20 19:46:02,long_call,FIS,FIS261218C00035000,buy,8,0,,canceled,"open: FIS Dec 18 2026 35 Call, delta +0.64"
 2026-10-20 19:57:58,long_call,FIS,FIS261127C00036000,buy,11,0,,canceled,"open: FIS Nov 27 2026 36 Call, delta +0.57"
+2026-10-21 13:58:04,bear_call_spread,NFLX,NFLX261218C00078000,buy,4,4,0.61,filled,"close: half the credit earned (buy back $180 vs $456 received)"
+2026-10-21 13:58:06,bear_call_spread,NFLX,NFLX261218C00085000,sell,4,4,0.2,filled,"close: half the credit earned (buy back $180 vs $456 received)"
+2026-10-21 13:58:10,long_call,PEP,PEP261120C00133000,buy,6,6,4.35,filled,"open: PEP Nov 20 2026 133 Call, delta +0.59"

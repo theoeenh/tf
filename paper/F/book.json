@@ -97,28 +97,6 @@
   },
   {
    "playbook": "bear_call_spread",
-   "underlying": "NFLX",
-   "legs": [
-    {
-     "symbol": "NFLX261218C00085000",
-     "qty": 4,
-     "price": 0.82
-    },
-    {
-     "symbol": "NFLX261218C00078000",
-     "qty": -4,
-     "price": 1.96
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": -456.0,
-   "max_loss": 2356.0,
-   "desc": "sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7",
-   "opened": "2026-10-20 15:00",
-   "id": "bear_call_spread-NFLX-2026-10-20"
-  },
-  {
-   "playbook": "bear_call_spread",
    "underlying": "AVGO",
    "legs": [
     {
@@ -239,6 +217,24 @@
    "desc": "sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31",
    "opened": "2026-10-20 19:28",
    "id": "spy_put_spread-SPY-2026-10-20"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "PEP",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "PEP261120C00133000",
+     "qty": 6,
+     "price": 4.35
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2610.0,
+   "max_loss": 2628.0,
+   "desc": "PEP Nov 20 2026 133 Call, delta +0.59",
+   "opened": "2026-10-21 13:58",
+   "id": "long_call-PEP-2026-10-21"
   }
  ],
  "closed": [
@@ -606,6 +602,31 @@
    "closed": "2026-10-20 15:37",
    "why_closed": "account A closed the stock",
    "pnl": -230.0
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261218C00085000",
+     "qty": 4,
+     "price": 0.82
+    },
+    {
+     "symbol": "NFLX261218C00078000",
+     "qty": -4,
+     "price": 1.96
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -456.0,
+   "max_loss": 2356.0,
+   "desc": "sell 78 / buy 85 calls, 2026-12-18, credit 1.11 on width 7",
+   "opened": "2026-10-20 15:00",
+   "id": "bear_call_spread-NFLX-2026-10-20",
+   "closed": "2026-10-21 13:56",
+   "why_closed": "half the credit earned (buy back $180 vs $456 received)",
+   "pnl": 292.0
   }
  ]
 }
