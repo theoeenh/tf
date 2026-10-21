@@ -784,3 +784,34 @@ def test_liquidity_sweep_needs_the_close_back_inside():
     s = liquidity_sweep({"X": df}, n=7)["X"]
     assert s.iloc[20] == 1 and s.iloc[25] == -1 and s.iloc[30] == 0
     assert set(s.iloc[:20]) == {0}
+
+
+def test_insider_opportunistic_skips_the_yearly_routine_buyer(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2019-01-01", "2023-12-29")
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    rows = [dict(ticker="AAA", owner="routine", filed=pd.Timestamp(f"{y}-03-10"), code="P", price=1.0, shares=1)
+            for y in (2019, 2020, 2021, 2022)]              # every March: a plan, not news
+    rows.append(dict(ticker="AAA", owner="fresh", filed=pd.Timestamp("2022-08-15"), code="P", price=1.0, shares=1))
+    monkeypatch.setattr(ff, "_insider", lambda code="P": pd.DataFrame(rows))
+    out = ff.insider_opportunistic(prices, buyers=1, years=2)["AAA"]
+    hits = set(out.index[out == 1].strftime("%Y-%m-%d"))
+    # 2019 and 2020 March buys have no 2-year history yet (opportunistic); 2021 and 2022 are routine
+    assert hits == {"2019-03-11", "2020-03-10", "2022-08-15"}
+
+
+def test_overnight_momentum_uses_past_opens_and_closes_only():
+    from algo.finder_families import overnight_momentum
+
+    days = pd.bdate_range("2024-01-01", periods=80)
+    flat = pd.Series(100.0, index=days)
+    gaps = pd.DataFrame({"Open": flat * 1.0, "Close": flat})
+    up = gaps.copy()
+    up["Open"] = np.r_[100.0, [101.0] * 79]               # opens 1% above the previous close every day
+    up["Close"] = 100.0
+    prices = {"UP": up, "FLAT": gaps, "F2": gaps.copy(), "F3": gaps.copy()}
+    full = overnight_momentum(prices, lookback=20, top=0.25)
+    assert full["UP"].sum() > 0 and full["FLAT"].sum() == 0
+    part = overnight_momentum({a: df.iloc[:60] for a, df in prices.items()}, lookback=20, top=0.25)
+    assert (full["UP"].iloc[:60] == part["UP"]).all()

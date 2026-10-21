@@ -793,6 +793,47 @@ def insider_turn(prices: dict, buyers: int = 1, window: int = 20) -> dict:
     return out
 
 
+def insider_opportunistic(prices: dict, buyers: int = 1, years: int = 2) -> dict:
+    """Insider buys that break the insider's habit (Cohen-Malloy-Pomorski 2012): a purchase is routine
+    when the same insider also bought the same stock in the same calendar month in each of the `years`
+    previous years (a yearly plan, no news in it), opportunistic otherwise. Signal: the day `buyers`
+    distinct insiders have bought opportunistically within 30 days (one signal per cluster). Only
+    filings of earlier years decide what is routine."""
+    t = _insider("P")
+    if len(t):
+        t = t.assign(year=t["filed"].dt.year, month=t["filed"].dt.month)
+        seen = set(zip(t["ticker"], t["owner"], t["year"], t["month"]))
+        routine = np.array([all((tk, ow, y - k, m) in seen for k in range(1, years + 1))
+                            for tk, ow, y, m in zip(t["ticker"], t["owner"], t["year"], t["month"])], bool)
+        t = t[~routine]
+    out = {}
+    for a, df in prices.items():
+        g = t[t["ticker"] == a].sort_values("filed") if len(t) else t
+        s = np.zeros(len(df), int)
+        last = pd.Timestamp("1900-01-01")
+        for f in g["filed"].drop_duplicates():
+            win = g[(g["filed"] > f - pd.Timedelta(days=30)) & (g["filed"] <= f)]
+            if win["owner"].nunique() >= buyers and f - last > pd.Timedelta(days=30):
+                p = _on_days(pd.Series([f]), df.index)[0]
+                if p < len(df):
+                    s[p] = 1
+                last = f
+        out[a] = pd.Series(s, df.index)
+    return out
+
+
+def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
+    """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
+    (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
+    Each Friday, buy the stocks in the top `top` share of the sum of the last `lookback` overnight
+    returns. Opens and closes up to the signal day only."""
+    close, open_ = _panel(prices), _panel(prices, "Open")
+    night = np.log(open_ / close.shift(1)).rolling(lookback, min_periods=lookback).sum()
+    rank = night.rank(axis=1, pct=True, ascending=False)
+    friday = close.index.dayofweek == 4
+    return _own(((rank <= top) & friday[:, None]).astype(int), prices)
+
+
 def insider_accumulation(prices: dict, buyers: int = 1, volume: float = 2.0) -> dict:
     """Insiders bought and the market follows: within 10 sessions after an insider cluster (30 days),
     the first up day (close above the day before) on at least `volume` times the stock's usual volume
@@ -933,6 +974,14 @@ WIDE_FAMILIES = {
     "insider_turn": (insider_turn, {"buyers": [1, 2], "window": [10, 20]},
                      {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                       "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insider buys that break the insider's yearly habit (2026-10-21)
+    "insider_opportunistic": (insider_opportunistic, {"buyers": [1, 2], "years": [2, 3]},
+                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                               "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: overnight-return momentum, weekly (2026-10-21)
+    "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
+                           {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500"], "trend": False}),
     # insiders bought, then a heavy-volume up day: big buyers follow (2026-10-20)
     "insider_accumulation": (insider_accumulation, {"buyers": [1, 2], "volume": [1.5, 2.5]},
                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
