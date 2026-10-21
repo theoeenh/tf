@@ -1,18 +1,18 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-21 19:51 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-21 20:26 UTC.
 
-**Equity $94,819** (-5.18%) · max drawdown -6.6% · 54 closed trades · 4 open
+**Equity $94,895** (-5.11%) · max drawdown -6.6% · 54 closed trades · 4 open
 
 ## Open positions
 
-- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +1.77R  
+- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +1.78R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, high volatility (ATR 0.8% of price). Plan: entry 332.61, stop 326.18, target 351.89 (3:1); risking $199.
-- **LONG 35.5354 MSFT** (rsi2_reversion) since 2026-10-16 18:00, entry 527.11, stop 517.50, target 546.33, now +0.42R  
+- **LONG 35.5354 MSFT** (rsi2_reversion) since 2026-10-16 18:00, entry 527.11, stop 517.50, target 546.33, now +0.60R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 527.11, stop 517.50, target 546.33 (2:1); risking $342.
-- **LONG 63.5150 AMZN** (rsi2_reversion) since 2026-10-21 14:00, entry 260.40, stop 255.04, target 271.12, now +0.34R  
+- **LONG 63.5150 AMZN** (rsi2_reversion) since 2026-10-21 14:00, entry 260.40, stop 255.04, target 271.12, now +0.35R  
   *Thinking:* LONG AMZN (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, high volatility (ATR 0.8% of price). Plan: entry 260.40, stop 255.04, target 271.12 (2:1); risking $341.
-- **LONG 108.3507 AMZN** (opening_range) since 2026-10-21 17:00, entry 263.30, stop 260.14, target 269.61, now -0.35R  
+- **LONG 108.3507 AMZN** (opening_range) since 2026-10-21 17:00, entry 263.30, stop 260.14, target 269.61, now -0.32R  
   *Thinking:* LONG AMZN (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.8% of price). Plan: entry 263.30, stop 260.14, target 269.61 (2:1); risking $342.
 
 ## Closed trades (newest first)
