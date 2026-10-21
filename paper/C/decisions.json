@@ -161,6 +161,15 @@
 0.19052399710291146
 ]
 },
+"AMZN|rsi2_reversion|+|2026-10-21 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.336164498125334,
+0.06851173760626839
+]
+},
 "AMZN|vwap_reversion|+|2026-10-08 18:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 53% estimated chance of profit, expected -0.04R (avg win +0.64R, avg loss -0.81R).",
