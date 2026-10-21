@@ -35,6 +35,15 @@
 0.16106273233652035
 ]
 },
+"AAPL|opening_range|+|2026-10-21 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.07R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4362502471590199,
+-0.0741636092449825
+]
+},
 "AAPL|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",
@@ -564,6 +573,15 @@
 "pred": [
 0.43667517853547216,
 -0.07344557017010506
+]
+},
+"MSFT|opening_range|+|2026-10-21 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.05R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4475384626405731,
+-0.05161093918388954
 ]
 },
 "MSFT|rsi2_reversion|+|2026-10-01 13:00": {
