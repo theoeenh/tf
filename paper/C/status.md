@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 17:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 17:56 UTC.
 
 **Equity $93,776** (-6.22%) · max drawdown -7.5% · 56 closed trades · 2 open
 
