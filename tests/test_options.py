@@ -155,3 +155,63 @@ def test_reconcile_flags_legs_the_book_does_not_know_and_odd_prices():
     assert "| IWM261120C00286000 | -4 | $0 | $-840 | Alpaca's price far from the quotes |" in out
     assert "| MSFT261120C00520000 | 1 | $1,020 | $1,020 | book 0 |" in out
     assert "Alpaca values the positions at $4,070; at the quotes' mid they are worth $3,230 (difference $+840)" in out
+
+
+def _fake_orders(monkeypatch, fills):
+    """_order fills each (symbol, side) at the price given, or cancels it (None); calls are recorded."""
+    calls = []
+
+    def order(sym, side, qty, price):
+        calls.append((sym, side, qty))
+        px = fills.get((sym, side))
+        if isinstance(px, tuple):  # (filled qty, price): filled in part, then cancelled
+            return {"status": "canceled", "filled_qty": str(px[0]), "filled_avg_price": str(px[1])}
+        return {"status": "filled", "filled_qty": str(qty), "filled_avg_price": str(px)} if px else \
+            {"status": "canceled", "filled_qty": "0"}
+
+    def market(sym, side, qty):
+        calls.append((sym, side, qty, "market"))
+        return {"status": "filled", "filled_qty": str(qty), "filled_avg_price": "1"}
+
+    monkeypatch.setattr(O, "_order", order)
+    monkeypatch.setattr(O, "_market", market)
+    monkeypatch.setattr(O, "_log", lambda *a: None)
+    monkeypatch.setattr(O, "quotes", lambda syms: {s: {"bp": 1.0, "ap": 1.2} for s in syms})
+    return calls
+
+
+def test_a_close_that_stops_half_way_closes_only_the_rest_next_time(monkeypatch):
+    """2026-10-08: IWM's short call was bought back, the long call's sale cancelled, and the retry bought
+    the short call back again, leaving 4 long calls at Alpaca that the book did not know (same for TLT, AMZN)."""
+    p = {"underlying": "IWM", "playbook": "bear_call_spread", "cost": -772.0,
+         "legs": [{"symbol": "S", "qty": -4, "price": 3.2}, {"symbol": "L", "qty": 4, "price": 1.27}]}
+    calls = _fake_orders(monkeypatch, {("S", "buy"): 1.22})
+    assert O.close_position(p, "half the credit") is None
+    assert p["done_legs"] == ["S"] and abs(p["partial"] + 488) < 1e-9
+    assert O.open_legs(p) == [p["legs"][1]]
+    assert abs(O.close_cost(p, {"L": {"bp": 0.78, "ap": 0.9}}) - (488 - 312)) < 1e-9
+    calls = _fake_orders(monkeypatch, {("L", "sell"): 0.78})
+    assert abs(O.close_position(p, "half the credit") - (-488 + 312)) < 1e-9
+    assert calls == [("L", "sell", 4)]  # the short call is not bought a second time
+
+
+def test_a_leg_closed_in_part_keeps_the_rest_open(monkeypatch):
+    p = {"underlying": "X", "playbook": "bull_put_spread", "cost": -300.0,
+         "legs": [{"symbol": "S", "qty": -3, "price": 2.0}, {"symbol": "L", "qty": 3, "price": 1.0}]}
+    _fake_orders(monkeypatch, {("S", "buy"): (1, 0.5)})
+    assert O.close_position(p, "x") is None
+    assert p["legs"][0]["qty"] == -2 and abs(p["partial"] + 50) < 1e-9 and "done_legs" not in p
+    calls = _fake_orders(monkeypatch, {("S", "buy"): 0.5, ("L", "sell"): 0.2})
+    assert abs(O.close_position(p, "x") - (-150 + 60)) < 1e-9
+    assert calls == [("S", "buy", 2), ("L", "sell", 3)]
+
+
+def test_an_unwind_that_does_not_fill_goes_out_at_market(monkeypatch):
+    """2026-10-05: five QQQ and MSFT puts stayed at Alpaca after their unwind orders were cancelled unfilled."""
+    pos = {"underlying": "QQQ", "playbook": "bull_put_spread", "desc": "d",
+           "legs": [{"symbol": "S", "qty": -2, "price": 11.7}, {"symbol": "L", "qty": 2, "price": 5.5}]}
+    calls = _fake_orders(monkeypatch, {("L", "buy"): 5.5, ("S", "sell"): (1, 11.6)})
+    assert O.open_position(pos, TODAY) is None
+    assert calls == [("L", "buy", 2), ("S", "sell", 2),
+                     ("L", "sell", 2), ("L", "sell", 2, "market"),   # the long puts, and
+                     ("S", "buy", 1), ("S", "buy", 1, "market")]     # the short put sold in part

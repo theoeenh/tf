@@ -263,6 +263,24 @@ def _log(sym: str, und: str, playbook: str, side: str, qty: int, st: dict, why: 
                  f"{st.get('filled_qty', 0)},{st.get('filled_avg_price') or ''},{st.get('status', '')},\"{why}\"\n")
 
 
+def _market(sym: str, side: str, qty: int) -> dict:
+    """A market order (an unwind that must not stay open), waited for like _order."""
+    r = request("POST", "/v2/orders", {"symbol": sym, "qty": str(qty), "side": side, "type": "market",
+                                       "time_in_force": "day"})
+    for _ in range(10):
+        time.sleep(2)
+        st = request("GET", f"/v2/orders/{r['id']}")
+        if st.get("status") in ("filled", "canceled", "rejected", "expired"):
+            return st
+    return request("GET", f"/v2/orders/{r['id']}")
+
+
+def open_legs(p: dict) -> list[dict]:
+    """The legs of a position still held (a close that stopped half-way has closed the others)."""
+    done = set(p.get("done_legs", []))
+    return [leg for leg in p["legs"] if leg["symbol"] not in done]
+
+
 def _order(sym: str, side: str, qty: int, price: float) -> dict:
     r = request("POST", "/v2/orders", {"symbol": sym, "qty": str(qty), "side": side, "type": "limit",
                                        "limit_price": f"{max(price, 0.01):.2f}", "time_in_force": "day"})
@@ -286,8 +304,8 @@ def quotes(symbols: list[str]) -> dict[str, dict]:
 
 def close_cost(p: dict, q: dict) -> float | None:
     """$ it takes to close a position now: buy back short legs at the ask, sell long legs at the bid."""
-    total = 0.0
-    for leg in p["legs"]:
+    total = -p.get("partial", 0.0)  # cash already received from legs closed by an earlier attempt
+    for leg in open_legs(p):
         qq = q.get(leg["symbol"]) or {}
         px = float((qq.get("ap") if leg["qty"] < 0 else qq.get("bp")) or 0)
         if px <= 0:
@@ -304,12 +322,19 @@ def open_position(pos: dict, today: pd.Timestamp) -> dict | None:
         st = _order(leg["symbol"], side, abs(leg["qty"]), leg["price"])
         _log(leg["symbol"], pos["underlying"], pos["playbook"], side, abs(leg["qty"]), st, "open: " + pos["desc"])
         if st.get("status") != "filled":
+            part = int(float(st.get("filled_qty") or 0))
+            if part:  # a leg that filled in part is unwound too
+                done.append(leg | {"qty": part if leg["qty"] > 0 else -part})
             for d in done:  # unwind what was opened
                 back = "sell" if d["qty"] > 0 else "buy"
                 q = quotes([d["symbol"]]).get(d["symbol"], {})
                 px = float((q.get("bp") if back == "sell" else q.get("ap")) or d["price"])
                 st2 = _order(d["symbol"], back, abs(d["qty"]), px)
                 _log(d["symbol"], pos["underlying"], pos["playbook"], back, abs(d["qty"]), st2, "unwind")
+                if st2.get("status") != "filled":  # 2026-10-22: 8 legs were left at Alpaca this way
+                    left = abs(d["qty"]) - int(float(st2.get("filled_qty") or 0))
+                    st3 = _market(d["symbol"], back, left)
+                    _log(d["symbol"], pos["underlying"], pos["playbook"], back, left, st3, "unwind at market")
             return None
         done.append(leg | {"price": float(st["filled_avg_price"])})
     cost = sum(leg["qty"] * leg["price"] * 100 for leg in done)
@@ -318,18 +343,28 @@ def open_position(pos: dict, today: pd.Timestamp) -> dict | None:
 
 
 def close_position(p: dict, why: str) -> float | None:
-    """Short legs first (no naked short in between), then long legs. Returns the $ received (net)."""
-    q = quotes([leg["symbol"] for leg in p["legs"]])
-    got = 0.0
-    for leg in sorted(p["legs"], key=lambda leg: leg["qty"] > 0):
+    """Short legs first (no naked short in between), then long legs. Returns the $ received (net), or
+    None when a leg did not fill: the legs already closed are remembered in the position (done_legs,
+    partial cash) so the next attempt closes only the rest (2026-10-22: a retry would have bought back
+    an IWM short call already bought back, opening a new long call)."""
+    legs = open_legs(p)
+    q = quotes([leg["symbol"] for leg in legs])
+    got = p.get("partial", 0.0)
+    for leg in sorted(legs, key=lambda leg: leg["qty"] > 0):
         side = "buy" if leg["qty"] < 0 else "sell"
         qq = q.get(leg["symbol"]) or {}
         px = float((qq.get("ap") if side == "buy" else qq.get("bp")) or 0.01)
         st = _order(leg["symbol"], side, abs(leg["qty"]), px)
         _log(leg["symbol"], p["underlying"], p["playbook"], side, abs(leg["qty"]), st, "close: " + why)
         if st.get("status") != "filled":
+            part = int(float(st.get("filled_qty") or 0))
+            if part:  # the rest of this leg stays open
+                got += (1 if side == "sell" else -1) * part * float(st["filled_avg_price"]) * 100
+                leg["qty"] += part if leg["qty"] < 0 else -part
+            p["partial"] = got
             return None
         got += (1 if side == "sell" else -1) * abs(leg["qty"]) * float(st["filled_avg_price"]) * 100
+        p["done_legs"] = p.get("done_legs", []) + [leg["symbol"]]
     return got
 
 
@@ -347,7 +382,7 @@ def reconcile(book: dict, q: dict, positions: list[dict]) -> list[str]:
     rose $9,450 while the book's positions gained about $1,650 on the day's moves)."""
     want: dict[str, float] = {}
     for p in book["open"]:
-        for leg in p["legs"]:
+        for leg in open_legs(p):
             want[leg["symbol"]] = want.get(leg["symbol"], 0) + leg["qty"]
     have = {p["symbol"]: p for p in positions}
     rows, at_alpaca, at_mid = [], 0.0, 0.0
