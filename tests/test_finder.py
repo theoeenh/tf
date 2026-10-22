@@ -815,3 +815,37 @@ def test_overnight_momentum_uses_past_opens_and_closes_only():
     assert full["UP"].sum() > 0 and full["FLAT"].sum() == 0
     part = overnight_momentum({a: df.iloc[:60] for a, df in prices.items()}, lookback=20, top=0.25)
     assert (full["UP"].iloc[:60] == part["UP"]).all()
+
+
+def test_insider_opportunistic_low_short_reads_published_short_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_opportunistic", lambda p, buyers, years: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_opportunistic_low_short(prices, max_rank=0.25)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_opportunistic_low_short(prices, max_rank=0.25)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_insider_opportunistic_exec_keeps_the_boss_breaking_the_habit(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2019-01-01", "2023-12-29")
+    prices = {"AAA": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    row = lambda owner, title, d: dict(ticker="AAA", owner=owner, title=title, filed=pd.Timestamp(d),  # noqa: E731
+                                       code="P", price=1.0, shares=1)
+    rows = [row("ceo", "Chief Executive Officer", f"{y}-03-10") for y in (2019, 2020, 2021)]  # yearly plan
+    rows += [row("ceo", "Chief Executive Officer", "2022-08-15"),                              # breaks it
+             row("dir", "Director", "2022-09-15")]                                             # not the boss
+    monkeypatch.setattr(ff, "_insider", lambda code="P": pd.DataFrame(rows))
+    out = ff.insider_opportunistic_exec(prices, who="ceo", years=1)["AAA"]
+    assert set(out.index[out == 1].strftime("%Y-%m-%d")) == {"2019-03-11", "2022-08-15"}

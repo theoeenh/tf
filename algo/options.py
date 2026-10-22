@@ -340,7 +340,37 @@ def config() -> dict:
     return json.loads(p.read_text()) if p.exists() else {}
 
 
-def write_status(acct: dict, book: dict, q: dict) -> None:
+def reconcile(book: dict, q: dict, positions: list[dict]) -> list[str]:
+    """Alpaca's positions next to the book's legs: the legs only one side has, and each leg's value at
+    Alpaca against its value at the quotes' mid. F's equity is Alpaca's, so a leg Alpaca prices far from
+    the quotes, or one the book does not know, moves it without any trade (2026-10-22: Alpaca's equity
+    rose $9,450 while the book's positions gained about $1,650 on the day's moves)."""
+    want: dict[str, float] = {}
+    for p in book["open"]:
+        for leg in p["legs"]:
+            want[leg["symbol"]] = want.get(leg["symbol"], 0) + leg["qty"]
+    have = {p["symbol"]: p for p in positions}
+    rows, at_alpaca, at_mid = [], 0.0, 0.0
+    for sym in sorted(set(want) | set(have)):
+        qty, value = float(have.get(sym, {}).get("qty", 0)), float(have.get(sym, {}).get("market_value", 0))
+        bid, ask = (float((q.get(sym) or {}).get(k) or 0) for k in ("bp", "ap"))
+        mid = qty * (bid + ask) / 2 * 100 if bid > 0 and ask > 0 else None
+        flags = [f"book {want.get(sym, 0):g}"] if qty != want.get(sym, 0) else []
+        if mid is None and qty:
+            flags.append("no quote")
+        elif mid is not None and abs(value - mid) > max(100.0, 0.2 * abs(mid)):
+            flags.append("Alpaca's price far from the quotes")
+        at_alpaca += value
+        at_mid += mid or 0.0
+        rows.append(f"| {sym} | {qty:g} | ${value:,.0f} | {'-' if mid is None else f'${mid:,.0f}'} | "
+                    f"{', '.join(flags) or 'ok'} |")
+    return ["", "## Alpaca vs book", "",
+            f"Alpaca values the positions at ${at_alpaca:,.0f}; at the quotes' mid they are worth ${at_mid:,.0f} "
+            f"(difference ${at_alpaca - at_mid:+,.0f}).", "",
+            "| leg | Alpaca qty | Alpaca value | value at mid | check |", "|---|---|---|---|---|", *rows]
+
+
+def write_status(acct: dict, book: dict, q: dict, positions: list[dict] | None = None) -> None:
     eq = float(acct.get("equity", 0))
     cfg = config()
     active = cfg.get("playbooks", list(PLAYBOOKS))
@@ -360,6 +390,8 @@ def write_status(acct: dict, book: dict, q: dict) -> None:
     lines += ["", "## Open positions", ""] + ([f"- **{p['playbook']}** {p['underlying']}: {p['desc']} (opened "
                                               f"{p['opened']}, cost ${p['cost']:+,.0f}, most it can lose "
                                               f"${p['max_loss']:,.0f})" for p in book["open"]] or ["None."])
+    if positions is not None:
+        lines += reconcile(book, q, positions)
     (PAPER_DIR / "status.md").write_text("\n".join(lines) + "\n")
 
 
@@ -431,7 +463,14 @@ def sync(send: bool = False) -> None:
                             f"{pos['desc']}; most it can lose ${pos['max_loss']:,.0f}")
     q = quotes(sorted({leg["symbol"] for p in book["open"] for leg in p["legs"]})) if book["open"] else {}
     save_book(book)
-    write_status(acct, book, q)
+    try:  # what Alpaca holds, for the check against the book (status.md only: nothing is traded on it)
+        positions = request("GET", "/v2/positions")
+        extra = sorted(p["symbol"] for p in positions if p["symbol"] not in q and any(c.isdigit() for c in p["symbol"]))
+        q = q | (quotes(extra) if extra else {})
+    except (AlpacaError, OSError) as e:
+        print(f"No Alpaca positions for the check against the book ({e}).")
+        positions = None
+    write_status(acct, book, q, positions)
 
 
 def main() -> None:

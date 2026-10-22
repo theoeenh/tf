@@ -793,33 +793,71 @@ def insider_turn(prices: dict, buyers: int = 1, window: int = 20) -> dict:
     return out
 
 
-def insider_opportunistic(prices: dict, buyers: int = 1, years: int = 2) -> dict:
-    """Insider buys that break the insider's habit (Cohen-Malloy-Pomorski 2012): a purchase is routine
-    when the same insider also bought the same stock in the same calendar month in each of the `years`
-    previous years (a yearly plan, no news in it), opportunistic otherwise. Signal: the day `buyers`
-    distinct insiders have bought opportunistically within 30 days (one signal per cluster). Only
-    filings of earlier years decide what is routine."""
-    t = _insider("P")
-    if len(t):
-        t = t.assign(year=t["filed"].dt.year, month=t["filed"].dt.month)
-        seen = set(zip(t["ticker"], t["owner"], t["year"], t["month"]))
-        routine = np.array([all((tk, ow, y - k, m) in seen for k in range(1, years + 1))
-                            for tk, ow, y, m in zip(t["ticker"], t["owner"], t["year"], t["month"])], bool)
-        t = t[~routine]
+def _opportunistic(t: pd.DataFrame, years: int) -> pd.DataFrame:
+    """The purchases that break the insider's habit: not routine, where routine means the same insider
+    bought the same stock in the same calendar month in each of the `years` previous years (Cohen-
+    Malloy-Pomorski 2012). Only filings of earlier years decide."""
+    if not len(t):
+        return t
+    t = t.assign(year=t["filed"].dt.year, month=t["filed"].dt.month)
+    seen = set(zip(t["ticker"], t["owner"], t["year"], t["month"]))
+    routine = np.array([all((tk, ow, y - k, m) in seen for k in range(1, years + 1))
+                        for tk, ow, y, m in zip(t["ticker"], t["owner"], t["year"], t["month"])], bool)
+    return t[~routine]
+
+
+def _clusters(t: pd.DataFrame, prices: dict, buyers: int, days: int = 30) -> dict:
+    """The day `buyers` distinct insiders have bought within `days` days (one signal per cluster)."""
     out = {}
     for a, df in prices.items():
         g = t[t["ticker"] == a].sort_values("filed") if len(t) else t
         s = np.zeros(len(df), int)
         last = pd.Timestamp("1900-01-01")
         for f in g["filed"].drop_duplicates():
-            win = g[(g["filed"] > f - pd.Timedelta(days=30)) & (g["filed"] <= f)]
-            if win["owner"].nunique() >= buyers and f - last > pd.Timedelta(days=30):
+            win = g[(g["filed"] > f - pd.Timedelta(days=days)) & (g["filed"] <= f)]
+            if win["owner"].nunique() >= buyers and f - last > pd.Timedelta(days=days):
                 p = _on_days(pd.Series([f]), df.index)[0]
                 if p < len(df):
                     s[p] = 1
                 last = f
         out[a] = pd.Series(s, df.index)
     return out
+
+
+def insider_opportunistic(prices: dict, buyers: int = 1, years: int = 2) -> dict:
+    """Insider buys that break the insider's habit (Cohen-Malloy-Pomorski 2012): a purchase is routine
+    when the same insider also bought the same stock in the same calendar month in each of the `years`
+    previous years (a yearly plan, no news in it), opportunistic otherwise. Signal: the day `buyers`
+    distinct insiders have bought opportunistically within 30 days (one signal per cluster). Only
+    filings of earlier years decide what is routine."""
+    return _clusters(_opportunistic(_insider("P"), years), prices, buyers)
+
+
+def insider_opportunistic_low_short(prices: dict, buyers: int = 1, max_rank: float = 0.3) -> dict:
+    """The two best ideas together: an opportunistic insider cluster (insider_opportunistic, 1 year of
+    habit) in a stock short sellers are not betting against (20-day short share of off-exchange volume,
+    FINRA, known from the next session, in the lowest `max_rank` of the universe that day; account D's
+    filter). Two independent votes should give a steadier edge, the luck check's weak point."""
+    from . import wide
+
+    sig = insider_opportunistic(prices, buyers=buyers, years=1)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
+def insider_opportunistic_exec(prices: dict, who: str = "ceo_cfo", years: int = 1) -> dict:
+    """The boss breaks the habit: an opportunistic purchase (insider_opportunistic) by the chief
+    executive (who='ceo') or the chief executive or finance officer ('ceo_cfo'), from the Form 4 title.
+    One signal per 30 days per stock."""
+    t = _opportunistic(_insider("P"), years)
+    if len(t):
+        t = t[t["title"].fillna("").str.upper().str.contains(TOP_TITLES[who], regex=True)]
+    return _clusters(t, prices, buyers=1)
 
 
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
@@ -978,6 +1016,14 @@ WIDE_FAMILIES = {
     "insider_opportunistic": (insider_opportunistic, {"buyers": [1, 2], "years": [2, 3]},
                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # opportunistic insider buys where short sellers are not against the stock (2026-10-22)
+    "insider_opportunistic_low_short": (insider_opportunistic_low_short, {"buyers": [1, 2], "max_rank": [0.3, 0.5]},
+                                        {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                         "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # the CEO or CFO breaking the habit (2026-10-22)
+    "insider_opportunistic_exec": (insider_opportunistic_exec, {"who": ["ceo", "ceo_cfo"], "years": [1, 2]},
+                                   {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                    "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

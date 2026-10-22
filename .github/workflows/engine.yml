@@ -51,6 +51,10 @@ jobs:
             data/news
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
+      # The cache holds the earnings calendars as first downloaded (30 Sep); the repo's copies are refreshed
+      # every morning (algo.daily) and must win, or the event blackout uses stale dates (2026-10-22).
+      - name: Earnings calendars from the repo, not the cache
+        run: git checkout -- $(git ls-files 'data/news/*_earnings.csv')
       - name: Git identity (the engine saves its log during the day)
         run: |
           git config user.name "paper-bot"

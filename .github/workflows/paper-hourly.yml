@@ -55,6 +55,10 @@ jobs:
             data/social
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
+      # The cache holds the earnings calendars as first downloaded (30 Sep); the repo's copies are refreshed
+      # every morning (algo.daily) and must win, or the event blackout uses stale dates (2026-10-22).
+      - name: Earnings calendars from the repo, not the cache
+        run: git checkout -- $(git ls-files 'data/news/*_earnings.csv')
       - name: Download what is missing
         run: python -m algo.fetch
       # Crowd mood from StockTwits: recorded only, no trading uses it yet. Never blocks trading.
@@ -156,6 +160,10 @@ jobs:
             data/news
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
+      # The cache holds the earnings calendars as first downloaded (30 Sep); the repo's copies are refreshed
+      # every morning (algo.daily) and must win, or the event blackout uses stale dates (2026-10-22).
+      - name: Earnings calendars from the repo, not the cache
+        run: git checkout -- $(git ls-files 'data/news/*_earnings.csv')
 
       - name: Paper account (trade the new bars)
         run: ${{ matrix.update }}
@@ -225,6 +233,10 @@ jobs:
             data/news
           key: market-data-${{ github.run_id }}
           restore-keys: market-data-
+      # The cache holds the earnings calendars as first downloaded (30 Sep); the repo's copies are refreshed
+      # every morning (algo.daily) and must win, or the event blackout uses stale dates (2026-10-22).
+      - name: Earnings calendars from the repo, not the cache
+        run: git checkout -- $(git ls-files 'data/news/*_earnings.csv')
       - name: Option playbooks (calls, puts, put and call spreads)
         run: python -m algo.options sync --send | tee options_sync.txt
       # once a day (first run from 15:00 New York): the option market, saved for the learner (algo/optiondata.py).

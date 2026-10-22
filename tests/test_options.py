@@ -137,3 +137,21 @@ def test_spy_put_spread_narrows_the_protection_to_fit_the_budget():
     d = O.design("spy_put_spread", cs, 95_000)
     legs = {leg["symbol"]: leg["qty"] for leg in d["legs"]}
     assert legs == {"P747": -1, "P720": 1} and d["max_loss"] <= 0.03 * 95_000
+
+
+def test_reconcile_flags_legs_the_book_does_not_know_and_odd_prices():
+    """2026-10-22: Alpaca's equity rose $9,450 while the book's positions gained about $1,650."""
+    from algo.options import reconcile
+
+    book = {"open": [{"legs": [{"symbol": "AVGO261120P00347500", "qty": 1, "price": 22.1},
+                               {"symbol": "IWM261120C00286000", "qty": -4, "price": 3.2}]}]}
+    q = {"AVGO261120P00347500": {"bp": 30.0, "ap": 31.0}, "IWM261120C00286000": {"bp": 2.0, "ap": 2.2},
+         "MSFT261120C00520000": {"bp": 10.0, "ap": 10.4}}
+    positions = [{"symbol": "AVGO261120P00347500", "qty": "1", "market_value": "3050"},       # = mid: ok
+                 {"symbol": "IWM261120C00286000", "qty": "-4", "market_value": "0"},          # short leg at 0
+                 {"symbol": "MSFT261120C00520000", "qty": "1", "market_value": "1020"}]       # not in the book
+    out = "\n".join(reconcile(book, q, positions))
+    assert "| AVGO261120P00347500 | 1 | $3,050 | $3,050 | ok |" in out
+    assert "| IWM261120C00286000 | -4 | $0 | $-840 | Alpaca's price far from the quotes |" in out
+    assert "| MSFT261120C00520000 | 1 | $1,020 | $1,020 | book 0 |" in out
+    assert "Alpaca values the positions at $4,070; at the quotes' mid they are worth $3,230 (difference $+840)" in out

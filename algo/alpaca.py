@@ -233,7 +233,9 @@ def plan(want: dict[str, float], have: dict[str, float], prices: dict[str, float
     return orders
 
 
-OPG_WINDOW = (30, 2)  # minutes before the open: opening-auction orders are accepted until 9:28
+# minutes before the open: opening-auction orders (Alpaca accepts them until 9:28; 2026-10-22: one sent at
+# 9:26 expired unfilled). From 9:25 a plain market order is sent instead: it fills at the open.
+OPG_WINDOW = (30, 5)
 
 
 def opening_auction(clock: dict) -> bool:
@@ -490,17 +492,20 @@ def _order_key(o: dict) -> tuple:
 
 
 def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
-    """While the market is closed (and outside the opening-auction window) the orders a run sends cannot
-    fill, so a run that would send exactly the orders already open has nothing to do. Cancelling and
-    re-sending them each hour (2026-10-17: account D's 3 weekend buys) only fills the order list with
-    cancelled copies. Crypto trades 24/7: any crypto in play keeps the normal path. On any doubt
-    (an error, an order we would not send) the answer is False and the run cancels and re-sends."""
+    """While the market is closed the orders a run sends cannot fill, so a run that would send exactly
+    the orders already open has nothing to do. Cancelling and re-sending them each hour (2026-10-17:
+    account D's 3 weekend buys) only fills the order list with cancelled copies; in the opening-auction
+    window the orders compared are the auction ones (2026-10-22: the 9:05, 9:12 and 9:20 runs each
+    re-sent account C's auction sell, the last at 9:26, and it expired). Crypto trades 24/7: any crypto
+    in play keeps the normal path. On any doubt (an error, an order we would not send) the answer is
+    False and the run cancels and re-sends."""
     from collections import Counter
 
     try:
         clock = request("GET", "/v2/clock")
-        if clock.get("is_open") or opening_auction(clock):
+        if clock.get("is_open"):
             return False
+        auction = opening_auction(clock)
         have = positions()
         syms = sorted({SYMBOLS[t["asset"]] for t in trades})
         if any("/" in s for s in list(have) + syms):
@@ -508,6 +513,8 @@ def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
         live = live_prices(syms + [s for s in have if s not in syms])
         seen = bar_range(syms)
         todo = plan(wanted(live, seen), have, dict(prices))
+        if auction:
+            todo = at_the_open(todo)
         alive = [t for t in trades if not through_stop(t, live, seen)]
         protective = []
         for sym, q in sorted(have.items()):

@@ -597,3 +597,48 @@ def test_stop_range_without_bar_times_starts_after_the_last_equity_line(monkeypa
     monkeypatch.setattr(alpaca, "get_data", lambda path, params: asked.append(dict(params)) or {"bars": {}})
     assert alpaca.bar_range(["AAPL"]) == {}
     assert asked[0]["start"] == "2026-10-20T14:00:00Z"
+
+
+def test_opening_auction_orders_already_queued_are_not_sent_again(monkeypatch, tmp_path):
+    """2026-10-22: account C's opening-auction sell of AMZN was cancelled and sent again by the 9:05,
+    9:12 and 9:20 runs; the last copy went out at 9:26 and expired unfilled, so the position was sold
+    at 9:57 instead of in the auction."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "FIS", "ticker": "FIS", "strategy": "insider_low_short", "qty": 125.932423,
+               "stop": 32.83, "target": None, "mark": 36.01}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setitem(alpaca.SYMBOLS, "FIS", "FIS")
+    monkeypatch.setattr(alpaca, "positions", lambda: {})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"FIS": 36.0})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
+    auction = [{"id": "1", "symbol": "FIS", "side": "buy", "qty": "125", "type": "market",
+                "time_in_force": "opg", "order_class": "", "legs": None},
+               {"id": "2", "symbol": "FIS", "side": "buy", "qty": "0.932423", "type": "market",
+                "time_in_force": "day", "order_class": "", "legs": None}]
+    state = {"orders": auction}
+
+    def request(m, p, b=None, base=None):
+        if p == "/v2/clock":
+            return {"is_open": False}
+        if p.startswith("/v2/orders?status=open"):
+            return state["orders"]
+        raise AssertionError(f"unexpected {m} {p}")
+
+    monkeypatch.setattr(alpaca, "request", request)
+    assert alpaca.already_queued(trades, {"FIS": 36.01})
+    state["orders"] = [dict(auction[0], time_in_force="day", qty="125.932423")]   # sent before the window
+    assert not alpaca.already_queued(trades, {"FIS": 36.01})   # turned into an auction order
+
+
+def test_opening_auction_orders_stop_five_minutes_before_the_open():
+    from algo import alpaca
+
+    clock = lambda mins: {"is_open": False, "timestamp": "2026-10-22T09:00:00.000000000-04:00",  # noqa: E731
+                          "next_open": f"2026-10-22T09:{mins:02d}:00-04:00"}
+    assert alpaca.opening_auction(clock(30)) and alpaca.opening_auction(clock(5))
+    assert not alpaca.opening_auction(clock(4))      # 9:26: a plain market order, filled at the open

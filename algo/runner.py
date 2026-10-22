@@ -39,7 +39,8 @@ INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "inside
                     "insider_consensus", "insider_deep_value",
                     "insider_sector_laggard", "insider_low_vol",
                     "insider_high_short", "insider_momentum",
-                    "insider_turn", "insider_accumulation", "insider_opportunistic"}
+                    "insider_turn", "insider_accumulation", "insider_opportunistic",
+                    "insider_opportunistic_low_short", "insider_opportunistic_exec"}
 SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund"}  # FINRA short volume
 
 
