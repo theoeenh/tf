@@ -1025,6 +1025,15 @@
 0.12328640592136186
 ]
 },
+"TSLA|vwap_reversion|+|2026-10-22 19:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.15R (avg win +0.64R, avg loss -0.81R).",
+"size": 1.0,
+"pred": [
+0.4549371369519216,
+-0.14925414632083595
+]
+},
 "USO|donchian_trend|+|2026-10-12 14:00": {
 "skip": false,
 "reason": "",
