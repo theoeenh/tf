@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-10-22 18:01 UTC. **Equity $104,856** (+4.86% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-10-22 18:28 UTC. **Equity $105,163** (+5.16% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 4 | $-1,464 | $+997 | 1 / 4 |
-| long_put | 3 | 3 | $-520 | $+1,027 | 1 / 3 |
-| bull_put_spread | 3 | 6 | $-809 | $-297 | 1 / 6 |
-| bear_call_spread | 2 | 4 | $-988 | $+161 | 2 / 4 |
-| spy_put_spread | 1 | 0 | $+0 | $-148 | 0 / 0 |
+| long_call | 3 | 4 | $-1,464 | $+1,113 | 1 / 4 |
+| long_put | 3 | 3 | $-520 | $+958 | 1 / 3 |
+| bull_put_spread | 3 | 6 | $-809 | $-211 | 1 / 6 |
+| bear_call_spread | 2 | 4 | $-988 | $+125 | 2 / 4 |
+| spy_put_spread | 1 | 0 | $+0 | $-136 | 0 / 0 |
 
 ## Open positions
 
