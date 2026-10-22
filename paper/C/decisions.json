@@ -17,6 +17,15 @@
 0.1654355510937009
 ]
 },
+"AAPL|donchian_trend|+|2026-10-23 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.32428648647090774,
+0.004015064481804442
+]
+},
 "AAPL|opening_range|+|2026-10-08 17:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.09R (avg win +1.05R, avg loss -0.95R).",
@@ -42,6 +51,15 @@
 "pred": [
 0.4362502471590199,
 -0.0741636092449825
+]
+},
+"AAPL|opening_range|+|2026-10-23 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.5139366738479293,
+0.08200716115610701
 ]
 },
 "AAPL|rsi2_reversion|+|2026-10-01 13:00": {
