@@ -1,6 +1,6 @@
 # F – Options
 
-Updated 2026-10-22 21:28 UTC. **Equity $104,014** (+4.01% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-10-22 22:00 UTC. **Equity $104,014** (+4.01% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
@@ -9,7 +9,7 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 | long_call | 3 | 4 | $-1,464 | $+534 | 1 / 4 |
 | long_put | 3 | 3 | $-520 | $+986 | 1 / 3 |
 | bull_put_spread | 3 | 6 | $-809 | $-163 | 1 / 6 |
-| bear_call_spread | 2 | 4 | $-988 | $+96 | 2 / 4 |
+| bear_call_spread | 2 | 4 | $-988 | $+692 | 2 / 4 |
 | spy_put_spread | 1 | 0 | $+0 | $-95 | 0 / 0 |
 
 ## Open positions
@@ -43,7 +43,6 @@ Alpaca values the positions at $29,603; at the quotes' mid they are worth $31,53
 | FIS261120P00032500 | 14 | $350 | $420 | ok |
 | FIS261120P00035000 | -14 | $-1,050 | $-945 | ok |
 | IWM261113C00294000 | 4 | $228 | $244 | book 0 |
-| IWM261120C00286000 | 0 | $0 | $0 | book -4 |
 | IWM261120C00295000 | 4 | $312 | $310 | ok |
 | IWM261218P00284000 | 2 | $2,442 | $2,467 | ok |
 | MSFT261106P00480000 | 1 | $325 | $354 | book 0 |
