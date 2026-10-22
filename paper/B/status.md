@@ -1,22 +1,19 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 18:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 19:23 UTC.
 
-**Equity $94,780** (-5.22%) · max drawdown -6.4% · 42 closed trades · 3 open
+**Equity $94,705** (-5.30%) · max drawdown -6.5% · 42 closed trades · 4 open
 
 ## Open positions
 
-- **LONG 30.8937 TSLA** (rsi2_reversion) since 2026-10-22 16:00, entry 383.28, stop 371.02, target 407.81, now -0.42R  
+- **LONG 30.8937 TSLA** (rsi2_reversion) since 2026-10-22 16:00, entry 383.28, stop 371.02, target 407.81, now -0.63R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 25 = trend market, high volatility (ATR 1.3% of price). Plan: entry 383.28, stop 371.02, target 407.81 (2:1); risking $379.
-- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +0.68R  
+- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +0.79R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 342.03, stop 335.99, target 360.16 (3:1); risking $382.
-- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now -0.47R  
+- **LONG 2.7008 MSFT** (rsi2_reversion) since 2026-10-07 14:00, entry 528.04, stop 518.64, target 556.25, now -0.70R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 35 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 528.04, stop 518.64, target 556.25 (3:1); risking $25. Strong trend, so the target was widened.
-
-## Opening now (at the open of the bar forming now)
-
-- **LONG 71.1538 USO** (squeeze_breakout) for the 2026-10-22 18:00 bar, at about 163.31, stop 157.99, target none (trailing)  
-  *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 16 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 163.31, stop 157.99, no target, trailing stop lets it run; risking $378.
+- **LONG 71.1538 USO** (squeeze_breakout) since 2026-10-22 18:00, entry 163.05, stop 157.73, target none (trailing), now -0.07R  
+  *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 16 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 163.05, stop 157.73, no target, trailing stop lets it run; risking $378.
 
 ## Closed trades (newest first)
 
