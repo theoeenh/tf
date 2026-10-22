@@ -1,14 +1,14 @@
 # Paper account – long + trend + blackout + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 16:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 17:23 UTC.
 
-**Equity $94,075** (-5.92%) · max drawdown -7.2% · 45 closed trades · 2 open
+**Equity $94,100** (-5.90%) · max drawdown -7.2% · 45 closed trades · 2 open
 
 ## Open positions
 
-- **LONG 61.1348 AAPL** (rsi2_reversion) since 2026-10-20 15:00, entry 340.75, stop 334.60, target 353.06, now +0.72R  
+- **LONG 61.1348 AAPL** (rsi2_reversion) since 2026-10-20 15:00, entry 340.75, stop 334.60, target 353.06, now +0.81R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 15 = chop market, mid volatility (ATR 0.7% of price). Plan: entry 340.75, stop 334.60, target 353.06 (2:1); risking $376.
-- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now -0.05R  
+- **LONG 15.4668 MSFT** (rsi2_reversion) since 2026-10-08 17:00, entry 526.39, stop 517.42, target 553.30, now -0.10R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 30 = strong market, mid volatility (ATR 0.7% of price). Plan: entry 526.39, stop 517.42, target 553.30 (3:1); risking $139. Strong trend, so the target was widened.
 
 ## Closed trades (newest first)
