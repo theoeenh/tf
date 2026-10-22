@@ -1,91 +1,91 @@
-# Daily brief — Wednesday 21 October 2026
+# Daily brief — Thursday 22 October 2026
 
 ## Coming up in the next 7 days
 
-- **Wed 21 Oct**: TSLA earnings
 - **Wed 28 Oct**: Fed (FOMC) rate decision
 - **Wed 28 Oct**: GOOGL earnings
-- **Wed 28 Oct**: META earnings
 - **Wed 28 Oct**: MSFT earnings
+- **Thu 29 Oct**: AMZN earnings
+- **Thu 29 Oct**: COIN earnings
 
 ## Core holdings this month (momentum)
 
-- TXN: 31%
+- TXN: 30%
 - CSCO: 27%
 - AMD: 15%
 - INTC: 14%
-- MU: 13%
+- MU: 14%
 
 ## Assets
 
-### BTC — 82,941.00 (2026-10-20)
-1 week +1.0%, 1 month -0.8%; above its 200-day average; ADX 20.
+### BTC — 84,011.97 (2026-10-21)
+1 week +3.1%, 1 month +0.5%; above its 200-day average; ADX 19.
 Signals for the next open: none.
 News (GDELT, to 2026-10-07): tone +1.5σ vs usual, coverage -2.9σ.
 Headlines:
-- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday as AI Stocks Rebound Amid Corporate Earnings (Wed, 21 Oct 2026)
-- Stock Market Today: Tech Futures Rise With SpaceX Earnings; Meta, Tesla Set To Report Later (Live Coverage) (Wed, 21 Oct 2026)
-- IREN Limted Crashed 40% This Month: Three Wall Street Analysts Agree It’s Going to Quadruple (Wed, 21 Oct 2026)
-- Morning Minute: Bitcoin Tops JPMorgan’s Ten-Year Forecast for All Assets (Wed, 21 Oct 2026)
-- Is Bitcoin Undervalued? What Elon Musk’s Energy Money Idea and Hashrate Data Show (Wed, 21 Oct 2026)
+- Stock Market Today: Dow Falls As Oil Prices Jump; Meta, Tesla Slide On Earnings (Live Coverage) (Thu, 22 Oct 2026)
+- Chamath Says Bitcoin Will Hit $0 as Standard Chartered Expands Crypto Business (Thu, 22 Oct 2026)
+- MARA Holdings (MARA) Moved 1,000 BTC to Exchanges and Investors Are Watching (Thu, 22 Oct 2026)
+- Bitcoin and ethereum prices today, Thursday, October 22, 2026: Crypto gains wiped out as oil prices stay over $111 a barrel (Thu, 22 Oct 2026)
+- Tesla Was Expected to Burn $5 Billion. It Made $1.5 Billion Instead (Thu, 22 Oct 2026)
 
-### ETH — 2,446.73 (2026-10-20)
-1 week +0.3%, 1 month -8.6%; above its 200-day average; ADX 30.
+### ETH — 2,470.77 (2026-10-21)
+1 week +2.1%, 1 month -7.9%; above its 200-day average; ADX 28.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -1.1σ vs usual, coverage +0.2σ.
 Headlines:
-- Bitmine's Tom Lee Warns of a Potential Sell-Off in Ethereum. Here's the Most Likely Scenario for ETH. (Wed, 21 Oct 2026)
-- Better Altcoin Buy: XRP vs. Solana (Wed, 21 Oct 2026)
-- Ethereum Price Disappoints: Bitmine Fails to Offset ETF Exodus (Wed, 21 Oct 2026)
-- Spot Bitcoin ETFs Lost $681 Million in 1 Week as Bitcoin Trades Nearly 33% Below Its 2025 High (Wed, 21 Oct 2026)
-- Bitcoin and ethereum prices today, Wednesday, October 21, 2026: Crypto to outperform stocks and gold? (Wed, 21 Oct 2026)
+- Aerodrome and Velodrome Go Live as Aero Across Seven Chains (Thu, 22 Oct 2026)
+- Bitcoin and ethereum prices today, Thursday, October 22, 2026: Crypto gains wiped out as oil prices stay over $111 a barrel (Thu, 22 Oct 2026)
+- BitGo-Held Bitcoin and Ether Will Secure Perps Margin Loans for Some Kalshi Prime Clients (Thu, 22 Oct 2026)
+- Signs Are Growing That Crypto's Altseason Is Right Around the Corner. Here's the 1 Altcoin I'm Buying Right Now. (Thu, 22 Oct 2026)
+- Bitcoin ETFs Turn October Positive With $1 Billion in Three Days While ETH Funds Bleed $1 Billion (Thu, 22 Oct 2026)
 
-### SOL — 106.42 (2026-10-20)
-1 week +1.0%, 1 month -10.6%; above its 200-day average; ADX 27.
+### SOL — 106.79 (2026-10-21)
+1 week +2.4%, 1 month -9.5%; above its 200-day average; ADX 26.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.3σ.
 Headlines:
-- Better Altcoin Buy: XRP vs. Solana (Wed, 21 Oct 2026)
-- PUMP vs FOMO: Can Signing $40M TRUMP Trader Kimchi Help Pump.fun Win the Launchpad War? (Wed, 21 Oct 2026)
-- The Next Generation of Crypto Winners Could Be Very Different (Wed, 21 Oct 2026)
-- Solana Price Faces New Risk Despite Growing On-Chain Adoption (Wed, 21 Oct 2026)
-- Wallet Linked to Drift Exploit Sends $61 Million in Ethereum to Tornado Cash (Tue, 20 Oct 2026)
+- Upexi Details Solana Treasury Strategy, Staking Income and Locked Token Purchases (Thu, 22 Oct 2026)
+- Scientist.com Launches Agentic AI Platform for Research Procurement (Thu, 22 Oct 2026)
+- How Much of Your Money Would You Let an AI Control? (Thu, 22 Oct 2026)
+- Signs Are Growing That Crypto's Altseason Is Right Around the Corner. Here's the 1 Altcoin I'm Buying Right Now. (Thu, 22 Oct 2026)
+- Ethereum Earned Less Than a 3-Month-Old Robinhood Chain Last Quarter (Thu, 22 Oct 2026)
 
-### NVDA — 216.47 (2026-10-20)
-1 week -5.3%, 1 month -4.8%; above its 200-day average; ADX 18.
+### NVDA — 221.97 (2026-10-21)
+1 week +0.3%, 1 month -3.0%; above its 200-day average; ADX 18.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -1.1σ vs usual, coverage +0.5σ.
 Headlines:
-- AI capabilities and safety are 'one and the same': Nvidia CEO Jensen Huang (Wed, 21 Oct 2026)
-- Nvidia CEO Jensen Huang: 'We have to accelerate AI safety' (Wed, 21 Oct 2026)
-- Nvidia Aims To Speed Deployment Of AI Factories (Wed, 21 Oct 2026)
-- Nvidia prepares to support struggling data centres as AI deals collapse (Wed, 21 Oct 2026)
-- Elisa taps NVIDIA and Nokia for its journey towards commercial AI-RAN in Finland (Wed, 21 Oct 2026)
+- Chip stocks fall as equipment maker Lam Research cites 'supply chain constraints' (Thu, 22 Oct 2026)
+- A Recession Is Coming Eventually, and History Says There's a Major Silver Lining for Investors (Thu, 22 Oct 2026)
+- FuboTV’s (FUBO) Strategic Plan to Turn Streaming Distribution into Durable Free Cash Flow (Thu, 22 Oct 2026)
+- HCLTech introduces Nvidia-based automotive software testing suite (Thu, 22 Oct 2026)
+- Evaluating CareCloud’s (CCLD) Short-Term Integration Friction vs. Long-Term Margin Expansion (Thu, 22 Oct 2026)
 
-### TSLA — 373.71 (2026-10-20)
-1 week -0.4%, 1 month -0.4%; below its 200-day average; ADX 13.
-Signals for the next open: none.
+### TSLA — 386.47 (2026-10-21)
+1 week +5.3%, 1 month +2.0%; below its 200-day average; ADX 13.
+Signals for the next open: rsi2_reversion SELL.
 News (GDELT, to 2026-09-30): tone +1.0σ vs usual, coverage +0.2σ.
 Headlines:
-- Meta, Tesla, and IBM earnings: What to Watch (Wed, 21 Oct 2026)
-- Stock Market Today: Tech Futures Rise With SpaceX Earnings; Meta, Tesla Set To Report Later (Live Coverage) (Wed, 21 Oct 2026)
-- Tesla Earnings Prediction Market Preview: Will Elon Musk Discuss a SpaceX Merger? (Wed, 21 Oct 2026)
-- Dow Jones Futures Rise As SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck (Wed, 21 Oct 2026)
-- Tesla, SpaceX Pop After Musk Confirms Merger Talks; 'Would Be A Good Idea' (Wed, 21 Oct 2026)
+- Why Tesla's lower capex plans are worrying investors (Thu, 22 Oct 2026)
+- Why Tesla shareholders should be 'a little bit nervous' about a SpaceX merger (Thu, 22 Oct 2026)
+- Stock Market Today: Dow Falls As Oil Prices Jump; Meta, Tesla Slide On Earnings (Live Coverage) (Thu, 22 Oct 2026)
+- Tesla Falls 4% as Profit Shrinks and Musk Trims Sales Target; Rivian and Lucid Slip (Thu, 22 Oct 2026)
+- Nvidia and Tesla back Samsung Electro-Mechanics substrate expansion (Thu, 22 Oct 2026)
 
-### GOLD — 377.65 (2026-10-20)
-1 week -1.1%, 1 month -5.2%; below its 200-day average; ADX 17.
+### GOLD — 378.95 (2026-10-21)
+1 week +0.8%, 1 month -5.3%; below its 200-day average; ADX 16.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.2σ.
 Headlines:
 - Jim Cramer Prefers Gold to Bitcoin for Portfolio Insurance, but Backs 2 ‘Vetted’ Cryptos (Wed, 21 Oct 2026)
 - Forget GLD. Investors Sent $500 Million to the Cheaper SPDR Gold Fund (Mon, 19 Oct 2026)
 - Gold ETF Down 13% in Six Months: 4 Bullish Reasons for Long Term (Thu, 08 Oct 2026)
-- Ultra-rich investors are snatching up gold and the miners digging it out. Stake your claim in the new gold rush (Wed, 21 Oct 2026)
-- China's Treasury Pile Is Shrinking on Paper. The Custody Data Tell a Different Story (Mon, 19 Oct 2026)
+- Gold ETFs to Watch Amid Fed Rate Hike & Oil Risks (Wed, 21 Oct 2026)
+- ETFs to Buy and Hold for a Long-Term Investment Strategy (Wed, 21 Oct 2026)
 
-### SILVER — 52.12 (2026-10-20)
-1 week -2.6%, 1 month -12.6%; below its 200-day average; ADX 22.
+### SILVER — 52.26 (2026-10-21)
+1 week +4.1%, 1 month -13.9%; below its 200-day average; ADX 23.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.2σ.
 Headlines:
@@ -95,160 +95,161 @@ Headlines:
 - Gold Defied the Fed’s Rate Hike—These 3 Plays Stand Out (Wed, 23 Sep 2026)
 - Silver Made America’s Critical Minerals List. This ETF Is the Easiest Way In (Tue, 22 Sep 2026)
 
-### AAPL — 339.50 (2026-10-20)
-1 week -0.5%, 1 month +0.2%; above its 200-day average; ADX 18.
+### AAPL — 343.99 (2026-10-21)
+1 week +0.3%, 1 month +1.2%; above its 200-day average; ADX 18.
 Signals for the next open: none.
 Headlines:
-- Apple vs. Broadcom: Which Tech Stock Is a Better Buy in 2026? (Wed, 21 Oct 2026)
-- Should You Be Worried About Apple Stock? (Wed, 21 Oct 2026)
-- What it’s like to use the iPhone Duo for a week (Wed, 21 Oct 2026)
-- I Tested Apple’s iPhone Duo for a Week. Is It Worth $2,000? (Wed, 21 Oct 2026)
-- Apple Stock Falls Following Loop Capital Downgrade Over Valuation Concerns (Wed, 21 Oct 2026)
+- What Intel, Boeing, Nike Have In Common With Each Other — And Apple (Thu, 22 Oct 2026)
+- Forbes editor urges Fed to cut printing, shrink balance sheet and appreciate dollar to combat import-driven inflation (Thu, 22 Oct 2026)
+- If Netflix Can’t Shine in Show Business, Who Can? (Thu, 22 Oct 2026)
+- Are You Sure You Understand Dell Stock's Risk? (Thu, 22 Oct 2026)
+- Should You Buy Snap Stock For Its Cash? (Thu, 22 Oct 2026)
 
-### MSFT — 531.87 (2026-10-20)
-1 week -2.1%, 1 month +6.0%; above its 200-day average; ADX 35.
+### MSFT — 532.95 (2026-10-21)
+1 week -0.1%, 1 month +7.0%; above its 200-day average; ADX 33.
 Signals for the next open: none.
 Headlines:
-- FinTurk Introduces FinBox and Unlimited AI Usage to Streamline Email Management for Financial Advisors (Wed, 21 Oct 2026)
-- Market Re-Rating Aligns Microsoft Corporation’s (MSFT) Valuation with Core AI Fundamentals (Wed, 21 Oct 2026)
-- IREN Limted Crashed 40% This Month: Three Wall Street Analysts Agree It’s Going to Quadruple (Wed, 21 Oct 2026)
-- The Zacks Analyst Blog Highlights Microsoft, Palantir Technologies, Micron Technology, Lam Research and IonQ (Wed, 21 Oct 2026)
-- Tavant Launches Accelerator for Microsoft Fabric Through Microsoft Marketplace (Wed, 21 Oct 2026)
+- Infragistics to Strengthen Blazor Development with Microsoft (Thu, 22 Oct 2026)
+- Meta Falls 3% as Higher AI Spending Outlook Overshadows Earnings Beat; Alphabet Dips, Microsoft Holds Steady (Thu, 22 Oct 2026)
+- Microsoft is Creating a $700 Billion Moat With Its AI Spend Through 2030 (Thu, 22 Oct 2026)
+- Oracle Vs. Microsoft: How The Wildcard AI Spender Plans to Disrupt (Thu, 22 Oct 2026)
+- ModelOp Takes Control of Enterprise AI Agent Sprawl with Expanded Microsoft and Amazon Integrations (Thu, 22 Oct 2026)
 
-### AMZN — 262.63 (2026-10-20)
-1 week +1.6%, 1 month +1.6%; above its 200-day average; ADX 14.
+### AMZN — 262.37 (2026-10-21)
+1 week +3.3%, 1 month +2.9%; above its 200-day average; ADX 14.
 Signals for the next open: none.
 Headlines:
-- Protolabs Accelerates AI-Enabled Manufacturing with Amazon Quick (Wed, 21 Oct 2026)
-- Amazon plans €16bn investment across Germany in 2027 (Wed, 21 Oct 2026)
-- Amazon to recruit over 300,000 US workers for holiday season (Wed, 21 Oct 2026)
-- Stord acquires e-commerce competitor AMS Fulfillment in large deal (Wed, 21 Oct 2026)
-- Should You Be Worried About Apple Stock? (Wed, 21 Oct 2026)
+- ModelOp Takes Control of Enterprise AI Agent Sprawl with Expanded Microsoft and Amazon Integrations (Thu, 22 Oct 2026)
+- Transaera to Install Its Heat Pump Against a Conventional System in First Multifamily Residential Deployment (Thu, 22 Oct 2026)
+- Olifant Digital Tops New York Amazon PPC Rankings, Earns California Recognition (Thu, 22 Oct 2026)
+- Tech Giants Race To Patch Critical PHP Vulnerabilities Affecting Web Systems (Thu, 22 Oct 2026)
+- Replit Expands Government Business Worldwide, Taps Former Amazon Executive to Lead Corporate Affairs (Thu, 22 Oct 2026)
 
-### META — 694.25 (2026-10-20)
-1 week -9.0%, 1 month -6.3%; above its 200-day average; ADX 30.
-Signals for the next open: rsi2_reversion BUY.
-Headlines:
-- Meta, Tesla, and IBM earnings: What to Watch (Wed, 21 Oct 2026)
-- Meta and Google are about to have a consumer AI showdown (Wed, 21 Oct 2026)
-- What It Will Take to Get Meta Above This New Plateau (Wed, 21 Oct 2026)
-- Dow Jones Futures Rise As SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck (Wed, 21 Oct 2026)
-- Stocks Rise Pre-Bell as Traders Await Meta, Tesla Earnings (Wed, 21 Oct 2026)
-
-### GOOGL — 340.28 (2026-10-20)
-1 week -3.8%, 1 month -4.1%; below its 200-day average; ADX 15.
+### META — 697.52 (2026-10-21)
+1 week -5.4%, 1 month -5.3%; above its 200-day average; ADX 29.
 Signals for the next open: none.
 Headlines:
-- SpaceX Surges on Solid Q3 Beat & Upbeat Outlook: ETFs to Tap (Wed, 21 Oct 2026)
-- Making sense of Anthropic's $750 billion compute bet (Wed, 21 Oct 2026)
-- How Has Zoom's Story Changed? (Wed, 21 Oct 2026)
-- OpenAI expands Google Cloud access as AI rivals deepen ties (Wed, 21 Oct 2026)
-- Is IonQ Stock A Buy Today, Down By Half In A Year? (Wed, 21 Oct 2026)
+- Meta's AI build-out comes with an $825 billion price tag (Thu, 22 Oct 2026)
+- Meta's new nonvoting shares create an overhang — and Wall Street wants it gone (Thu, 22 Oct 2026)
+- Meta Stock Falls Despite Strong Q3 Results As AI Spending Takes Focus (Thu, 22 Oct 2026)
+- Stock Market Today: Dow Falls As Oil Prices Jump; Meta, Tesla Slide On Earnings (Live Coverage) (Thu, 22 Oct 2026)
+- Meta Falls 3% as Higher AI Spending Outlook Overshadows Earnings Beat; Alphabet Dips, Microsoft Holds Steady (Thu, 22 Oct 2026)
 
-### AMD — 534.74 (2026-10-20)
-1 week -11.7%, 1 month -13.1%; above its 200-day average; ADX 22.
+### GOOGL — 334.76 (2026-10-21)
+1 week -3.7%, 1 month -4.7%; below its 200-day average; ADX 15.
+Signals for the next open: squeeze_breakout SELL.
+Headlines:
+- PreScalar Raises $7M to Build the Software Layer for the Modern Factory (Thu, 22 Oct 2026)
+- Meta Falls 3% as Higher AI Spending Outlook Overshadows Earnings Beat; Alphabet Dips, Microsoft Holds Steady (Thu, 22 Oct 2026)
+- I Keep Buying Alphabet Expressly Because of Chips and Interest Rates (Thu, 22 Oct 2026)
+- If Netflix Can’t Shine in Show Business, Who Can? (Thu, 22 Oct 2026)
+- Should You Buy Snap Stock For Its Cash? (Thu, 22 Oct 2026)
+
+### AMD — 552.72 (2026-10-21)
+1 week -3.2%, 1 month -11.4%; above its 200-day average; ADX 22.
 Signals for the next open: none.
 Headlines:
-- Supermicro stock jumps as server maker lifts revenue forecast (Wed, 21 Oct 2026)
-- Advanced Micro Devices (AMD) Stock Plummeted 13% Last Week. Should You Buy the Dip Before Nov. 3? (Wed, 21 Oct 2026)
-- Generative Bionics to build Europe's largest Physical AI Data Factory and advance European humanoid sovereignty with AMD AI infrastructure (Wed, 21 Oct 2026)
-- Vultr and AMD Expand Global Collaboration with New AI Infrastructure in India (Wed, 21 Oct 2026)
-- MindWalk Screens 890,634 Antibody Sequences for Immune Risk in Under Five Hours (Wed, 21 Oct 2026)
+- Chip stocks fall as equipment maker Lam Research cites 'supply chain constraints' (Thu, 22 Oct 2026)
+- I Think AMD’s Potential Is Actively Being Underestimated So I Keep Betting On It (Thu, 22 Oct 2026)
+- Does The Move In AMD Stock Change Anything? (Thu, 22 Oct 2026)
+- Nvidia Is Moving Deeper Into Intel, AMD Territory: Supermicro Rolls Out 256-CPU Vera Rack (Thu, 22 Oct 2026)
+- Our Pick Of The Best AI Stocks In October 2026 (Thu, 22 Oct 2026)
 
-### AVGO — 334.37 (2026-10-20)
-1 week -6.4%, 1 month -7.8%; below its 200-day average; ADX 21.
+### AVGO — 337.80 (2026-10-21)
+1 week -2.4%, 1 month -7.3%; below its 200-day average; ADX 22.
 Signals for the next open: none.
 Headlines:
-- Broadcom Launches Arcot Scam Defense to Block Social Engineering Fraud (Wed, 21 Oct 2026)
-- Apple vs. Broadcom: Which Tech Stock Is a Better Buy in 2026? (Wed, 21 Oct 2026)
-- JEPI vs. VYM: The High-Yield ETF Delivered the Income but Lost the Race (Wed, 21 Oct 2026)
-- This Week In AI Chips - Advancing AI Network Management Through Enhanced GigaSMART Technology (Wed, 21 Oct 2026)
-- Broadcom fought AT&T over VMware: Now a telecom giant is all in (Wed, 21 Oct 2026)
+- Chip stocks fall as equipment maker Lam Research cites 'supply chain constraints' (Thu, 22 Oct 2026)
+- Broadcom (AVGO) Debuts Arcot Scam Defense For Real Time Payment Fraud Detection (Thu, 22 Oct 2026)
+- Broadcom’s AI Revenue Surges 221%, But is Growth Becoming Too Dependent on AI Spending? (Wed, 21 Oct 2026)
+- 3 AI Stocks That Could Split in 2027 (Thu, 22 Oct 2026)
+- $4,000 in These 4 Non-Nvidia Chip Stocks Could Be Worth This Much by 2030 (Wed, 21 Oct 2026)
 
-### NFLX — 68.69 (2026-10-20)
-1 week -2.5%, 1 month -6.4%; below its 200-day average; ADX 21.
+### NFLX — 65.04 (2026-10-21)
+1 week -7.8%, 1 month -9.9%; below its 200-day average; ADX 22.
+Signals for the next open: donchian_trend SELL, squeeze_breakout SELL.
+Headlines:
+- Netflix is losing viewers — but they're still subscribed (Thu, 22 Oct 2026)
+- If Netflix Can’t Shine in Show Business, Who Can? (Thu, 22 Oct 2026)
+- ETFs in Focus as Netflix Shares Tumble Amid Q3 Earnings Beat, Guidance Cut (Thu, 22 Oct 2026)
+- Netflix Stock Is on Track for Its Worst Year Since 2022. Is It Finally a Buy? (Thu, 22 Oct 2026)
+- Why Did NFLX, CMG, AVEX Stocks Crash To 52-Week Lows Today? (Thu, 22 Oct 2026)
+
+### JPM — 335.19 (2026-10-21)
+1 week -0.0%, 1 month -0.9%; above its 200-day average; ADX 18.
 Signals for the next open: none.
 Headlines:
-- Netflix has 2 problems behind the stock slide — and they aren't YouTube, co-CEO Ted Sarandos says (Wed, 21 Oct 2026)
-- The massive risk hiding inside your S&P 500 index fund (Wed, 21 Oct 2026)
-- Netflix Sinks 7% as Soft Q4 Outlook Sparks Wave of Price Target Cuts; Spotify Slips, Disney Holds Steady (Wed, 21 Oct 2026)
-- What Makes Netflix (NFLX) an Attractive Bet? (Wed, 21 Oct 2026)
-- Stock Market Today: Tech Futures Rise With SpaceX Earnings; Meta, Tesla Set To Report Later (Live Coverage) (Wed, 21 Oct 2026)
+- J.P. Morgan Commercial Banking and Syracuse University’s D’Aniello IVMF Announce 2027 CEOcircle Cohort of Veteran and Military Spouse Business Leaders (Thu, 22 Oct 2026)
+- JPMorgan says AI stock selling may be nearing its limit as positioning resets (Thu, 22 Oct 2026)
+- JPMorgan Chase (JPM) Takes JPM Coin to Ethereum for Institutional Payments (Thu, 22 Oct 2026)
+- ManpowerGroup to Participate in J.P. Morgan Ultimate Services Investor Conference (Wed, 21 Oct 2026)
+- The simple reason JPMorgan thinks SpaceX will triple: It's going after a $28 trillion market (Wed, 21 Oct 2026)
 
-### JPM — 335.26 (2026-10-20)
-1 week +1.2%, 1 month -4.3%; above its 200-day average; ADX 19.
+### XOM — 178.09 (2026-10-21)
+1 week +0.6%, 1 month +12.2%; above its 200-day average; ADX 29.
 Signals for the next open: none.
 Headlines:
-- JPMorgan’s 31-year-old report embraces once-mocked asset (Tue, 20 Oct 2026)
-- JPMorgan Puts a Number on Bitcoin for the First Time: 10% a Year, With a Big Caveat (Tue, 20 Oct 2026)
-- The Banks Locked Agents Out. This Week an Agent Paid an Invoice Through the Front Door. (Tue, 20 Oct 2026)
-- JPMorgan Reveals 3 Bitcoin Price Scenarios for 2036 (Tue, 20 Oct 2026)
-- JPMorgan Flips Bullish on Bitcoin Over the Next Ten Years (Tue, 20 Oct 2026)
-
-### XOM — 177.86 (2026-10-20)
-1 week +2.2%, 1 month +12.4%; above its 200-day average; ADX 28.
-Signals for the next open: none.
-Headlines:
+- Should You Forget ExxonMobil and Buy Cameco Stock Instead? (Thu, 22 Oct 2026)
+- Is Exxon Mobil's Next Big Thing Already Here? (Thu, 22 Oct 2026)
+- Can ExxonMobil Strengthen Its Long-Term Upstream Production Capacity? (Wed, 21 Oct 2026)
 - The massive risk hiding inside your S&P 500 index fund (Wed, 21 Oct 2026)
 - Which Dates Could Move Exxon Mobil Stock Most? (Wed, 21 Oct 2026)
-- ExxonMobil Hits a New All-Time High. Is It Too Late to Buy the Stock? (Tue, 20 Oct 2026)
-- ExxonMobil’s Dividend Has Deep Pockets, but a Shallow Yield (Tue, 20 Oct 2026)
-- Better Oil Stock: Chevron (CVX) vs. ExxonMobil (XOM) (Mon, 19 Oct 2026)
 
-### COIN — 170.85 (2026-10-20)
-1 week -6.0%, 1 month -15.0%; below its 200-day average; ADX 17.
+### COIN — 177.08 (2026-10-21)
+1 week +2.4%, 1 month -11.9%; below its 200-day average; ADX 16.
 Signals for the next open: none.
 Headlines:
-- Pearl Crypto Price Explodes: Coinbase Buzz Fuels Mystery Rally (Wed, 21 Oct 2026)
-- Crypto and Beyond? Here's Why Robinhood is a Better Buy Than Coinbase Today (Wed, 21 Oct 2026)
-- What Could Coinbase Global (COIN) New Crypto Rules Mean For Stock Investors? (Wed, 21 Oct 2026)
-- Stablecoin Transfers Hit $891 Billion in Third Quarter: Report (Tue, 20 Oct 2026)
-- Coinbase Global, Inc. (COIN) Outpaces Stock Market Gains: What You Should Know (Tue, 20 Oct 2026)
+- Coinbase Ireland fined €3.25M by Irish regulators over safeguarding breaches (Thu, 22 Oct 2026)
+- Coinbase Global's Irish Unit Fined $3.6 Million for Outsourcing, Safeguarding Failures (Thu, 22 Oct 2026)
+- Should One Shrinking Number Scare You About Coinbase Stock? (Thu, 22 Oct 2026)
+- Coinbase’s Tokenized Stocks Are Seeing About $20 Million a Week, According to John D’Agostino (Thu, 22 Oct 2026)
+- Coinbase (COIN) stock is up, what you need to know (Wed, 21 Oct 2026)
 
-### QQQ — 717.63 (2026-10-20)
-1 week -3.5%, 1 month -3.2%; above its 200-day average; ADX 20.
+### QQQ — 725.20 (2026-10-21)
+1 week -0.5%, 1 month -3.0%; above its 200-day average; ADX 21.
 Signals for the next open: none.
 Headlines:
-- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday as AI Stocks Rebound Amid Corporate Earnings (Wed, 21 Oct 2026)
-- Stock Market Today: Tech Futures Rise With SpaceX Earnings; Meta, Tesla Set To Report Later (Live Coverage) (Wed, 21 Oct 2026)
-- Ken Griffin: There Are “Almost Certainly Bubbles” in AI Right Now (Wed, 21 Oct 2026)
-- Super Micro Surges 12% as Preliminary Revenue Tops Guidance Range; Dell Jumps 7%, Hewlett Packard Enterprise Climbs 5% (Wed, 21 Oct 2026)
+- Exchange-Traded Funds, Equity Futures Lower Pre-Bell Thursday Amid Jobless Claims Data Release (Thu, 22 Oct 2026)
+- Questcorp Mining to Exercise Option to Acquire 100% of North Island Copper Project (Thu, 22 Oct 2026)
+- Stock Market Today: Dow Falls As Oil Prices Jump; Meta, Tesla Slide On Earnings (Live Coverage) (Thu, 22 Oct 2026)
+- Tesla Falls 4% as Profit Shrinks and Musk Trims Sales Target; Rivian and Lucid Slip (Thu, 22 Oct 2026)
+- Meta Falls 3% as Higher AI Spending Outlook Overshadows Earnings Beat; Alphabet Dips, Microsoft Holds Steady (Thu, 22 Oct 2026)
 
-### IWM — 275.78 (2026-10-20)
-1 week -0.3%, 1 month -3.4%; below its 200-day average; ADX 41.
+### IWM — 276.48 (2026-10-21)
+1 week +1.9%, 1 month -3.7%; below its 200-day average; ADX 39.
 Signals for the next open: none.
 Headlines:
 - Small-Cap Stocks Are in Grave Danger Thanks to an Impending Debt Cliff. Use These 2 ETFs for Protection and Profit. (Mon, 12 Oct 2026)
-- Forget IWM: This Screened Small-Cap Fund Beat It Year to Date, Over One Year and Over Five Years (Thu, 01 Oct 2026)
 - Hertz Rebounds 16% From a Record Low; Avis Climbs 5%, Ryder Ticks Up (Tue, 06 Oct 2026)
 - NYSE Expands Trading Beyond the Bell. An Expert Weighs In. (Tue, 20 Oct 2026)
 - What It Takes to Launch an ETF In Today's Market (Sat, 17 Oct 2026)
+- ETF Fund Flows: Small-Cap Focused IWM Nets $2.2 Billion (Fri, 16 Oct 2026)
 
-### TLT — 80.13 (2026-10-20)
-1 week +2.2%, 1 month -1.6%; below its 200-day average; ADX 23.
+### TLT — 80.24 (2026-10-21)
+1 week +1.7%, 1 month -1.5%; below its 200-day average; ADX 22.
 Signals for the next open: none.
 Headlines:
 - China's Treasury Pile Is Shrinking on Paper. The Custody Data Tell a Different Story (Mon, 19 Oct 2026)
 - Treasuries Rallied as Tech Slid, and the Crowded Bet Against Bonds Felt It (Mon, 19 Oct 2026)
 - Investors Have Poured $2.15 Billion Into One ETF This Month. Those Bets Are Paying Off. (Thu, 15 Oct 2026)
 - Bond Market Mayhem: History Says This Is the 1 Thing That Matters Most for Investors (Wed, 14 Oct 2026)
-- Too Many Investors Don’t Understand How Bonds Work (Mon, 12 Oct 2026)
+- Investors Just Poured Nearly $12 Billion Into This Battered ETF — and the Reason Could Surprise Wall Street (Mon, 19 Oct 2026)
 
-### USO — 160.61 (2026-10-20)
-1 week +4.9%, 1 month +8.4%; above its 200-day average; ADX 26.
+### USO — 159.80 (2026-10-21)
+1 week +4.1%, 1 month +10.9%; above its 200-day average; ADX 26.
 Signals for the next open: none.
 Headlines:
 - Energy ETFs: How to Play the Sector's Surge (Tue, 20 Oct 2026)
 - Exchange-Traded Funds Gain as US Equities Advance After Midday (Tue, 20 Oct 2026)
 - USO, UCO Gain Premarket As Brent Crude Hits 5-Month High — Middle East Shipping Attacks Fuel Supply Fears (Tue, 20 Oct 2026)
+- Sector Update: Energy Stocks Lean Lower Premarket Wednesday (Wed, 21 Oct 2026)
 - Sector Update: Energy Stocks Edge Higher Premarket Tuesday (Tue, 20 Oct 2026)
-- Exchange-Traded Funds Higher as US Equities Rise After Midday (Mon, 19 Oct 2026)
 
 ## Paper account
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-21 13:23 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-22 13:25 UTC.
 
-**Equity $94,219** (-5.78%) · max drawdown -7.0% · 44 closed trades · 2 open
+**Equity $94,626** (-5.37%) · max drawdown -7.0% · 44 closed trades · 3 open
 
 
 ## AI analyst track record
@@ -284,7 +285,7 @@ market picture give an edge over the next 1–20 trading days. Rules:
 - Flag scheduled events that could gap the price (earnings, Fed decision, jobs report).
 - Explain your reasoning in 1–3 sentences a finance student can check later.
 
-Write a JSON list to `paper/ai_views/2026-10-21.json`, one object per asset:
+Write a JSON list to `paper/ai_views/2026-10-22.json`, one object per asset:
 `{"asset": "NVDA", "bias": -2..2, "confidence": 0..1, "horizon_days": 1..20,
   "key_events": ["..."], "reasoning": "..."}`
 Then run `python -m pytest -q tests/test_analyst.py` to check the file parses.

@@ -1,0 +1,209 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Up 3.1% in a week, but headlines are split (crypto gains wiped out as oil tops $111; miners moving coins to exchanges). No 1-20 day edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Flat-to-up week inside a -7.9% month; product and lending headlines are not price-moving. No call."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Treasury-company and staking headlines only; no edge."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 17 Nov"
+  ],
+  "reasoning": "Chip stocks fell on Lam Research's supply-chain warning; one supplier's comment is not enough for a call."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "reported 21 Oct"
+  ],
+  "reasoning": "Slid after earnings on lower capex plans and SpaceX-merger worries; post-earnings drift failed our own tests (5/14), so no call despite the short signal."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Below its 200-day average, small rebound this week; no new information."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "+4.1% bounce in a -13.9% month; headlines are old. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 2 Nov"
+  ],
+  "reasoning": "No company-specific news; macro opinion pieces only. No edge."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 28 Oct",
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Held steady while META fell on AI spending; earnings and the Fed on the same day next week. Event risk, no direction."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 29 Oct"
+  ],
+  "reasoning": "Up 3.3% in a week; partnership headlines only. Earnings next Thursday. No call."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "reported 21 Oct"
+  ],
+  "reasoning": "Beat on earnings but fell on an $825bn AI spending outlook and a share-structure overhang; the reaction is already priced. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 28 Oct",
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Dipped with META's AI-spending worries; below its 200-day average with a squeeze-breakout short signal, but earnings next week. No call."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 3 Nov"
+  ],
+  "reasoning": "Chip stocks fell on supply-chain constraints; opinion pieces both ways. No edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 9 Dec"
+  ],
+  "reasoning": "AI revenue +221% is known; chip-sector weakness today. No call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "reported 20 Oct"
+  ],
+  "reasoning": "Still falling after the guidance cut (-7.8% in a week, below its 200-day average); our trend rules show SELL signals but post-earnings drift has not tested well. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Commentary that AI selling may be near its limit is a view, not news on the bank. No edge."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 30 Oct"
+  ],
+  "reasoning": "Oil above $111 supports it, already up 12% in a month; no new information beyond the price."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "earnings 29 Oct"
+  ],
+  "reasoning": "Small Irish regulatory fines; not material. No call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision 28 Oct",
+   "MSFT/GOOGL earnings 28 Oct"
+  ],
+  "reasoning": "Futures lower on oil and the META/TSLA reactions; next week's Fed and mega-cap earnings are the events. No direction."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Below its 200-day average; old headlines. No edge."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision 28 Oct"
+  ],
+  "reasoning": "Oil at $111 raises inflation worries against the bond rally of last week; the Fed next week decides. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Oil above $111 on Middle East shipping attacks; already +10.9% in a month and news-driven, can reverse fast. No call."
+ }
+]
