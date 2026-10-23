@@ -809,6 +809,15 @@
 -0.1274342487215897
 ]
 },
+"XOM|donchian_trend|+|2026-10-23 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.05R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.3092078698205235,
+-0.05013542202962773
+]
+},
 "XOM|rsi2_reversion|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
