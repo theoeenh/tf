@@ -962,6 +962,15 @@
 -0.36140068934079383
 ]
 },
+"TLT|rsi2_reversion|+|2026-10-26 13:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 25% estimated chance of profit, expected -0.26R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2462554143489759,
+-0.2602642502026278
+]
+},
 "TSLA|donchian_trend|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
