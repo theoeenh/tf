@@ -15,33 +15,8 @@
    "max_loss": 2798.0,
    "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
    "opened": "2026-10-05 15:55",
-   "id": "long_call-MSFT-2026-10-05"
-  },
-  {
-   "playbook": "bear_call_spread",
-   "underlying": "IWM",
-   "legs": [
-    {
-     "symbol": "IWM261120C00295000",
-     "qty": 4,
-     "price": 1.27
-    },
-    {
-     "symbol": "IWM261120C00286000",
-     "qty": -4,
-     "price": 3.2
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": -772.0,
-   "max_loss": 2860.0,
-   "desc": "sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9",
-   "opened": "2026-10-08 15:27",
-   "id": "bear_call_spread-IWM-2026-10-08",
-   "done_legs": [
-    "IWM261120C00286000"
-   ],
-   "partial": -488.0
+   "id": "long_call-MSFT-2026-10-05",
+   "partial": 0.0
   },
   {
    "playbook": "long_put",
@@ -59,28 +34,6 @@
    "desc": "IWM Dec 18 2026 284 Put, delta -0.60",
    "opened": "2026-10-20 14:29",
    "id": "long_put-IWM-2026-10-20"
-  },
-  {
-   "playbook": "bull_put_spread",
-   "underlying": "MSFT",
-   "legs": [
-    {
-     "symbol": "MSFT261218P00470000",
-     "qty": 1,
-     "price": 5.9
-    },
-    {
-     "symbol": "MSFT261218P00505000",
-     "qty": -1,
-     "price": 13.0
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": -710.0,
-   "max_loss": 2809.0,
-   "desc": "sell 505 / buy 470 puts, 2026-12-18, credit 6.91 on width 35",
-   "opened": "2026-10-20 14:29",
-   "id": "bull_put_spread-MSFT-2026-10-20"
   },
   {
    "playbook": "long_put",
@@ -631,6 +584,65 @@
    "closed": "2026-10-21 13:56",
    "why_closed": "half the credit earned (buy back $180 vs $456 received)",
    "pnl": 292.0
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "IWM",
+   "legs": [
+    {
+     "symbol": "IWM261120C00295000",
+     "qty": 4,
+     "price": 1.27
+    },
+    {
+     "symbol": "IWM261120C00286000",
+     "qty": -4,
+     "price": 3.2
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -772.0,
+   "max_loss": 2860.0,
+   "desc": "sell 286 / buy 295 calls, 2026-11-20, credit 1.85 on width 9",
+   "opened": "2026-10-08 15:27",
+   "id": "bear_call_spread-IWM-2026-10-08",
+   "done_legs": [
+    "IWM261120C00286000",
+    "IWM261120C00295000"
+   ],
+   "partial": -488.0,
+   "closed": "2026-10-23 14:31",
+   "why_closed": "15 days held",
+   "pnl": 476.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261218P00470000",
+     "qty": 1,
+     "price": 5.9
+    },
+    {
+     "symbol": "MSFT261218P00505000",
+     "qty": -1,
+     "price": 13.0
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -710.0,
+   "max_loss": 2809.0,
+   "desc": "sell 505 / buy 470 puts, 2026-12-18, credit 6.91 on width 35",
+   "opened": "2026-10-20 14:29",
+   "id": "bull_put_spread-MSFT-2026-10-20",
+   "done_legs": [
+    "MSFT261218P00505000",
+    "MSFT261218P00470000"
+   ],
+   "closed": "2026-10-23 14:31",
+   "why_closed": "account A closed the stock",
+   "pnl": -275.0
   }
  ]
 }
