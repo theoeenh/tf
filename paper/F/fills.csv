@@ -183,3 +183,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-23 14:34:57,bear_call_spread,IWM,IWM261120C00295000,sell,4,4,0.48,filled,"close: 15 days held"
 2026-10-23 14:34:59,bull_put_spread,MSFT,MSFT261218P00505000,buy,1,1,16.25,filled,"close: account A closed the stock"
 2026-10-23 14:35:01,bull_put_spread,MSFT,MSFT261218P00470000,sell,1,1,6.4,filled,"close: account A closed the stock"
+2026-10-23 14:59:44,long_call,MSFT,MSFT261120C00520000,sell,1,0,,canceled,"close: account A closed the stock"
