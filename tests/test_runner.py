@@ -74,3 +74,18 @@ def test_each_universe_has_its_own_recent_filings_and_both_are_loaded(tmp_path, 
     t = wide.load_insider()
     assert sorted(t["accession"]) == ["a", "b"]  # union, the shared filing once
     assert wide.recent_paths("insider_recent_all")[1].name == "insider_recent_all_days.txt"
+
+
+def test_orders_carry_the_last_session_replayed():
+    """The broker sync checks the prices since that session for stops filled at Alpaca (2026-10-23:
+    without it account D bought PRIM back after its stop had sold it)."""
+    df = _df(5, "2026-10-19")
+    live = [{"asset": "PRIM", "strategy": "s", "side": 1, "qty": 32.3, "stop": 63.76, "target": None,
+             "mark": 66.89, "entry": 75.47, "unrealised_r": -0.69}]
+    o = RN.position_orders(live, {"PRIM": df})[0]
+    assert o["bar"] == "2026-10-23" and o["qty"] == 32.3 and o["r"] == -0.69
+    c = F.Candidate("insider_cluster", {"buyers": 3, "days": 90}, dict(F.DAILY_RULES["hold 20 days"]), data="daily500")
+    long = _df(300, "2025-08-20")
+    sig = {"X": pd.Series(0, long.index)}
+    sig["X"].iloc[-1] = 1
+    assert RN.pending_entries(c, sig, {"X": long}, set(), 100_000)[0]["bar"] == f"{long.index[-1]:%Y-%m-%d}"

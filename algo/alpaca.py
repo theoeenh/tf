@@ -153,25 +153,30 @@ def bar_range(symbols) -> dict[str, tuple[float, float]]:
     "bar" in orders.json; else the last line of equity.csv, hourly accounts only): the prices its next
     bar will contain. IEX minute bars (the free real-time feed). Per stock because equity.csv already
     has the hour that just ended when only crypto's bar is final (stock data is 15 minutes late):
-    2026-10-20 14:01 UTC, a range from 14:00 missed AAPL's stop at the 13:30 open (engine, shadow)."""
+    2026-10-20 14:01 UTC, a range from 14:00 missed AAPL's stop at the 13:30 open (engine, shadow).
+    A daily account's "bar" is a date (algo.runner): its range is the whole next session (2026-10-23:
+    account D's PRIM stop filled at 9:45, the price came back above it and the 10:50 run bought PRIM back)."""
     path = PAPER_DIR / "equity.csv"
     stocks = sorted(s for s in symbols if "/" not in s)
-    if not stocks or not path.exists():
-        return {}
-    last = path.read_text().strip().splitlines()[-1].split(",")[0]
-    if len(last) < 16:  # a daily account: not used
+    if not stocks:
         return {}
     from datetime import datetime, timedelta, timezone
 
     def end_of(bar: str) -> datetime:
+        if len(bar) == 10:  # a daily bar: the session ends that day
+            return datetime.fromisoformat(bar).replace(tzinfo=timezone.utc) + timedelta(days=1)
         return datetime.fromisoformat(bar[:19]).replace(tzinfo=timezone.utc) + timedelta(hours=1)
 
-    starts = {s: end_of(last) for s in stocks}
+    last = path.read_text().strip().splitlines()[-1].split(",")[0] if path.exists() else ""
+    starts = {s: end_of(last) for s in stocks} if len(last) >= 16 else {}  # hourly accounts
     orders = PAPER_DIR / "orders.json"
     for o in json.loads(orders.read_text()) if orders.exists() else []:
         sym = SYMBOLS.get(o.get("asset"), o.get("asset"))
-        if sym in starts and o.get("bar"):
-            starts[sym] = min(starts[sym], end_of(str(o["bar"])))
+        if sym in stocks and o.get("bar"):
+            starts[sym] = min(starts.get(sym, end_of(str(o["bar"]))), end_of(str(o["bar"])))
+    stocks = sorted(starts)
+    if not stocks:
+        return {}
     start = min(starts.values())
     if start > datetime.now(timezone.utc):
         return {}

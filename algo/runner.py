@@ -108,8 +108,16 @@ def pending_entries(c: F.Candidate, sig: dict, prices: dict, held: set, equity: 
         qty = min(qty, MAX_GROSS * equity / close / 4)  # never more than half the gross limit on one stock
         out.append({"asset": a, "ticker": a, "strategy": c.family, "qty": float(qty),
                     "stop": close - risk_each, "target": None, "mark": close, "entry": close, "r": 0.0,
-                    "pending": True})
+                    "pending": True, "bar": f"{df.index[-1]:%Y-%m-%d}"})
     return out
+
+
+def position_orders(live: list[dict], prices: dict[str, pd.DataFrame]) -> list[dict]:
+    """orders.json entries of the replay's open positions. "bar": the last session replayed, so the
+    broker sync knows since when a stop may have filled (algo.alpaca.bar_range)."""
+    return [{"asset": p["asset"], "ticker": p["asset"], "strategy": p["strategy"], "qty": p["side"] * p["qty"],
+             "stop": p["stop"], "target": p["target"], "mark": p["mark"], "entry": p["entry"],
+             "r": p.get("unrealised_r", 0.0), "bar": f"{prices[p['asset']].index[-1]:%Y-%m-%d}"} for p in live]
 
 
 def update(fetch_insider: bool = True) -> dict:
@@ -153,9 +161,7 @@ def update(fetch_insider: bool = True) -> dict:
         trades = res.trades_df
     else:
         equity, live, trades = float(cfg["capital"]), [], pd.DataFrame()
-    orders = [{"asset": p["asset"], "ticker": p["asset"], "strategy": p["strategy"], "qty": p["side"] * p["qty"],
-               "stop": p["stop"], "target": p["target"], "mark": p["mark"], "entry": p["entry"],
-               "r": p.get("unrealised_r", 0.0)} for p in live]
+    orders = position_orders(live, prices)
     pend = [] if blocked else pending_entries(c, sig, prices, {o["asset"] for o in orders}, equity)
     (PAPER_DIR / "orders.json").write_text(json.dumps(orders + pend, indent=1, default=float))
     if len(trades):

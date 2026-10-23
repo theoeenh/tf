@@ -704,3 +704,29 @@ def test_stop_next_to_a_pending_buy_waits_for_the_next_run(monkeypatch, tmp_path
     assert [(o["side"], o["qty"], o["time_in_force"], o.get("order_class", "")) for o in sent] == [
         ("buy", 77, "opg", ""), ("buy", 0.921665, "day", ""), ("sell", 61, "gtc", "oco")]
     assert "0.134829 AAPL     stop 343.6" in capsys.readouterr().out
+
+
+def test_daily_account_range_covers_the_session_after_its_last_bar(monkeypatch, tmp_path):
+    """2026-10-23: account D's PRIM stop (63.76) filled at 9:45 (low 62.60); at 10:50 the price was back
+    at 64 and, with no range for a daily account, the run bought PRIM back."""
+    import json
+
+    from algo import alpaca
+
+    (tmp_path / "orders.json").write_text(json.dumps([
+        {"asset": "PRIM", "qty": 32.34, "stop": 63.7567, "target": None, "bar": "2026-10-22"},
+        {"asset": "PEP", "qty": 48.9, "stop": 130.47, "target": None}]))      # no bar: no range
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    calls = []
+
+    def fake(path, params):
+        calls.append(dict(params))
+        return {"bars": {"PRIM": [{"t": "2026-10-23T12:00:00Z", "l": 60.0, "h": 61.0},   # pre-market
+                                  {"t": "2026-10-23T13:45:00Z", "l": 62.595, "h": 65.1},
+                                  {"t": "2026-10-23T14:50:00Z", "l": 63.9, "h": 64.4}]}}
+
+    monkeypatch.setattr(alpaca, "get_data", fake)
+    seen = alpaca.bar_range(["PEP", "PRIM"])
+    assert calls[0]["start"] == "2026-10-23T00:00:00Z" and calls[0]["symbols"] == "PRIM"
+    assert seen == {"PRIM": (62.595, 65.1)}
+    assert alpaca.through_stop({"asset": "PRIM", "qty": 32.34, "stop": 63.7567}, {"PRIM": 64.3}, seen)
