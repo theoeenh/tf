@@ -1,23 +1,20 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-23 16:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-23 17:22 UTC.
 
-**Equity $93,390** (-6.61%) · max drawdown -8.0% · 57 closed trades · 4 open
+**Equity $93,020** (-6.98%) · max drawdown -8.2% · 57 closed trades · 5 open
 
 ## Open positions
 
-- **LONG 69.8168 AAPL** (donchian_trend) since 2026-10-23 13:00, entry 349.22, stop 344.40, target 358.87, now -0.27R  
+- **LONG 69.8168 AAPL** (donchian_trend) since 2026-10-23 13:00, entry 349.22, stop 344.40, target 358.87, now -0.55R  
   *Thinking:* LONG AAPL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 15 = chop market, low volatility (ATR 0.6% of price). Plan: entry 349.22, stop 344.40, target 358.87 (2:1); risking $337.
-- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +2.38R  
+- **LONG 30.9780 AAPL** (rsi2_reversion) since 2026-10-09 14:00, entry 332.61, stop 326.18, target 351.89, now +2.17R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, high volatility (ATR 0.8% of price). Plan: entry 332.61, stop 326.18, target 351.89 (3:1); risking $199.
-- **LONG 70.3238 USO** (donchian_trend) since 2026-10-23 14:00, entry 167.43, stop 162.64, target 177.01, now +0.22R  
+- **LONG 70.3238 USO** (donchian_trend) since 2026-10-23 14:00, entry 167.43, stop 162.64, target 177.01, now +0.20R  
   *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 167.43, stop 162.64, target 177.01 (2:1); risking $337.
-- **LONG 116.4927 AAPL** (opening_range) since 2026-10-23 13:00, entry 349.22, stop 346.33, target 355.01, now -0.44R  
+- **LONG 116.4927 AAPL** (opening_range) since 2026-10-23 13:00, entry 349.22, stop 346.33, target 355.01, now -0.91R  
   *Thinking:* LONG AAPL (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 15 = chop market, low volatility (ATR 0.6% of price). Plan: entry 349.22, stop 346.33, target 355.01 (2:1); risking $337.
-
-## Opening now (at the open of the bar forming now)
-
-- **LONG 153.1763 XOM** (opening_range) for the 2026-10-23 16:00 bar, at about 183.09, stop 180.90, target 187.48  
+- **LONG 153.1763 XOM** (opening_range) since 2026-10-23 16:00, entry 183.09, stop 180.90, target 187.48, now -0.20R  
   *Thinking:* LONG XOM (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 27 = trend market, high volatility (ATR 0.8% of price). Plan: entry 183.09, stop 180.90, target 187.48 (2:1); risking $336.
 
 ## Closed trades (newest first)
