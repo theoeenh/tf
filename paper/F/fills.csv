@@ -178,3 +178,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-21 13:58:04,bear_call_spread,NFLX,NFLX261218C00078000,buy,4,4,0.61,filled,"close: half the credit earned (buy back $180 vs $456 received)"
 2026-10-21 13:58:06,bear_call_spread,NFLX,NFLX261218C00085000,sell,4,4,0.2,filled,"close: half the credit earned (buy back $180 vs $456 received)"
 2026-10-21 13:58:10,long_call,PEP,PEP261120C00133000,buy,6,6,4.35,filled,"open: PEP Nov 20 2026 133 Call, delta +0.59"
+2026-10-23 14:04:40,bear_call_spread,IWM,IWM261120C00295000,sell,4,0,,canceled,"close: 15 days held"
