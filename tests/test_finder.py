@@ -849,3 +849,37 @@ def test_insider_opportunistic_exec_keeps_the_boss_breaking_the_habit(monkeypatc
     monkeypatch.setattr(ff, "_insider", lambda code="P": pd.DataFrame(rows))
     out = ff.insider_opportunistic_exec(prices, who="ceo", years=1)["AAA"]
     assert set(out.index[out == 1].strftime("%Y-%m-%d")) == {"2019-03-11", "2022-08-15"}
+
+
+def test_insider_opportunistic_wave_counts_earlier_buys_of_the_same_sector_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2022-01-03", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("A1", "A2", "A3", "B1")}
+    on = {"A1": days[10], "A2": days[15], "A3": days[20], "B1": days[12]}
+    monkeypatch.setattr(ff, "insider_opportunistic", lambda p, buyers, years: {
+        a: pd.Series((p[a].index == on[a]).astype(int), p[a].index) for a in p})
+    monkeypatch.setattr(wide, "sectors", lambda: {"A1": "Ind", "A2": "Ind", "A3": "Ind", "B1": "Tech"})
+    out = ff.insider_opportunistic_wave(prices, companies=3, window=30)
+    assert out["A3"].loc[days[20]] == 1                       # the third company of the wave
+    assert out["A1"].sum() == 0 and out["A2"].sum() == 0      # A3's later buy is not known then
+    assert out["B1"].sum() == 0                               # another sector does not count
+
+
+def test_momentum_low_short_reads_published_short_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "momentum_12_1", lambda p, top: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.momentum_low_short(prices, top=0.1, max_rank=0.25)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.momentum_low_short(prices, top=0.1, max_rank=0.25)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)

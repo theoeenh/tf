@@ -40,8 +40,10 @@ INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "inside
                     "insider_sector_laggard", "insider_low_vol",
                     "insider_high_short", "insider_momentum",
                     "insider_turn", "insider_accumulation", "insider_opportunistic",
-                    "insider_opportunistic_low_short", "insider_opportunistic_exec"}
-SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund"}  # FINRA short volume
+                    "insider_opportunistic_low_short", "insider_opportunistic_exec",
+                    "insider_opportunistic_wave"}
+SHORT_FAMILIES = {"insider_low_short", "ml_rank_short", "ml_rank_fund",  # FINRA short volume
+                  "insider_opportunistic_low_short", "momentum_low_short"}
 
 
 def complete_sessions(df: pd.DataFrame, now_ny: pd.Timestamp) -> pd.DataFrame:

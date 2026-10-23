@@ -860,6 +860,50 @@ def insider_opportunistic_exec(prices: dict, who: str = "ceo_cfo", years: int = 
     return _clusters(t, prices, buyers=1)
 
 
+def insider_opportunistic_wave(prices: dict, companies: int = 3, window: int = 30) -> dict:
+    """The best campaign (insider_sector_wave) and the newest 13/14 (insider_opportunistic) together: an
+    opportunistic insider buy (1 year of habit) on a day when at least `companies` companies of the same
+    sector (this one included) had an opportunistic insider buy within the last `window` calendar days.
+    Insiders across a sector breaking their habits at once is news about the sector, not one company's
+    yearly plan. Filings up to that day only."""
+    from . import wide
+
+    sig = insider_opportunistic(prices, buyers=1, years=1)
+    sector = wide.sectors()
+    events: dict[str, list] = {}
+    for a, s in sig.items():
+        for d in s.index[s.to_numpy() > 0]:
+            events.setdefault(sector.get(a, "?"), []).append((d, a))
+    out = {}
+    for a, s in sig.items():
+        keep = pd.Series(0, s.index)
+        sec = sector.get(a)
+        for d in s.index[s.to_numpy() > 0]:
+            names = {b for (e, b) in events.get(sec, []) if d - pd.Timedelta(days=window) < e <= d}
+            if sec and len(names | {a}) >= companies:
+                keep.loc[d] = 1
+        out[a] = keep.astype(int)
+    return out
+
+
+def momentum_low_short(prices: dict, top: float = 0.1, max_rank: float = 0.3) -> dict:
+    """Market data only, no insiders: momentum winners short sellers stay away from. At each month end,
+    the stocks in the top `top` share of the 12-month return skipping the last month (momentum_12_1)
+    whose 20-day short share of off-exchange volume (FINRA, known from the next session) ranks in the
+    lowest `max_rank` of the universe that day. Heavily shorted stocks do worse (Boehmer-Jones-Zhang
+    2008); the winners nobody bets against should keep momentum's edge with fewer of its crashes."""
+    from . import wide
+
+    sig = momentum_12_1(prices, top=top)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1024,6 +1068,14 @@ WIDE_FAMILIES = {
     "insider_opportunistic_exec": (insider_opportunistic_exec, {"who": ["ceo", "ceo_cfo"], "years": [1, 2]},
                                    {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                     "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # opportunistic insider buys in a sector-wide wave of them (2026-10-23)
+    "insider_opportunistic_wave": (insider_opportunistic_wave, {"companies": [3, 5], "window": [30, 60]},
+                                   {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                    "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market and FINRA data only: momentum winners short sellers avoid, monthly (2026-10-23)
+    "momentum_low_short": (momentum_low_short, {"top": [0.05, 0.1], "max_rank": [0.3, 0.5]},
+                           {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
