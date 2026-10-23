@@ -1,20 +1,17 @@
 # Paper account – long + trend + blackout + ML + brake 10%, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-23 15:12 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-10-23 15:22 UTC.
 
-**Equity $95,044** (-4.96%) · max drawdown -6.5% · 44 closed trades · 2 open
+**Equity $94,940** (-5.06%) · max drawdown -6.5% · 44 closed trades · 3 open
 
 ## Open positions
 
-- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +1.19R  
+- **LONG 63.1821 AAPL** (rsi2_reversion) since 2026-10-14 18:00, entry 342.03, stop 335.99, target 360.16, now +0.95R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 27 = trend market, mid volatility (ATR 0.7% of price). Plan: entry 342.03, stop 335.99, target 360.16 (3:1); risking $382.
-- **LONG 71.1538 USO** (squeeze_breakout) since 2026-10-22 18:00, entry 163.05, stop 159.76, target none (trailing), now +0.82R  
+- **LONG 5.0125 USO** (donchian_trend) since 2026-10-23 14:00, entry 167.43, stop 162.64, target 177.01, now -0.04R  
+  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 167.43, stop 162.64, target 177.01 (2:1); risking $24.
+- **LONG 71.1538 USO** (squeeze_breakout) since 2026-10-22 18:00, entry 163.05, stop 160.05, target none (trailing), now +0.79R  
   *Thinking:* LONG USO (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 16 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 163.05, stop 157.73, no target, trailing stop lets it run; risking $378.
-
-## Opening now (at the open of the bar forming now)
-
-- **LONG 5.0125 USO** (donchian_trend) for the 2026-10-23 14:00 bar, at about 167.45, stop 162.66, target 177.03  
-  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 167.45, stop 162.66, target 177.03 (2:1); risking $24.
 
 ## Closed trades (newest first)
 
@@ -151,9 +148,8 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $399. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (28)
+## Skipped by the learner (29)
 
-- 2026-10-08 19:00 AAPL donchian_trend: would have made -1.93R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-13 14:00 MSFT donchian_trend: would have made -1.02R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-13 14:00 META donchian_trend: would have made -1.01R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-13 14:00 GOOGL donchian_trend: would have made -1.02R. SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.06R (avg win +2.43R, avg loss -1.16R).
@@ -163,3 +159,4 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 - 2026-10-16 17:00 USO donchian_trend: would have made -1.01R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.21R (avg win +2.43R, avg loss -1.16R).
 - 2026-10-05 18:00 XOM squeeze_breakout: would have made +2.91R. SKIPPED by the ML learner: 33% estimated chance of profit, expected -0.07R (avg win +1.58R, avg loss -0.87R).
 - 2026-10-16 14:00 USO rsi2_reversion: would have made +3.45R. SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.10R (avg win +2.48R, avg loss -1.16R).
+- 2026-10-13 14:00 XOM donchian_trend: would have made +2.98R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.43R, avg loss -1.16R).
