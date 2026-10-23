@@ -683,6 +683,15 @@
 0.23503048133170468
 ]
 },
+"MSFT|rsi2_reversion|+|2026-10-23 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.11R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2864206689622086,
+-0.11445078244561391
+]
+},
 "MSFT|squeeze_breakout|+|2026-10-05 14:00": {
 "skip": false,
 "reason": "",
@@ -1068,6 +1077,15 @@
 "pred": [
 0.2738030559278986,
 -0.17798661856984377
+]
+},
+"USO|donchian_trend|+|2026-10-23 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3336316442814525,
+0.03753116785396027
 ]
 },
 "USO|opening_range|+|2026-10-01 16:00": {
