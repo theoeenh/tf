@@ -1,20 +1,19 @@
 # F – Options
 
-Updated 2026-10-23 14:59 UTC. **Equity $102,088** (+2.09% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-10-23 15:20 UTC. **Equity $102,105** (+2.11% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 4 | $-1,464 | $+73 | 1 / 4 |
-| long_put | 3 | 3 | $-520 | $+960 | 1 / 3 |
-| bull_put_spread | 2 | 7 | $-1,084 | $+51 | 1 / 7 |
+| long_call | 2 | 5 | $-2,044 | $+616 | 1 / 5 |
+| long_put | 3 | 3 | $-520 | $+905 | 1 / 3 |
+| bull_put_spread | 2 | 7 | $-1,084 | $-3 | 1 / 7 |
 | bear_call_spread | 1 | 5 | $-512 | $+88 | 3 / 5 |
-| spy_put_spread | 1 | 0 | $+0 | $-113 | 0 / 0 |
+| spy_put_spread | 1 | 0 | $+0 | $-121 | 0 / 0 |
 
 ## Open positions
 
-- **long_call** MSFT: MSFT Nov 20 2026 520 Call, delta +0.58 (opened 2026-10-05 15:55, cost $+2,795, most it can lose $2,798)
 - **long_put** IWM: IWM Dec 18 2026 284 Put, delta -0.60 (opened 2026-10-20 14:29, cost $+2,523, most it can lose $2,528)
 - **long_put** NFLX: NFLX Dec 18 2026 75 Put, delta -0.60 (opened 2026-10-20 15:00, cost $+2,190, most it can lose $2,214)
 - **bear_call_spread** AVGO: sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20 (opened 2026-10-20 15:35, cost $-355, most it can lose $1,657)
@@ -27,29 +26,28 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $28,520; at the quotes' mid they are worth $29,278 (difference $-758).
+Alpaca values the positions at $26,387; at the quotes' mid they are worth $27,055 (difference $-668).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261120P00310000 | 3 | $465 | $478 | book 1 |
-| AAPL261120P00327500 | -1 | $-415 | $-404 | ok |
-| AAPL261218C00335000 | 1 | $2,220 | $2,242 | ok |
-| AMZN261113P00245000 | 4 | $3,680 | $3,762 | book 0 |
-| AVGO261120C00360000 | -1 | $-460 | $-454 | ok |
-| AVGO261120C00380000 | 1 | $193 | $197 | ok |
-| AVGO261120P00347500 | 1 | $2,700 | $2,755 | ok |
-| FIS261120P00032500 | 14 | $490 | $525 | ok |
-| FIS261120P00035000 | -14 | $-1,330 | $-1,260 | ok |
-| IWM261113C00294000 | 4 | $164 | $162 | book 0 |
-| IWM261218P00284000 | 2 | $2,542 | $2,585 | ok |
-| MSFT261106P00480000 | 1 | $276 | $286 | book 0 |
-| MSFT261120C00520000 | 1 | $2,245 | $2,278 | ok |
+| AAPL261120P00310000 | 3 | $465 | $473 | book 1 |
+| AAPL261120P00327500 | -1 | $-410 | $-397 | ok |
+| AAPL261218C00335000 | 1 | $2,260 | $2,260 | ok |
+| AMZN261113P00245000 | 4 | $3,600 | $3,680 | book 0 |
+| AVGO261120C00360000 | -1 | $-440 | $-436 | ok |
+| AVGO261120C00380000 | 1 | $181 | $188 | ok |
+| AVGO261120P00347500 | 1 | $2,745 | $2,778 | ok |
+| FIS261120P00032500 | 14 | $490 | $497 | ok |
+| FIS261120P00035000 | -14 | $-1,400 | $-1,295 | ok |
+| IWM261113C00294000 | 4 | $168 | $182 | book 0 |
+| IWM261218P00284000 | 2 | $2,548 | $2,539 | ok |
+| MSFT261106P00480000 | 1 | $279 | $289 | book 0 |
 | NFLX261218C00085000 | 4 | $72 | $84 | book 0 |
-| NFLX261218P00075000 | 3 | $2,610 | $2,668 | ok |
-| PEP261120C00133000 | 6 | $2,820 | $3,063 | ok |
-| QQQ261106P00704000 | 1 | $1,233 | $1,250 | book 0 |
-| QQQ261113P00699000 | 3 | $3,828 | $3,834 | book 0 |
-| QQQ261120P00691000 | 1 | $1,227 | $1,252 | book 0 |
-| SPY261127P00715000 | 1 | $374 | $382 | ok |
-| SPY261127P00746000 | -1 | $-800 | $-810 | ok |
-| TLT261106C00079000 | 17 | $4,386 | $4,403 | book 0 |
+| NFLX261218P00075000 | 3 | $2,610 | $2,625 | ok |
+| PEP261120C00133000 | 6 | $2,820 | $3,054 | ok |
+| QQQ261106P00704000 | 1 | $1,281 | $1,302 | book 0 |
+| QQQ261113P00699000 | 3 | $3,951 | $3,894 | book 0 |
+| QQQ261120P00691000 | 1 | $1,260 | $1,286 | book 0 |
+| SPY261127P00715000 | 1 | $380 | $378 | ok |
+| SPY261127P00746000 | -1 | $-808 | $-813 | ok |
+| TLT261106C00079000 | 17 | $4,335 | $4,488 | book 0 |

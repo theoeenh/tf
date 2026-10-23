@@ -1,24 +1,6 @@
 {
  "open": [
   {
-   "playbook": "long_call",
-   "underlying": "MSFT",
-   "legs": [
-    {
-     "symbol": "MSFT261120C00520000",
-     "qty": 1,
-     "price": 27.95
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": 2795.0,
-   "max_loss": 2798.0,
-   "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
-   "opened": "2026-10-05 15:55",
-   "id": "long_call-MSFT-2026-10-05",
-   "partial": 0.0
-  },
-  {
    "playbook": "long_put",
    "underlying": "IWM",
    "legs": [
@@ -643,6 +625,30 @@
    "closed": "2026-10-23 14:31",
    "why_closed": "account A closed the stock",
    "pnl": -275.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "MSFT",
+   "legs": [
+    {
+     "symbol": "MSFT261120C00520000",
+     "qty": 1,
+     "price": 27.95
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2795.0,
+   "max_loss": 2798.0,
+   "desc": "MSFT Nov 20 2026 520 Call, delta +0.58",
+   "opened": "2026-10-05 15:55",
+   "id": "long_call-MSFT-2026-10-05",
+   "partial": 0.0,
+   "done_legs": [
+    "MSFT261120C00520000"
+   ],
+   "closed": "2026-10-23 15:17",
+   "why_closed": "account A closed the stock",
+   "pnl": -580.0
   }
  ]
 }
