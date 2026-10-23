@@ -642,3 +642,65 @@ def test_opening_auction_orders_stop_five_minutes_before_the_open():
                           "next_open": f"2026-10-22T09:{mins:02d}:00-04:00"}
     assert alpaca.opening_auction(clock(30)) and alpaca.opening_auction(clock(5))
     assert not alpaca.opening_auction(clock(4))      # 9:26: a plain market order, filled at the open
+
+
+def _aapl_auction(monkeypatch, tmp_path):
+    """Account A on 2026-10-23 before the open: 61.13 AAPL held, a second AAPL trade bought at the open."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "AAPL", "strategy": "donchian_trend", "qty": 61.134829, "stop": 343.6, "target": 358.07},
+              {"asset": "AAPL", "strategy": "donchian_trend", "qty": 77.921665, "stop": 343.6, "target": 358.07}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"AAPL": 61.134829})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: 348.0 for s in syms})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
+    return trades
+
+
+def test_auction_buy_of_a_held_stock_keeps_its_orders_queued(monkeypatch, tmp_path):
+    """2026-10-23: Alpaca refused the stop of A's 0.13 fractional AAPL share next to the queued AAPL
+    buy ("potential wash trade"), so the open orders never matched the plan and the 9:12 run cancelled
+    and re-sent everything, the auction buy included."""
+    from algo import alpaca
+
+    trades = _aapl_auction(monkeypatch, tmp_path)
+    open_ = [{"id": "1", "symbol": "AAPL", "side": "buy", "qty": "77", "type": "market", "time_in_force": "opg",
+              "order_class": "", "legs": None},
+             {"id": "2", "symbol": "AAPL", "side": "buy", "qty": "0.921665", "type": "market",
+              "time_in_force": "day", "order_class": "", "legs": None},
+             {"id": "3", "symbol": "AAPL", "side": "sell", "qty": "61", "type": "limit", "limit_price": "358.07",
+              "time_in_force": "gtc", "order_class": "oco",
+              "legs": [{"id": "4", "type": "stop", "stop_price": "343.6"}]}]
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
+                        {"is_open": False} if p == "/v2/clock" else open_)
+    assert alpaca.already_queued(trades, {"AAPL": 348.42})
+
+
+def test_stop_next_to_a_pending_buy_waits_for_the_next_run(monkeypatch, tmp_path, capsys):
+    from algo import alpaca, notify
+
+    trades = _aapl_auction(monkeypatch, tmp_path)
+    sent = []
+    monkeypatch.setattr(alpaca, "_send", lambda o: sent.append(o) or {"id": f"id{len(sent)}"})
+    monkeypatch.setattr(alpaca, "_wait", lambda check, seconds=20.0: check())
+    monkeypatch.setattr(notify, "send", lambda *a, **k: True)
+
+    def request(m, p, b=None, base=None):
+        if p == "/v2/clock":
+            return {"is_open": False}
+        if p.startswith("/v2/orders/id"):
+            o = sent[int(p.rsplit("id", 1)[1]) - 1]
+            return {"status": "accepted", "side": o["side"], "qty": str(o["qty"]), "filled_qty": "0"}
+        if p == "/v2/account":
+            return {"equity": "96000"}
+        raise AssertionError(p)
+
+    monkeypatch.setattr(alpaca, "request", request)
+    alpaca._trade_and_protect(True, trades, {"AAPL": 348.42})
+    assert [(o["side"], o["qty"], o["time_in_force"], o.get("order_class", "")) for o in sent] == [
+        ("buy", 77, "opg", ""), ("buy", 0.921665, "day", ""), ("sell", 61, "gtc", "oco")]
+    assert "0.134829 AAPL     stop 343.6" in capsys.readouterr().out

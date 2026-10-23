@@ -335,6 +335,19 @@ def protect(sym: str, held: float, trades: list[dict], price: float | None = Non
     return out
 
 
+def no_wash(protective: list[dict], pending: set[tuple[str, str]]) -> tuple[list[dict], list[dict]]:
+    """Split the protective orders into those to send now and those that wait: Alpaca refuses a plain
+    stop on a stock with an opposite-side order pending ("potential wash trade"; an OCO is accepted).
+    `pending`: (symbol, side) of the market orders not filled yet. The stop goes out with the next run,
+    once the order has filled (2026-10-23: A's AAPL buy queued for the opening auction made Alpaca refuse
+    the stop of the AAPL shares already held, so the 9:12 run found its orders different from the plan
+    and cancelled and re-sent all of them, the auction buy included)."""
+    back = {"buy": "sell", "sell": "buy"}
+    wait = [o for o in protective if o["type"] == "stop" and o.get("order_class") != "oco"
+            and (o["symbol"], back[o["side"]]) in pending]
+    return [o for o in protective if not any(o is w for w in wait)], wait
+
+
 def _stop_of(o: dict) -> float:
     return float(o.get("stop_price") or o["stop_loss"]["stop_price"])
 
@@ -520,6 +533,7 @@ def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
         for sym, q in sorted(have.items()):
             if abs(q) > 1e-9:
                 protective += protect(sym, q, [t for t in alive if SYMBOLS[t["asset"]] == sym], live.get(sym))
+        protective = no_wash(protective, {(o["symbol"], o["side"]) for o in todo})[0]
         want = Counter(_order_key(o) for o in todo + protective)
         open_ = Counter(_order_key(o) for o in request("GET", "/v2/orders?status=open&nested=true"))
     except (AlpacaError, OSError, KeyError, ValueError, TypeError):
@@ -623,7 +637,7 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
         print("Positions already match the paper account.")
 
     # 3) protect what is held once the market orders have filled
-    unfilled = []
+    unfilled, pending = [], set()
     if send:
         done = ("filled", "canceled", "rejected", "expired")
         _wait(lambda: all(request("GET", f"/v2/orders/{i}").get("status") in done for i in sent))
@@ -633,6 +647,8 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             if r.get("status") == "filled":
                 continue
             unfilled.append(sym)
+            if r.get("status") not in done:
+                pending.add((sym, r.get("side")))
             rest = float(r.get("qty") or 0) - float(r.get("filled_qty") or 0)
             if r.get("status") not in done and held.get(sym, 0.0) * (1 if r.get("side") == "buy" else -1) < 0:
                 # a pending order that shrinks the position has those shares reserved already
@@ -653,6 +669,11 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
             continue
         mine = [t for t in trades if SYMBOLS[t["asset"]] == sym]
         protective += protect(sym, q, mine, live.get(sym))
+    protective, waiting = no_wash(protective, pending)
+    for o in waiting:
+        print(f"{o['side'].upper():4s} {o['qty']:>12,.6f} {o['symbol']:8s} stop {o['stop_price']} ({o['note']})  -> "
+              f"waits for the pending {'buy' if o['side'] == 'sell' else 'sell'} to fill (Alpaca refuses it "
+              f"next to one); sent by the next run")
     for o in protective:
         lvl = (f"stop {o.get('stop_price') or o['stop_loss']['stop_price']}" if o["type"] != "market" else "")
         if o.get("order_class") == "oco":
