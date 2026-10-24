@@ -904,6 +904,40 @@ def momentum_low_short(prices: dict, top: float = 0.1, max_rank: float = 0.3) ->
     return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
 
 
+def insider_wave_low_short(prices: dict, companies: int = 3, max_rank: float = 0.3) -> dict:
+    """The best campaign with account D's filter: an insider cluster during a sector-wide wave of insider
+    buying (insider_sector_wave, 2 buyers) in a stock short sellers are not betting against (20-day short
+    share of off-exchange volume, FINRA, known from the next session, in the lowest `max_rank` that day)."""
+    from . import wide
+
+    sig = insider_sector_wave(prices, buyers=2, companies=companies)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
+def sector_momentum(prices: dict, top: int = 3, ma: int = 200) -> dict:
+    """Market data only: account B's idea (trend + momentum, monthly) inside the stock market. At each
+    month end, rank the sectors by the median 12-1 month return of their stocks; buy the stocks of the
+    `top` sectors that trade above their own `ma`-day average. Closes up to that day only."""
+    from . import wide
+
+    close = _panel(prices)
+    ret = close.shift(21) / close.shift(252) - 1
+    sector = pd.Series({a: wide.sectors().get(a) for a in close.columns}).dropna()
+    med = ret[sector.index].T.groupby(sector).median().T                       # date x sector
+    best = med.rank(axis=1, ascending=False, method="first") <= top
+    in_best = pd.DataFrame({a: best[sector[a]] for a in sector.index}, index=close.index).reindex(columns=close.columns,
+                                                                                                   fill_value=False)
+    above = close > close.rolling(ma, min_periods=ma).mean()
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    return _own((in_best & above & month_end.to_numpy()[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1076,6 +1110,14 @@ WIDE_FAMILIES = {
     "momentum_low_short": (momentum_low_short, {"top": [0.05, 0.1], "max_rank": [0.3, 0.5]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                             "segments": ["sp1500"], "trend": False}),
+    # insider waves where short sellers are not against the stock (2026-10-24)
+    "insider_wave_low_short": (insider_wave_low_short, {"companies": [3, 5], "max_rank": [0.3, 0.5]},
+                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: the strongest sectors' stocks above their average, monthly (2026-10-24)
+    "sector_momentum": (sector_momentum, {"top": [2, 3], "ma": [100, 200]},
+                        {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

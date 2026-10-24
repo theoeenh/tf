@@ -883,3 +883,39 @@ def test_momentum_low_short_reads_published_short_data_only(monkeypatch):
     b = ff.momentum_low_short(prices, top=0.1, max_rank=0.25)
     assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
     assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_insider_wave_low_short_reads_published_short_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_sector_wave", lambda p, buyers, companies: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_wave_low_short(prices, companies=3, max_rank=0.25)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_wave_low_short(prices, companies=3, max_rank=0.25)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=320)
+    up = pd.Series(100 * 1.002 ** np.arange(320), index=days)
+    down = pd.Series(100 * 0.999 ** np.arange(320), index=days)
+    prices = {"U1": pd.DataFrame({"Close": up}), "U2": pd.DataFrame({"Close": up * 1.1}),
+              "D1": pd.DataFrame({"Close": down}), "D2": pd.DataFrame({"Close": down * 0.9})}
+    monkeypatch.setattr(wide, "sectors", lambda: {"U1": "Tech", "U2": "Tech", "D1": "Energy", "D2": "Energy"})
+    full = ff.sector_momentum(prices, top=1, ma=100)
+    assert full["U1"].sum() > 0 and full["D1"].sum() == 0
+    month_ends = full["U1"].index[full["U1"] == 1]
+    assert all(d.month != (d + pd.offsets.BDay(1)).month for d in month_ends[:-1])  # month ends (+ the data's end)
+    part = ff.sector_momentum({a: df.iloc[:280] for a, df in prices.items()}, top=1, ma=100)
+    assert (full["U1"].iloc[:279] == part["U1"].iloc[:279]).all()
