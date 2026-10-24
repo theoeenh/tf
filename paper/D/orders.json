@@ -34,5 +34,18 @@
   "entry": 130.9404375,
   "r": 0.5905844662458186,
   "bar": "2026-10-23"
+ },
+ {
+  "asset": "CLF",
+  "ticker": "CLF",
+  "strategy": "insider_low_short",
+  "qty": 156.37436130394988,
+  "stop": 11.347175602213742,
+  "target": null,
+  "mark": 13.9,
+  "entry": 13.9,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-23"
  }
 ]

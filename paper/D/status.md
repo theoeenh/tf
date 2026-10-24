@@ -13,7 +13,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **CLF** 156.37 shares around 13.90, stop 11.35
 
 ## Closed trades
 
