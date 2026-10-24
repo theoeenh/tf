@@ -7,7 +7,6 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 
 ## Open positions
 
-None.
 - **SPY** (idle cash) 121.77 shares, now 759.97
 
 ## New signals (bought at the next open)
