@@ -215,3 +215,27 @@ def test_an_unwind_that_does_not_fill_goes_out_at_market(monkeypatch):
     assert calls == [("L", "buy", 2), ("S", "sell", 2),
                      ("L", "sell", 2), ("L", "sell", 2, "market"),   # the long puts, and
                      ("S", "buy", 1), ("S", "buy", 1, "market")]     # the short put sold in part
+
+
+def test_leftover_legs_approved_by_the_user_are_sold_and_nothing_else(monkeypatch):
+    """2026-10-24, user's go: sell the legs Alpaca holds beyond the book (left by the bugs fixed on 22 Oct)."""
+    book = {"open": [{"underlying": "AAPL", "playbook": "bull_put_spread",
+                      "legs": [{"symbol": "AAPL261120P00310000", "qty": 1}, {"symbol": "AAPL261120P00327500", "qty": -1}]}]}
+    positions = [{"symbol": "AAPL261120P00310000", "qty": "3"}, {"symbol": "AAPL261120P00327500", "qty": "-1"},
+                 {"symbol": "TLT261106C00079000", "qty": "17"}, {"symbol": "QQQ261106P00704000", "qty": "1"},
+                 {"symbol": "XYZ261120C00010000", "qty": "2"}]                     # not approved: kept
+    approved = {"until": "2026-10-30", "legs": {"AAPL261120P00310000": 2, "TLT261106C00079000": 17,
+                                                 "QQQ261106P00704000": 1, "AMZN261113P00245000": 4}}  # AMZN gone
+    calls = _fake_orders(monkeypatch, {("AAPL261120P00310000", "sell"): 1.4, ("QQQ261106P00704000", "sell"): 13.5,
+                                       ("TLT261106C00079000", "sell"): (10, 2.4)})  # TLT: 10 of 17 at the bid
+    got = O.close_leftovers(book, approved, positions, pd.Timestamp("2026-10-26"), trade=True)
+    assert calls == [("AAPL261120P00310000", "sell", 2), ("QQQ261106P00704000", "sell", 1),
+                     ("TLT261106C00079000", "sell", 17), ("TLT261106C00079000", "sell", 7, "market")]
+    assert [s for s, _ in got] == ["AAPL261120P00310000", "QQQ261106P00704000", "TLT261106C00079000"]
+    # once Alpaca holds no more than the book, or after the approval's date, nothing is sold
+    left = [{"symbol": "AAPL261120P00310000", "qty": "1"}, {"symbol": "TLT261106C00079000", "qty": "17"}]
+    calls = _fake_orders(monkeypatch, {})
+    assert O.close_leftovers(book, approved, left[:1], pd.Timestamp("2026-10-27"), trade=True) == [] and calls == []
+    assert O.close_leftovers(book, approved, left, pd.Timestamp("2026-10-31"), trade=True) == [] and calls == []
+    assert O.close_leftovers(book, approved, left, pd.Timestamp("2026-10-27"), trade=False) == []  # market closed
+    assert calls == []

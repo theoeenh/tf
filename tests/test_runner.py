@@ -89,3 +89,16 @@ def test_orders_carry_the_last_session_replayed():
     sig = {"X": pd.Series(0, long.index)}
     sig["X"].iloc[-1] = 1
     assert RN.pending_entries(c, sig, {"X": long}, set(), 100_000)[0]["bar"] == f"{long.index[-1]:%Y-%m-%d}"
+
+
+def test_idle_cash_follows_spy_by_the_book_s_unused_share():
+    days = pd.bdate_range("2026-10-23", periods=4)
+    book = pd.Series([100_000.0, 100_000.0, 101_000.0, 101_000.0], days)     # +1% on day 3 from the trades
+    gross = pd.Series([0.0, 0.5, 0.5, 1.2], days)                               # half invested, then over 1
+    spy = pd.Series([500.0, 505.0, 510.05, 515.15], days)                      # about +1% a day
+    eq = RN.with_idle_spy(book, gross, spy, 94_600.0)
+    assert eq.iloc[0] == 94_600.0
+    assert abs(eq.iloc[1] / eq.iloc[0] - (1 + 0.01 - 1e-4 * 0)) < 1e-9          # all idle on day 1: SPY's +1%
+    r2 = 0.01 + 0.5 * (510.05 / 505 - 1)                                        # book +1%, half in SPY
+    assert abs(eq.iloc[2] / eq.iloc[1] - (1 + r2 - 0.5 * 1e-4)) < 1e-9
+    assert abs(eq.iloc[3] / eq.iloc[2] - (1 + 0.5 * (515.15 / 510.05 - 1))) < 1e-9  # weight from the day before

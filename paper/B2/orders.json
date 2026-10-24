@@ -1,0 +1,41 @@
+[
+ {
+  "asset": "DBC",
+  "ticker": "DBC",
+  "strategy": "trend_momentum",
+  "qty": 929.7143695014662,
+  "stop": null,
+  "target": null,
+  "mark": 34.1,
+  "entry": 34.1,
+  "r": 0.0,
+  "bar": "2026-10-23",
+  "pending": true
+ },
+ {
+  "asset": "EEM",
+  "ticker": "EEM",
+  "strategy": "trend_momentum",
+  "qty": 511.26044186421547,
+  "stop": null,
+  "target": null,
+  "mark": 62.01,
+  "entry": 62.01,
+  "r": 0.0,
+  "bar": "2026-10-23",
+  "pending": true
+ },
+ {
+  "asset": "SPY",
+  "ticker": "SPY",
+  "strategy": "trend_momentum",
+  "qty": 41.71646249194047,
+  "stop": null,
+  "target": null,
+  "mark": 759.97,
+  "entry": 759.97,
+  "r": 0.0,
+  "bar": "2026-10-23",
+  "pending": true
+ }
+]

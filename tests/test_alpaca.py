@@ -730,3 +730,21 @@ def test_daily_account_range_covers_the_session_after_its_last_bar(monkeypatch, 
     assert calls[0]["start"] == "2026-10-23T00:00:00Z" and calls[0]["symbols"] == "PRIM"
     assert seen == {"PRIM": (62.595, 65.1)}
     assert alpaca.through_stop({"asset": "PRIM", "qty": 32.34, "stop": 63.7567}, {"PRIM": 64.3}, seen)
+
+
+def test_holdings_without_a_stop_need_no_stop_order(monkeypatch, tmp_path):
+    """From 26 Oct 2026: A keeps its idle cash in SPY and B holds monthly ETFs, both without stops."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "SPY", "qty": 120.5, "stop": None, "target": None, "mark": 760.0},
+              {"asset": "FIS", "qty": 10.0, "stop": 34.89, "target": None, "mark": 37.5}]
+    assert alpaca.protect("SPY", 120.5, trades[:1], 760.0) == []
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    stop = {"symbol": "FIS", "side": "sell", "type": "stop", "qty": "10"}
+    _fake_alpaca(monkeypatch, {"SPY": 120.5, "FIS": 10.0}, [stop], {"SPY": 120.5, "FIS": 10.0})
+    assert alpaca.verify() == []
+    _fake_alpaca(monkeypatch, {"SPY": 120.5, "FIS": 10.0}, [], {"SPY": 120.5, "FIS": 10.0})
+    assert alpaca.verify() == ["FIS: 10 held, only 0 covered by a stop"]       # the stock still needs its stop

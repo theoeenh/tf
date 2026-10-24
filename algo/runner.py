@@ -122,6 +122,21 @@ def position_orders(live: list[dict], prices: dict[str, pd.DataFrame]) -> list[d
              "r": p.get("unrealised_r", 0.0), "bar": f"{prices[p['asset']].index[-1]:%Y-%m-%d}"} for p in live]
 
 
+def with_idle_spy(book_eq: pd.Series, gross: pd.Series, spy: pd.Series, capital: float) -> pd.Series:
+    """Equity of the book with the money its trades leave idle held in SPY (reports/2026-10-20-insider-spy):
+    each day SPY's weight is 1 minus the book's gross exposure at the previous close (never below 0),
+    1 bp per unit of SPY traded. Daily, from the book's first day."""
+    if not len(book_eq):
+        return pd.Series(dtype=float)
+    eq = book_eq.groupby(book_eq.index.normalize()).last()
+    g = gross.groupby(gross.index.normalize()).last().reindex(eq.index).ffill().fillna(0)
+    r_book = eq.pct_change().fillna(0)
+    r_spy = spy.reindex(eq.index).ffill().pct_change().fillna(0)
+    w = (1 - g.shift(1)).clip(lower=0).fillna(1.0)
+    cost = (w.diff().abs() * 1e-4).fillna(0)
+    return capital * (1 + r_book + w * r_spy - cost).cumprod()
+
+
 def update(fetch_insider: bool = True) -> dict:
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
     c = F.Candidate(**json.loads(cfg["candidate"]))
@@ -163,9 +178,23 @@ def update(fetch_insider: bool = True) -> dict:
         trades = res.trades_df
     else:
         equity, live, trades = float(cfg["capital"]), [], pd.DataFrame()
+        res = None
     orders = position_orders(live, prices)
     pend = [] if blocked else pending_entries(c, sig, prices, {o["asset"] for o in orders}, equity)
-    (PAPER_DIR / "orders.json").write_text(json.dumps(orders + pend, indent=1, default=float))
+    spy = []
+    if cfg.get("idle_spy"):  # account A from 26 Oct 2026: the money the trades leave idle is held in SPY
+        spy_df = load_bars(["SPY"], now_ny, since)["SPY"]
+        comb = (with_idle_spy(res.equity, res.gross, spy_df["Close"], float(cfg["capital"])) if res is not None
+                else pd.Series(dtype=float))
+        if len(comb):
+            comb.rename("equity").rename_axis("Date").to_csv(PAPER_DIR / "equity.csv", date_format="%Y-%m-%d")
+        equity = float(comb.iloc[-1]) if len(comb) else float(cfg["capital"])
+        px = float(spy_df["Close"].iloc[-1])
+        stocks = sum(abs(o["qty"]) * o["mark"] for o in orders + pend)
+        spy = [{"asset": "SPY", "ticker": "SPY", "strategy": "idle_cash_spy", "qty": max(0.0, equity - stocks) / px,
+                "stop": None, "target": None, "mark": px, "entry": px, "r": 0.0,
+                "bar": f"{spy_df.index[-1]:%Y-%m-%d}"}]
+    (PAPER_DIR / "orders.json").write_text(json.dumps(orders + pend + spy, indent=1, default=float))
     if len(trades):
         trades.to_csv(PAPER_DIR / "trades.csv", index=False)
     lines = [f"# {cfg.get('name', PAPER_DIR.name)}", "",
@@ -173,7 +202,8 @@ def update(fetch_insider: bool = True) -> dict:
              f"Data through {last.date()}. **Equity ${equity:,.0f}** ({equity / cfg['capital'] - 1:+.2%}).", "",
              cfg.get("plan", ""), "", *([f"**{blocked}**", ""] if blocked else []), "## Open positions", ""]
     lines += [f"- **{o['asset']}** {o['qty']:.2f} shares, entry {o['entry']:.2f}, stop {o['stop']:.2f}, "
-              f"now {o['mark']:.2f} ({o['r']:+.2f}R)" for o in orders] or ["None."]
+              f"now {o['mark']:.2f} ({o['r']:+.2f}R)" for o in orders] or ([] if spy else ["None."])
+    lines += [f"- **SPY** (idle cash) {o['qty']:.2f} shares, now {o['mark']:.2f}" for o in spy]
     lines += ["", "## New signals (bought at the next open)", ""]
     lines += [f"- **{o['asset']}** {o['qty']:.2f} shares around {o['mark']:.2f}, stop {o['stop']:.2f}" for o in pend] or ["None."]
     if len(trades):

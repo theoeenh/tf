@@ -375,15 +375,49 @@ def config() -> dict:
     return json.loads(p.read_text()) if p.exists() else {}
 
 
+def book_qty(book: dict) -> dict[str, float]:
+    """Contracts per option symbol the book holds (legs a half-done close has closed left out)."""
+    want: dict[str, float] = {}
+    for p in book["open"]:
+        for leg in open_legs(p):
+            want[leg["symbol"]] = want.get(leg["symbol"], 0) + leg["qty"]
+    return want
+
+
+def close_leftovers(book: dict, approved: dict, positions: list[dict], today: pd.Timestamp,
+                    trade: bool) -> list[tuple[str, dict]]:
+    """Sell the long option legs Alpaca holds beyond the book (left by the order bugs fixed on 22 Oct),
+    only those the user approved: config "close_leftovers" = {"until": date, "legs": {symbol: contracts}}
+    (user's go 2026-10-24). Never more than Alpaca holds beyond the book, so the book's own legs stay.
+    Limit at the bid first, then at market for what is left. Returns (symbol, order) per leg sold."""
+    if not trade or not approved or today > pd.Timestamp(approved.get("until", "1900-01-01")):
+        return []
+    want = book_qty(book)
+    have = {p["symbol"]: float(p["qty"]) for p in positions}
+    todo = {s: int(min(n, have.get(s, 0) - want.get(s, 0))) for s, n in approved.get("legs", {}).items()}
+    todo = {s: n for s, n in todo.items() if n > 0}
+    q = quotes(sorted(todo)) if todo else {}
+    out = []
+    for sym, n in sorted(todo.items()):
+        und = sym[:-15]  # OCC symbol: root + YYMMDD + C/P + 8-digit strike
+        bid = float((q.get(sym) or {}).get("bp") or 0.01)
+        st = _order(sym, "sell", n, bid)
+        why = "leftover leg (not in the book), sold with the user's go of 2026-10-24"
+        _log(sym, und, "leftover", "sell", n, st, why)
+        if st.get("status") != "filled":
+            left = n - int(float(st.get("filled_qty") or 0))
+            st = _market(sym, "sell", left)
+            _log(sym, und, "leftover", "sell", left, st, why + ", at market")
+        out.append((sym, st))
+    return out
+
+
 def reconcile(book: dict, q: dict, positions: list[dict]) -> list[str]:
     """Alpaca's positions next to the book's legs: the legs only one side has, and each leg's value at
     Alpaca against its value at the quotes' mid. F's equity is Alpaca's, so a leg Alpaca prices far from
     the quotes, or one the book does not know, moves it without any trade (2026-10-22: Alpaca's equity
     rose $9,450 while the book's positions gained about $1,650 on the day's moves)."""
-    want: dict[str, float] = {}
-    for p in book["open"]:
-        for leg in open_legs(p):
-            want[leg["symbol"]] = want.get(leg["symbol"], 0) + leg["qty"]
+    want = book_qty(book)
     have = {p["symbol"]: p for p in positions}
     rows, at_alpaca, at_mid = [], 0.0, 0.0
     for sym in sorted(set(want) | set(have)):
@@ -476,6 +510,18 @@ def sync(send: bool = False) -> None:
                 book["open"].remove(p)
                 book["closed"].append(p | {"closed": str(now)[:16], "why_closed": why, "pnl": got - p["cost"]})
                 save_book(book)
+
+    leftovers = cfg.get("close_leftovers")
+    if leftovers and trade:
+        try:
+            held = request("GET", "/v2/positions")
+        except (AlpacaError, OSError) as e:
+            print(f"No Alpaca positions for the leftover legs ({e}): the next run sells them.")
+            held = []
+        for sym, st in close_leftovers(book, leftovers, held, today, trade):
+            print(f"SOLD  leftover {sym}: {st.get('status')}, {st.get('filled_qty')} at {st.get('filled_avg_price')}")
+    elif leftovers:
+        print("Leftover legs approved for sale: sold by the first run during market hours.")
 
     def chain_for(und, kind, spot, dte=None):
         try:

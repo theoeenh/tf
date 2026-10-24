@@ -35,7 +35,7 @@ LOG_DIR = ROOT / "paper" / "engine"
 # The shadow decisions run in a copy of the code and accounts (prices shared), so they
 # never touch the real paper/ files: only the engine log is written to the repo.
 WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "engine-workspace"
-ACCOUNTS = {"A": "", "B": "B", "C": "C"}  # account -> folder under paper/
+ACCOUNTS = {"C": "C"}  # account -> folder under paper/ (A and B trade daily / monthly plans from 26 Oct 2026)
 DECIDE_AT = (1, 17)  # minutes past the hour: crypto bars are final at once, stocks 16 minutes late
 STOP_AFTER_CLOSE_MIN = 25  # the last stock bar (15:00-16:00) is final at 16:16
 

@@ -1,0 +1,27 @@
+[
+ {
+  "asset": "CLF",
+  "ticker": "CLF",
+  "strategy": "insider_low_short",
+  "qty": 148.2278374996888,
+  "stop": 11.347175602215781,
+  "target": null,
+  "mark": 13.9,
+  "entry": 13.9,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-23"
+ },
+ {
+  "asset": "SPY",
+  "ticker": "SPY",
+  "strategy": "idle_cash_spy",
+  "qty": 121.76736326270026,
+  "stop": null,
+  "target": null,
+  "mark": 759.97,
+  "entry": 759.97,
+  "r": 0.0,
+  "bar": "2026-10-23"
+ }
+]

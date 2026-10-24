@@ -44,6 +44,16 @@ account meets the criteria above. Then small, with the repository made private f
 
 ## Changes agreed during the freeze
 
+- **2026-10-24 (user's go):** from Monday 26 October, **A trades "insiders + SPY"** (D's insider rule
+  `1591c2bcb6`, the money the trades leave idle held in SPY; reports/2026-10-20-insider-spy/) in paper/A2/, and
+  **B trades asset-class trend + momentum** (each month the top 3 of 8 asset-class ETFs by 12-month return, only
+  those above their 10-month average, else SHY; reports/2026-10-20-trend-momentum/) in paper/B2/. Both start from
+  their paper equity at the switch (A $94,600, B $95,110); the hourly positions are sold at Monday's open. The
+  hourly books stay as records: paper/ (updated each morning as the learner's research book) and paper/B/ (no
+  longer updated). **C is unchanged** until 6 December, as the control for the hourly approach. The 5-minute
+  shadow engine follows C only. Same day: **F sells the 9 option legs** Alpaca holds beyond its book (left by
+  the order bugs fixed on 22 October), once, from the first run with the market open on 26 October
+  (paper/F/config.json "close_leftovers").
 - **2026-10-20 (user's go):** F starts the SPY put-spread playbook now instead of 7 December, and its call /
   put-spread playbooks follow account D's insider signals instead of A's (A's signals have no edge); F's long
   puts and bear call spreads pause until a bearish signal passes the finder. E renamed "E – Insider clusters

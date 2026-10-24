@@ -1,8 +1,10 @@
 # Hourly paper trading: each account trades the hour that just closed and
 # mirrors it on its own Alpaca paper account with real stop / target orders.
 #
-#   A  paper/    secrets ALPACA_API_KEY_ID,   ALPACA_API_SECRET_KEY    (PA32CKBVJRGL)
-#   B  paper/B/  secrets ALPACA_B_API_KEY_ID, ALPACA_B_API_SECRET_KEY  (PA3F9NT51E8I)
+#   A  paper/A2/ secrets ALPACA_API_KEY_ID,   ALPACA_API_SECRET_KEY    (PA32CKBVJRGL)
+#   B  paper/B2/ secrets ALPACA_B_API_KEY_ID, ALPACA_B_API_SECRET_KEY  (PA3F9NT51E8I)
+# (from 26 Oct 2026, user's go 2026-10-24: A = insiders + idle cash in SPY, B = asset-class trend +
+# momentum; their hourly books paper/ and paper/B/ are no longer traded)
 #   C  paper/C/  secrets ALPACA_C_API_KEY_ID, ALPACA_C_API_SECRET_KEY  (PA36I46L8ZXT)
 # Each account only ever uses its own keys, and the sync refuses to send if the
 # keys belong to another Alpaca account than the folder's config says.
@@ -89,12 +91,14 @@ jobs:
       fail-fast: false  # one account failing never stops the others
       matrix:
         include:
+          # A from 26 Oct 2026: D's insider rule, the idle cash in SPY (daily runner, idle_spy)
           - account: A
-            folder: ""
-            update: python -m algo.paper update
+            folder: A2
+            update: python -m algo.runner update --no-fetch  # filings + FINRA: workflow insider-backfill
+          # B from 26 Oct 2026: asset-class trend + momentum, 9 ETFs, monthly (algo/rotation.py)
           - account: B
-            folder: B
-            update: python -m algo.paper update
+            folder: B2
+            update: python -m algo.rotation update
           - account: C
             folder: C
             update: python -m algo.paper update

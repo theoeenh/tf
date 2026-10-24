@@ -312,6 +312,8 @@ def protect(sym: str, held: float, trades: list[dict], price: float | None = Non
         if held * float(t["qty"]) <= 0 or q <= 0:
             continue
         left -= q
+        if t.get("stop") is None:  # a holding without a stop (idle cash in SPY, a monthly rotation)
+            continue
         stop, target = float(t["stop"]), t.get("target")
         tag = f"{t.get('strategy', '')}"
         # already through the stop (e.g. the price moved since the last bar): close at market
@@ -743,6 +745,10 @@ def verify(alert: bool = False) -> list[str]:
             elif x is o and x.get("type") in ("market", "limit") and not o.get("order_class"):
                 pending[norm(x["symbol"])] = pending.get(norm(x["symbol"]), 0.0) + sign * q
     prices = last_prices()
+    core: dict[str, float] = {}  # holdings the plan keeps without a stop (idle cash in SPY, a monthly rotation)
+    for t in json.loads((PAPER_DIR / "orders.json").read_text()):
+        if t.get("stop") is None:
+            core[norm(SYMBOLS[t["asset"]])] = core.get(norm(SYMBOLS[t["asset"]]), 0.0) + abs(float(t["qty"]))
     try:
         cash = float(request("GET", "/v2/account").get("non_marginable_buying_power") or 0.0)
     except AlpacaError:
@@ -766,7 +772,7 @@ def verify(alert: bool = False) -> list[str]:
         # an exit decided after the close is a market order queued for the next open: those shares
         # are on their way out, they need no stop
         exiting = max(0.0, -math.copysign(1.0, held) * pending.get(sym, 0.0)) if held else 0.0
-        covered = stops.get(sym, 0.0) + exiting
+        covered = stops.get(sym, 0.0) + exiting + min(core.get(sym, 0.0), abs(held))
         # the fractional rest's stop is a day order (Alpaca's rule), gone after the close until the next
         # run renews it: whole shares covered is enough
         whole_covered = abs(held) - covered < 1.0 and covered >= math.floor(abs(held) + 1e-9) > 0
