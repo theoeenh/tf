@@ -1,6 +1,6 @@
-# Strategy finder – 2026-10-24
+# Strategy finder – 2026-10-25
 
-**4179 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
+**4379 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
 
 | gates | strategy | IC search | ICIR | IC valid. | avg R s / random | avg R v / random | return v | DSR | months + | regimes + | breadth | first failed gate |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -11,7 +11,7 @@
 | 13/14 | `b80970d1f6` insider_opportunistic_wave(companies=3, window=21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Utilities, daily | +1.175 | +0.45 | +0.587 | +0.20 / -0.02 | +0.03 / +0.02 | +0.5% | 0.09 | 65% | 3/3 | 87% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `68ca8b871d` insider_sector_laggard(buyers=1, lag=0.07) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.065 | +0.44 | +1.205 | +0.04 / -0.01 | +0.10 / +0.04 | +5.9% | 0.01 | 63% | 3/3 | 67% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `7ac445c110` insider_fresh(buyers=2, gap=178) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.372 | +0.44 | +1.076 | +0.11 / +0.05 | +0.15 / +0.14 | +5.0% | 0.04 | 65% | 3/3 | 71% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `421c1c271f` insider_fresh(buyers=2, gap=175) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.364 | +0.44 | +1.344 | +0.12 / +0.06 | +0.20 / +0.16 | +6.7% | 0.05 | 66% | 3/3 | 71% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `421c1c271f` insider_fresh(buyers=2, gap=175) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.364 | +0.44 | +1.344 | +0.12 / +0.06 | +0.20 / +0.16 | +6.7% | 0.04 | 66% | 3/3 | 71% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `242358a81a` insider_fresh_wave(buyers=2, companies=3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.278 | +0.43 | +1.063 | +0.10 / -0.04 | +0.10 / +0.09 | +2.6% | 0.03 | 68% | 3/3 | 78% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `86755b6c71` insider_sector_wave(buyers=3, companies=4) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.164 | +0.43 | +0.901 | +0.05 / +0.03 | +0.23 / +0.00 | +10.8% | 0.01 | 60% | 3/3 | 70% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `a5f89f69c7` insider_underwater(buyers=2, discount=0.1) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.617 | +0.42 | +1.170 | +0.15 / +0.03 | +0.18 / -0.16 | +3.3% | 0.06 | 71% | 3/3 | 88% | search: deflated Sharpe >= 0.90 |
@@ -23,16 +23,16 @@
 | 13/14 | `328f6e08bf` insider_after_earnings(buyers=4, window=78) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +0.965 | +0.36 | +0.401 | +0.05 / -0.01 | +0.24 / -0.02 | +17.4% | 0.01 | 66% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `7ea781d068` insider_after_earnings(buyers=4, window=55) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.033 | +0.36 | +0.562 | +0.05 / +0.02 | +0.19 / -0.07 | +12.2% | 0.01 | 63% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `6931885bc6` insider_after_earnings(buyers=4, window=56) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.032 | +0.36 | +0.562 | +0.05 / +0.03 | +0.19 / -0.07 | +12.2% | 0.01 | 63% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `46bb8c1223` insider_consensus(votes=3, window=30) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.056 | +0.35 | +1.433 | +0.14 / +0.02 | +0.12 / -0.17 | +2.2% | 0.05 | 55% | 3/3 | 71% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `46bb8c1223` insider_consensus(votes=3, window=30) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.056 | +0.35 | +1.433 | +0.14 / +0.02 | +0.12 / -0.17 | +2.2% | 0.04 | 55% | 3/3 | 71% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `139c078d63` insider_opportunistic(buyers=3, years=1) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +0.883 | +0.35 | +0.624 | +0.05 / +0.03 | +0.20 / +0.00 | +22.8% | 0.01 | 71% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `5171bc830e` insider_underwater(buyers=3, discount=0.21) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +0.774 | +0.35 | +0.628 | +0.05 / +0.04 | +0.19 / +0.10 | +7.7% | 0.01 | 63% | 3/3 | 73% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `51028b78a0` insider_fresh(buyers=1, gap=701) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Health Care, daily | +0.841 | +0.35 | +1.313 | +0.29 / +0.13 | +0.04 / -0.03 | +1.9% | 0.67 | 64% | 3/3 | 62% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `64a39c60ff` insider_fresh(buyers=2, gap=125) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Industrials, daily | +0.871 | +0.34 | +0.902 | +0.14 / +0.07 | +0.17 / +0.06 | +6.0% | 0.08 | 66% | 3/3 | 67% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `64a39c60ff` insider_fresh(buyers=2, gap=125) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Industrials, daily | +0.871 | +0.34 | +0.902 | +0.14 / +0.07 | +0.17 / +0.06 | +6.0% | 0.07 | 66% | 3/3 | 67% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `fda4e627ca` insider_fresh(buyers=2, gap=255) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +0.956 | +0.34 | +0.806 | +0.15 / +0.02 | +0.20 / +0.10 | +6.0% | 0.07 | 62% | 3/3 | 77% | search: deflated Sharpe >= 0.90 |
 
 ## Campaigns: each idea refined round by round (max 5 rounds)
 
-1173 ideas tried; **229 still improving** (search ICIR >= 0.2), 924 dropped below the bar, 20 finished their 5 rounds.
+1197 ideas tried; **241 still improving** (search ICIR >= 0.2), 936 dropped below the bar, 20 finished their 5 rounds.
 
 | idea → best version so far | rounds | tried | gates by round | ICIR | status |
 |---|---|---|---|---|---|
@@ -67,6 +67,7 @@
 | insider_consensus | 130 | 13/14 | +0.35 | `46bb8c1223` insider_consensus(votes=3, window=30) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily |
 | insider_opportunistic | 87 | 13/14 | +0.35 | `139c078d63` insider_opportunistic(buyers=3, years=1) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_cluster | 128 | 13/14 | +0.31 | `5aca4825d9` insider_cluster(buyers=3, days=90) · stop_atr=2.5, rr=None, max_bars=60 · no trend filter · sector Industrials, daily |
+| insider_wave_low_short | 192 | 13/14 | +0.31 | `4073a3fd7e` insider_wave_low_short(companies=5, max_rank=0.3) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily |
 | insider_fresh_officer | 204 | 13/14 | +0.30 | `c297391e1c` insider_fresh_officer(buyers=1, gap=1401) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Industrials, daily |
 | insider_low_short | 120 | 13/14 | +0.30 | `09a08ad601` insider_low_short(buyers=3, max_rank=0.42) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_opportunistic_low_short | 155 | 13/14 | +0.27 | `08cac4815e` insider_opportunistic_low_short(buyers=1, max_rank=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
@@ -100,6 +101,7 @@
 | rsi2 | 41 | 6/14 | -0.00 | `9dcb4f23b3` rsi2(rsi_n=3, threshold=5.0, trend_ma=200) · stop_atr=1.5, rr=None, max_bars=1 |
 | intraday_momentum | 15 | 6/14 | -0.22 | `52f33b3180` intraday_momentum(k=1.0) · stop_atr=2.0, rr=2.0 |
 | squeeze | 21 | 6/14 | -0.36 | `5f107ac95d` squeeze() · stop_atr=3.0, rr=None, trail_atr=4.0, adx_threshold=25.0 · stocks+etfs |
+| sector_momentum | 8 | 5/14 | +0.09 | `305c6e6e52` sector_momentum(top=2, ma=100) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | gap_fade | 15 | 5/14 | -0.17 | `63e0bb1295` gap_fade(g=1.0) · stop_atr=1.5, rr=None, max_bars=1 |
 | liquidity_sweep | 20 | 5/14 | -0.25 | `ad23174e9f` liquidity_sweep(n=35, k=0.25) · stop_atr=1.5, rr=None, max_bars=1 |
 | earnings_drift | 15 | 5/14 | -0.29 | `6493eb9de4` earnings_drift(x=2.0) · stop_atr=2.0, rr=2.0 |
@@ -110,7 +112,7 @@
 | momentum_low_short | 8 | 2/14 | -0.13 | `5845cb17fa` momentum_low_short(top=0.05, max_rank=0.3) · stop_atr=3.0, rr=None, max_bars=20 · no trend filter · S&P 1500, daily |
 | earnings_reaction | 27 | 2/14 | -0.17 | `77d24b85f6` earnings_reaction(z=1.5, volume=1.5) · stop_atr=3.0, rr=None, max_bars=20 · S&P 500, daily |
 
-## The loop: 3006 children tried (improved versions aimed at a parent's failures)
+## The loop: 3182 children tried (improved versions aimed at a parent's failures)
 
 - breadth failed: 93 tried, best 9/14 gates
 - edge peaks at 2 bars, exit at 1: 1 tried, best 6/14 gates
@@ -122,29 +124,29 @@
 - edge peaks at 40 bars, exit at 20: 1 tried, best 7/14 gates
 - edge peaks at 6 bars, exit at 1: 2 tried, best 6/14 gates
 - edge peaks at 6 bars, exit at 2: 1 tried, best 4/14 gates
-- edge peaks at 60 bars, exit at 10: 3 tried, best 7/14 gates
+- edge peaks at 60 bars, exit at 10: 9 tried, best 12/14 gates
 - edge peaks at 60 bars, exit at 2: 1 tried, best 9/14 gates
 - edge peaks at 60 bars, exit at 20: 17 tried, best 13/14 gates
 - edge peaks at 60 bars, exit at 5: 42 tried, best 13/14 gates
-- fails in some regime: 171 tried, best 11/14 gates
-- no better than random: 746 tried, best 12/14 gates
-- parameter neighbour: 1465 tried, best 13/14 gates
+- fails in some regime: 175 tried, best 11/14 gates
+- no better than random: 790 tried, best 12/14 gates
+- parameter neighbour: 1563 tried, best 13/14 gates
 - unstable / decaying: 35 tried, best 8/14 gates
-- works only in some sectors: 422 tried, best 13/14 gates
+- works only in some sectors: 446 tried, best 13/14 gates
 
 ## Why strategies fail (all attempts)
 
-- search: deflated Sharpe >= 0.90: 4179 of 4179
-- shelf life: positive in every market regime seen: 2896 of 4179
-- shelf life: no decay (2nd half >= half of 1st): 2533 of 4179
-- robust: parameter neighbours keep >= half the edge (2+ tested): 2491 of 4179
-- shelf life: positive in >= 55% of months: 2237 of 4179
-- decay: edge still >= half its peak at the exit, peak after the first bar: 2181 of 4179
-- search: ICIR >= 0.2 (stable month to month): 2025 of 4179
-- shelf life: works on >= 55% of assets (S&P 500: of sectors): 1932 of 4179
-- validation: positive edge: 1897 of 4179
-- validation: beats random entries: 1690 of 4179
-- search: beats random entries (avg R): 1511 of 4179
-- validation: makes money after costs: 1334 of 4179
-- search: at least 100 signals: 1209 of 4179
-- search: positive edge (IC): 907 of 4179
+- search: deflated Sharpe >= 0.90: 4379 of 4379
+- shelf life: positive in every market regime seen: 2996 of 4379
+- shelf life: no decay (2nd half >= half of 1st): 2651 of 4379
+- robust: parameter neighbours keep >= half the edge (2+ tested): 2553 of 4379
+- shelf life: positive in >= 55% of months: 2379 of 4379
+- decay: edge still >= half its peak at the exit, peak after the first bar: 2272 of 4379
+- search: ICIR >= 0.2 (stable month to month): 2086 of 4379
+- shelf life: works on >= 55% of assets (S&P 500: of sectors): 2065 of 4379
+- validation: positive edge: 1984 of 4379
+- validation: beats random entries: 1788 of 4379
+- search: beats random entries (avg R): 1575 of 4379
+- validation: makes money after costs: 1399 of 4379
+- search: at least 100 signals: 1335 of 4379
+- search: positive edge (IC): 922 of 4379
