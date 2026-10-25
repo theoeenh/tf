@@ -919,3 +919,39 @@ def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkey
     assert all(d.month != (d + pd.offsets.BDay(1)).month for d in month_ends[:-1])  # month ends (+ the data's end)
     part = ff.sector_momentum({a: df.iloc[:280] for a, df in prices.items()}, top=1, ma=100)
     assert (full["U1"].iloc[:279] == part["U1"].iloc[:279]).all()
+
+
+def test_insider_sector_stress_needs_the_sector_down_before_the_signal(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    fall = pd.Series(np.r_[[100.0] * 40, np.linspace(100, 80, 80)], index=days)   # the sector falls from day 40
+    flat = pd.Series(100.0, index=days)
+    prices = {"S1": pd.DataFrame({"Close": fall}), "S2": pd.DataFrame({"Close": fall * 1.01}),
+              "T1": pd.DataFrame({"Close": flat}), "T2": pd.DataFrame({"Close": flat})}
+    on = {"S1": days[50], "S2": days[110], "T1": days[110], "T2": days[60]}
+    monkeypatch.setattr(ff, "insider_cluster", lambda p, buyers, days: {
+        a: pd.Series((p[a].index == on[a]).astype(int), p[a].index) for a in p})
+    monkeypatch.setattr(wide, "sectors", lambda: {"S1": "Ind", "S2": "Ind", "T1": "Tech", "T2": "Tech"})
+    out = ff.insider_sector_stress(prices, buyers=1, drop=0.10)
+    assert out["S2"].loc[days[110]] == 1          # sector down about 20% over 60 sessions
+    assert out["S1"].sum() == 0                   # day 50: down only ~2.5% so far
+    assert out["T1"].sum() == 0 and out["T2"].sum() == 0
+    part = ff.insider_sector_stress({a: df.iloc[:111] for a, df in prices.items()}, buyers=1, drop=0.10)
+    assert part["S2"].loc[days[110]] == 1         # the same with no later prices
+
+
+def test_momentum_low_vol_keeps_the_steady_winner_and_past_closes_only():
+    from algo.finder_families import momentum_low_vol
+
+    days = pd.bdate_range("2024-01-01", periods=320)
+    t = np.arange(320)
+    steady = pd.Series(100 * 1.002 ** t, index=days)
+    jumpy = pd.Series(100 * 1.002 ** t * (1 + 0.05 * np.sin(t)), index=days)
+    prices = {"STEADY": pd.DataFrame({"Close": steady}), "JUMPY": pd.DataFrame({"Close": jumpy * 1.3}),
+              "FLAT1": pd.DataFrame({"Close": pd.Series(100.0, index=days)}),
+              "FLAT2": pd.DataFrame({"Close": pd.Series(100.0, index=days) * (1 + 0.04 * np.sin(t))})}
+    full = momentum_low_vol(prices, top=0.5, max_vol=0.5)
+    assert full["STEADY"].sum() > 0 and full["JUMPY"].sum() == 0
+    part = momentum_low_vol({a: df.iloc[:280] for a, df in prices.items()}, top=0.5, max_vol=0.5)
+    assert (full["STEADY"].iloc[:279] == part["STEADY"].iloc[:279]).all()

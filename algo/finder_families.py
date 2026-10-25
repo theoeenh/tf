@@ -938,6 +938,43 @@ def sector_momentum(prices: dict, top: int = 3, ma: int = 200) -> dict:
     return _own((in_best & above & month_end.to_numpy()[:, None]).astype(int), prices)
 
 
+def insider_sector_stress(prices: dict, buyers: int = 1, drop: float = 0.10) -> dict:
+    """Insiders buying while their own sector is falling: an insider cluster (insider_cluster, 30 days)
+    kept only when the median stock of the same sector lost at least `drop` over the last 60 sessions
+    (closes up to the signal day). insider_market_stress (11/14) on the whole market; here the sell-off
+    is the sector's, where forced selling hits a company's peers too."""
+    from . import wide
+
+    sig = insider_cluster(prices, buyers=buyers, days=30)
+    close = _panel(prices)
+    ret = close / close.shift(60) - 1
+    sector = pd.Series({a: wide.sectors().get(a) for a in close.columns}).dropna()
+    med = ret[sector.index].T.groupby(sector).median().T                       # date x sector
+    out = {}
+    for a, s in sig.items():
+        sec = sector.get(a)
+        if sec is None:
+            out[a] = s * 0
+            continue
+        fell = (med[sec] <= -drop).reindex(s.index).fillna(False).to_numpy()
+        out[a] = (s.astype(bool) & fell).astype(int)
+    return out
+
+
+def momentum_low_vol(prices: dict, top: float = 0.1, max_vol: float = 0.5) -> dict:
+    """Market data only: momentum without the jumpy stocks. At each month end, the stocks in the top `top`
+    share of the 12-1 month return whose 60-day volatility ranks in the lowest `max_vol` of the universe.
+    Steady winners keep winning more reliably than winners made by a few big jumps (Da-Gurun-Warachka
+    2014, "frog in the pan"); calmer stocks also cut momentum's crashes. Closes up to that day only."""
+    close = _panel(prices)
+    ret = close.shift(21) / close.shift(252) - 1
+    vol = np.log(close / close.shift(1)).rolling(60, min_periods=60).std()
+    winners = ret.rank(axis=1, pct=True, ascending=False) <= top
+    calm = vol.rank(axis=1, pct=True) <= max_vol
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    return _own((winners & calm & month_end.to_numpy()[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1118,6 +1155,14 @@ WIDE_FAMILIES = {
     "sector_momentum": (sector_momentum, {"top": [2, 3], "ma": [100, 200]},
                         {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500"], "trend": False}),
+    # insider clusters while the stock's own sector sells off (2026-10-25)
+    "insider_sector_stress": (insider_sector_stress, {"buyers": [1, 2], "drop": [0.08, 0.15]},
+                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                               "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: steady momentum winners (low volatility), monthly (2026-10-25)
+    "momentum_low_vol": (momentum_low_vol, {"top": [0.05, 0.1], "max_vol": [0.3, 0.5]},
+                         {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                          "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
