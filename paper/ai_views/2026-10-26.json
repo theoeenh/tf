@@ -1,0 +1,204 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Fell below $80,000 on Iran fears; one firm calls the bear market over, another big holder paused its buying. Mixed, no edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "A protocol exploit and prediction pieces; nothing that moves ETH itself. No call."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Tokenisation headlines and the weekend crypto drop; no edge."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Commentary that the biggest stocks are dragging the index; opinion, no news. No call."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Optimus production commentary; no new information on the business. No call."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Below $4,000 after its worst week in five months, below its 200-day average; the trend rules act on it. No separate view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Follows gold's slide; no silver-specific news. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AAPL earnings Mon 2 Nov",
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "iPad mini update; earnings on 2 Nov and the Fed on Wednesday. Event risk, no direction."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "MSFT earnings Wed 28 Oct",
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Earnings and the Fed on the same day this week; previews only. No direction."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMZN earnings Thu 29 Oct",
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Earnings Thursday; previews only. No call."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Raising up to $95bn more for AI and the stock falls after reports; the news is out and priced. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "GOOGL earnings Wed 28 Oct",
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Earnings Wednesday, below its 200-day average with SELL signals; the report can gap it either way. No call."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Could gain from Meta's AI spending, but only as a supplier headline. No edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Tech higher before the open; supplier headlines only. No call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Attention pieces after the guidance cut; no new information. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Commentary only. No edge."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "XOM earnings Fri 30 Oct"
+  ],
+  "reasoning": "Record close as Brent tops $116; earnings Friday. Already up 13% in a month. No new information."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "COIN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Earnings previews; crypto weak over the weekend. No call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "FOMC Wed 28 Oct",
+   "MSFT/GOOGL earnings Wed 28 Oct",
+   "AMZN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Futures higher before big-tech earnings and the Fed; this week's events decide. No direction."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Old headlines; below its 200-day average. No edge."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "FOMC Wed 28 Oct"
+  ],
+  "reasoning": "Old headlines; the Fed on Wednesday decides. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Oil at an 11-year high on Middle East tensions; news-driven and can reverse fast. No call."
+ }
+]
