@@ -197,6 +197,24 @@
    "desc": "sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1",
    "opened": "2026-10-26 15:57",
    "id": "bull_put_spread-CLF-2026-10-26"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "CLF",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "CLF261204C00013500",
+     "qty": 22,
+     "price": 1.34
+    }
+   ],
+   "expiry": "2026-12-04",
+   "cost": 2948.0,
+   "max_loss": 2992.0,
+   "desc": "CLF Dec 04 2026 13.5 Call, delta +0.59",
+   "opened": "2026-10-26 17:59",
+   "id": "long_call-CLF-2026-10-26"
   }
  ],
  "closed": [

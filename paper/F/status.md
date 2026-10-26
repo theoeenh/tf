@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-10-26 17:26 UTC. **Equity $101,339** (+1.34% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-10-26 17:59 UTC. **Equity $101,360** (+1.36% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 2 | 5 | $-2,044 | $+177 | 1 / 5 |
-| long_put | 3 | 3 | $-520 | $+1,217 | 1 / 3 |
-| bull_put_spread | 3 | 7 | $-1,084 | $-555 | 1 / 7 |
-| bear_call_spread | 1 | 5 | $-512 | $+67 | 3 / 5 |
-| spy_put_spread | 1 | 0 | $+0 | $-44 | 0 / 0 |
+| long_call | 3 | 5 | $-2,044 | $-173 | 1 / 5 |
+| long_put | 3 | 3 | $-520 | $+1,170 | 1 / 3 |
+| bull_put_spread | 3 | 7 | $-1,084 | $-478 | 1 / 7 |
+| bear_call_spread | 1 | 5 | $-512 | $+56 | 3 / 5 |
+| spy_put_spread | 1 | 0 | $+0 | $-25 | 0 / 0 |
 
 ## Open positions
 
@@ -24,25 +24,27 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 - **spy_put_spread** SPY: sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31 (opened 2026-10-20 19:28, cost $-321, most it can lose $2,800)
 - **long_call** PEP: PEP Nov 20 2026 133 Call, delta +0.59 (opened 2026-10-21 13:58, cost $+2,610, most it can lose $2,628)
 - **bull_put_spread** CLF: sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1 (opened 2026-10-26 15:57, cost $-1,080, most it can lose $3,000)
+- **long_call** CLF: CLF Dec 04 2026 13.5 Call, delta +0.59 (opened 2026-10-26 17:59, cost $+2,948, most it can lose $2,992)
 
 ## Alpaca vs book
 
-Alpaca values the positions at $9,280; at the quotes' mid they are worth $9,981 (difference $-701).
+Alpaca values the positions at $11,948; at the quotes' mid they are worth $12,698 (difference $-750).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261120P00310000 | 1 | $160 | $162 | ok |
-| AAPL261120P00327500 | -1 | $-445 | $-431 | ok |
-| AAPL261218C00335000 | 1 | $1,905 | $1,961 | ok |
-| AVGO261120C00360000 | -1 | $-485 | $-476 | ok |
-| AVGO261120C00380000 | 1 | $194 | $198 | ok |
-| AVGO261120P00347500 | 1 | $2,365 | $2,406 | ok |
+| AAPL261120P00310000 | 1 | $168 | $173 | ok |
+| AAPL261120P00327500 | -1 | $-465 | $-446 | ok |
+| AAPL261218C00335000 | 1 | $1,895 | $1,929 | ok |
+| AVGO261120C00360000 | -1 | $-500 | $-500 | ok |
+| AVGO261120C00380000 | 1 | $208 | $209 | ok |
+| AVGO261120P00347500 | 1 | $2,325 | $2,334 | ok |
+| CLF261204C00013500 | 22 | $2,662 | $2,805 | ok |
 | CLF261218P00012000 | 40 | $1,680 | $1,800 | ok |
-| CLF261218P00013000 | -40 | $-3,200 | $-3,200 | ok |
-| FIS261120P00032500 | 14 | $560 | $658 | ok |
-| FIS261120P00035000 | -14 | $-1,540 | $-1,435 | ok |
-| IWM261218P00284000 | 2 | $2,228 | $2,283 | ok |
-| NFLX261218P00075000 | 3 | $3,540 | $3,561 | ok |
-| PEP261120C00133000 | 6 | $2,670 | $2,853 | ok |
-| SPY261127P00715000 | 1 | $288 | $288 | ok |
-| SPY261127P00746000 | -1 | $-640 | $-647 | ok |
+| CLF261218P00013000 | -40 | $-3,120 | $-3,160 | ok |
+| FIS261120P00032500 | 14 | $560 | $630 | ok |
+| FIS261120P00035000 | -14 | $-1,540 | $-1,442 | ok |
+| IWM261218P00284000 | 2 | $2,248 | $2,274 | ok |
+| NFLX261218P00075000 | 3 | $3,540 | $3,600 | ok |
+| PEP261120C00133000 | 6 | $2,640 | $2,835 | ok |
+| SPY261127P00715000 | 1 | $290 | $294 | ok |
+| SPY261127P00746000 | -1 | $-643 | $-637 | ok |
