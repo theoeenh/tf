@@ -235,13 +235,20 @@ def market(accounts) -> dict:
     return request("GET", "/v2/clock")
 
 
+def active(names: str) -> list[str]:
+    """The accounts the engine shadows: hourly ones (ACCOUNTS) with keys in the environment (2026-10-26:
+    A and B left the hourly system; the default list still named them and the run stopped at its first
+    decision)."""
+    return [a for a in names.split(",") if a in ACCOUNTS and keys(a)["ALPACA_API_KEY_ID"]]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--minutes", type=float, default=345, help="stop after this long (a GitHub job lasts 6 h)")
-    ap.add_argument("--accounts", default="A,B,C")
+    ap.add_argument("--accounts", default=",".join(ACCOUNTS))
     ap.add_argument("--decide-now", action="store_true", help="one decision at once (test)")
     args = ap.parse_args()
-    accounts = [a for a in args.accounts.split(",") if keys(a)["ALPACA_API_KEY_ID"]]
+    accounts = active(args.accounts)
     if not accounts:
         sys.exit("No Alpaca keys in the environment.")
     end = time.time() + args.minutes * 60

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from algo import live
 from algo.live import due, keys, touched
 
 
@@ -36,3 +37,14 @@ def test_each_account_its_own_keys(monkeypatch):
     assert keys("B")["ALPACA_API_KEY_ID"] == "b"
     monkeypatch.delenv("ALPACA_C_API_KEY_ID", raising=False)
     assert keys("C")["ALPACA_API_KEY_ID"] == ""
+
+
+def test_engine_shadows_only_the_hourly_accounts(monkeypatch):
+    """2026-10-26: A and B left the hourly system; the engine's default list still named them and the
+    afternoon run stopped at its first decision (KeyError 'A')."""
+    for p in ("", "B_", "C_"):
+        monkeypatch.setenv(f"ALPACA_{p}API_KEY_ID", "k")
+        monkeypatch.setenv(f"ALPACA_{p}API_SECRET_KEY", "s")
+    assert live.active("A,B,C") == ["C"]
+    monkeypatch.delenv("ALPACA_C_API_KEY_ID")
+    assert live.active("A,B,C") == []
