@@ -980,6 +980,15 @@
 0.17876328485213755
 ]
 },
+"TSLA|donchian_trend|+|2026-10-26 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.09R (avg win +2.43R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.29892722265754584,
+-0.08729519053833412
+]
+},
 "TSLA|opening_range|+|2026-10-05 18:00": {
 "skip": true,
 "reason": "Not taken by the live account on 2026-10-05 (decision restored after the 2026-10-06 replay drift).",
