@@ -611,6 +611,15 @@
 -0.05161093918388954
 ]
 },
+"MSFT|opening_range|+|2026-10-26 19:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 41% estimated chance of profit, expected -0.13R (avg win +1.06R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.40927101021390194,
+-0.12816870343637993
+]
+},
 "MSFT|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",
@@ -1374,6 +1383,15 @@
 "pred": [
 0.48599174404129397,
 0.02592723778825995
+]
+},
+"XOM|opening_range|+|2026-10-27 13:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 42% estimated chance of profit, expected -0.11R (avg win +1.06R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.41900151426956567,
+-0.10865999815647875
 ]
 },
 "XOM|rsi2_reversion|+|2026-10-05 14:00": {
