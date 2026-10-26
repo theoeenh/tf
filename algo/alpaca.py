@@ -258,20 +258,13 @@ def opening_auction(clock: dict) -> bool:
 
 
 def at_the_open(orders: list[dict]) -> list[dict]:
-    """Stock orders sent just before the open go to the opening auction (market-on-open:
-    time_in_force 'opg', whole shares only); a fractional rest fills right after the open."""
-    out = []
-    for o in orders:
-        if "/" in o["symbol"] or o["type"] != "market":
-            out.append(o)
-            continue
-        whole = math.floor(o["qty"] + 1e-9)
-        frac = round(o["qty"] - whole, 6)
-        if whole >= 1:
-            out.append(o | {"qty": whole, "time_in_force": "opg", "note": (o["note"] + " opening auction").strip()})
-        if frac > 0:
-            out.append(o | {"qty": frac, "time_in_force": "day", "note": (o["note"] + " fractional, at the open").strip()})
-    return out
+    """Stock orders sent just before the open: plain market orders for the day, whole and fractional
+    shares in one, which Alpaca fills as the market opens. Not opening-auction ('opg') orders: on
+    2026-10-26 Alpaca let the auction orders of A and B expire unfilled (AAPL, USO, SPY, DBC, EEM; only
+    CLF's filled), so the next run had to trade them 20 minutes later, while every plain market order
+    queued before the open filled at 9:30:00."""
+    return [o if "/" in o["symbol"] or o["type"] != "market"
+            else o | {"time_in_force": "day", "note": (o["note"] + " at the open").strip()} for o in orders]
 
 
 def last_prices() -> dict[str, float]:

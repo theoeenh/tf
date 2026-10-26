@@ -93,7 +93,10 @@ def test_notifications_only_for_real_trades_and_off_without_topic(monkeypatch):
     assert len(msgs) == 1 and msgs[0][0] == "BUY 0.42 ETH/USD" and "$100,000" in msgs[0][1]
 
 
-def test_opening_auction_window_and_order_split():
+def test_opening_auction_window_and_orders_at_the_open():
+    """2026-10-26: Alpaca let the opening-auction ('opg') orders of A and B expire unfilled (AAPL, USO,
+    SPY, DBC, EEM; only CLF filled) while every plain market order queued before the open filled at 9:30:
+    orders sent before the open are plain market orders for the day, whole and fractional shares in one."""
     base = {"is_open": False, "next_open": "2026-10-01T09:30:00-04:00"}
     assert alpaca.opening_auction(base | {"timestamp": "2026-10-01T09:12:00.000000000-04:00"})
     assert not alpaca.opening_auction(base | {"timestamp": "2026-10-01T09:29:00.000000000-04:00"})  # too late
@@ -102,7 +105,7 @@ def test_opening_auction_window_and_order_split():
         {"symbol": "AAPL", "side": "buy", "qty": 10.4, "type": "market", "time_in_force": "day", "note": ""},
         {"symbol": "BTC/USD", "side": "buy", "qty": 0.1, "type": "market", "time_in_force": "gtc", "note": ""}])
     assert [(o["symbol"], o["qty"], o["time_in_force"]) for o in orders] == [
-        ("AAPL", 10, "opg"), ("AAPL", 0.4, "day"), ("BTC/USD", 0.1, "gtc")]
+        ("AAPL", 10.4, "day"), ("BTC/USD", 0.1, "gtc")]
 
 
 def test_clock_without_fractional_seconds():
@@ -616,9 +619,7 @@ def test_opening_auction_orders_already_queued_are_not_sent_again(monkeypatch, t
     monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"FIS": 36.0})
     monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
     monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
-    auction = [{"id": "1", "symbol": "FIS", "side": "buy", "qty": "125", "type": "market",
-                "time_in_force": "opg", "order_class": "", "legs": None},
-               {"id": "2", "symbol": "FIS", "side": "buy", "qty": "0.932423", "type": "market",
+    auction = [{"id": "1", "symbol": "FIS", "side": "buy", "qty": "125.932423", "type": "market",
                 "time_in_force": "day", "order_class": "", "legs": None}]
     state = {"orders": auction}
 
@@ -631,8 +632,8 @@ def test_opening_auction_orders_already_queued_are_not_sent_again(monkeypatch, t
 
     monkeypatch.setattr(alpaca, "request", request)
     assert alpaca.already_queued(trades, {"FIS": 36.01})
-    state["orders"] = [dict(auction[0], time_in_force="day", qty="125.932423")]   # sent before the window
-    assert not alpaca.already_queued(trades, {"FIS": 36.01})   # turned into an auction order
+    state["orders"] = [dict(auction[0], qty="100")]             # the plan changed
+    assert not alpaca.already_queued(trades, {"FIS": 36.01})
 
 
 def test_opening_auction_orders_stop_five_minutes_before_the_open():
@@ -668,9 +669,7 @@ def test_auction_buy_of_a_held_stock_keeps_its_orders_queued(monkeypatch, tmp_pa
     from algo import alpaca
 
     trades = _aapl_auction(monkeypatch, tmp_path)
-    open_ = [{"id": "1", "symbol": "AAPL", "side": "buy", "qty": "77", "type": "market", "time_in_force": "opg",
-              "order_class": "", "legs": None},
-             {"id": "2", "symbol": "AAPL", "side": "buy", "qty": "0.921665", "type": "market",
+    open_ = [{"id": "1", "symbol": "AAPL", "side": "buy", "qty": "77.921665", "type": "market",
               "time_in_force": "day", "order_class": "", "legs": None},
              {"id": "3", "symbol": "AAPL", "side": "sell", "qty": "61", "type": "limit", "limit_price": "358.07",
               "time_in_force": "gtc", "order_class": "oco",
@@ -702,7 +701,7 @@ def test_stop_next_to_a_pending_buy_waits_for_the_next_run(monkeypatch, tmp_path
     monkeypatch.setattr(alpaca, "request", request)
     alpaca._trade_and_protect(True, trades, {"AAPL": 348.42})
     assert [(o["side"], o["qty"], o["time_in_force"], o.get("order_class", "")) for o in sent] == [
-        ("buy", 77, "opg", ""), ("buy", 0.921665, "day", ""), ("sell", 61, "gtc", "oco")]
+        ("buy", 77.921665, "day", ""), ("sell", 61, "gtc", "oco")]
     assert "0.134829 AAPL     stop 343.6" in capsys.readouterr().out
 
 
@@ -765,10 +764,8 @@ def test_queued_sales_of_stocks_the_plan_no_longer_holds_count_as_queued(monkeyp
     monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: {"SPY": 760.0, "AAPL": 344.0}[s] for s in syms})
     monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
     monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
-    queued = [{"symbol": "AAPL", "side": "sell", "type": "market", "time_in_force": "opg", "qty": "139"},
-              {"symbol": "AAPL", "side": "sell", "type": "market", "time_in_force": "day", "qty": "0.056494"},
-              {"symbol": "SPY", "side": "buy", "type": "market", "time_in_force": "opg", "qty": "121"},
-              {"symbol": "SPY", "side": "buy", "type": "market", "time_in_force": "day", "qty": "0.767363"}]
+    queued = [{"symbol": "AAPL", "side": "sell", "type": "market", "time_in_force": "day", "qty": "139.056494"},
+              {"symbol": "SPY", "side": "buy", "type": "market", "time_in_force": "day", "qty": "121.767363"}]
     monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
                         {"is_open": False} if p == "/v2/clock" else queued)
     assert alpaca.already_queued(trades, alpaca.last_prices())
