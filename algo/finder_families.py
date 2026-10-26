@@ -961,6 +961,39 @@ def insider_sector_stress(prices: dict, buyers: int = 1, drop: float = 0.10) -> 
     return out
 
 
+def insider_wave_stress(prices: dict, companies: int = 3, drop: float = 0.10) -> dict:
+    """The two best sector ideas together: an insider cluster during a sector-wide wave of insider buying
+    (insider_sector_wave, 2 buyers) while that sector is falling (its median stock down at least `drop`
+    over 60 sessions, as insider_sector_stress). Many insiders across a beaten-down sector buying at once.
+    Filings and closes up to the signal day."""
+    from . import wide
+
+    sig = insider_sector_wave(prices, buyers=2, companies=companies)
+    close = _panel(prices)
+    ret = close / close.shift(60) - 1
+    sector = pd.Series({a: wide.sectors().get(a) for a in close.columns}).dropna()
+    med = ret[sector.index].T.groupby(sector).median().T
+    out = {}
+    for a, s in sig.items():
+        sec = sector.get(a)
+        fell = ((med[sec] <= -drop).reindex(s.index).fillna(False).to_numpy() if sec is not None
+                else np.zeros(len(s), bool))
+        out[a] = (s.astype(bool) & fell).astype(int)
+    return out
+
+
+def momentum_pullback(prices: dict, top: float = 0.2, bottom: float = 0.1) -> dict:
+    """Market data only: buy the dip of a long-term winner. Each Friday, among the stocks in the top `top`
+    share of the 12-1 month return, those whose last 5 days rank in the worst `bottom` share of the
+    universe: a short-term reversal inside a strong trend, where plain 5-day reversal (reversal_5d) and
+    plain momentum each failed. Closes up to that day only."""
+    close = _panel(prices)
+    mom = (close.shift(21) / close.shift(252) - 1).rank(axis=1, pct=True, ascending=False) <= top
+    dip = (close / close.shift(5) - 1).rank(axis=1, pct=True) <= bottom
+    friday = close.index.dayofweek == 4
+    return _own((mom & dip & friday[:, None]).astype(int), prices)
+
+
 def momentum_low_vol(prices: dict, top: float = 0.1, max_vol: float = 0.5) -> dict:
     """Market data only: momentum without the jumpy stocks. At each month end, the stocks in the top `top`
     share of the 12-1 month return whose 60-day volatility ranks in the lowest `max_vol` of the universe.
@@ -1163,6 +1196,14 @@ WIDE_FAMILIES = {
     "momentum_low_vol": (momentum_low_vol, {"top": [0.05, 0.1], "max_vol": [0.3, 0.5]},
                          {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                           "segments": ["sp1500"], "trend": False}),
+    # insider waves in a falling sector (2026-10-26)
+    "insider_wave_stress": (insider_wave_stress, {"companies": [3, 5], "drop": [0.08, 0.15]},
+                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: weekly dips of long-term winners (2026-10-26)
+    "momentum_pullback": (momentum_pullback, {"top": [0.1, 0.2], "bottom": [0.05, 0.1]},
+                          {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

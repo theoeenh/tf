@@ -955,3 +955,38 @@ def test_momentum_low_vol_keeps_the_steady_winner_and_past_closes_only():
     assert full["STEADY"].sum() > 0 and full["JUMPY"].sum() == 0
     part = momentum_low_vol({a: df.iloc[:280] for a, df in prices.items()}, top=0.5, max_vol=0.5)
     assert (full["STEADY"].iloc[:279] == part["STEADY"].iloc[:279]).all()
+
+
+def test_insider_wave_stress_needs_the_sector_down_before_the_wave(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    fall = pd.Series(np.r_[[100.0] * 40, np.linspace(100, 80, 80)], index=days)
+    prices = {"S1": pd.DataFrame({"Close": fall}), "S2": pd.DataFrame({"Close": fall * 1.01}),
+              "T1": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    on = {"S1": days[50], "S2": days[110], "T1": days[110]}
+    monkeypatch.setattr(ff, "insider_sector_wave", lambda p, buyers, companies: {
+        a: pd.Series((p[a].index == on[a]).astype(int), p[a].index) for a in p})
+    monkeypatch.setattr(wide, "sectors", lambda: {"S1": "Ind", "S2": "Ind", "T1": "Tech"})
+    out = ff.insider_wave_stress(prices, companies=3, drop=0.10)
+    assert out["S2"].loc[days[110]] == 1 and out["S1"].sum() == 0 and out["T1"].sum() == 0
+    part = ff.insider_wave_stress({a: df.iloc[:111] for a, df in prices.items()}, companies=3, drop=0.10)
+    assert part["S2"].loc[days[110]] == 1
+
+
+def test_momentum_pullback_buys_a_winner_s_dip_on_fridays_with_past_closes_only():
+    from algo.finder_families import momentum_pullback
+
+    days = pd.bdate_range("2024-01-01", periods=320)
+    t = np.arange(320)
+    win = 100 * 1.003 ** t
+    win[-8:-3] *= 0.93                                          # a dip in the last weeks
+    prices = {"WIN": pd.DataFrame({"Close": pd.Series(win, index=days)}),
+              "LOSE": pd.DataFrame({"Close": pd.Series(100 * 0.998 ** t, index=days)}),
+              "FLAT": pd.DataFrame({"Close": pd.Series(100.0 + np.sin(t), index=days)}),
+              "UP": pd.DataFrame({"Close": pd.Series(100 * 1.001 ** t, index=days)})}
+    full = momentum_pullback(prices, top=0.5, bottom=0.25)
+    hits = full["WIN"].index[full["WIN"] == 1]
+    assert len(hits) and all(d.dayofweek == 4 for d in hits)
+    part = momentum_pullback({a: df.iloc[:300] for a, df in prices.items()}, top=0.5, bottom=0.25)
+    assert (full["WIN"].iloc[:300] == part["WIN"]).all()
