@@ -748,3 +748,27 @@ def test_holdings_without_a_stop_need_no_stop_order(monkeypatch, tmp_path):
     assert alpaca.verify() == []
     _fake_alpaca(monkeypatch, {"SPY": 120.5, "FIS": 10.0}, [], {"SPY": 120.5, "FIS": 10.0})
     assert alpaca.verify() == ["FIS: 10 held, only 0 covered by a stop"]       # the stock still needs its stop
+
+
+def test_queued_sales_of_stocks_the_plan_no_longer_holds_count_as_queued(monkeypatch, tmp_path):
+    """2026-10-26: A's switch sold AAPL and USO, which are not in its new orders.json, so the check had no
+    price for them, left their sales out of the plan, and the 9:12 and 9:20 runs cancelled and re-sent
+    every opening-auction order."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "SPY", "qty": 121.767363, "stop": None, "target": None, "mark": 759.97}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"AAPL": 139.056494})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {s: {"SPY": 760.0, "AAPL": 344.0}[s] for s in syms})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
+    queued = [{"symbol": "AAPL", "side": "sell", "type": "market", "time_in_force": "opg", "qty": "139"},
+              {"symbol": "AAPL", "side": "sell", "type": "market", "time_in_force": "day", "qty": "0.056494"},
+              {"symbol": "SPY", "side": "buy", "type": "market", "time_in_force": "opg", "qty": "121"},
+              {"symbol": "SPY", "side": "buy", "type": "market", "time_in_force": "day", "qty": "0.767363"}]
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
+                        {"is_open": False} if p == "/v2/clock" else queued)
+    assert alpaca.already_queued(trades, alpaca.last_prices())

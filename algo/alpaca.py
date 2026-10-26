@@ -532,7 +532,8 @@ def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
             return False
         live = live_prices(syms + [s for s in have if s not in syms])
         seen = bar_range(syms)
-        todo = plan(wanted(live, seen), have, dict(prices))
+        # held but no longer wanted: no price in orders.json, the live one (as _trade_and_protect does)
+        todo = plan(wanted(live, seen), have, {s: live.get(s, 0.0) for s in have} | dict(prices))
         if auction:
             todo = at_the_open(todo)
         alive = [t for t in trades if not through_stop(t, live, seen)]
