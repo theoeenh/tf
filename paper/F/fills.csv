@@ -196,3 +196,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-26 13:57:41,leftover,QQQ,QQQ261120P00691000,sell,1,1,12.02,filled,"leftover leg (not in the book), sold with the user's go of 2026-10-24"
 2026-10-26 13:57:43,leftover,TLT,TLT261106C00079000,sell,17,17,2.76,filled,"leftover leg (not in the book), sold with the user's go of 2026-10-24"
 2026-10-26 13:58:07,long_call,CLF,CLF261218C00014000,buy,19,0,,canceled,"open: CLF Dec 18 2026 14 Call, delta +0.58"
+2026-10-26 14:27:48,long_call,CLF,CLF261218C00013000,buy,15,0,,canceled,"open: CLF Dec 18 2026 13 Call, delta +0.67"
