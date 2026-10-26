@@ -4,24 +4,23 @@
   "ticker": "CLF",
   "strategy": "insider_low_short",
   "qty": 148.2278374996888,
-  "stop": 11.347175602215781,
+  "stop": 11.31826360221578,
   "target": null,
-  "mark": 13.9,
-  "entry": 13.9,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-10-23"
+  "mark": 13.38,
+  "entry": 13.871087999999999,
+  "r": -0.1923704585502429,
+  "bar": "2026-10-26"
  },
  {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 121.76736326270026,
+  "qty": 121.79203690920515,
   "stop": null,
   "target": null,
-  "mark": 759.97,
-  "entry": 759.97,
+  "mark": 765.37,
+  "entry": 765.37,
   "r": 0.0,
-  "bar": "2026-10-23"
+  "bar": "2026-10-26"
  }
 ]
