@@ -201,3 +201,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-26 14:33:22,bull_put_spread,CLF,CLF261218P00011000,buy,20,0,,canceled,"open: sell 13 / buy 11 puts, 2026-12-18, credit 0.47 on width 2"
 2026-10-26 14:43:20,long_call,CLF,CLF261218C00014000,buy,24,0,,canceled,"open: CLF Dec 18 2026 14 Call, delta +0.55"
 2026-10-26 15:11:11,long_call,CLF,CLF261218C00014000,buy,24,0,,canceled,"open: CLF Dec 18 2026 14 Call, delta +0.55"
+2026-10-26 15:30:03,long_call,CLF,CLF261218C00014000,buy,22,0,,canceled,"open: CLF Dec 18 2026 14 Call, delta +0.55"
+2026-10-26 15:30:27,bull_put_spread,CLF,CLF261218P00012000,buy,42,0,,canceled,"open: sell 13 / buy 12 puts, 2026-12-18, credit 0.28 on width 1"
