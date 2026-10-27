@@ -1,65 +1,62 @@
 [
  {
+  "asset": "BBT",
+  "ticker": "BBT",
+  "strategy": "insider_low_short",
+  "qty": 168.16173473270942,
+  "stop": 28.88870067810273,
+  "target": null,
+  "mark": 30.71,
+  "entry": 31.096575,
+  "r": -0.17192725454557437,
+  "bar": "2026-10-27"
+ },
+ {
   "asset": "CLF",
   "ticker": "CLF",
   "strategy": "insider_low_short",
   "qty": 148.2278374996888,
   "stop": 11.31826360221578,
   "target": null,
-  "mark": 13.38,
+  "mark": 13.9,
   "entry": 13.871087999999999,
-  "r": -0.1923704585502429,
-  "bar": "2026-10-26"
- },
- {
-  "asset": "BBT",
-  "ticker": "BBT",
-  "strategy": "insider_low_short",
-  "qty": 168.16173473270942,
-  "stop": 28.611519961033707,
-  "target": null,
-  "mark": 30.86,
-  "entry": 30.86,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-10-26"
+  "r": 0.011325495018418286,
+  "bar": "2026-10-27"
  },
  {
   "asset": "STC",
   "ticker": "STC",
   "strategy": "insider_low_short",
-  "qty": 54.25378501667657,
-  "stop": 35.99074792388737,
+  "qty": 54.23089162895651,
+  "stop": 37.18722878646685,
   "target": null,
-  "mark": 42.96,
-  "entry": 42.96,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-10-26"
+  "mark": 43.48,
+  "entry": 43.945820000000005,
+  "r": -0.06683931000237787,
+  "bar": "2026-10-27"
  },
  {
   "asset": "THRM",
   "ticker": "THRM",
   "strategy": "insider_low_short",
-  "qty": 70.68329147897344,
-  "stop": 23.240669260684903,
+  "qty": 70.61345320272434,
+  "stop": 26.129550027778837,
   "target": null,
-  "mark": 28.59,
-  "entry": 28.59,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-10-26"
+  "mark": 31.82,
+  "entry": 29.844700000000003,
+  "r": 0.3692611461621655,
+  "bar": "2026-10-27"
  },
  {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 109.32610665122316,
+  "qty": 109.16374801748012,
   "stop": null,
   "target": null,
-  "mark": 765.37,
-  "entry": 765.37,
+  "mark": 769.66,
+  "entry": 769.66,
   "r": 0.0,
-  "bar": "2026-10-26"
+  "bar": "2026-10-27"
  }
 ]
