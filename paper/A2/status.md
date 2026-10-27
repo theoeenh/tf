@@ -8,8 +8,10 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 ## Open positions
 
 - **CLF** 148.23 shares, entry 13.87, stop 11.32, now 13.38 (-0.19R)
-- **SPY** (idle cash) 121.79 shares, now 765.37
+- **SPY** (idle cash) 109.33 shares, now 765.37
 
 ## New signals (bought at the next open)
 
-None.
+- **BBT** 168.16 shares around 30.86, stop 28.61
+- **STC** 54.25 shares around 42.96, stop 35.99
+- **THRM** 70.68 shares around 28.59, stop 23.24
