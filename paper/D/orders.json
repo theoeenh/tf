@@ -46,5 +46,44 @@
   "entry": 130.9404375,
   "r": 0.5526760253598783,
   "bar": "2026-10-26"
+ },
+ {
+  "asset": "BBT",
+  "ticker": "BBT",
+  "strategy": "insider_low_short",
+  "qty": 177.39275315335905,
+  "stop": 28.611519961034656,
+  "target": null,
+  "mark": 30.86,
+  "entry": 30.86,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-26"
+ },
+ {
+  "asset": "STC",
+  "ticker": "STC",
+  "strategy": "insider_low_short",
+  "qty": 57.23197556434858,
+  "stop": 35.9907479238774,
+  "target": null,
+  "mark": 42.96,
+  "entry": 42.96,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-26"
+ },
+ {
+  "asset": "THRM",
+  "ticker": "THRM",
+  "strategy": "insider_low_short",
+  "qty": 74.56335828925413,
+  "stop": 23.24066926069614,
+  "target": null,
+  "mark": 28.59,
+  "entry": 28.59,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-26"
  }
 ]

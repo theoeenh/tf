@@ -14,7 +14,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **BBT** 177.39 shares around 30.86, stop 28.61
+- **STC** 57.23 shares around 42.96, stop 35.99
+- **THRM** 74.56 shares around 28.59, stop 23.24
 
 ## Closed trades
 
