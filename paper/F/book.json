@@ -215,6 +215,28 @@
    "desc": "CLF Dec 04 2026 13.5 Call, delta +0.59",
    "opened": "2026-10-26 17:59",
    "id": "long_call-CLF-2026-10-26"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261204P00710000",
+     "qty": 1,
+     "price": 3.19
+    },
+    {
+     "symbol": "SPY261204P00742000",
+     "qty": -1,
+     "price": 6.56
+    }
+   ],
+   "expiry": "2026-12-04",
+   "cost": -337.0,
+   "max_loss": 2875.0,
+   "desc": "sell 742 / buy 710 puts, 2026-12-04, credit 3.25 on width 32",
+   "opened": "2026-10-27 14:29",
+   "id": "spy_put_spread-SPY-2026-10-27"
   }
  ],
  "closed": [
