@@ -904,6 +904,44 @@ def test_insider_wave_low_short_reads_published_short_data_only(monkeypatch):
     assert all(a[k].equals(b[k]) for k in a)
 
 
+def test_insider_stress_low_short_reads_published_short_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_sector_stress", lambda p, buyers, drop: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_stress_low_short(prices, drop=0.1, max_rank=0.25)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_stress_low_short(prices, drop=0.1, max_rank=0.25)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_sector_reversal_buys_the_drop_against_its_sector_on_fridays_with_past_closes_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=60)
+    f = max(i for i, d in enumerate(days) if d.dayofweek == 4 and i < 55)
+    drop = pd.Series(100.0, index=days)
+    drop.iloc[f - 4:] = np.linspace(98, 90, 5).tolist() + [90.0] * (len(days) - f - 1)
+    flat = pd.Series(100.0, index=days)
+    prices = {"I1": pd.DataFrame({"Close": drop}), "I2": pd.DataFrame({"Close": flat}),
+              "T1": pd.DataFrame({"Close": drop}), "T2": pd.DataFrame({"Close": drop * 1.0})}
+    monkeypatch.setattr(wide, "sectors", lambda: {"I1": "Ind", "I2": "Ind", "T1": "Tech", "T2": "Tech"})
+    full = ff.sector_reversal(prices, lookback=5, bottom=0.25)
+    # I1 fell 10% while its sector's median fell 5%; T1 fell as much as its whole sector: no signal
+    assert full["I1"].loc[days[f]] == 1 and full["I1"].sum() == 1
+    assert full["T1"].sum() == 0 and full["I2"].sum() == 0
+    part = ff.sector_reversal({a: df.iloc[:f + 1] for a, df in prices.items()}, lookback=5, bottom=0.25)
+    assert all((full[a].iloc[:f + 1] == part[a]).all() for a in prices)
+
+
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
     from algo import finder_families as ff, wide
 

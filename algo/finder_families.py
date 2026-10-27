@@ -1008,6 +1008,42 @@ def momentum_low_vol(prices: dict, top: float = 0.1, max_vol: float = 0.5) -> di
     return _own((winners & calm & month_end.to_numpy()[:, None]).astype(int), prices)
 
 
+def insider_stress_low_short(prices: dict, drop: float = 0.10, max_rank: float = 0.3) -> dict:
+    """The top campaign with account D's filter: an insider buys (insider_cluster, 1 buyer, 30 days) while
+    the stock's sector is falling (insider_sector_stress: median stock down at least `drop` over 60
+    sessions) and short sellers are not betting against the stock (20-day short share of off-exchange
+    volume, FINRA, known from the next session, in the lowest `max_rank` that day). The wave version of
+    this filter (insider_wave_low_short) reached 13/14 on its first night."""
+    from . import wide
+
+    sig = insider_sector_stress(prices, buyers=1, drop=drop)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
+def sector_reversal(prices: dict, lookback: int = 5, bottom: float = 0.05) -> dict:
+    """Market data only: short-term reversal measured against the stock's own sector. Each Friday, buy the
+    stocks whose last `lookback`-day return minus their sector's median return ranks in the worst `bottom`
+    share of the universe. Taking out the sector's move leaves the stock's own overreaction, which reverses
+    more reliably than the raw drop (Da-Liu-Schaumburg 2014); plain 5-day reversal (reversal_5d) failed.
+    Closes up to that day only."""
+    from . import wide
+
+    close = _panel(prices)
+    ret = close / close.shift(lookback) - 1
+    sector = pd.Series({a: wide.sectors().get(a) for a in close.columns}).dropna()
+    med = ret[sector.index].T.groupby(sector).median().T                       # date x sector
+    rel = pd.DataFrame({a: ret[a] - med[sector[a]] for a in sector.index}, index=close.index)
+    worst = rel.rank(axis=1, pct=True) <= bottom
+    friday = close.index.dayofweek == 4
+    return _own((worst & friday[:, None]).reindex(columns=close.columns, fill_value=False).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1204,6 +1240,13 @@ WIDE_FAMILIES = {
     "momentum_pullback": (momentum_pullback, {"top": [0.1, 0.2], "bottom": [0.05, 0.1]},
                           {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                            "segments": ["sp1500"], "trend": False}),
+    # insiders in a falling sector where short sellers are not against the stock (2026-10-27)
+    "insider_stress_low_short": (insider_stress_low_short, {"drop": [0.08, 0.15], "max_rank": [0.3, 0.5]},
+                                 {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                  "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: weekly reversal of the drop against the stock's own sector (2026-10-27)
+    "sector_reversal": (sector_reversal, {"lookback": [5, 10], "bottom": [0.02, 0.05]},
+                        {"rules": ["hold 5 days", "hold 10 days"], "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
