@@ -1447,5 +1447,14 @@
 0.32711078404423205,
 -0.06654509204891124
 ]
+},
+"XOM|vwap_reversion|+|2026-10-27 19:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.19R (avg win +0.64R, avg loss -0.81R).",
+"size": 1.0,
+"pred": [
+0.4276619114013166,
+-0.19327219849375904
+]
 }
 }
