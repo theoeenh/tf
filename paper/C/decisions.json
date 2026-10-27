@@ -1412,6 +1412,15 @@
 -0.11089073621470069
 ]
 },
+"XOM|rsi2_reversion|+|2026-10-27 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2800072937072533,
+-0.1376096949473392
+]
+},
 "XOM|squeeze_breakout|+|2026-10-05 18:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 33% estimated chance of profit, expected -0.07R (avg win +1.58R, avg loss -0.87R).",
