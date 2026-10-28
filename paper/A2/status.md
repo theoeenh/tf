@@ -11,8 +11,8 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **CLF** 148.23 shares, entry 13.87, stop 11.32, now 13.90 (+0.01R)
 - **STC** 54.23 shares, entry 43.95, stop 37.19, now 43.48 (-0.07R)
 - **THRM** 70.61 shares, entry 29.84, stop 26.13, now 31.82 (+0.37R)
-- **SPY** (idle cash) 109.16 shares, now 769.66
+- **SPY** (idle cash) 102.03 shares, now 769.66
 
 ## New signals (bought at the next open)
 
-None.
+- **FFIN** 181.69 shares around 30.20, stop 28.12

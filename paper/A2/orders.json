@@ -48,10 +48,23 @@
   "bar": "2026-10-27"
  },
  {
+  "asset": "FFIN",
+  "ticker": "FFIN",
+  "strategy": "insider_low_short",
+  "qty": 181.6859145138539,
+  "stop": 28.116114210742193,
+  "target": null,
+  "mark": 30.2,
+  "entry": 30.2,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-27"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 109.16374801748012,
+  "qty": 102.03473700181297,
   "stop": null,
   "target": null,
   "mark": 769.66,
