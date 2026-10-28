@@ -17,7 +17,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **FFIN** 191.17 shares around 30.20, stop 28.12
 
 ## Closed trades
 

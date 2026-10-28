@@ -82,5 +82,18 @@
   "entry": 29.844700000000003,
   "r": 0.3692611461629413,
   "bar": "2026-10-27"
+ },
+ {
+  "asset": "FFIN",
+  "ticker": "FFIN",
+  "strategy": "insider_low_short",
+  "qty": 191.1748360288338,
+  "stop": 28.116114210734672,
+  "target": null,
+  "mark": 30.2,
+  "entry": 30.2,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-27"
  }
 ]
