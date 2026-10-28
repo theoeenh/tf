@@ -481,6 +481,8 @@ def sync(send: bool = False) -> list[dict]:
     prices = last_prices()
     if send and already_queued(trades, prices):
         print("Market closed and Alpaca's open orders already match the plan: left as they are.")
+        for line in retry_stand_ins():
+            print(line)
         return []
     if send:  # 1) cancel the stops and targets of the last run
         request("DELETE", "/v2/orders")
@@ -491,6 +493,28 @@ def sync(send: bool = False) -> list[dict]:
         if send:  # the old stops are gone: never leave what is held unprotected
             emergency_protect(trades, exc)
         raise
+
+
+def retry_stand_ins() -> list[str]:
+    """Stops put under Alpaca's reference price (_below_reference) tried again at their planned level, in
+    place (the order is replaced only if Alpaca accepts the new stop): while the market is closed the
+    queued orders are left alone (already_queued), but the reference price often comes back later
+    (2026-10-27: BBT's by 18:50), and the planned stop should be in before the open."""
+    import uuid
+
+    out = []
+    for o in request("GET", "/v2/orders?status=open&nested=true"):
+        planned = _planned_stop(o)
+        if planned is None or o.get("type") != "stop":
+            continue
+        body = {"stop_price": _px(planned), "client_order_id": f"tf-{uuid.uuid4().hex[:24]}"}
+        try:
+            request("PATCH", f"/v2/orders/{o['id']}", body)
+            out.append(f"{o['symbol']} {float(o['qty']):g}: stop back at the planned {_px(planned)}")
+        except AlpacaError as e:
+            if "stop price must be less than current price" not in str(e):
+                out.append(f"{o['symbol']}: planned stop {_px(planned)} not restored ({e})")
+    return out
 
 
 def _planned_stop(o: dict) -> float | None:
