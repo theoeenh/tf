@@ -1,0 +1,223 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Around $80,800 into the Fed; traders price a hold today and a likely December hike, which is already known. A holder losing access to its coins is company news. No edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Wallet moves and prediction pieces; down 13% in a month with nothing new that gives a direction. No call."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "A $953K wallet hack and the worst day for Solana ETFs since December, but SOL holds $100. Mixed; no call."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "MSFT/GOOGL earnings Wed 28 Oct",
+   "AMZN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Chips up a third day in a row; Big Tech's spending plans this week decide the next move. No edge before them."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Up 9% in a week on SpaceX merger hopes and back above $400; the move is already in the price. No call."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Still below its 200-day average after falling below $4,000; the Fed can move it either way. No edge."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Down 5.7% in a week with gold; no silver-specific news. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AAPL earnings Mon 2 Nov"
+  ],
+  "reasoning": "Previews of the new CEO's first earnings call on 2 Nov; the report can gap the price. No call before it."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "MSFT earnings Wed 28 Oct",
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Reports after today's close with the Fed in the afternoon; backlog optimism is a preview, not news. The report decides; no call."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "AMZN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Told its coders to rein in AI use as costs rise, ahead of Thursday's earnings. Not enough for a direction before the report."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "MSFT/GOOGL earnings Wed 28 Oct"
+  ],
+  "reasoning": "Down 11% in a week; possible chip-maker investments and 'AI panic is wrong' opinion pieces. Mixed; no call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "GOOGL earnings Wed 28 Oct"
+  ],
+  "reasoning": "Reports after today's close; OpenAI buying Google's AI chips is a plus, but the report decides. No call."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMD earnings Tue 3 Nov"
+  ],
+  "reasoning": "Up 5% on a bullish CFO update and the chip rally; momentum news already priced. No edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "MSFT/GOOGL earnings Wed 28 Oct"
+  ],
+  "reasoning": "Moves with the chip sector; no company news. No call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "New 52-week lows and a leadership shake-up; already down 9% in a week, and my two earlier NFLX calls were wrong. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Picked to lead retail sales for a large IPO; good for fees but small for JPM. No call."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "XOM earnings Fri 30 Oct"
+  ],
+  "reasoning": "Record highs into Friday's earnings while crude slipped this week; earnings can gap it. No edge."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "COIN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Another customer-data leak (funds not affected) the day before earnings. The report matters more; no call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "Fed decision Wed 28 Oct",
+   "Big Tech earnings Wed-Thu"
+  ],
+  "reasoning": "Futures mixed before the Fed and Big Tech earnings. No edge before the events."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "No small-cap news in the brief; the Fed is the event. No call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "Up 4% in a month as a haven; a priced-in December hike limits the upside, the decision can move it either way. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fed decision Wed 28 Oct"
+  ],
+  "reasoning": "More Russian diesel coming to the US and crude off its high; Middle East headlines cut both ways. No edge."
+ }
+]
