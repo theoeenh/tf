@@ -1,6 +1,6 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-28 19:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-28 20:22 UTC.
 
 **Equity $92,649** (-7.35%) · max drawdown -8.9% · 63 closed trades · 0 open
 
@@ -8,6 +8,11 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
 
 None.
 
+
+## Opening now (at the open of the bar forming now)
+
+- **LONG 76.1561 AAPL** (rsi2_reversion) for the 2026-10-29 13:00 bar, at about 343.96, stop 339.59, target 352.72  
+  *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 9 = chop market, low volatility (ATR 0.5% of price). Plan: entry 343.96, stop 339.59, target 352.72 (2:1); risking $333. Warning: fomc coming up while in the trade.
 
 ## Closed trades (newest first)
 

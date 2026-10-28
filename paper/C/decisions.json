@@ -89,6 +89,15 @@
 0.015240820131068755
 ]
 },
+"AAPL|rsi2_reversion|+|2026-10-29 13:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3389781357636914,
+0.07683425982076186
+]
+},
 "AAPL|squeeze_breakout|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
