@@ -636,6 +636,44 @@ def test_opening_auction_orders_already_queued_are_not_sent_again(monkeypatch, t
     assert not alpaca.already_queued(trades, {"FIS": 36.01})
 
 
+def test_stop_put_under_the_reference_price_keeps_the_queued_orders(monkeypatch, tmp_path):
+    """2026-10-28: before the open Alpaca's reference price for STC was 30.69 (it closed at 43.48), so its
+    37.19 stop went in at 30.68 (just under the reference). The open orders never matched the plan's 37.19,
+    and every run from 6:53 to 9:23 cancelled and re-sent everything, the queued FFIN buy included."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "STC", "strategy": "insider_low_short", "qty": 54.253785, "stop": 37.19, "target": None},
+              {"asset": "FFIN", "strategy": "insider_low_short", "qty": 181.685915, "stop": 28.12, "target": None,
+               "pending": True}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    for s in ("STC", "FFIN"):
+        monkeypatch.setitem(alpaca.SYMBOLS, s, s)
+    monkeypatch.setattr(alpaca, "positions", lambda: {"STC": 54.253785})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"STC": 43.48, "FFIN": 30.2})
+    monkeypatch.setattr(alpaca, "bar_range", lambda syms: {})
+    monkeypatch.setattr(alpaca, "opening_auction", lambda clock: True)
+    refused = alpaca.AlpacaError('POST /v2/orders -> 422: {"code":42210000,"market_price":"30.69",'
+                                 '"message":"stop price must be less than current price","stop_price":"37.19"}')
+    lower = [alpaca._below_reference({"symbol": "STC", "side": "sell", "qty": q, "type": "stop", "stop_price": 37.19,
+                                      "time_in_force": tif}, refused) for q, tif in ((54, "gtc"), (0.253785, "day"))]
+    assert [_ for _ in lower if _["stop_price"] == 30.68] == lower
+    buy = {"id": "1", "symbol": "FFIN", "side": "buy", "qty": "181.685915", "type": "market", "time_in_force": "day",
+           "order_class": "", "legs": None, "client_order_id": "tf-0123"}
+    open_ = [buy] + [{"id": str(i + 2), "symbol": "STC", "side": "sell", "qty": str(o["qty"]), "type": "stop",
+                      "stop_price": "30.68", "time_in_force": o["time_in_force"], "order_class": "", "legs": None,
+                      "client_order_id": o["client_order_id"]} for i, o in enumerate(lower)]
+    state = {"orders": open_}
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
+                        {"is_open": False} if p == "/v2/clock" else state["orders"])
+    assert alpaca.already_queued(trades, {"STC": 43.48, "FFIN": 30.2})
+    # a lower stop that is not a stand-in (an old level the trailing stop has since raised) still differs
+    state["orders"] = [buy] + [dict(o, client_order_id=f"tf-{i}") for i, o in enumerate(open_[1:])]
+    assert not alpaca.already_queued(trades, {"STC": 43.48, "FFIN": 30.2})
+
+
 def test_opening_auction_orders_stop_five_minutes_before_the_open():
     from algo import alpaca
 

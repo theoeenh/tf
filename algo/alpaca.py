@@ -356,7 +356,11 @@ def _below_reference(o: dict, err: Exception) -> dict | None:
     """Before the open Alpaca checks a sell stop against its reference price (the last close): a
     trailing stop raised above it is refused ("stop price must be less than current price") although
     the stock trades higher pre-market. The same order with its stop just under that price (1 cent),
-    so the position is never unprotected; the next run puts the planned stop back. None: another error."""
+    so the position is never unprotected; the next run puts the planned stop back. None: another error.
+    Its client_order_id carries the planned stop (tf-ref<stop x 10000>-...), so a later run with the
+    market closed sees the stand-in as the planned order (already_queued, 2026-10-28)."""
+    import uuid
+
     msg = str(err)
     if o.get("side") != "sell" or "stop price must be less than current price" not in msg:
         return None
@@ -365,6 +369,7 @@ def _below_reference(o: dict, err: Exception) -> dict | None:
     except (ValueError, KeyError):
         return None
     new = {k: (dict(v) if isinstance(v, dict) else v) for k, v in o.items()}
+    new["client_order_id"] = f"tf-ref{round(_stop_of(o) * 10000)}-{uuid.uuid4().hex[:16]}"
     stop = _px(ref - 0.01)
     if "stop_loss" in new:
         new["stop_loss"]["stop_price"] = stop
@@ -488,19 +493,33 @@ def sync(send: bool = False) -> list[dict]:
         raise
 
 
+def _planned_stop(o: dict) -> float | None:
+    """The plan's stop of a stand-in put under Alpaca's reference price (_below_reference), else None."""
+    cid = o.get("client_order_id") or ""
+    if not cid.startswith("tf-ref") or "-" not in cid[6:]:
+        return None
+    try:
+        return int(cid[6:cid.index("-", 6)]) / 10000
+    except ValueError:
+        return None
+
+
 def _order_key(o: dict) -> tuple:
-    """What an order does, the same for an order we would send and one Alpaca lists as open."""
+    """What an order does, the same for an order we would send and one Alpaca lists as open (a stop put
+    under Alpaca's reference price counts as the planned stop it stands in for)."""
     r = lambda x: round(float(x), 4)  # noqa: E731
     sym, side, qty = o["symbol"].replace("/", ""), o["side"], round(float(o["qty"]), 6)
+    planned = _planned_stop(o)
     if o.get("order_class") == "oco":
         if "take_profit" in o:  # ours
             return ("oco", sym, side, qty, r(o["take_profit"]["limit_price"]), r(o["stop_loss"]["stop_price"]))
         stop = next((x for x in o.get("legs") or [] if x.get("type") == "stop"), {})
-        return ("oco", sym, side, qty, r(o.get("limit_price") or 0), r(stop.get("stop_price") or 0))
+        return ("oco", sym, side, qty, r(o.get("limit_price") or 0),
+                r(planned if planned is not None else stop.get("stop_price") or 0))
     if o["type"] == "market":
         return ("market", sym, side, qty, o["time_in_force"])
     if o["type"] == "stop":
-        return ("stop", sym, side, qty, r(o["stop_price"]), o["time_in_force"])
+        return ("stop", sym, side, qty, r(planned if planned is not None else o["stop_price"]), o["time_in_force"])
     return ("other", sym, o.get("id"))  # never matches what we would send: the normal path runs
 
 
