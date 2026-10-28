@@ -1088,6 +1088,15 @@
 -0.03841689942217885
 ]
 },
+"TSLA|rsi2_reversion|+|2026-10-28 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.29905757282834006,
+-0.06831733713638377
+]
+},
 "TSLA|squeeze_breakout|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
