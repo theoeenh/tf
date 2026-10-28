@@ -480,6 +480,10 @@ def fitness(r) -> tuple:
     return (sum(_safe(GATES[g], r) for g in SEARCH_GATES), np.nan_to_num(r["s_icir"], nan=-9))
 
 
+SHARES = {"below", "bottom", "discount", "drop", "keep", "lag", "max_rank", "max_vol", "min_rank", "top",
+          "within"}  # fractions (of the universe, of a price): 100% or more switches the rule off or empties it
+
+
 def _neighbours(c: Candidate, keys=None) -> list[dict]:
     out = []
     for k, v in c.params.items():
@@ -487,6 +491,8 @@ def _neighbours(c: Candidate, keys=None) -> list[dict]:
             continue
         for f in (0.7, 1.4):
             nv = max(1, int(round(v * f))) if isinstance(v, int) else round(v * f, 2)
+            if isinstance(v, float) and k in SHARES and not 0 < nv < 1:
+                continue
             if nv != v:
                 out.append(c.params | {k: nv})
     return out

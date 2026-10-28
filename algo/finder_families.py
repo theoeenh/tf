@@ -1044,6 +1044,43 @@ def sector_reversal(prices: dict, lookback: int = 5, bottom: float = 0.05) -> di
     return _own((worst & friday[:, None]).reindex(columns=close.columns, fill_value=False).astype(int), prices)
 
 
+def _sector_median(close: pd.DataFrame, ret: pd.DataFrame) -> tuple[pd.Series, pd.DataFrame]:
+    from . import wide
+
+    sector = pd.Series({a: wide.sectors().get(a) for a in close.columns}).dropna()
+    return sector, ret[sector.index].T.groupby(sector).median().T                 # date x sector
+
+
+def sector_washout(prices: dict, drop: float = 0.15, bounce: int = 5) -> dict:
+    """Market data only: is insider_sector_stress's edge the sector's rebound rather than the insiders?
+    On the first day a sector whose median stock lost at least `drop` over 60 sessions has its median
+    `bounce`-day return turn positive, buy every stock of that sector. Closes up to that day only."""
+    close = _panel(prices)
+    sector, med60 = _sector_median(close, close / close.shift(60) - 1)
+    _, med_b = _sector_median(close, close / close.shift(bounce) - 1)
+    event = _entries((med60 <= -drop) & (med_b > 0))                               # date x sector
+    sig = pd.DataFrame({a: event[sector[a]] for a in sector.index}, index=close.index)
+    return _own(sig.reindex(columns=close.columns, fill_value=0), prices)
+
+
+def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
+    """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
+    days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
+    did better than that median by more than `lead`. The opposite of insider_sector_laggard: insiders
+    buying the names that held up in a sell-off. Filings and closes up to the signal day."""
+    sig = insider_sector_stress(prices, buyers=1, drop=drop)
+    close = _panel(prices)
+    ret = close / close.shift(60) - 1
+    sector, med = _sector_median(close, ret)
+    out = {}
+    for a, s in sig.items():
+        sec = sector.get(a)
+        ahead = ((ret[a] - med[sec]) > lead).reindex(s.index).fillna(False).to_numpy() if sec is not None \
+            else np.zeros(len(s), bool)
+        out[a] = (s.astype(bool) & ahead).astype(int)
+    return out
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1247,6 +1284,14 @@ WIDE_FAMILIES = {
     # market data only: weekly reversal of the drop against the stock's own sector (2026-10-27)
     "sector_reversal": (sector_reversal, {"lookback": [5, 10], "bottom": [0.02, 0.05]},
                         {"rules": ["hold 5 days", "hold 10 days"], "segments": ["sp1500"], "trend": False}),
+    # market data only: a sold-off sector's first bounce, all its stocks (2026-10-28)
+    "sector_washout": (sector_washout, {"drop": [0.1, 0.15], "bounce": [5, 10]},
+                       {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                        "segments": ["sp1500"], "trend": False}),
+    # insiders buying the names that held up in a falling sector (2026-10-28)
+    "insider_stress_leader": (insider_stress_leader, {"drop": [0.08, 0.15], "lead": [0.0, 0.05]},
+                              {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                               "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

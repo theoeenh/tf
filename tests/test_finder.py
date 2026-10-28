@@ -75,6 +75,16 @@ def test_children_follow_the_failures():
     assert any(k.params["n"] > 20 for k, w in slower if "slower" in w)
 
 
+def test_parameter_neighbours_keep_shares_below_one():
+    """2026-10-28: insider_stress_low_short(max_rank=0.98) had a neighbour max_rank=1.37: a share of the
+    universe above 100% switches the short filter off, so the 'new' idea scored as insider_sector_stress."""
+    c = F.Candidate("insider_stress_low_short", {"drop": 0.15, "max_rank": 0.98}, dict(F.RULES["target 2R"]))
+    ps = F._neighbours(c)
+    assert {p["max_rank"] for p in ps} == {0.98, 0.69} and all(0 < p["drop"] < 1 for p in ps)
+    k = F.Candidate("intraday_momentum", {"k": 0.75}, dict(F.RULES["target 2R"]))
+    assert {p["k"] for p in F._neighbours(k)} == {0.52, 1.05}  # not a share: may pass 1
+
+
 def test_ranking_never_looks_at_validation():
     base = {"s_events": 500, "s_ic": 0.1, "s_icir": 0.3, "s_avg_r": 0.2, "s_rand_avg_r": 0.1, "s_dsr": 0.5}
     good_v = base | {"v_ic": 0.5, "v_return": 0.3}
@@ -940,6 +950,41 @@ def test_sector_reversal_buys_the_drop_against_its_sector_on_fridays_with_past_c
     assert full["T1"].sum() == 0 and full["I2"].sum() == 0
     part = ff.sector_reversal({a: df.iloc[:f + 1] for a, df in prices.items()}, lookback=5, bottom=0.25)
     assert all((full[a].iloc[:f + 1] == part[a]).all() for a in prices)
+
+
+def test_sector_washout_buys_the_fallen_sector_on_its_first_bounce_with_past_closes_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    fall = np.r_[np.full(30, 100.0), np.linspace(100, 75, 60), np.linspace(75, 75, 10), np.linspace(75.5, 80, 20)]
+    prices = {"I1": pd.DataFrame({"Close": pd.Series(fall, index=days)}),
+              "I2": pd.DataFrame({"Close": pd.Series(fall * 1.02, index=days)}),
+              "T1": pd.DataFrame({"Close": pd.Series(100.0 + np.sin(np.arange(120)), index=days)})}
+    monkeypatch.setattr(wide, "sectors", lambda: {"I1": "Ind", "I2": "Ind", "T1": "Tech"})
+    full = ff.sector_washout(prices, drop=0.15, bounce=5)
+    hit = full["I1"].index[full["I1"] == 1]
+    assert len(hit) == 1 and hit[0] == days[100] and full["I2"].loc[hit[0]] == 1 and full["T1"].sum() == 0
+    cut = days.get_loc(hit[0]) + 1
+    part = ff.sector_washout({a: df.iloc[:cut] for a, df in prices.items()}, drop=0.15, bounce=5)
+    assert all((full[a].iloc[:cut] == part[a]).all() for a in prices)
+
+
+def test_insider_stress_leader_keeps_the_stocks_ahead_of_their_sector(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=100)
+    t = np.arange(100)
+    prices = {"LEAD": pd.DataFrame({"Close": pd.Series(100 - 0.05 * t, index=days)}),
+              "LAG": pd.DataFrame({"Close": pd.Series(100 - 0.3 * t, index=days)}),
+              "MID": pd.DataFrame({"Close": pd.Series(100 - 0.2 * t, index=days)})}
+    on = days[90]
+    monkeypatch.setattr(ff, "insider_sector_stress", lambda p, buyers, drop: {
+        a: pd.Series((p[a].index == on).astype(int), p[a].index) for a in p})
+    monkeypatch.setattr(wide, "sectors", lambda: {"LEAD": "Ind", "LAG": "Ind", "MID": "Ind"})
+    out = ff.insider_stress_leader(prices, drop=0.1, lead=0.0)
+    assert out["LEAD"].loc[on] == 1 and out["LAG"].sum() == 0 and out["MID"].sum() == 0
+    part = ff.insider_stress_leader({a: df.iloc[:91] for a, df in prices.items()}, drop=0.1, lead=0.0)
+    assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
 
 
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
