@@ -890,6 +890,15 @@
 -0.009537963534247795
 ]
 },
+"QQQ|opening_range|+|2026-10-29 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.06R (avg win +1.06R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4438165309564052,
+-0.0591552211174855
+]
+},
 "QQQ|rsi2_reversion|+|2026-10-01 13:00": {
 "skip": false,
 "reason": "",

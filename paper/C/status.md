@@ -1,14 +1,14 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-29 15:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-29 16:15 UTC.
 
-**Equity $92,690** (-7.31%) · max drawdown -8.9% · 63 closed trades · 2 open
+**Equity $92,738** (-7.26%) · max drawdown -8.9% · 63 closed trades · 2 open
 
 ## Open positions
 
 - **LONG 76.1561 AAPL** (rsi2_reversion) since 2026-10-29 13:00, entry 348.20, stop 343.83, target 356.96, now +0.21R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 9 = chop market, low volatility (ATR 0.5% of price). Plan: entry 348.20, stop 343.83, target 356.96 (2:1); risking $333. Warning: fomc coming up while in the trade.
-- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now -0.09R  
+- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now +0.06R  
   *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.52, stop 160.03, target 173.52 (2:1); risking $334.
 
 ## Closed trades (newest first)
@@ -203,7 +203,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (83)
+## Skipped by the learner (84)
 
 - 2026-10-27 16:00 AAPL opening_range: would have made -0.69R. SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.05R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-27 19:00 XOM vwap_reversion: would have made +1.47R. SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.19R (avg win +0.64R, avg loss -0.81R).
