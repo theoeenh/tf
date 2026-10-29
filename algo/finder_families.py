@@ -1081,6 +1081,37 @@ def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -
     return out
 
 
+def insider_calm_low_short(prices: dict, max_vol: float = 0.3, max_rank: float = 0.3) -> dict:
+    """The steadiest campaign with account D's filter: an insider buys (insider_low_vol, 1 buyer, 30 days)
+    a calm stock (60-session volatility in the lowest `max_vol` of the universe) that short sellers are
+    not betting against (20-day short share of off-exchange volume, FINRA, known from the next session,
+    in the lowest `max_rank`). Unlike the sector-stress ideas it fires in most months."""
+    from . import wide
+
+    sig = insider_low_vol(prices, buyers=1, max_rank=max_vol)
+    sv = wide.load_short_volume()
+    if sv.empty:
+        return {a: s * 0 for a, s in sig.items()}
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    sv = sv.reindex(index=idx, columns=list(prices)).shift(1)  # published after the close
+    rank = sv.rolling(20, min_periods=10).mean().rank(axis=1, pct=True)
+    return {a: (s * (rank[a].reindex(s.index) <= max_rank)).astype(int) for a, s in sig.items()}
+
+
+def low_vol_monthly(prices: dict, bottom: float = 0.1, trend: int = 200) -> dict:
+    """Market data only: the low-volatility effect (Baker-Bradley-Wurgler 2011: calm stocks earn as much
+    as jumpy ones with far less risk). At each month end, buy the stocks whose 60-session volatility ranks
+    in the calmest `bottom` share of the universe and that trade above their `trend`-day average (calm and
+    not falling). It fires every month, so its month-to-month steadiness can be judged. Closes up to that
+    day only."""
+    close = _panel(prices)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    calm = vol.rank(axis=1, pct=True) <= bottom
+    up = close > close.rolling(trend, min_periods=trend).mean()
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    return _own((calm & up & month_end.to_numpy()[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1292,6 +1323,14 @@ WIDE_FAMILIES = {
     "insider_stress_leader": (insider_stress_leader, {"drop": [0.08, 0.15], "lead": [0.0, 0.05]},
                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # insiders buying calm stocks short sellers are not against (2026-10-29)
+    "insider_calm_low_short": (insider_calm_low_short, {"max_vol": [0.3, 0.5], "max_rank": [0.3, 0.5]},
+                               {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: the calmest stocks in an uptrend, monthly (2026-10-29)
+    "low_vol_monthly": (low_vol_monthly, {"bottom": [0.05, 0.1], "trend": [100, 200]},
+                        {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

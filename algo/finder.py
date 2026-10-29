@@ -200,6 +200,23 @@ def monthly_ic(events: pd.DataFrame) -> pd.Series:
     return events.groupby(events["time"].dt.to_period("M"))["edge"].mean()
 
 
+MIN_IC_MONTHS = 12  # an ICIR from fewer months with signals means nothing (2026-10-29: +10.3 from 3 months)
+
+
+def icir(ic: pd.Series) -> float:
+    """Mean / std of the monthly IC: how steady the edge is from month to month."""
+    return float(ic.mean() / ic.std()) if len(ic) >= MIN_IC_MONTHS and ic.std() > 0 else np.nan
+
+
+def with_enough_months(rows: pd.DataFrame) -> pd.DataFrame:
+    """The search ICIR only where the search window has MIN_IC_MONTHS months with signals. Rows scored
+    before 2026-10-29 have no s_months: their months over search + validation ('months'), an upper bound."""
+    months = rows["s_months"] if "s_months" in rows else pd.Series(np.nan, index=rows.index)
+    if "months" in rows:
+        months = months.fillna(rows["months"])
+    return rows.assign(s_icir=rows["s_icir"].mask(months < MIN_IC_MONTHS))  # unknown: kept
+
+
 def backtest(c: Candidate, prices, sig, start, end, seed: int | None = None):
     rule = ExitRule(**c.rule)
     if c.data == "daily500":  # 500 stocks: only those with a signal in the window, and only the window
@@ -327,7 +344,7 @@ def evaluate(c: Candidate, prices) -> dict:
         ev = edge_events(win, prices, c.horizon())
         ic = monthly_ic(ev)
         row |= {f"{w}_events": len(ev), f"{w}_ic": float(ic.mean()) if len(ic) else np.nan,
-                f"{w}_icir": float(ic.mean() / ic.std()) if len(ic) > 2 and ic.std() > 0 else np.nan}
+                f"{w}_icir": icir(ic), f"{w}_months": len(ic)}
         st = trading_stats(backtest(c, prices, sig, a, b))
         row |= {f"{w}_{k}": v for k, v in st.items()}
         rnd = [trading_stats(backtest(c, prices, sig, a, b, seed=sd)) for sd in range(SEEDS)]
@@ -402,7 +419,7 @@ def plateau(rows: pd.DataFrame) -> pd.Series:
 
 def score(rows: pd.DataFrame) -> pd.DataFrame:
     """Deflated Sharpe with N = every attempt so far, then the gates."""
-    rows = rows.copy().reset_index(drop=True)
+    rows = with_enough_months(rows.copy().reset_index(drop=True))
     rows["plateau"] = plateau(rows)
     data = rows["candidate"].map(lambda x: json.loads(x).get("data", "hourly"))
     srs = {d: rows.loc[data == d, "s_sr_daily"].fillna(0).tolist() for d in data.unique()}

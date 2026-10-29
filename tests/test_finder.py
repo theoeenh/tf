@@ -2,6 +2,7 @@ import json
 from dataclasses import asdict
 
 import numpy as np
+import pytest
 import pandas as pd
 
 from algo import finder as F
@@ -83,6 +84,19 @@ def test_parameter_neighbours_keep_shares_below_one():
     assert {p["max_rank"] for p in ps} == {0.98, 0.69} and all(0 < p["drop"] < 1 for p in ps)
     k = F.Candidate("intraday_momentum", {"k": 0.75}, dict(F.RULES["target 2R"]))
     assert {p["k"] for p in F._neighbours(k)} == {0.52, 1.05}  # not a share: may pass 1
+
+
+def test_icir_needs_a_year_of_months_with_signals():
+    """2026-10-29: sector_washout(Energy) had an ICIR of +10.3 from signals on 4 days in 3 months; the top
+    campaign (insider_wave_stress, +0.88) had signals in only 8 months of 2017-2025."""
+    ic = pd.Series([0.5, 0.6, 0.55], index=pd.period_range("2020-03", periods=3, freq="M"))
+    assert np.isnan(F.icir(ic))
+    ic12 = pd.Series(np.r_[[0.5, 0.6, 0.55] * 4], index=pd.period_range("2019-01", periods=12, freq="M"))
+    assert F.icir(ic12) == pytest.approx(ic12.mean() / ic12.std())
+    rows = pd.DataFrame({"s_icir": [10.3, 0.88, 0.3, 0.5], "s_months": [np.nan, np.nan, np.nan, 40],
+                         "months": [3, 8, 100, 5]})  # older rows: months over search + validation only
+    assert F.with_enough_months(rows)["s_icir"].tolist()[2:] == [0.3, 0.5]
+    assert F.with_enough_months(rows)["s_icir"].isna().tolist()[:2] == [True, True]
 
 
 def test_ranking_never_looks_at_validation():
@@ -985,6 +999,44 @@ def test_insider_stress_leader_keeps_the_stocks_ahead_of_their_sector(monkeypatc
     assert out["LEAD"].loc[on] == 1 and out["LAG"].sum() == 0 and out["MID"].sum() == 0
     part = ff.insider_stress_leader({a: df.iloc[:91] for a, df in prices.items()}, drop=0.1, lead=0.0)
     assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
+
+
+def test_insider_calm_low_short_reads_published_short_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2021-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("AAA", "BBB", "CCC", "DDD")}
+    sig_day = days[40]
+    monkeypatch.setattr(ff, "insider_low_vol", lambda p, buyers, max_rank: {
+        a: pd.Series((p[a].index == sig_day).astype(int), p[a].index) for a in p})
+    base = pd.DataFrame({"AAA": 0.1, "BBB": 0.2, "CCC": 0.3, "DDD": 0.4}, index=days)
+    monkeypatch.setattr(wide, "load_short_volume", lambda: base)
+    a = ff.insider_calm_low_short(prices, max_vol=0.3, max_rank=0.25)
+    moved = base.copy()
+    moved.loc[sig_day:, "AAA"] = 9.0  # AAA heavily shorted from the signal day on: not known yet
+    monkeypatch.setattr(wide, "load_short_volume", lambda: moved)
+    b = ff.insider_calm_low_short(prices, max_vol=0.3, max_rank=0.25)
+    assert a["AAA"].loc[sig_day] == 1 and a["DDD"].loc[sig_day] == 0
+    assert all(a[k].equals(b[k]) for k in a)
+
+
+def test_low_vol_monthly_buys_calm_uptrending_stocks_at_month_ends_with_past_closes_only():
+    from algo.finder_families import low_vol_monthly
+
+    days = pd.bdate_range("2023-01-02", periods=320)
+    t = np.arange(320)
+    rng = np.random.default_rng(0)
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(100 * 1.001 ** t * (1 + 0.001 * np.sin(t)), index=days)}),
+              "JUMPY": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0.001, 0.03, 320))),
+                                                        index=days)}),
+              "CALM_DOWN": pd.DataFrame({"Close": pd.Series(100 * 0.999 ** t * (1 + 0.002 * np.sin(t)), index=days)})}
+    full = low_vol_monthly(prices, bottom=0.5, trend=200)
+    hits = full["CALM"].index[full["CALM"] == 1]
+    assert len(hits) >= 3 and all(d.to_period("M") != (d + pd.offsets.BDay(1)).to_period("M")
+                                  for d in hits if d != days[-1])  # the last day counts as a month end
+    assert full["JUMPY"].sum() == 0 and full["CALM_DOWN"].sum() == 0
+    part = low_vol_monthly({a: df.iloc[:300] for a, df in prices.items()}, bottom=0.5, trend=200)
+    assert all((full[a].iloc[:299] == part[a].iloc[:299]).all() for a in prices)
 
 
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
