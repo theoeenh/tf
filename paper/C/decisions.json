@@ -161,6 +161,15 @@
 -0.06683406704535444
 ]
 },
+"AMD|opening_range|+|2026-10-29 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.08R (avg win +1.06R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4336376466976424,
+-0.07958577072845202
+]
+},
 "AMD|rsi2_reversion|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
