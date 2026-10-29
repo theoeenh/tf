@@ -1,0 +1,190 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Little moved after the Fed held rates with a hawkish tone; wagers and opinion pieces only. No edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Heading for its worst October since 2018 as early holders move coins; the fall is already in the price. No call."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Payments news and price predictions; nothing that gives a direction. No call."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMZN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Chips fell on Samsung's profit miss and lighter capex from Microsoft and Alphabet; an $18 billion SpaceX stake disclosed. Mixed; no call."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Dragged down with tech after Alphabet's results, after a 15% month. No company news to trade on."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No new gold news; below its 200-day average after the hawkish Fed. No call."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down 12% in a month, no new silver news. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "AAPL earnings Mon 2 Nov"
+  ],
+  "reasoning": "Smartphone shipments fell 20% in Q3 (lowest Q3 since 2013) and memory costs rise, ahead of Monday's earnings. Negative industry news, but the report decides; no call."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Beat estimates and showed capex can grow; edged higher while Alphabet fell. Already priced at the open; no call."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 2,
+  "key_events": [
+   "AMZN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Reports after today's close; Alphabet's cash-burn reaction is a warning for big AI spenders, but the report decides. No call."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Bank of America clients selling Meta and Google at a record pace; down 17% in a month. The selling is already in the price. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": -1,
+  "confidence": 0.3,
+  "horizon_days": 20,
+  "key_events": [],
+  "reasoning": "Down about 11% today after a 'significant miss' in search and negative cash flow from AI spending, the biggest value drop in its history. Large negative earnings surprises tend to keep drifting lower for weeks (post-earnings drift). Small short bias, low confidence: my past calls have mostly been wrong."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "AMD earnings Tue 3 Nov"
+  ],
+  "reasoning": "Chips fell on Samsung's miss; earnings next Tuesday decide the next move. No call."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Fell with chips on lighter capex from Microsoft and Alphabet; a new Anthropic deal on the other side. Mixed; no call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Walked away from an Xbox licensing deal; still near 52-week lows. My earlier NFLX calls were wrong. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Lead roles on two very large IPOs; positive for fees but small for JPM. No call."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 2,
+  "key_events": [
+   "XOM earnings Fri 30 Oct"
+  ],
+  "reasoning": "Up 55% this year into Friday's earnings; the report can gap it either way. No call."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 2,
+  "key_events": [
+   "COIN earnings Thu 29 Oct"
+  ],
+  "reasoning": "Reports after today's close in a 'stealth bear market' for crypto stocks (down 53% from its high). The fall is known; the report decides. No call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nasdaq selling off after inflation data and Alphabet's results; one day's drop is not a trend. No call."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No small-cap news in the brief. No call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Higher yields make bonds look attractive again, but a hawkish Fed and inflation data point the other way. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No new oil news beyond diesel supply; near its highs on Middle East tension. No edge."
+ }
+]
