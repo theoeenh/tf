@@ -60,10 +60,23 @@
   "bar": "2026-10-28"
  },
  {
+  "asset": "HBAN",
+  "ticker": "HBAN",
+  "strategy": "insider_low_short",
+  "qty": 408.80596363575546,
+  "stop": 14.772847491347797,
+  "target": null,
+  "mark": 15.7,
+  "entry": 15.7,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-28"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 102.05074896551066,
+  "qty": 93.74028603083242,
   "stop": null,
   "target": null,
   "mark": 772.31,

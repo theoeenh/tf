@@ -12,8 +12,8 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **FFIN** 181.69 shares, entry 30.23, stop 28.28, now 30.31 (+0.04R)
 - **STC** 54.23 shares, entry 43.95, stop 37.51, now 44.30 (+0.05R)
 - **THRM** 70.61 shares, entry 29.84, stop 27.47, now 33.16 (+0.62R)
-- **SPY** (idle cash) 102.05 shares, now 772.31
+- **SPY** (idle cash) 93.74 shares, now 772.31
 
 ## New signals (bought at the next open)
 
-None.
+- **HBAN** 408.81 shares around 15.70, stop 14.77
