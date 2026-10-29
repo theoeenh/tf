@@ -107,6 +107,15 @@
 0.1502478361470423
 ]
 },
+"AAPL|squeeze_breakout|+|2026-10-29 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).",
+"size": 1.0,
+"pred": [
+0.3419383736415523,
+-0.036939467305081464
+]
+},
 "AMD|donchian_trend|+|2026-10-02 14:00": {
 "skip": false,
 "reason": "",
@@ -1275,6 +1284,15 @@
 "pred": [
 0.2820514762055383,
 -0.13024442621950805
+]
+},
+"USO|rsi2_reversion|+|2026-10-29 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.35626452304948436,
+0.13963788583753267
 ]
 },
 "USO|squeeze_breakout|+|2026-10-01 18:00": {
