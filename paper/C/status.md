@@ -1,18 +1,15 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-29 14:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-29 15:23 UTC.
 
-**Equity $92,764** (-7.24%) · max drawdown -8.9% · 63 closed trades · 1 open
+**Equity $92,690** (-7.31%) · max drawdown -8.9% · 63 closed trades · 2 open
 
 ## Open positions
 
-- **LONG 76.1561 AAPL** (rsi2_reversion) since 2026-10-29 13:00, entry 348.20, stop 343.83, target 356.96, now +0.35R  
+- **LONG 76.1561 AAPL** (rsi2_reversion) since 2026-10-29 13:00, entry 348.20, stop 343.83, target 356.96, now +0.21R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 9 = chop market, low volatility (ATR 0.5% of price). Plan: entry 348.20, stop 343.83, target 356.96 (2:1); risking $333. Warning: fomc coming up while in the trade.
-
-## Opening now (at the open of the bar forming now)
-
-- **LONG 74.2103 USO** (rsi2_reversion) for the 2026-10-29 14:00 bar, at about 164.50, stop 160.01, target 173.50  
-  *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.50, stop 160.01, target 173.50 (2:1); risking $334.
+- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now -0.09R  
+  *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.52, stop 160.03, target 173.52 (2:1); risking $334.
 
 ## Closed trades (newest first)
 
