@@ -18,7 +18,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **HBAN** 430.71 shares around 15.70, stop 14.77
 
 ## Closed trades
 

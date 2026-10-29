@@ -94,5 +94,18 @@
   "entry": 29.844700000000003,
   "r": 0.6197597721227148,
   "bar": "2026-10-28"
+ },
+ {
+  "asset": "HBAN",
+  "ticker": "HBAN",
+  "strategy": "insider_low_short",
+  "qty": 430.71176941141886,
+  "stop": 14.772847491347592,
+  "target": null,
+  "mark": 15.7,
+  "entry": 15.7,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-10-28"
  }
 ]
