@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-10-29 17:28 UTC. **Equity $99,426** (-0.57% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-10-29 17:58 UTC. **Equity $99,532** (-0.47% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 5 | $-2,044 | $-408 | 1 / 5 |
-| long_put | 3 | 3 | $-520 | $-215 | 1 / 3 |
-| bull_put_spread | 3 | 7 | $-1,084 | $-677 | 1 / 7 |
-| bear_call_spread | 1 | 5 | $-512 | $-135 | 3 / 5 |
-| spy_put_spread | 2 | 0 | $+0 | $+84 | 0 / 0 |
+| long_call | 3 | 5 | $-2,044 | $-496 | 1 / 5 |
+| long_put | 3 | 3 | $-520 | $-39 | 1 / 3 |
+| bull_put_spread | 3 | 7 | $-1,084 | $-573 | 1 / 7 |
+| bear_call_spread | 1 | 5 | $-512 | $-145 | 3 / 5 |
+| spy_put_spread | 2 | 0 | $+0 | $+43 | 0 / 0 |
 
 ## Open positions
 
@@ -29,25 +29,25 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $9,927; at the quotes' mid they are worth $10,791 (difference $-864).
+Alpaca values the positions at $10,016; at the quotes' mid they are worth $10,756 (difference $-740).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261120P00310000 | 1 | $90 | $92 | ok |
-| AAPL261120P00327500 | -1 | $-279 | $-274 | ok |
-| AAPL261218C00335000 | 1 | $2,305 | $2,333 | ok |
-| AVGO261120C00360000 | -1 | $-870 | $-849 | ok |
-| AVGO261120C00380000 | 1 | $370 | $372 | ok |
-| AVGO261120P00347500 | 1 | $1,470 | $1,466 | ok |
-| CLF261204C00013500 | 22 | $2,992 | $3,146 | ok |
-| CLF261218P00012000 | 40 | $1,320 | $1,300 | ok |
+| AAPL261120P00310000 | 1 | $90 | $90 | ok |
+| AAPL261120P00327500 | -1 | $-282 | $-272 | ok |
+| AAPL261218C00335000 | 1 | $2,285 | $2,287 | ok |
+| AVGO261120C00360000 | -1 | $-870 | $-866 | ok |
+| AVGO261120C00380000 | 1 | $370 | $374 | ok |
+| AVGO261120P00347500 | 1 | $1,500 | $1,492 | ok |
+| CLF261204C00013500 | 22 | $2,948 | $3,080 | ok |
+| CLF261218P00012000 | 40 | $1,320 | $1,340 | ok |
 | CLF261218P00013000 | -40 | $-2,760 | $-2,640 | ok |
 | FIS261120P00032500 | 14 | $420 | $525 | ok |
-| FIS261120P00035000 | -14 | $-1,540 | $-1,302 | ok |
-| IWM261218P00284000 | 2 | $1,486 | $1,513 | ok |
-| NFLX261218P00075000 | 3 | $3,810 | $3,891 | ok |
-| PEP261120C00133000 | 6 | $1,674 | $1,779 | ok |
-| SPY261127P00715000 | 1 | $198 | $201 | ok |
-| SPY261127P00746000 | -1 | $-474 | $-481 | ok |
-| SPY261204P00710000 | 1 | $244 | $245 | ok |
-| SPY261204P00742000 | -1 | $-529 | $-525 | ok |
+| FIS261120P00035000 | -14 | $-1,540 | $-1,358 | ok |
+| IWM261218P00284000 | 2 | $1,550 | $1,547 | ok |
+| NFLX261218P00075000 | 3 | $3,900 | $3,957 | ok |
+| PEP261120C00133000 | 6 | $1,692 | $1,803 | ok |
+| SPY261127P00715000 | 1 | $217 | $222 | ok |
+| SPY261127P00746000 | -1 | $-518 | $-512 | ok |
+| SPY261204P00710000 | 1 | $264 | $267 | ok |
+| SPY261204P00742000 | -1 | $-570 | $-580 | ok |
