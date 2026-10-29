@@ -677,7 +677,9 @@ def test_stop_put_under_the_reference_price_keeps_the_queued_orders(monkeypatch,
 def test_stand_in_stops_are_tried_again_at_the_planned_level_without_touching_the_queue(monkeypatch, tmp_path):
     """A stop put under Alpaca's reference price stays only until Alpaca accepts the planned level
     (2026-10-27: BBT's reference came back by 18:50): while the market is closed and the queued orders
-    match the plan, each run tries the planned stop again in place; queued market orders stay."""
+    match the plan, each run tries the planned stop again; queued market orders stay. Alpaca cannot
+    replace an order held for the next session (2026-10-28: "cannot replace order in accepted status"),
+    so the stand-in is cancelled and the planned stop sent, or a new stand-in if it is still refused."""
     import json
 
     from algo import alpaca
@@ -688,6 +690,17 @@ def test_stand_in_stops_are_tried_again_at_the_planned_level_without_touching_th
     monkeypatch.setattr(alpaca, "check_account", lambda: "PA1")
     monkeypatch.setattr(alpaca, "last_prices", lambda: {})
     monkeypatch.setattr(alpaca, "already_queued", lambda trades, prices: True)
+    monkeypatch.setattr(alpaca, "_wait", lambda check, seconds=20.0: check())
+    sent = []
+
+    def send(o):
+        if o["symbol"] == "FFIN" and o["stop_price"] > 23.09:  # FFIN: still refused above the reference
+            raise alpaca.AlpacaError('POST /v2/orders -> 422: {"code":42210000,"market_price":"23.09",'
+                                     '"message":"stop price must be less than current price"}')
+        sent.append(o)
+        return {"id": f"n{len(sent)}"}
+
+    monkeypatch.setattr(alpaca, "_send", send)
     open_ = [{"id": "s1", "symbol": "BBT", "side": "sell", "qty": "168", "type": "stop", "stop_price": "26.54",
               "time_in_force": "gtc", "client_order_id": "tf-ref288900-aaaa"},
              {"id": "s2", "symbol": "FFIN", "side": "sell", "qty": "181", "type": "stop", "stop_price": "23.08",
@@ -702,19 +715,18 @@ def test_stand_in_stops_are_tried_again_at_the_planned_level_without_touching_th
         calls.append((m, p, b))
         if m == "GET" and p.startswith("/v2/orders?status=open"):
             return open_
-        if m == "PATCH" and p.endswith("/s2"):  # FFIN: still refused above Alpaca's reference
-            raise alpaca.AlpacaError('PATCH -> 422: {"market_price":"23.09","message":"stop price must be less '
-                                     'than current price"}')
-        if m == "PATCH":
-            return {"id": "new", "stop_price": b["stop_price"]}
+        if m == "DELETE":
+            return {}
+        if m == "GET" and p.startswith("/v2/orders/s"):
+            return {"status": "canceled"}
         raise AssertionError((m, p))
 
     monkeypatch.setattr(alpaca, "request", request)
     assert alpaca.sync(send=True) == []
-    patched = [(p, b["stop_price"]) for m, p, b in calls if m == "PATCH"]
-    assert patched == [("/v2/orders/s1", 28.89), ("/v2/orders/s2", 28.28)]
-    assert all(not b["client_order_id"].startswith("tf-ref") for m, p, b in calls if m == "PATCH")
-    assert not [c for c in calls if c[0] in ("DELETE", "POST")]  # the queue and the other stops stay
+    assert [p for m, p, b in calls if m == "DELETE"] == ["/v2/orders/s1", "/v2/orders/s2"]  # stand-ins only
+    assert [(o["symbol"], o["qty"], o["stop_price"], o["time_in_force"]) for o in sent] == [
+        ("BBT", 168.0, 28.89, "gtc"), ("FFIN", 181.0, 23.08, "gtc")]
+    assert "client_order_id" not in sent[0] and sent[1]["client_order_id"].startswith("tf-ref282800-")
 
 
 def test_opening_auction_orders_stop_five_minutes_before_the_open():

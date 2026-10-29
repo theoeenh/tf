@@ -496,24 +496,39 @@ def sync(send: bool = False) -> list[dict]:
 
 
 def retry_stand_ins() -> list[str]:
-    """Stops put under Alpaca's reference price (_below_reference) tried again at their planned level, in
-    place (the order is replaced only if Alpaca accepts the new stop): while the market is closed the
-    queued orders are left alone (already_queued), but the reference price often comes back later
-    (2026-10-27: BBT's by 18:50), and the planned stop should be in before the open."""
-    import uuid
-
+    """Stops put under Alpaca's reference price (_below_reference) tried again at their planned level:
+    while the market is closed the queued orders are left alone (already_queued), but the reference price
+    often comes back later (2026-10-27: BBT's by 18:50), and the planned stop should be in before the open.
+    Alpaca does not replace an order held for the next session ("cannot replace order in accepted status",
+    2026-10-28), so the stand-in is cancelled and the planned stop sent; if Alpaca still refuses it, a new
+    stand-in goes in at once (stops cannot trigger while the market is closed). Market orders stay queued."""
     out = []
     for o in request("GET", "/v2/orders?status=open&nested=true"):
         planned = _planned_stop(o)
         if planned is None or o.get("type") != "stop":
             continue
-        body = {"stop_price": _px(planned), "client_order_id": f"tf-{uuid.uuid4().hex[:24]}"}
+        new = {"symbol": o["symbol"], "side": o["side"], "qty": float(o["qty"]), "type": "stop",
+               "stop_price": _px(planned), "time_in_force": o["time_in_force"]}
         try:
-            request("PATCH", f"/v2/orders/{o['id']}", body)
-            out.append(f"{o['symbol']} {float(o['qty']):g}: stop back at the planned {_px(planned)}")
+            request("DELETE", f"/v2/orders/{o['id']}")
+            gone = _wait(lambda i=o["id"]: request("GET", f"/v2/orders/{i}").get("status") in ("canceled", "expired"))
         except AlpacaError as e:
-            if "stop price must be less than current price" not in str(e):
-                out.append(f"{o['symbol']}: planned stop {_px(planned)} not restored ({e})")
+            out.append(f"{o['symbol']}: stand-in stop kept ({e})")
+            continue
+        if not gone:
+            out.append(f"{o['symbol']}: stand-in stop not cancelled yet; the next run tries again")
+            continue
+        try:
+            _send(new)
+            out.append(f"{o['symbol']} {new['qty']:g}: stop back at the planned {new['stop_price']}")
+        except AlpacaError as e:
+            lower = _below_reference(new, e)  # still refused: a new stand-in, nothing to report
+            try:
+                if lower is None:
+                    raise
+                _send(lower)
+            except AlpacaError as e2:
+                out.append(f"{o['symbol']} {new['qty']:g}: NO STOP, planned {new['stop_price']} refused ({e2})")
     return out
 
 
