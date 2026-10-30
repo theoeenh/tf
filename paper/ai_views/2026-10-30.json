@@ -1,0 +1,190 @@
+[
+ {
+  "asset": "BTC",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "Binance hack: withdrawals halted"
+  ],
+  "reasoning": "A record $6.3 billion hack of Binance (North Korea suspected) halted withdrawals on the largest exchange, after a $1.49 billion liquidation day. A shock like this can force more selling as traders pull coins from exchanges. Small short bias, low confidence: my BTC calls have all been wrong so far."
+ },
+ {
+  "asset": "ETH",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "Binance hack: withdrawals halted"
+  ],
+  "reasoning": "Same Binance shock; ETH heads for its worst October since 2018. Forced selling risk while withdrawals are halted. Small short bias, low confidence."
+ },
+ {
+  "asset": "SOL",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "Binance hack: withdrawals halted"
+  ],
+  "reasoning": "Same Binance shock; SOL is down 13% in a month. Small short bias, low confidence."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Fell 3% with chips after Intel's weak outlook; a security story near its CEO. Not enough for a call."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Held up in a bad week for AI stocks; merger questions with SpaceX cut both ways. No call."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No new gold news. No call."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down 13% in a month, no new news. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "AAPL earnings Mon 2 Nov"
+  ],
+  "reasoning": "Earnings Monday; previews say memory costs are the number to watch after a 20% drop in phone shipments. The report decides; no call."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Its first bond sale since 2017 ($25 billion for AI); held up better than other big tech. No call."
+ },
+ {
+  "asset": "AMZN",
+  "bias": -1,
+  "confidence": 0.3,
+  "horizon_days": 20,
+  "key_events": [],
+  "reasoning": "Down about 7% after an earnings miss and negative free cash flow from AI spending. Like Alphabet yesterday, a large negative surprise tends to keep drifting lower for weeks. Small short bias, low confidence."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Down 2% with big tech and a new UK monopoly investigation; already down 14% in a month. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": -1,
+  "confidence": 0.3,
+  "horizon_days": 20,
+  "key_events": [],
+  "reasoning": "Kept falling after Wednesday's results (-12.5% in a week) and got analyst downgrades. Post-earnings drift: small short bias kept from yesterday, low confidence."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "AMD earnings Tue 3 Nov"
+  ],
+  "reasoning": "Fell 10% with Intel's 25% plunge on a weak PC outlook, before its own earnings on Tuesday. The report decides; no call."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Bullish calls and a large Anthropic deal against the chip sell-off. Mixed; no call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "New 52-week lows after its guidance reset; my earlier NFLX calls were wrong. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No company news beyond analyst calls. No call."
+ },
+ {
+  "asset": "XOM",
+  "bias": 1,
+  "confidence": 0.25,
+  "horizon_days": 20,
+  "key_events": [],
+  "reasoning": "Earnings topped estimates on refining margins from the diesel and gasoline spike. A positive surprise tends to drift higher for weeks, but the stock is already up 55% this year. Small long bias, low confidence."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Binance hack: withdrawals halted"
+  ],
+  "reasoning": "The Binance hack could send users to Coinbase, but falling crypto prices hurt its trading income; down 4.6% today. Mixed; no call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nasdaq futures down 2% on Amazon and Intel; the AI-spending worry is in the price after a week of falls. No call."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No small-cap news in the brief. No call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "No new bond news; tech selling can bring buyers to Treasuries, but nothing specific. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Big Oil profits on high prices; no new supply news. No call."
+ }
+]
