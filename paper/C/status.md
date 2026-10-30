@@ -1,22 +1,22 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-30 15:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-10-30 16:18 UTC.
 
-**Equity $92,698** (-7.30%) · max drawdown -8.9% · 63 closed trades · 6 open
+**Equity $92,663** (-7.34%) · max drawdown -8.9% · 63 closed trades · 6 open
 
 ## Open positions
 
-- **LONG 29.5411 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.50R  
+- **LONG 29.5411 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.47R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.
-- **LONG 76.1561 AAPL** (rsi2_reversion) since 2026-10-29 13:00, entry 348.20, stop 343.83, target 356.96, now +0.06R  
+- **LONG 76.1561 AAPL** (rsi2_reversion) since 2026-10-29 13:00, entry 348.20, stop 343.83, target 356.96, now -0.29R  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 9 = chop market, low volatility (ATR 0.5% of price). Plan: entry 348.20, stop 343.83, target 356.96 (2:1); risking $333. Warning: fomc coming up while in the trade.
-- **LONG 91.2711 XOM** (donchian_trend) since 2026-10-30 14:00, entry 188.30, stop 184.63, target 195.62, now -0.93R  
+- **LONG 91.2711 XOM** (donchian_trend) since 2026-10-30 14:00, entry 188.30, stop 184.63, target 195.62, now -0.72R  
   *Thinking:* LONG XOM (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 184.63, target 195.62 (2:1); risking $334.
-- **LONG 76.0510 XOM** (squeeze_breakout) since 2026-10-30 14:00, entry 188.30, stop 183.90, target none (trailing), now -0.78R  
+- **LONG 76.0510 XOM** (squeeze_breakout) since 2026-10-30 14:00, entry 188.30, stop 183.90, target none (trailing), now -0.60R  
   *Thinking:* LONG XOM (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 183.90, no target, trailing stop lets it run; risking $334.
-- **LONG 77.7412 USO** (donchian_trend) since 2026-10-30 14:00, entry 170.74, stop 166.45, target 179.34, now -0.04R  
+- **LONG 77.7412 USO** (donchian_trend) since 2026-10-30 14:00, entry 170.74, stop 166.45, target 179.34, now -0.10R  
   *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, low volatility (ATR 1.0% of price). Plan: entry 170.74, stop 166.45, target 179.34 (2:1); risking $334.
-- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now +1.35R  
+- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now +1.29R  
   *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.52, stop 160.03, target 173.52 (2:1); risking $334.
 
 ## Closed trades (newest first)
