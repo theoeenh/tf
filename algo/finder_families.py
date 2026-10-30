@@ -1112,6 +1112,37 @@ def low_vol_monthly(prices: dict, bottom: float = 0.1, trend: int = 200) -> dict
     return _own((calm & up & month_end.to_numpy()[:, None]).astype(int), prices)
 
 
+def insider_calm_fresh(prices: dict, gap: int = 365, max_vol: float = 0.3) -> dict:
+    """Two 13/14 ideas together: an opportunistic insider (insider_fresh, 1 buyer: no purchase of this stock
+    by that insider in the `gap` days before) buys a calm stock (60-session volatility in the lowest
+    `max_vol` of the universe, as insider_low_vol, the steadiest campaign under the 12-month rule).
+    Filings and closes up to the signal day."""
+    sig = insider_fresh(prices, buyers=1, gap=gap)
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    calm = vol.rank(axis=1, pct=True) <= max_vol
+    return {a: (s.astype(bool) & calm[a].reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
+def turn_of_month(prices: dict, days_before: int = 1, max_vol: float = 0.3) -> dict:
+    """Market data only: the turn-of-the-month effect (Ariel 1987, Lakonishok-Smidt 1988: stocks earn
+    most of their return from the last day of a month to the first days of the next, when pay and fund
+    flows arrive). At the close `days_before` sessions before the month's last session, buy the calm
+    stocks (60-session volatility in the lowest `max_vol`) that trade above their 200-day average; it fires
+    every month. The month's sessions come from the trading calendar (the data's own dates), so no future
+    prices are used; only the last, unfinished month of the data counts its sessions as if it were over."""
+    close = _panel(prices)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    calm = vol.rank(axis=1, pct=True) <= max_vol
+    up = close > close.rolling(200, min_periods=200).mean()
+    month = close.index.to_period("M")
+    left = pd.Series(1, index=close.index).groupby(month).cumcount(ascending=False)  # sessions left this month
+    day = (left == days_before).to_numpy()
+    return _own((calm & up & day[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1331,6 +1362,13 @@ WIDE_FAMILIES = {
     "low_vol_monthly": (low_vol_monthly, {"bottom": [0.05, 0.1], "trend": [100, 200]},
                         {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500"], "trend": False}),
+    # opportunistic insiders buying calm stocks (2026-10-30)
+    "insider_calm_fresh": (insider_calm_fresh, {"gap": [365, 730], "max_vol": [0.3, 0.5]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: calm uptrending stocks over the turn of the month (2026-10-30)
+    "turn_of_month": (turn_of_month, {"days_before": [0, 1], "max_vol": [0.2, 0.4]},
+                      {"rules": ["hold 5 days"], "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

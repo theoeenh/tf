@@ -163,8 +163,10 @@ def test_refresh_earnings_moves_a_stale_next_date_and_keeps_the_cache_on_failure
     monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
     monkeypatch.setitem(news.ASSET_CLASS, "AAA", "stock")
     monkeypatch.setitem(news.ASSET_CLASS, "BBB", "stock")
-    soon = pd.Timestamp.now(tz="America/New_York").normalize() + pd.Timedelta(days=3)
-    later = soon + pd.Timedelta(days=7)
+    # calendar days (DateOffset), not 72 hours: across the end of daylight saving time (1 Nov 2026)
+    # "+3 days" in hours lands at 23:00 the day before
+    soon = pd.Timestamp.now(tz="America/New_York").normalize() + pd.DateOffset(days=3)
+    later = soon + pd.DateOffset(days=7)
     for a in ("AAA", "BBB"):
         pd.DataFrame({"date": [later.tz_localize(None)]}).to_csv(tmp_path / f"{a}_earnings.csv", index=False)
 

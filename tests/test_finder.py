@@ -1039,6 +1039,42 @@ def test_low_vol_monthly_buys_calm_uptrending_stocks_at_month_ends_with_past_clo
     assert all((full[a].iloc[:299] == part[a].iloc[:299]).all() for a in prices)
 
 
+def test_insider_calm_fresh_keeps_calm_stocks_with_past_closes_only(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    t = np.arange(120)
+    rng = np.random.default_rng(1)
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(100 + 0.1 * np.sin(t), index=days)}),
+              "WILD": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0, 0.04, 120))), index=days)})}
+    on = days[100]
+    monkeypatch.setattr(ff, "insider_fresh", lambda p, buyers, gap: {
+        a: pd.Series((p[a].index == on).astype(int), p[a].index) for a in p})
+    out = ff.insider_calm_fresh(prices, gap=365, max_vol=0.5)
+    assert out["CALM"].loc[on] == 1 and out["WILD"].sum() == 0
+    part = ff.insider_calm_fresh({a: df.iloc[:101] for a, df in prices.items()}, gap=365, max_vol=0.5)
+    assert all((out[a].iloc[:101] == part[a]).all() for a in prices)
+
+
+def test_turn_of_month_fires_before_each_month_end_with_past_closes_only():
+    from algo.finder_families import turn_of_month
+
+    days = pd.bdate_range("2023-01-02", periods=320)
+    t = np.arange(320)
+    rng = np.random.default_rng(2)
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(100 * 1.001 ** t * (1 + 0.001 * np.sin(t)), index=days)}),
+              "JUMPY": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0.001, 0.03, 320))),
+                                                        index=days)})}
+    full = turn_of_month(prices, days_before=1, max_vol=0.5)
+    hits = full["CALM"].index[full["CALM"] == 1]
+    last = days.to_series().groupby(days.to_period("M")).max()
+    assert len(hits) >= 3 and all(days[days.get_loc(d) + 1] == last[d.to_period("M")] for d in hits[:-1])
+    assert full["JUMPY"].sum() == 0
+    cut = days.get_loc(last[days[299].to_period("M")]) + 1     # up to a completed month: the same signals
+    part = turn_of_month({a: df.iloc[:cut] for a, df in prices.items()}, days_before=1, max_vol=0.5)
+    assert all((full[a].iloc[:cut] == part[a]).all() for a in prices)
+
+
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
     from algo import finder_families as ff, wide
 
