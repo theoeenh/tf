@@ -3,36 +3,39 @@
   "asset": "DBC",
   "ticker": "DBC",
   "strategy": "trend_momentum",
-  "qty": 938.7995262066922,
+  "qty": 937.3312197698866,
   "stop": null,
   "target": null,
-  "mark": 33.72,
+  "mark": 33.61,
   "entry": 33.77,
   "r": 0.0,
-  "bar": "2026-10-29"
+  "bar": "2026-10-30",
+  "pending": true
  },
  {
-  "asset": "EEM",
-  "ticker": "EEM",
+  "asset": "EFA",
+  "ticker": "EFA",
   "strategy": "trend_momentum",
-  "qty": 517.2664382444118,
+  "qty": 304.7663954383853,
   "stop": null,
   "target": null,
-  "mark": 62.72,
-  "entry": 61.29,
+  "mark": 103.37,
+  "entry": 103.37,
   "r": 0.0,
-  "bar": "2026-10-29"
+  "bar": "2026-10-30",
+  "pending": true
  },
  {
-  "asset": "SPY",
-  "ticker": "SPY",
+  "asset": "SHY",
+  "ticker": "SHY",
   "strategy": "trend_momentum",
-  "qty": 41.59168251885864,
+  "qty": 385.6022312908922,
   "stop": null,
   "target": null,
-  "mark": 769.36,
-  "entry": 762.25,
+  "mark": 81.7,
+  "entry": 81.7,
   "r": 0.0,
-  "bar": "2026-10-29"
+  "bar": "2026-10-30",
+  "pending": true
  }
 ]
