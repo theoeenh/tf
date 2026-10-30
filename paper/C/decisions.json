@@ -1322,6 +1322,15 @@
 -0.03790133854985617
 ]
 },
+"USO|opening_range|+|2026-10-30 17:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 46% estimated chance of profit, expected -0.04R (avg win +1.05R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.45545571510402094,
+-0.037436461997908066
+]
+},
 "USO|rsi2_reversion|+|2026-10-16 14:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 29% estimated chance of profit, expected -0.10R (avg win +2.48R, avg loss -1.15R).",
