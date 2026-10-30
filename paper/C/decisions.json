@@ -1034,6 +1034,15 @@
 -0.2602642502026278
 ]
 },
+"TLT|squeeze_breakout|+|2026-11-02 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).",
+"size": 1.0,
+"pred": [
+0.34138600658110374,
+-0.03845377904434111
+]
+},
 "TSLA|donchian_trend|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
