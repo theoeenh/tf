@@ -494,6 +494,15 @@
 -0.09455444487326142
 ]
 },
+"JPM|rsi2_reversion|+|2026-10-30 14:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.15R).",
+"size": 1.0,
+"pred": [
+0.2724930156229668,
+-0.1636679169747255
+]
+},
 "META|donchian_trend|+|2026-10-13 14:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).",
@@ -1133,6 +1142,15 @@
 -0.06831733713638377
 ]
 },
+"TSLA|rsi2_reversion|+|2026-10-30 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.33870504073325236,
+0.07720128793197123
+]
+},
 "TSLA|squeeze_breakout|+|2026-10-09 14:00": {
 "skip": false,
 "reason": "",
@@ -1176,6 +1194,15 @@
 "pred": [
 0.3336316442814525,
 0.03753116785396027
+]
+},
+"USO|donchian_trend|+|2026-10-30 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3265578964208527,
+0.01036751526594848
 ]
 },
 "USO|opening_range|+|2026-10-01 16:00": {
@@ -1403,6 +1430,15 @@
 -0.07431819426830322
 ]
 },
+"XOM|donchian_trend|+|2026-10-30 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.3706910600526179,
+0.16860861104295244
+]
+},
 "XOM|opening_range|+|2026-10-02 13:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 47% estimated chance of profit, expected -0.01R (avg win +1.05R, avg loss -0.95R).",
@@ -1527,6 +1563,15 @@
 "pred": [
 0.32711078404423205,
 -0.06654509204891124
+]
+},
+"XOM|squeeze_breakout|+|2026-10-30 14:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.38451534532648274,
+0.06617449799991015
 ]
 },
 "XOM|vwap_reversion|+|2026-10-27 19:00": {
