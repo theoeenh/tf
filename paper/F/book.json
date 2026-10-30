@@ -35,28 +35,6 @@
    "id": "long_put-NFLX-2026-10-20"
   },
   {
-   "playbook": "bear_call_spread",
-   "underlying": "AVGO",
-   "legs": [
-    {
-     "symbol": "AVGO261120C00380000",
-     "qty": 1,
-     "price": 3.1
-    },
-    {
-     "symbol": "AVGO261120C00360000",
-     "qty": -1,
-     "price": 6.65
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": -355.0,
-   "max_loss": 1657.0,
-   "desc": "sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20",
-   "opened": "2026-10-20 15:35",
-   "id": "bear_call_spread-AVGO-2026-10-20"
-  },
-  {
    "playbook": "long_put",
    "underlying": "AVGO",
    "legs": [
@@ -712,6 +690,35 @@
    "closed": "2026-10-23 15:17",
    "why_closed": "account A closed the stock",
    "pnl": -580.0
+  },
+  {
+   "playbook": "bear_call_spread",
+   "underlying": "AVGO",
+   "legs": [
+    {
+     "symbol": "AVGO261120C00380000",
+     "qty": 1,
+     "price": 3.1
+    },
+    {
+     "symbol": "AVGO261120C00360000",
+     "qty": -1,
+     "price": 6.65
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -355.0,
+   "max_loss": 1657.0,
+   "desc": "sell 360 / buy 380 calls, 2026-11-20, credit 3.43 on width 20",
+   "opened": "2026-10-20 15:35",
+   "id": "bear_call_spread-AVGO-2026-10-20",
+   "done_legs": [
+    "AVGO261120C00360000",
+    "AVGO261120C00380000"
+   ],
+   "closed": "2026-10-30 18:29",
+   "why_closed": "half the credit earned (buy back $162 vs $355 received)",
+   "pnl": 195.0
   }
  ]
 }
