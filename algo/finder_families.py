@@ -1143,6 +1143,32 @@ def turn_of_month(prices: dict, days_before: int = 1, max_vol: float = 0.3) -> d
     return _own((calm & up & day[:, None]).astype(int), prices)
 
 
+def insider_filing_lag(prices: dict, mode: str = "prompt", buyers: int = 1) -> dict:
+    """Does it matter how fast an insider reports a purchase? Form 4 is due within two business days of
+    the trade. mode='prompt': only purchases filed within 1 day of the trade; mode='late': only those
+    filed 3 or more days after it (insiders who were in no hurry, or hid it for a while). Then an
+    insider cluster (30 days) of such purchases, signalled on the filing day. Filings up to that day."""
+    t = _insider("P")
+    if len(t):
+        lag = (t["filed"] - t["traded"]).dt.days
+        t = t[lag.notna() & ((lag <= 1) if mode == "prompt" else (lag >= 3))]
+    return _clusters(t, prices, buyers, days=30)
+
+
+def stress_calm_leaders(prices: dict, drop: float = 0.05, max_vol: float = 0.3) -> dict:
+    """Market data only: what holds up in a sell-off. On the first day the universe's median stock has
+    lost at least `drop` over 5 sessions (once per sell-off), buy the calm stocks (60-session volatility in
+    the lowest `max_vol`) that still trade above their 200-day average. insider_market_stress (11/14)
+    with the insiders replaced by price strength. Closes up to that day only."""
+    close = _panel(prices)
+    stress = (close / close.shift(5) - 1).median(axis=1) <= -drop
+    first = (stress & ~stress.shift(1, fill_value=False)).to_numpy()
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    calm = vol.rank(axis=1, pct=True) <= max_vol
+    up = close > close.rolling(200, min_periods=200).mean()
+    return _own((calm & up & first[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1369,6 +1395,14 @@ WIDE_FAMILIES = {
     # market data only: calm uptrending stocks over the turn of the month (2026-10-30)
     "turn_of_month": (turn_of_month, {"days_before": [0, 1], "max_vol": [0.2, 0.4]},
                       {"rules": ["hold 5 days"], "segments": ["sp1500"], "trend": False}),
+    # insider purchases filed promptly vs late (2026-10-31)
+    "insider_filing_lag": (insider_filing_lag, {"mode": ["prompt", "late"], "buyers": [1, 2]},
+                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                            "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # market data only: calm uptrending stocks at the start of a market sell-off (2026-10-31)
+    "stress_calm_leaders": (stress_calm_leaders, {"drop": [0.03, 0.05], "max_vol": [0.2, 0.4]},
+                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

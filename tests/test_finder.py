@@ -1075,6 +1075,42 @@ def test_turn_of_month_fires_before_each_month_end_with_past_closes_only():
     assert all((full[a].iloc[:cut] == part[a]).all() for a in prices)
 
 
+def test_insider_filing_lag_splits_prompt_and_late_filings_known_on_the_filing_day(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=60)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("FAST", "SLOW")}
+    t = pd.DataFrame({"ticker": ["FAST", "SLOW"], "owner": [1, 2],
+                      "traded": [days[20], days[20]], "filed": [days[21], days[26]]})  # 1 and 6 days late
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    prompt = ff.insider_filing_lag(prices, mode="prompt", buyers=1)
+    late = ff.insider_filing_lag(prices, mode="late", buyers=1)
+    assert prompt["FAST"].loc[days[21]] == 1 and prompt["SLOW"].sum() == 0
+    assert late["SLOW"].loc[days[26]] == 1 and late["FAST"].sum() == 0  # signalled when filed, not traded
+    assert late["SLOW"].loc[:days[25]].sum() == 0
+
+
+def test_stress_calm_leaders_buys_calm_uptrending_stocks_on_the_first_sell_off_day():
+    from algo.finder_families import stress_calm_leaders
+
+    days = pd.bdate_range("2023-01-02", periods=300)
+    t = np.arange(300)
+    calm = 100 * 1.001 ** t * (1 + 0.001 * np.sin(t))
+    shock = np.ones(300)
+    shock[280:] = 0.92                                         # an 8% market drop on day 280, then flat
+    rng = np.random.default_rng(3)
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(calm * np.where(t >= 280, 0.99, 1.0), index=days)}),
+              "MKT1": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0, 0.003, 300))) * shock,
+                                                       index=days)}),
+              "MKT2": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0, 0.003, 300))) * shock,
+                                                       index=days)})}
+    full = stress_calm_leaders(prices, drop=0.05, max_vol=0.4)
+    hits = full["CALM"].index[full["CALM"] == 1]
+    assert days[280] in hits and full["CALM"].loc[days[281]:days[284]].sum() == 0   # once per sell-off
+    part = stress_calm_leaders({a: df.iloc[:281] for a, df in prices.items()}, drop=0.05, max_vol=0.4)
+    assert all((full[a].iloc[:281] == part[a]).all() for a in prices)
+
+
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
     from algo import finder_families as ff, wide
 
