@@ -1,6 +1,6 @@
-# Strategy finder – 2026-10-30
+# Strategy finder – 2026-10-31
 
-**5176 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
+**5388 strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
 
 | gates | strategy | IC search | ICIR | IC valid. | avg R s / random | avg R v / random | return v | DSR | months + | regimes + | breadth | first failed gate |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -8,7 +8,7 @@
 | 13/14 | `0d7ffa1a66` sector_washout(drop=0.15, bounce=3) · stop_atr=3.0, rr=None, max_bars=60 · no trend filter · S&P 1500, daily | +2.152 | +0.78 | +2.074 | +1.29 / +0.24 | +0.98 / +0.26 | +57.5% | 0.06 | 85% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `ea77cc276f` sector_washout(drop=0.15, bounce=5) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.178 | +0.76 | +1.225 | +0.48 / +0.10 | +0.89 / +0.12 | +36.8% | 0.25 | 81% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `4696637404` sector_washout(drop=0.15, bounce=5) · stop_atr=3.0, rr=None, max_bars=60 · no trend filter · S&P 1500, daily | +2.178 | +0.76 | +1.225 | +1.19 / +0.21 | +1.27 / +0.23 | +45.6% | 0.03 | 81% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `f8a4373833` sector_washout(drop=0.15, bounce=10) · stop_atr=3.0, rr=None, max_bars=20 · no trend filter · S&P 1500, daily | +1.471 | +0.72 | +0.029 | +0.27 / +0.06 | +1.13 / +0.06 | +18.6% | 0.07 | 86% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `f8a4373833` sector_washout(drop=0.15, bounce=10) · stop_atr=3.0, rr=None, max_bars=20 · no trend filter · S&P 1500, daily | +1.471 | +0.72 | +0.029 | +0.27 / +0.06 | +1.13 / +0.06 | +18.6% | 0.06 | 86% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `853d3e7180` sector_washout(drop=0.15, bounce=6) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.213 | +0.72 | +1.225 | +0.57 / +0.10 | +1.01 / +0.10 | +46.9% | 0.28 | 73% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `0c507d036f` sector_washout(drop=0.15, bounce=6) · stop_atr=3.0, rr=None, max_bars=60 · no trend filter · S&P 1500, daily | +2.213 | +0.72 | +1.225 | +1.53 / +0.17 | +1.51 / +0.18 | +58.4% | 0.02 | 73% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `82b78b89e9` insider_stress_low_short(drop=0.15, max_rank=1.37) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.228 | +0.70 | +1.346 | +0.20 / +0.06 | +0.78 / +0.11 | +28.6% | 0.03 | 75% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
@@ -32,7 +32,7 @@
 
 ## Campaigns: each idea refined round by round (max 5 rounds)
 
-1317 ideas tried; **270 still improving** (search ICIR >= 0.2), 1018 dropped below the bar, 29 finished their 5 rounds.
+1337 ideas tried; **284 still improving** (search ICIR >= 0.2), 1024 dropped below the bar, 29 finished their 5 rounds.
 
 | idea → best version so far | rounds | tried | gates by round | ICIR | status |
 |---|---|---|---|---|---|
@@ -77,6 +77,7 @@
 | insider_opportunistic_low_short | 155 | 13/14 | +0.27 | `08cac4815e` insider_opportunistic_low_short(buyers=1, max_rank=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_low_vol | 64 | 13/14 | +0.27 | `3e085b793c` insider_low_vol(buyers=2, max_rank=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_top_exec | 145 | 13/14 | +0.26 | `ddc1eb8b1b` insider_top_exec(min_value=140000, who=ceo_cfo) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
+| insider_calm_fresh | 208 | 13/14 | +0.25 | `3cfdb091d7` insider_calm_fresh(gap=511, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_turn | 79 | 12/14 | +0.44 | `9f06c0dd75` insider_turn(buyers=2, window=14) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily |
 | insider_market_stress | 145 | 12/14 | +0.43 | `f627a77d0f` insider_market_stress(buyers=1, drop=0.03) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | insider_clean | 108 | 12/14 | +0.40 | `b36dede71a` insider_clean(buyers=2, quiet=88) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
@@ -109,6 +110,7 @@
 | intraday_momentum | 15 | 6/14 | -0.22 | `52f33b3180` intraday_momentum(k=1.0) · stop_atr=2.0, rr=2.0 |
 | squeeze | 21 | 6/14 | -0.36 | `5f107ac95d` squeeze() · stop_atr=3.0, rr=None, trail_atr=4.0, adx_threshold=25.0 · stocks+etfs |
 | sector_momentum | 8 | 5/14 | +0.09 | `305c6e6e52` sector_momentum(top=2, ma=100) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
+| turn_of_month | 4 | 5/14 | +0.08 | `fd97fffe16` turn_of_month(days_before=0, max_vol=0.2) · stop_atr=2.5, rr=None, max_bars=5 · no trend filter · S&P 1500, daily |
 | momentum_low_vol | 8 | 5/14 | -0.02 | `cbfb01bd5f` momentum_low_vol(top=0.05, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily |
 | momentum_pullback | 8 | 5/14 | -0.03 | `b158014923` momentum_pullback(top=0.2, bottom=0.1) · stop_atr=3.0, rr=None, max_bars=20 · no trend filter · S&P 1500, daily |
 | gap_fade | 15 | 5/14 | -0.17 | `63e0bb1295` gap_fade(g=1.0) · stop_atr=1.5, rr=None, max_bars=1 |
@@ -122,7 +124,7 @@
 | momentum_low_short | 8 | 2/14 | -0.13 | `5845cb17fa` momentum_low_short(top=0.05, max_rank=0.3) · stop_atr=3.0, rr=None, max_bars=20 · no trend filter · S&P 1500, daily |
 | earnings_reaction | 27 | 2/14 | -0.17 | `77d24b85f6` earnings_reaction(z=1.5, volume=1.5) · stop_atr=3.0, rr=None, max_bars=20 · S&P 500, daily |
 
-## The loop: 3859 children tried (improved versions aimed at a parent's failures)
+## The loop: 4051 children tried (improved versions aimed at a parent's failures)
 
 - breadth failed: 93 tried, best 9/14 gates
 - edge peaks at 2 bars, exit at 1: 1 tried, best 6/14 gates
@@ -137,27 +139,27 @@
 - edge peaks at 6 bars, exit at 2: 1 tried, best 4/14 gates
 - edge peaks at 60 bars, exit at 10: 10 tried, best 12/14 gates
 - edge peaks at 60 bars, exit at 2: 1 tried, best 9/14 gates
-- edge peaks at 60 bars, exit at 20: 23 tried, best 13/14 gates
+- edge peaks at 60 bars, exit at 20: 24 tried, best 13/14 gates
 - edge peaks at 60 bars, exit at 5: 46 tried, best 13/14 gates
-- fails in some regime: 212 tried, best 11/14 gates
-- no better than random: 1007 tried, best 12/14 gates
-- parameter neighbour: 1905 tried, best 13/14 gates
+- fails in some regime: 227 tried, best 11/14 gates
+- no better than random: 1042 tried, best 12/14 gates
+- parameter neighbour: 2013 tried, best 13/14 gates
 - unstable / decaying: 35 tried, best 8/14 gates
-- works only in some sectors: 515 tried, best 13/14 gates
+- works only in some sectors: 548 tried, best 13/14 gates
 
 ## Why strategies fail (all attempts)
 
-- search: deflated Sharpe >= 0.90: 5176 of 5176
-- shelf life: positive in every market regime seen: 3524 of 5176
-- shelf life: no decay (2nd half >= half of 1st): 2988 of 5176
-- robust: parameter neighbours keep >= half the edge (2+ tested): 2880 of 5176
-- shelf life: positive in >= 55% of months: 2815 of 5176
-- search: ICIR >= 0.2 (stable month to month): 2676 of 5176
-- decay: edge still >= half its peak at the exit, peak after the first bar: 2643 of 5176
-- shelf life: works on >= 55% of assets (S&P 500: of sectors): 2625 of 5176
-- validation: positive edge: 2485 of 5176
-- validation: beats random entries: 2150 of 5176
-- search: beats random entries (avg R): 1870 of 5176
-- search: at least 100 signals: 1687 of 5176
-- validation: makes money after costs: 1672 of 5176
-- search: positive edge (IC): 1057 of 5176
+- search: deflated Sharpe >= 0.90: 5388 of 5388
+- shelf life: positive in every market regime seen: 3710 of 5388
+- shelf life: no decay (2nd half >= half of 1st): 3154 of 5388
+- robust: parameter neighbours keep >= half the edge (2+ tested): 2947 of 5388
+- shelf life: positive in >= 55% of months: 2916 of 5388
+- search: ICIR >= 0.2 (stable month to month): 2749 of 5388
+- decay: edge still >= half its peak at the exit, peak after the first bar: 2723 of 5388
+- shelf life: works on >= 55% of assets (S&P 500: of sectors): 2661 of 5388
+- validation: positive edge: 2587 of 5388
+- validation: beats random entries: 2235 of 5388
+- search: beats random entries (avg R): 1918 of 5388
+- search: at least 100 signals: 1729 of 5388
+- validation: makes money after costs: 1711 of 5388
+- search: positive edge (IC): 1065 of 5388
