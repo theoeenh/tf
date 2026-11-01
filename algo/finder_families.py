@@ -1169,6 +1169,52 @@ def stress_calm_leaders(prices: dict, drop: float = 0.05, max_vol: float = 0.3) 
     return _own((calm & up & first[:, None]).astype(int), prices)
 
 
+def insider_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
+    """Breadth against the luck check: every attempt fails the deflated Sharpe, which rewards a steadier
+    daily return, and each insider idea alone holds few trades at a time. The union of the steadiest
+    insider ideas, versions fixed before this family existed, in order of their months with signals:
+    insider_low_short (account D's rule), insider_calm_fresh, insider_low_vol, insider_sector_stress; the
+    first `parts` of them. A stock signalled again within `gap` sessions is not bought twice. Each part
+    uses data up to its own signal day."""
+    comps = [lambda p: insider_low_short(p, buyers=1, max_rank=0.3),
+             lambda p: insider_calm_fresh(p, gap=365, max_vol=0.3),
+             lambda p: insider_low_vol(p, buyers=2, max_rank=0.3),
+             lambda p: insider_sector_stress(p, buyers=1, drop=0.15)][:parts]
+    sigs = [f(prices) for f in comps]
+    out = {}
+    for a, df in prices.items():
+        any_ = np.zeros(len(df), bool)
+        for s in sigs:
+            any_ |= s[a].reindex(df.index).fillna(0).to_numpy().astype(bool)
+        keep, last = np.zeros(len(df), int), -10**9
+        for i in np.flatnonzero(any_):
+            if i - last > gap:
+                keep[i], last = 1, i
+        out[a] = pd.Series(keep, df.index)
+    return out
+
+
+def residual_momentum(prices: dict, top: float = 0.1, lookback: int = 252) -> dict:
+    """Market data only: momentum of what is left after the market's move (Blitz-Huij-Martens 2011:
+    about twice plain momentum's Sharpe, with far smaller crashes; plain momentum_12_1 failed here). Each
+    day's residual is the stock's return minus its beta (over the previous `lookback` sessions, against the
+    universe's median return) times the market's; at each month end, buy the `top` share with the highest
+    residual return over the past year skipping the last month, divided by the residuals' volatility.
+    Returns up to that day only."""
+    close = _panel(prices)
+    r = close.pct_change(fill_method=None)
+    m = r.median(axis=1)
+    cov = r.mul(m, axis=0).rolling(lookback, min_periods=lookback // 2).mean() \
+        - r.rolling(lookback, min_periods=lookback // 2).mean().mul(m.rolling(lookback, min_periods=lookback // 2).mean(), axis=0)
+    beta = cov.div(m.rolling(lookback, min_periods=lookback // 2).var(ddof=0), axis=0).shift(1)  # known the day before
+    res = r - beta.mul(m, axis=0)
+    win = lookback - 21
+    score = (res.rolling(win, min_periods=win // 2).sum() / res.rolling(win, min_periods=win // 2).std()).shift(21)
+    best = score.rank(axis=1, pct=True, ascending=False) <= top
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    return _own((best & month_end.to_numpy()[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1403,6 +1449,14 @@ WIDE_FAMILIES = {
     "stress_calm_leaders": (stress_calm_leaders, {"drop": [0.03, 0.05], "max_vol": [0.2, 0.4]},
                             {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                              "segments": ["sp1500"], "trend": False}),
+    # the steadiest insider ideas together: more trades at a time for a steadier return (2026-11-01)
+    "insider_union": (insider_union, {"parts": [2, 4], "gap": [60]},
+                      {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                       "segments": ["sp1500"], "trend": False}),
+    # market data only: momentum of the market-neutral residual return, monthly (2026-11-01)
+    "residual_momentum": (residual_momentum, {"top": [0.05, 0.1], "lookback": [252]},
+                          {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

@@ -1111,6 +1111,40 @@ def test_stress_calm_leaders_buys_calm_uptrending_stocks_on_the_first_sell_off_d
     assert all((full[a].iloc[:281] == part[a]).all() for a in prices)
 
 
+def test_insider_union_joins_its_parts_once_per_gap(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=200)
+    prices = {"AAA": pd.DataFrame({"Close": 10.0}, index=days)}
+    on = {"insider_low_short": [10], "insider_calm_fresh": [30, 150], "insider_low_vol": [40], "insider_sector_stress": [180]}
+
+    def fake(name):
+        return lambda p, **k: {a: pd.Series(np.isin(np.arange(len(df)), on[name]).astype(int), df.index)
+                               for a, df in p.items()}
+
+    for name in on:
+        monkeypatch.setattr(ff, name, fake(name))
+    two = ff.insider_union(prices, parts=2, gap=60)["AAA"]
+    assert list(np.flatnonzero(two.to_numpy())) == [10, 150]          # 30 is within 60 sessions of 10
+    four = ff.insider_union(prices, parts=4, gap=60)["AAA"]
+    assert list(np.flatnonzero(four.to_numpy())) == [10, 150]          # 40 too close to 10, 180 to 150
+
+
+def test_residual_momentum_uses_past_returns_only():
+    from algo.finder_families import residual_momentum
+
+    days = pd.bdate_range("2022-01-03", periods=420)
+    rng = np.random.default_rng(4)
+    mkt = rng.normal(0.0003, 0.01, 420)
+    prices = {f"S{i}": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum((0.5 + 0.3 * i) * mkt
+                                                                               + rng.normal(0.0002 * (i - 3), 0.01, 420))),
+                                                        index=days)}) for i in range(8)}
+    full = residual_momentum(prices, top=0.25, lookback=252)
+    assert sum(int(v.sum()) for v in full.values()) > 0
+    part = residual_momentum({a: df.iloc[:400] for a, df in prices.items()}, top=0.25, lookback=252)
+    assert all((full[a].iloc[:399] == part[a].iloc[:399]).all() for a in prices)  # day 400 counts as a month end
+
+
 def test_sector_momentum_buys_the_strong_sector_and_uses_past_closes_only(monkeypatch):
     from algo import finder_families as ff, wide
 
