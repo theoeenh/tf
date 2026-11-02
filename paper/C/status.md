@@ -1,18 +1,20 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 15:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 16:21 UTC.
 
-**Equity $91,182** (-8.82%) · max drawdown -10.0% · 66 closed trades · 1 open
+**Equity $91,438** (-8.56%) · max drawdown -10.0% · 66 closed trades · 2 open
 
 ## Open positions
 
-- **LONG 29.5429 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.38R  
+- **LONG 29.5429 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +1.50R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.
+- **LONG 439.2782 TLT** (donchian_trend) since 2026-11-02 15:00, entry 82.02, stop 81.27, target 83.51, now -0.36R  
+  *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.02, stop 81.27, target 83.51 (2:1); risking $328.
 
 ## Opening now (at the open of the bar forming now)
 
-- **LONG 439.2782 TLT** (donchian_trend) for the 2026-11-02 15:00 bar, at about 82.03, stop 81.28, target 83.52  
-  *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.03, stop 81.28, target 83.52 (2:1); risking $328.
+- **LONG 22.8856 TSLA** (donchian_trend) for the 2026-11-02 16:00 bar, at about 413.16, stop 398.78, target 441.91  
+  *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, high volatility (ATR 1.4% of price). Plan: entry 413.16, stop 398.78, target 441.91 (2:1); risking $329.
 
 ## Closed trades (newest first)
 
@@ -215,7 +217,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (91)
+## Skipped by the learner (92)
 
 - 2026-10-27 15:00 XOM rsi2_reversion: would have made +0.33R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.48R, avg loss -1.16R).
 - 2026-10-28 16:00 XOM opening_range: would have made -0.14R. SKIPPED by the ML learner: 42% estimated chance of profit, expected -0.11R (avg win +1.06R, avg loss -0.95R).
