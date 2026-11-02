@@ -8,7 +8,7 @@ From 26 Oct 2026 (user's go 2026-10-24; until then B traded the hourly ML system
 
 - **DBC** (commodities) 937.33 shares, now 33.61
 - **EFA** (developed stocks ex-US) 304.77 shares, now 103.37
-- **SHY** (short Treasuries (cash)) 385.60 shares, now 81.70
+- **SHY** (short Treasuries (cash)) 386.79 shares, now 81.45
 
 ## Decision of 2026-10-30 (12-month return, 10-month average)
 
