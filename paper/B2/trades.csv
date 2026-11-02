@@ -1,0 +1,3 @@
+asset,strategy,side,entry_date,exit_date,entry,exit,qty,pnl,reason
+EEM,trend_momentum,1,2026-10-26,2026-11-02,61.29,62.07,517.2664382444118,403.4678218306418,monthly rebalance
+SPY,trend_momentum,1,2026-10-26,2026-11-02,762.25,759.45,41.59168251885864,-116.4567110528023,monthly rebalance
