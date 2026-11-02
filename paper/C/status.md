@@ -1,24 +1,33 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 14:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 15:22 UTC.
 
-**Equity $92,413** (-7.59%) · max drawdown -8.9% · 64 closed trades · 5 open
+**Equity $90,444** (-9.56%) · max drawdown -10.8% · 68 closed trades · 1 open
 
 ## Open positions
 
-- **LONG 29.5411 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.33R  
+- **LONG 29.5411 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.38R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.
-- **LONG 91.2711 XOM** (donchian_trend) since 2026-10-30 14:00, entry 188.30, stop 184.63, target 195.62, now -0.28R  
-  *Thinking:* LONG XOM (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 184.63, target 195.62 (2:1); risking $334.
-- **LONG 76.0510 XOM** (squeeze_breakout) since 2026-10-30 14:00, entry 188.30, stop 183.90, target none (trailing), now -0.23R  
-  *Thinking:* LONG XOM (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 183.90, no target, trailing stop lets it run; risking $334.
-- **LONG 77.7412 USO** (donchian_trend) since 2026-10-30 14:00, entry 170.74, stop 166.45, target 179.34, now -0.45R  
-  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, low volatility (ATR 1.0% of price). Plan: entry 170.74, stop 166.45, target 179.34 (2:1); risking $334.
-- **LONG 74.2103 USO** (rsi2_reversion) since 2026-10-29 14:00, entry 164.52, stop 160.03, target 173.52, now +0.95R  
-  *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.52, stop 160.03, target 173.52 (2:1); risking $334.
+
+## Opening now (at the open of the bar forming now)
+
+- **LONG 435.7197 TLT** (donchian_trend) for the 2026-11-02 15:00 bar, at about 82.03, stop 81.28, target 83.52  
+  *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.03, stop 81.28, target 83.52 (2:1); risking $325.
 
 ## Closed trades (newest first)
 
+- **2026-11-02 14:00 · LONG XOM · squeeze_breakout · -1.01R · $-339** (fees $1, stop)  
+  *Thinking:* LONG XOM (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 183.90, no target, trailing stop lets it run; risking $334.  
+  *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-1.01R, best point +0.0R)
+- **2026-11-02 14:00 · LONG USO · rsi2_reversion · -1.12R · $-374** (fees $0, stop)  
+  *Thinking:* LONG USO (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 18 = chop market, mid volatility (ATR 1.1% of price). Plan: entry 164.52, stop 160.03, target 173.52 (2:1); risking $334.  
+  *Lesson:* Was at least 1R in profit, then gave it all back: exit management failed. (-1.12R, best point +1.6R)
+- **2026-11-02 14:00 · LONG USO · donchian_trend · -2.62R · $-876** (fees $1, stop)  
+  *Thinking:* LONG USO (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 16 = chop market, low volatility (ATR 1.0% of price). Plan: entry 170.74, stop 166.45, target 179.34 (2:1); risking $334.  
+  *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-2.62R, best point +0.3R)
+- **2026-11-02 14:00 · LONG XOM · donchian_trend · -1.20R · $-400** (fees $1, stop)  
+  *Thinking:* LONG XOM (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 184.63, target 195.62 (2:1); risking $334.  
+  *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-1.20R, best point +0.0R)
 - **2026-10-30 18:00 · LONG AAPL · rsi2_reversion · -1.03R · $-342** (fees $1, stop)  
   *Thinking:* LONG AAPL (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 9 = chop market, low volatility (ATR 0.5% of price). Plan: entry 348.20, stop 343.83, target 356.96 (2:1); risking $333. Warning: fomc coming up while in the trade.  
   *Lesson:* Valid setup, planned 1R loss. Normal variance, no clear mistake. (-1.03R, best point +0.7R)
@@ -182,7 +191,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG USO (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 18 = chop market, high volatility (ATR 1.5% of price). Plan: entry 146.37, stop 143.01, target 153.10 (2:1); risking $356. Warning: jobs report coming up while in the trade.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.53R, best point +0.5R)
 - **2026-10-05 04:00 · LONG BTC · donchian_trend · -1.33R · $-472** (fees $233, event)  
-  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $355. Strong trend, so the target was widened. AI analyst view +1: it agrees with this trade.  
+  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $355. Strong trend, so the target was widened. News: neutral tone (+0.9σ vs usual), normal coverage. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.33R, best point +0.8R)
 - **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-326** (fees $78, event)  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $359. Warning: jobs report coming up while in the trade.  
@@ -212,7 +221,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (89)
+## Skipped by the learner (91)
 
 - 2026-10-27 15:00 XOM rsi2_reversion: would have made +0.33R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.48R, avg loss -1.16R).
 - 2026-10-28 16:00 XOM opening_range: would have made -0.14R. SKIPPED by the ML learner: 42% estimated chance of profit, expected -0.11R (avg win +1.06R, avg loss -0.95R).
