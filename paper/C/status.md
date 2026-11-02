@@ -1,17 +1,22 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 17:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 18:23 UTC.
 
-**Equity $91,489** (-8.51%) · max drawdown -10.0% · 66 closed trades · 3 open
+**Equity $91,373** (-8.63%) · max drawdown -10.0% · 66 closed trades · 3 open
 
 ## Open positions
 
-- **LONG 22.8856 TSLA** (donchian_trend) since 2026-11-02 16:00, entry 413.22, stop 398.85, target 441.98, now -0.12R  
+- **LONG 22.8856 TSLA** (donchian_trend) since 2026-11-02 16:00, entry 413.22, stop 398.85, target 441.98, now -0.31R  
   *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, high volatility (ATR 1.4% of price). Plan: entry 413.22, stop 398.85, target 441.98 (2:1); risking $329.
-- **LONG 29.5429 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +1.37R  
+- **LONG 29.5429 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +1.12R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.
-- **LONG 439.2782 TLT** (donchian_trend) since 2026-11-02 15:00, entry 82.02, stop 81.27, target 83.51, now +0.05R  
+- **LONG 439.2782 TLT** (donchian_trend) since 2026-11-02 15:00, entry 82.02, stop 81.27, target 83.51, now +0.14R  
   *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.02, stop 81.27, target 83.51 (2:1); risking $328.
+
+## Opening now (at the open of the bar forming now)
+
+- **LONG 739.4127 TLT** (opening_range) for the 2026-11-02 18:00 bar, at about 82.14, stop 81.69, target 83.03  
+  *Thinking:* LONG TLT (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.4% of price). Plan: entry 82.14, stop 81.69, target 83.03 (2:1); risking $329.
 
 ## Closed trades (newest first)
 
