@@ -249,6 +249,26 @@ def event_features(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: li
                          "days_to_jobs": days_to_next(jobs)}, index=index)
 
 
+def _nyse_holidays() -> list:
+    """Full-day US market closures (NYSE): the federal holidays without Columbus and Veterans Day, plus
+    Good Friday."""
+    from pandas.tseries.holiday import AbstractHolidayCalendar, GoodFriday, USFederalHolidayCalendar
+
+    rules = [r for r in USFederalHolidayCalendar.rules if r.name not in ("Columbus Day", "Veterans Day")]
+    cal = type("NYSE", (AbstractHolidayCalendar,), {"rules": rules + [GoodFriday]})()
+    return list(cal.holidays("2015-01-01", "2030-12-31").date)
+
+
+_HOLIDAYS: list = []
+
+
+def _market_days_between(a: pd.Timestamp, b: pd.Timestamp) -> int:
+    """Weekdays strictly between two days that are not market holidays."""
+    if not _HOLIDAYS:
+        _HOLIDAYS.extend(_nyse_holidays())
+    return int(np.busday_count((a + pd.Timedelta(days=1)).date(), b.date(), holidays=_HOLIDAYS))
+
+
 def blackout(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list, stock: bool) -> pd.Series:
     """Intraday bars (UTC start times) to be flat through, because a scheduled
     event can gap the price through a stop. Dates are public in advance, so
@@ -272,8 +292,12 @@ def blackout(index: pd.DatetimeIndex, earnings: list, fomc: list, jobs: list, st
         uniq = pd.DatetimeIndex(sorted(set(day)))
         days = pd.DatetimeIndex(days)
         pos = np.searchsorted(uniq, days)
-        # the session right before (a weekend or holiday in between at most)
-        prev = {uniq[p - 1] for p, d in zip(pos, days) if 0 < p and (d - uniq[p - 1]).days <= 4}
+        # the session right before (a weekend or holiday in between at most). For an event after the
+        # data's newest day, the sessions in between are not in the data yet: the newest day is the one
+        # right before only if no market day lies in between (2026-11-02: on Monday the jobs report of
+        # Friday took Monday for its session before; account C went flat at Monday's last bar)
+        prev = {uniq[p - 1] for p, d in zip(pos, days) if 0 < p and (d - uniq[p - 1]).days <= 4
+                and (p < len(uniq) or _market_days_between(uniq[p - 1], d) == 0)}
         if prev:
             # The session's last bar is the 15:00 New York bar (15:00-16:00). A session still
             # in progress must not have its newest bar taken for its last one; a finished

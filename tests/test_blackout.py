@@ -87,3 +87,30 @@ def test_retired_asset_is_flat_from_its_date_and_history_is_unchanged():
     assert not m["BTC"].iloc[:5].any() and m["BTC"].iloc[5:].all()  # earlier bars untouched
     assert not m["NVDA"].any()
     assert retire_masks(prices, None, None) is None
+
+
+def test_last_bar_before_a_later_event_waits_for_the_session_right_before_it():
+    """2026-11-02 (Monday): with the data ending on Monday, the jobs report of Friday 6 Nov took Monday
+    for "the session before" (4 days, "a weekend or holiday in between at most"): account C went flat
+    at Monday's last bar (TSLA, TLT sold on Alpaca), and the next run, with Tuesday in the data, held
+    them again. Sessions not in the data yet count: Tuesday to Thursday come before Friday."""
+    def live(day, winter=True):  # one day in progress, up to its last bar (15:00 New York)
+        first = 14 if winter else 13
+        return pd.DatetimeIndex([pd.Timestamp(f"{day} {h}:00") for h in range(first, first + 7)])
+
+    fri = [pd.Timestamp("2026-11-06")]
+    for day in ("2026-11-02", "2026-11-03", "2026-11-04"):  # Mon, Tue, Wed: not the session before
+        assert not blackout(live(day), earnings=[], fomc=[], jobs=fri, stock=True).any(), day
+    b = blackout(live("2026-11-05"), earnings=[], fomc=[], jobs=fri, stock=True)  # Thursday: it is
+    assert b[pd.Timestamp("2026-11-05 20:00")] and b.sum() == 1
+    # a weekend in between: Friday before a Monday report
+    b = blackout(live("2026-10-16", winter=False), earnings=[pd.Timestamp("2026-10-19")], fomc=[], jobs=[],
+                 stock=True)
+    assert b[pd.Timestamp("2026-10-16 19:00")] and b.sum() == 1
+    # a market holiday in between: Friday 15 Jan 2027 before a report on Tuesday 19 Jan (Monday: MLK day)
+    b = blackout(live("2027-01-15"), earnings=[pd.Timestamp("2027-01-19")], fomc=[], jobs=[], stock=True)
+    assert b[pd.Timestamp("2027-01-15 20:00")] and b.sum() == 1
+    # Columbus Day is a federal holiday but the market is open: Friday 9 Oct is not the session before Tue 13 Oct
+    b = blackout(live("2026-10-09", winter=False), earnings=[pd.Timestamp("2026-10-13")], fomc=[], jobs=[],
+                 stock=True)
+    assert not b.any()
