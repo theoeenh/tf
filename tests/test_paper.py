@@ -75,3 +75,35 @@ def test_update_sends_the_entry_of_the_last_closed_bar_at_once(monkeypatch, tmp_
     paper.update()
     assert json.loads((tmp_path / "orders.json").read_text()) == []
     assert np.isfinite(pd.read_csv(tmp_path / "equity.csv").iloc[-1, 1])
+
+
+def test_blackout_of_traded_bars_is_kept_when_the_calendar_changes(tmp_path):
+    """2026-11-02: the morning refresh put back XOM's 30 Oct report date (the 30 Oct refresh had dropped
+    it) and the replay erased two XOM trades account C had made on 30 Oct. The blackout of a bar from
+    the start date on is the one the live run used; later bars take the fresh mask and are recorded."""
+    import pandas as pd
+
+    from algo.paper import FrozenBlackout
+
+    start = pd.Timestamp("2026-10-30 13:00")
+    idx = pd.date_range("2026-10-30 12:00", periods=5, freq="h")
+    ctx = {"XOM": pd.DataFrame({"blackout": [False] * 5, "x": range(5)}, index=idx),
+           "BTC": pd.DataFrame({"x": range(5)}, index=idx)}               # no blackout column: left alone
+    f = FrozenBlackout(start, tmp_path / "blackout.json")
+    out = f.apply(ctx)
+    assert not out["XOM"]["blackout"].any()
+    f.save()
+
+    # the calendar now says the report day was blacked out; two more bars, the last one blacked out
+    idx2 = pd.date_range("2026-10-30 12:00", periods=7, freq="h")
+    ctx2 = {"XOM": pd.DataFrame({"blackout": [True] * 7, "x": range(7)}, index=idx2),
+            "BTC": pd.DataFrame({"x": range(7)}, index=idx2)}
+    ctx2["XOM"].iloc[5, 0] = False
+    g = FrozenBlackout(start, tmp_path / "blackout.json")
+    out2 = g.apply(ctx2)
+    # before the start: the fresh mask (the learner's history); traded bars: as recorded; new bars: fresh
+    assert out2["XOM"]["blackout"].tolist() == [True, False, False, False, False, False, True]
+    assert out2["XOM"]["x"].tolist() == list(range(7)) and "blackout" not in out2["BTC"]
+    g.save()
+    h = FrozenBlackout(start, tmp_path / "blackout.json")
+    assert h.apply(ctx2)["XOM"]["blackout"].tolist() == [True, False, False, False, False, False, True]

@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Protocol
 
+import numpy as np
 import pandas as pd
 
 from . import data
@@ -215,6 +216,46 @@ class FrozenDecisions:
         self.path.write_text(json.dumps(dict(sorted(self.cache.items())), indent=0))
 
 
+class FrozenBlackout:
+    """The event blackout of every bar from the start date on is the one the live run used: it is
+    stored (paper/<account>/blackout.json) and reused by every later replay, so a revised calendar
+    does not re-decide bars already traded (2026-11-02: the morning refresh put back XOM's 30 Oct
+    report date, which the 30 Oct refresh had dropped, and the replay erased two XOM trades account C
+    had made on Alpaca). An asset's bars after its newest recorded one take the fresh mask and are
+    recorded; bars before the start date (the learner's history) always take the fresh mask."""
+
+    def __init__(self, start: pd.Timestamp, path: Path):
+        self.start, self.path = start, path
+        d = json.loads(path.read_text()) if path.exists() else {}
+        self.through = {a: pd.Timestamp(t) for a, t in d.get("through", {}).items()}
+        self.bars = {a: {pd.Timestamp(t) for t in ts} for a, ts in d.get("bars", {}).items()}
+
+    def apply(self, ctx: dict) -> dict:
+        out = {}
+        for a, c in ctx.items():
+            if "blackout" not in c:
+                out[a] = c
+                continue
+            idx, fresh = c.index, c["blackout"].fillna(False).astype(bool).to_numpy()
+            th = self.through.get(a)
+            done = (idx >= self.start) & (idx <= th) if th is not None else np.zeros(len(idx), bool)
+            bo = np.where(done, idx.isin(list(self.bars.get(a, ()))), fresh)
+            c = c.copy()
+            c["blackout"] = bo
+            out[a] = c
+            rec = idx >= self.start
+            if rec.any():
+                self.bars[a] = self.bars.get(a, set()) | set(idx[rec & bo])
+                self.through[a] = max(idx[rec].max(), th) if th is not None else idx[rec].max()
+        return out
+
+    def save(self) -> None:
+        fmt = "%Y-%m-%d %H:%M"
+        self.path.write_text(json.dumps({"through": {a: f"{t:{fmt}}" for a, t in sorted(self.through.items())},
+                                         "bars": {a: [f"{t:{fmt}}" for t in sorted(ts)]
+                                                  for a, ts in sorted(self.bars.items())}}, indent=0))
+
+
 def update(source: str | None = None) -> Path:
     """source: None = the one the account was started with (config.json)."""
     cfg = json.loads((PAPER_DIR / "config.json").read_text())
@@ -228,6 +269,9 @@ def update(source: str | None = None) -> Path:
     prices = with_next_bar(real, nxt)
 
     ctx = news_context(prices, v, interval)
+    frozen_bo = FrozenBlackout(start, PAPER_DIR / "blackout.json") if ctx is not None else None
+    if frozen_bo is not None:
+        ctx = frozen_bo.apply(ctx)
     ctx_real = None if ctx is None else {a: c.reindex(real[a].index) if a in real else c for a, c in ctx.items()}
 
     # 1) Learn from history up to the start date.
@@ -251,6 +295,8 @@ def update(source: str | None = None) -> Path:
                           concentration=concentration_caps(cfg), next_open=frozenset(nxt))
         if frozen is not None:
             frozen.save()
+        if frozen_bo is not None:
+            frozen_bo.save()
         # the books hold the closed bars only; what happens at the open of the bar forming now is listed apart
         at_open = lambda asset, t: nxt.get(asset) == t  # noqa: E731
         eq = res.equity[res.equity.index <= max(df.index[-1] for df in real.values() if len(df))]
