@@ -186,3 +186,36 @@ def test_refresh_earnings_moves_a_stale_next_date_and_keeps_the_cache_on_failure
     assert moved == [f"AAA: {later:%Y-%m-%d} -> {soon:%Y-%m-%d}"]
     assert news.earnings_dates("AAA") == [soon.tz_localize(None)]
     assert news.earnings_dates("BBB") == [later.tz_localize(None)]       # download failed: cache kept
+
+
+def test_refresh_earnings_keeps_report_dates_that_have_come(monkeypatch, tmp_path):
+    """2026-10-30: on XOM's report day the download left that day out, the refresh dropped it from
+    the calendar and account C held XOM through the report; on 2 Nov the download had it again.
+    A report date on or before today does not move: a refresh keeps it. Future dates follow the
+    download (an estimate moves when the company confirms the day)."""
+    import sys
+    import types
+
+    import pandas as pd
+
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setitem(news.ASSET_CLASS, "AAA", "stock")
+    monkeypatch.setitem(news.TICKERS, "AAA", "AAA")
+    today = pd.Timestamp.now(tz="America/New_York").normalize()
+    old, est = today - pd.DateOffset(days=90), today + pd.DateOffset(days=20)
+    pd.DataFrame({"date": [d.tz_localize(None) for d in (old, today, est)]}).to_csv(
+        tmp_path / "AAA_earnings.csv", index=False)
+    moved_est = est + pd.DateOffset(days=5)
+
+    class Ticker:
+        def __init__(self, t):
+            self.t = t
+
+        def get_earnings_dates(self, limit=60):  # today's report and the old one are missing
+            return pd.DataFrame({"EPS Estimate": [1.0]}, index=pd.DatetimeIndex([moved_est + pd.Timedelta(hours=16)]))
+
+    monkeypatch.setitem(sys.modules, "yfinance", types.SimpleNamespace(Ticker=Ticker))
+    news.refresh_earnings(["AAA"])
+    assert news.earnings_dates("AAA") == [d.tz_localize(None) for d in (old, today, moved_est)]

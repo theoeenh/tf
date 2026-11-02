@@ -1231,3 +1231,44 @@ def test_momentum_pullback_buys_a_winner_s_dip_on_fridays_with_past_closes_only(
     assert len(hits) and all(d.dayofweek == 4 for d in hits)
     part = momentum_pullback({a: df.iloc[:300] for a, df in prices.items()}, top=0.5, bottom=0.25)
     assert (full["WIN"].iloc[:300] == part["WIN"]).all()
+
+
+def test_same_month_seasonality_picks_last_years_strong_month_from_past_closes_only():
+    from algo.finder_families import same_month_seasonality
+
+    days = pd.bdate_range("2018-01-01", "2024-12-31")
+    rng = np.random.default_rng(7)
+    prices = {}
+    for i in range(10):
+        r = rng.normal(0, 0.005, len(days))
+        if i == 0:
+            r[days.month == 3] += 0.01  # S0 rises every March
+        prices[f"S{i}"] = pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(r)), index=days)})
+    full = same_month_seasonality(prices, top=0.1, years=5)
+    on = full["S0"].index[full["S0"] == 1]
+    # bought at the end of February from 2023 on (five past Marches needed); not a month early or late
+    assert [d.year for d in on if d.month == 2] == [2023, 2024]
+    assert not any(d.month in (1, 3) for d in on) and on[0] >= pd.Timestamp("2023-01-01")
+    part = same_month_seasonality({a: df.loc[:"2024-06-14"] for a, df in prices.items()}, top=0.1, years=5)
+    cut = part["S0"].index[-1]
+    assert all((full[a].loc[:cut].iloc[:-1] == part[a].iloc[:-1]).all() for a in prices)  # the cut day is a "month end"
+
+
+def test_smooth_momentum_prefers_the_steady_winner_and_uses_past_closes_only():
+    from algo.finder_families import smooth_momentum
+
+    days = pd.bdate_range("2021-01-01", periods=600)
+    n = len(days)
+    steady = np.full(n, 0.0015)                                  # up a little every day
+    jumpy = np.where(np.arange(n) % 25 == 0, 0.06, -0.001)       # a jump every 25 days, small losses between
+    rng = np.random.default_rng(3)
+    prices = {"STEADY": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(steady)), index=days)}),
+              "JUMPY": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(jumpy)), index=days)})}
+    for i in range(8):
+        prices[f"N{i}"] = pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(-0.0005, 0.01, n))),
+                                                           index=days)})
+    full = smooth_momentum(prices, top=0.2, within=0.5)
+    assert full["STEADY"].sum() > 0 and full["JUMPY"].sum() == 0
+    assert full["STEADY"].iloc[:252].sum() == 0  # a year of closes needed
+    part = smooth_momentum({a: df.iloc[:500] for a, df in prices.items()}, top=0.2, within=0.5)
+    assert all((full[a].iloc[:499] == part[a].iloc[:499]).all() for a in prices)

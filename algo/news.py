@@ -194,7 +194,14 @@ def earnings_dates(name: str, refresh: bool = False) -> list[pd.Timestamp]:
         return []
     if e is None or e.empty:
         return []
-    dates = sorted({pd.Timestamp(d).tz_convert("America/New_York").tz_localize(None).normalize() for d in e.index})
+    dates = {pd.Timestamp(d).tz_convert("America/New_York").tz_localize(None).normalize() for d in e.index}
+    if path.exists():
+        # a report date on or before today has happened and stays (2026-10-30: the download left out XOM's
+        # report of that day, the refresh dropped it and account C held XOM through the report); future
+        # dates are estimates and follow the download
+        today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
+        dates |= {d for d in pd.to_datetime(pd.read_csv(path)["date"]) if d <= today}
+    dates = sorted(dates)
     pd.DataFrame({"date": dates}).to_csv(path, index=False)
     return dates
 

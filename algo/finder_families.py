@@ -1215,6 +1215,46 @@ def residual_momentum(prices: dict, top: float = 0.1, lookback: int = 252) -> di
     return _own((best & month_end.to_numpy()[:, None]).astype(int), prices)
 
 
+def same_month_seasonality(prices: dict, top: float = 0.1, years: int = 5) -> dict:
+    """Market data only: the same calendar month again (Heston-Sadka 2008: a stock's return in a calendar
+    month predicts its return in that month in later years, for 10+ years, apart from momentum and
+    reversal). At each month end, buy the `top` share whose average return in the coming calendar month
+    over the past `years` years is the highest (every one of those years needed). Month-end closes up to
+    that day only: the newest month used is the coming month 11 months back."""
+    close = _panel(prices)
+    month = close.index.to_series().dt.to_period("M")
+    month_end = (month != month.shift(-1)).to_numpy()
+    # each month's return from its last close (the data's last day counts as a month end)
+    mret = close[month_end].pct_change(fill_method=None)
+    mret.index = month[month_end].to_numpy()
+    # at the end of month m, the coming month m+1 was last seen 11 months back, then 23, 35, ...
+    score = sum(mret.shift(12 * k - 1) for k in range(1, years + 1)) / years
+    best = score.rank(axis=1, pct=True, ascending=False) <= top
+    sig = pd.DataFrame(False, index=close.index, columns=close.columns)
+    sig.loc[month_end] = best.reindex(month[month_end].to_numpy()).fillna(False).to_numpy()
+    return _own(sig.astype(int), prices)
+
+
+def smooth_momentum(prices: dict, top: float = 0.2, within: float = 0.5) -> dict:
+    """Market data only: momentum earned bit by bit (Da-Gurun-Warachka 2014, "frog in the pan": investors
+    under-react to a stream of small moves more than to a few big jumps, so continuous winners keep going
+    and do not crash as hard; plain momentum_12_1 failed here). At each month end, among the `top` share
+    with the highest return over the past year skipping the last month, buy the `within` share with the
+    smoothest path: information discreteness = sign(return) x (share of down days - share of up days) over
+    the same window, lowest first. Closes up to that day only."""
+    close = _panel(prices)
+    r = close.pct_change(fill_method=None)
+    mom = close.shift(21) / close.shift(252) - 1
+    win = 231  # sessions from 252 to 21 back
+    up = (r > 0).astype(float).where(r.notna()).shift(21).rolling(win, min_periods=win // 2).mean()
+    down = (r < 0).astype(float).where(r.notna()).shift(21).rolling(win, min_periods=win // 2).mean()
+    disc = np.sign(mom) * (down - up)
+    winners = mom.rank(axis=1, pct=True, ascending=False) <= top
+    smooth = disc.where(winners).rank(axis=1, pct=True) <= within
+    month_end = close.index.to_series().dt.to_period("M") != close.index.to_series().shift(-1).dt.to_period("M")
+    return _own((winners & smooth & month_end.to_numpy()[:, None]).astype(int), prices)
+
+
 def overnight_momentum(prices: dict, lookback: int = 20, top: float = 0.1) -> dict:
     """Market data only: stocks whose gains come overnight (close to next open) keep outperforming
     (Lou-Polk-Skouras 2019: overnight returns carry the persistent buying, intraday ones the noise).
@@ -1457,6 +1497,14 @@ WIDE_FAMILIES = {
     "residual_momentum": (residual_momentum, {"top": [0.05, 0.1], "lookback": [252]},
                           {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                            "segments": ["sp1500"], "trend": False}),
+    # market data only: the same calendar month in past years, monthly (2026-11-02)
+    "same_month_seasonality": (same_month_seasonality, {"top": [0.05, 0.1], "years": [5, 10]},
+                               {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500"], "trend": False}),
+    # market data only: momentum built from many small moves, monthly (2026-11-02)
+    "smooth_momentum": (smooth_momentum, {"top": [0.1, 0.2], "within": [0.3, 0.5]},
+                        {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
