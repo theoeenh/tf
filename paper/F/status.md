@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-11-02 21:00 UTC. **Equity $103,304** (+3.30% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-02 21:32 UTC. **Equity $103,263** (+3.26% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
 | long_call | 3 | 5 | $-2,044 | $+1,631 | 1 / 5 |
-| long_put | 3 | 3 | $-520 | $+1,774 | 1 / 3 |
+| long_put | 3 | 3 | $-520 | $+1,738 | 1 / 3 |
 | bull_put_spread | 3 | 7 | $-1,084 | $-218 | 1 / 7 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
-| spy_put_spread | 2 | 0 | $+0 | $-538 | 0 / 0 |
+| spy_put_spread | 2 | 0 | $+0 | $-509 | 0 / 0 |
 
 ## Open positions
 
@@ -28,7 +28,7 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $13,910; at the quotes' mid they are worth $15,720 (difference $-1,810).
+Alpaca values the positions at $13,923; at the quotes' mid they are worth $15,704 (difference $-1,780).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
@@ -41,10 +41,10 @@ Alpaca values the positions at $13,910; at the quotes' mid they are worth $15,72
 | CLF261218P00013000 | -40 | $-2,760 | $-2,540 | ok |
 | FIS261120P00032500 | 14 | $210 | $280 | ok |
 | FIS261120P00035000 | -14 | $-840 | $-700 | ok |
-| IWM261218P00284000 | 2 | $2,070 | $2,099 | ok |
+| IWM261218P00284000 | 2 | $2,038 | $2,053 | ok |
 | NFLX261218P00075000 | 3 | $3,630 | $3,783 | ok |
 | PEP261120C00133000 | 6 | $4,110 | $4,833 | ok |
-| SPY261127P00715000 | 1 | $438 | $444 | ok |
-| SPY261127P00746000 | -1 | $-1,055 | $-1,035 | ok |
-| SPY261204P00710000 | 1 | $489 | $484 | ok |
-| SPY261204P00742000 | -1 | $-1,073 | $-1,072 | ok |
+| SPY261127P00715000 | 1 | $413 | $420 | ok |
+| SPY261127P00746000 | -1 | $-1,006 | $-1,004 | ok |
+| SPY261204P00710000 | 1 | $466 | $461 | ok |
+| SPY261204P00742000 | -1 | $-1,029 | $-1,027 | ok |
