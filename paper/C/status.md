@@ -1,23 +1,33 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 22:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-02 23:22 UTC.
 
-**Equity $89,874** (-10.13%) · max drawdown -11.3% · 69 closed trades · 3 open
+**Equity $90,034** (-9.97%) · max drawdown -11.2% · 72 closed trades · 0 open
 
 ## Open positions
 
-- **LONG 22.7010 TSLA** (donchian_trend) since 2026-11-02 16:00, entry 413.22, stop 398.85, target 441.98, now -0.65R  
-  *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, high volatility (ATR 1.4% of price). Plan: entry 413.22, stop 398.85, target 441.98 (2:1); risking $326.
-- **LONG 29.5411 TSLA** (rsi2_reversion) since 2026-10-30 14:00, entry 396.05, stop 384.73, target 418.67, now +0.70R  
-  *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.
-- **LONG 435.7197 TLT** (donchian_trend) since 2026-11-02 15:00, entry 82.02, stop 81.27, target 83.51, now -0.38R  
-  *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.02, stop 81.27, target 83.51 (2:1); risking $325.
+None.
+
+
+## Opening now (at the open of the bar forming now)
+
+- **LONG 76.8969 XOM** (rsi2_reversion) for the 2026-11-03 14:00 bar, at about 179.84, stop 175.63, target 188.26  
+  *Thinking:* LONG XOM (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.9% of price). Plan: entry 179.84, stop 175.63, target 188.26 (2:1); risking $324. AI analyst view +1: it agrees with this trade.
 
 ## Closed trades (newest first)
 
-- **2026-11-02 20:00 · LONG TLT · opening_range · -1.04R · $-340** (fees $2, stop)  
+- **2026-11-02 20:00 · LONG TLT · opening_range · -0.77R · $-250** (fees $2, event)  
   *Thinking:* LONG TLT (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.4% of price). Plan: entry 82.14, stop 81.69, target 83.03 (2:1); risking $326.  
-  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-1.04R, best point +0.1R)
+  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-0.77R, best point +0.1R)
+- **2026-11-02 20:00 · LONG TLT · donchian_trend · -0.30R · $-96** (fees $1, event)  
+  *Thinking:* LONG TLT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 20 = trend market, high volatility (ATR 0.4% of price). Plan: entry 82.02, stop 81.27, target 83.51 (2:1); risking $325.  
+  *Lesson:* Moved against the trade right away: the signal itself was wrong. (-0.30R, best point +0.2R)
+- **2026-11-02 20:00 · LONG TSLA · rsi2_reversion · +0.77R · $+256** (fees $0, event)  
+  *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, mid volatility (ATR 1.1% of price). Plan: entry 396.05, stop 384.73, target 418.67 (2:1); risking $334.  
+  *Lesson:* Plan worked. Event (+0.77R).
+- **2026-11-02 20:00 · LONG TSLA · donchian_trend · -0.59R · $-193** (fees $0, event)  
+  *Thinking:* LONG TSLA (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, high volatility (ATR 1.4% of price). Plan: entry 413.22, stop 398.85, target 441.98 (2:1); risking $326.  
+  *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.59R, best point +0.1R)
 - **2026-11-02 14:00 · LONG XOM · squeeze_breakout · -1.01R · $-339** (fees $1, stop)  
   *Thinking:* LONG XOM (volatility breakout): price broke out of a volatility squeeze to the upside. Trading with the 200-bar trend. ADX 20 = chop market, high volatility (ATR 0.8% of price). Plan: entry 188.30, stop 183.90, no target, trailing stop lets it run; risking $334. Warning: earnings coming up while in the trade.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-1.01R, best point +0.0R)
@@ -225,13 +235,13 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
 
 ## Skipped by the learner (92)
 
-- 2026-10-27 15:00 XOM rsi2_reversion: would have made +0.33R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.48R, avg loss -1.16R).
-- 2026-10-28 16:00 XOM opening_range: would have made -0.14R. SKIPPED by the ML learner: 42% estimated chance of profit, expected -0.11R (avg win +1.06R, avg loss -0.95R).
-- 2026-10-26 13:00 TLT rsi2_reversion: would have made -0.42R. SKIPPED by the ML learner: 25% estimated chance of profit, expected -0.26R (avg win +2.48R, avg loss -1.16R).
-- 2026-10-26 15:00 USO rsi2_reversion: would have made +0.69R. SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.13R (avg win +2.48R, avg loss -1.16R).
-- 2026-10-28 16:00 USO opening_range: would have made -0.22R. SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.06R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-29 16:00 AMD opening_range: would have made -1.02R. SKIPPED by the ML learner: 43% estimated chance of profit, expected -0.08R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-29 16:00 QQQ opening_range: would have made -3.45R. SKIPPED by the ML learner: 44% estimated chance of profit, expected -0.06R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-29 17:00 USO opening_range: would have made +1.98R. SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.04R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-29 14:00 AAPL squeeze_breakout: would have made -1.02R. SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).
 - 2026-10-30 17:00 USO opening_range: would have made -1.02R. SKIPPED by the ML learner: 46% estimated chance of profit, expected -0.04R (avg win +1.05R, avg loss -0.95R).
+- 2026-11-02 16:00 TSLA squeeze_breakout: would have made -0.49R. SKIPPED by the ML learner: 35% estimated chance of profit, expected -0.02R (avg win +1.55R, avg loss -0.86R).
+- 2026-10-30 14:00 JPM rsi2_reversion: would have made +0.63R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.15R).
+- 2026-11-02 15:00 XOM rsi2_reversion: would have made -0.45R. SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.06R (avg win +2.48R, avg loss -1.15R).
+- 2026-11-02 14:00 TLT squeeze_breakout: would have made -0.06R. SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).
+- 2026-11-02 14:00 USO rsi2_reversion: would have made -0.40R. SKIPPED by the ML learner: 25% estimated chance of profit, expected -0.23R (avg win +2.48R, avg loss -1.15R).
