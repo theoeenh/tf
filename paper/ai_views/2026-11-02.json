@@ -1,0 +1,223 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Binance resumed withdrawals after the hack and over $4.6 billion left it; commentators now call the damage limited. The shock is fading; no edge."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Ether ETFs had their worst month for flows; the Binance shock is fading. No call."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "A Solana app-store breach and continued weakness (-15% in a month). No new direction; no call."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMD earnings Tue 3 Nov",
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Down 11% in a month with the AI-chip rout; no company news. No call."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Robotaxi expansion and strong Nordic registrations; up 7% in a week, already priced. No call."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "GLD at a 52-week low; one chartist sees a possible bottom. No edge."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Down more than half since January, no new news. No call."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 2,
+  "key_events": [
+   "AAPL earnings Mon 2 Nov after the close"
+  ],
+  "reasoning": "Reports tonight; seen as a hedge against the AI trade, but its valuation leaves little room for disappointment. The report decides; no call."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Analyst praise; no new company news. No call."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Bounced today ('Dow rallies as Amazon pops') after Friday's 7% drop, which goes against the drift call I made on Friday. Dropping it: no call."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "S&P flags a new risk in its AI push; down 15% in a month. No call."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 15,
+  "key_events": [],
+  "reasoning": "Still falling after its earnings miss (-12.6% in a week). Post-earnings drift: small short bias kept, low confidence."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 2,
+  "key_events": [
+   "AMD earnings Tue 3 Nov"
+  ],
+  "reasoning": "Earnings tomorrow after an 18% monthly fall; previews ask whether AI infrastructure can recover from Friday's rout. The report decides; no call."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "ETFs net sellers; supply bottlenecks rather than demand. No call."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Lower ad revenue guidance and UK staff cuts; already at historically low valuations. My earlier NFLX calls were wrong. No call."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Large buyback plans and post-midterm commentary; nothing that gives a direction. No call."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Another earnings beat and a Mozambique LNG stake, but oil stocks fall today on hopes of lower oil prices. Mixed now; dropping Friday's small long bias."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Morgan Stanley cut its target after the Binance hack; down 24% in a month. Already priced; no call."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMD earnings Tue 3 Nov",
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Futures higher before a busy earnings week and the midterms; no edge."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "No small-cap news. No call."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov",
+   "US jobs report Fri 6 Nov"
+  ],
+  "reasoning": "A record week of Treasury borrowing ($839 billion) against haven demand; the election and jobs report can move it either way. No call."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US midterm elections Tue 3 Nov"
+  ],
+  "reasoning": "Energy stocks fall premarket on hopes for lower oil; Middle East headlines cut both ways. No call."
+ }
+]
