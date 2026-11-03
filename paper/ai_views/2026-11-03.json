@@ -1,0 +1,246 @@
+[
+  {
+    "asset": "BTC",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Still falling (-5.6% in a week) after the Binance heist, with $7.4bn of withdrawals; headlines split between 'bullish' takes and more downside. No clear edge."
+  },
+  {
+    "asset": "ETH",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 8% in a month on the Binance hack; commentators disagree (Tom Lee bullish, stablecoin data not). Nothing clear."
+  },
+  {
+    "asset": "SOL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Altcoins down up to 25% in a month; an RSI-2 dip signal, but news is only general crypto weakness. No view."
+  },
+  {
+    "asset": "NVDA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Chip stocks rebound this morning after a -13.6% month, below the 200-day average; no company news. No view."
+  },
+  {
+    "asset": "TSLA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Weak October in China, offset by the stock being up 9% in a month and above its 200-day average. Mixed."
+  },
+  {
+    "asset": "GOLD",
+    "bias": -1,
+    "confidence": 0.3,
+    "horizon_days": 10,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "The World Gold Council halved its 2026 gold investment forecast and GLD fell to a 52-week low pre-market; price below its 200-day average and falling. Small short bias with the trend."
+  },
+  {
+    "asset": "SILVER",
+    "bias": -1,
+    "confidence": 0.25,
+    "horizon_days": 10,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 17% in a month and over half since January, near 52-week lows with the gold forecast cut; one chartist sees a possible bottom, so only a small short bias with the trend."
+  },
+  {
+    "asset": "AAPL",
+    "bias": -1,
+    "confidence": 0.3,
+    "horizon_days": 5,
+    "key_events": [
+      "Apple earnings reaction Tue 3 Nov",
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Reported Monday after the close: an earnings beat, but the new CEO warned of 'unprecedented' memory prices squeezing margins and the stock fell about 4% (some $140bn) after hours. Guidance-driven drops tend to drift; small short bias."
+  },
+  {
+    "asset": "MSFT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Dipped with Apple's margin worries; only product news. No view."
+  },
+  {
+    "asset": "AMZN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "A price-target hike on AWS growth against worries about AI spending above operating cash flow. Mixed."
+  },
+  {
+    "asset": "META",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Holding steady after a -16.7% month; ETF buying, no company news. No view."
+  },
+  {
+    "asset": "GOOGL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 19% in a month on AI-spending worries (Krugman's 'Wile E. Coyote' warning); no company-specific news to add. No view."
+  },
+  {
+    "asset": "AMD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 3,
+    "key_events": [
+      "AMD earnings Tue 3 Nov after the close",
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Reports after today's close: a bullish pre-earnings note on server CPUs after a -26% month. The report can gap the price either way; no bias."
+  },
+  {
+    "asset": "AVGO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "ETF buying and the chip rebound; below its 200-day average. No view."
+  },
+  {
+    "asset": "NFLX",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "UK staff cuts and a new ads chief; near support after a -7% month. No view."
+  },
+  {
+    "asset": "JPM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Steady uptrend, 'rate hikes could be coming' pieces; nothing specific. No view."
+  },
+  {
+    "asset": "XOM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Earnings beat and higher analyst targets, but the stock fell 1.8% on Monday and oil (USO) is down 5.6% in a week. Mixed."
+  },
+  {
+    "asset": "COIN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 25% in a month after the Binance heist; ARK bought the dip and New Jersey staking resumes. Mixed."
+  },
+  {
+    "asset": "QQQ",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Election day: futures mixed, Apple and Palantir fall on earnings while chips rebound; history says stocks rose after past midterms. No edge before the results."
+  },
+  {
+    "asset": "IWM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Small caps held up (+0.8% in a week); no news. No view."
+  },
+  {
+    "asset": "TLT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 10,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Record Treasury borrowing against haven buying when tech falls. Mixed."
+  },
+  {
+    "asset": "USO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US midterm election results Tue 3 Nov evening",
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 5.6% in a week; its headlines are October's supply fears, nothing new. No view."
+  }
+]
