@@ -19,7 +19,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **BANC** 316.56 shares around 18.50, stop 17.22
+- **ENPH** 66.38 shares around 27.93, stop 21.83
+- **NTRS** 34.11 shares around 170.66, stop 158.80
 
 ## Closed trades
 

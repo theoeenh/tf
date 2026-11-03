@@ -106,5 +106,44 @@
   "entry": 29.844700000000003,
   "r": 0.28700786599704503,
   "bar": "2026-11-02"
+ },
+ {
+  "asset": "BANC",
+  "ticker": "BANC",
+  "strategy": "insider_low_short",
+  "qty": 316.55553670214215,
+  "stop": 17.221884466117565,
+  "target": null,
+  "mark": 18.5,
+  "entry": 18.5,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-02"
+ },
+ {
+  "asset": "ENPH",
+  "ticker": "ENPH",
+  "strategy": "insider_low_short",
+  "qty": 66.38047166980337,
+  "stop": 21.834916030002397,
+  "target": null,
+  "mark": 27.93,
+  "entry": 27.93,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-02"
+ },
+ {
+  "asset": "NTRS",
+  "ticker": "NTRS",
+  "strategy": "insider_low_short",
+  "qty": 34.10830354870255,
+  "stop": 158.79794569941637,
+  "target": null,
+  "mark": 170.66,
+  "entry": 170.66,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-02"
  }
 ]
