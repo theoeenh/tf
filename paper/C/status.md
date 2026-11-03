@@ -1,18 +1,20 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-03 14:53 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-03 15:19 UTC.
 
-**Equity $90,034** (-9.97%) · max drawdown -11.2% · 72 closed trades · 0 open
+**Equity $90,042** (-9.96%) · max drawdown -11.2% · 72 closed trades · 1 open
 
 ## Open positions
 
-None.
-
+- **LONG 76.8969 XOM** (rsi2_reversion) since 2026-11-03 14:00, entry 178.05, stop 173.84, target 186.48, now +0.03R  
+  *Thinking:* LONG XOM (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.9% of price). Plan: entry 178.05, stop 173.84, target 186.48 (2:1); risking $324. AI analyst view +1: it agrees with this trade.
 
 ## Opening now (at the open of the bar forming now)
 
-- **LONG 76.8969 XOM** (rsi2_reversion) for the 2026-11-03 14:00 bar, at about 179.84, stop 175.63, target 188.26  
-  *Thinking:* LONG XOM (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.9% of price). Plan: entry 179.84, stop 175.63, target 188.26 (2:1); risking $324. AI analyst view +1: it agrees with this trade.
+- **LONG 24.3121 TSLA** (rsi2_reversion) for the 2026-11-03 15:00 bar, at about 402.46, stop 389.13, target 429.10  
+  *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 15 = chop market, high volatility (ATR 1.3% of price). Plan: entry 402.46, stop 389.13, target 429.10 (2:1); risking $324.
+- **LONG 427.1720 TLT** (rsi2_reversion) for the 2026-11-03 15:00 bar, at about 81.28, stop 80.52, target 82.79  
+  *Thinking:* LONG TLT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 0.4% of price). Plan: entry 81.28, stop 80.52, target 82.79 (2:1); risking $324.
 
 ## Closed trades (newest first)
 
