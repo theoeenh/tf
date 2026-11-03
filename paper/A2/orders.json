@@ -1,125 +1,122 @@
 [
  {
+  "asset": "BANC",
+  "ticker": "BANC",
+  "strategy": "insider_low_short",
+  "qty": 297.8876158818209,
+  "stop": 17.269664466115344,
+  "target": null,
+  "mark": 18.37,
+  "entry": 18.54778,
+  "r": -0.13909540670369666,
+  "bar": "2026-11-03"
+ },
+ {
   "asset": "BBT",
   "ticker": "BBT",
   "strategy": "insider_low_short",
   "qty": 168.16173473270942,
   "stop": 29.22573384767524,
   "target": null,
-  "mark": 31.57,
+  "mark": 30.85,
   "entry": 31.096575,
-  "r": 0.21055334794862118,
-  "bar": "2026-11-02"
+  "r": -0.109662970418612,
+  "bar": "2026-11-03"
  },
  {
   "asset": "CLF",
   "ticker": "CLF",
   "strategy": "insider_low_short",
   "qty": 148.2278374996888,
-  "stop": 11.79952815581585,
+  "stop": 11.862246215984076,
   "target": null,
-  "mark": 14.27,
+  "mark": 14.14,
   "entry": 13.871087999999999,
-  "r": 0.15626300044227318,
-  "bar": "2026-11-02"
+  "r": 0.10533901205010823,
+  "bar": "2026-11-03"
+ },
+ {
+  "asset": "ENPH",
+  "ticker": "ENPH",
+  "strategy": "insider_low_short",
+  "qty": 62.45646766991447,
+  "stop": 24.141400599297057,
+  "target": null,
+  "mark": 30.42,
+  "entry": 28.3174125,
+  "r": 0.3449644845506887,
+  "bar": "2026-11-03"
  },
  {
   "asset": "FFIN",
   "ticker": "FFIN",
   "strategy": "insider_low_short",
   "qty": 181.6859145138539,
-  "stop": 29.28004901533236,
+  "stop": 29.312188371380046,
   "target": null,
-  "mark": 31.44,
+  "mark": 31.04,
   "entry": 30.234167999999997,
-  "r": 0.5786459153452321,
-  "bar": "2026-11-02"
+  "r": 0.3866968161854045,
+  "bar": "2026-11-03"
  },
  {
   "asset": "HBAN",
   "ticker": "HBAN",
   "strategy": "insider_low_short",
   "qty": 408.80596363575546,
-  "stop": 15.047152309945742,
+  "stop": 15.055970002092476,
   "target": null,
-  "mark": 16.01,
+  "mark": 15.86,
   "entry": 15.957974999999998,
-  "r": 0.056112667025657405,
-  "bar": "2026-11-02"
+  "r": -0.10567301397094203,
+  "bar": "2026-11-03"
+ },
+ {
+  "asset": "NTRS",
+  "ticker": "NTRS",
+  "strategy": "insider_low_short",
+  "qty": 32.08385985421862,
+  "stop": 160.96594957801992,
+  "target": null,
+  "mark": 172.6,
+  "entry": 171.65578499999998,
+  "r": 0.0795996187568234,
+  "bar": "2026-11-03"
  },
  {
   "asset": "STC",
   "ticker": "STC",
   "strategy": "insider_low_short",
   "qty": 54.23089162895651,
-  "stop": 39.09013526526133,
+  "stop": 39.14226846059981,
   "target": null,
-  "mark": 45.73,
+  "mark": 44.76,
   "entry": 43.945820000000005,
-  "r": 0.25600738508445325,
-  "bar": "2026-11-02"
+  "r": 0.11682458764701956,
+  "bar": "2026-11-03"
  },
  {
   "asset": "THRM",
   "ticker": "THRM",
   "strategy": "insider_low_short",
   "qty": 70.61345320272434,
-  "stop": 27.468155496235717,
+  "stop": 27.515787246504594,
   "target": null,
-  "mark": 31.38,
+  "mark": 30.3,
   "entry": 29.844700000000003,
-  "r": 0.287007865996442,
-  "bar": "2026-11-02"
- },
- {
-  "asset": "BANC",
-  "ticker": "BANC",
-  "strategy": "insider_low_short",
-  "qty": 297.8876158818209,
-  "stop": 17.221884466115345,
-  "target": null,
-  "mark": 18.5,
-  "entry": 18.5,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-11-02"
- },
- {
-  "asset": "ENPH",
-  "ticker": "ENPH",
-  "strategy": "insider_low_short",
-  "qty": 62.465880877960004,
-  "stop": 21.834916030012213,
-  "target": null,
-  "mark": 27.93,
-  "entry": 27.93,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-11-02"
- },
- {
-  "asset": "NTRS",
-  "ticker": "NTRS",
-  "strategy": "insider_low_short",
-  "qty": 32.09686784112576,
-  "stop": 158.79794569940606,
-  "target": null,
-  "mark": 170.66,
-  "entry": 170.66,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-11-02"
+  "r": 0.08511345104421267,
+  "bar": "2026-11-03"
  },
  {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 76.64625275258926,
+  "qty": 76.60854662461485,
   "stop": null,
   "target": null,
-  "mark": 752.1,
-  "entry": 752.1,
+  "mark": 754.35,
+  "entry": 754.35,
   "r": 0.0,
-  "bar": "2026-11-02"
+  "bar": "2026-11-03"
  }
 ]
