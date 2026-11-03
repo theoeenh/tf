@@ -1,16 +1,16 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-03 21:07 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-03 21:20 UTC.
 
-**Equity $89,844** (-10.16%) · max drawdown -11.4% · 72 closed trades · 3 open
+**Equity $89,808** (-10.19%) · max drawdown -11.4% · 72 closed trades · 3 open
 
 ## Open positions
 
-- **LONG 24.3121 TSLA** (rsi2_reversion) since 2026-11-03 15:00, entry 402.51, stop 389.19, target 429.16, now -0.37R  
+- **LONG 24.3121 TSLA** (rsi2_reversion) since 2026-11-03 15:00, entry 402.51, stop 389.19, target 429.16, now -0.32R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 15 = chop market, high volatility (ATR 1.3% of price). Plan: entry 402.51, stop 389.19, target 429.16 (2:1); risking $324.
-- **LONG 76.8969 XOM** (rsi2_reversion) since 2026-11-03 14:00, entry 178.05, stop 173.84, target 186.48, now -0.01R  
+- **LONG 76.8969 XOM** (rsi2_reversion) since 2026-11-03 14:00, entry 178.05, stop 173.84, target 186.48, now -0.14R  
   *Thinking:* LONG XOM (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 21 = trend market, high volatility (ATR 0.9% of price). Plan: entry 178.05, stop 173.84, target 186.48 (2:1); risking $324. AI analyst view +1: it agrees with this trade.
-- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now -0.21R  
+- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now -0.23R  
   *Thinking:* LONG TLT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 0.4% of price). Plan: entry 81.28, stop 80.52, target 82.79 (2:1); risking $324.
 
 ## Closed trades (newest first)
