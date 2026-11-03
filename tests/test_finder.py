@@ -1272,3 +1272,41 @@ def test_smooth_momentum_prefers_the_steady_winner_and_uses_past_closes_only():
     assert full["STEADY"].iloc[:252].sum() == 0  # a year of closes needed
     part = smooth_momentum({a: df.iloc[:500] for a, df in prices.items()}, top=0.2, within=0.5)
     assert all((full[a].iloc[:499] == part[a].iloc[:499]).all() for a in prices)
+
+
+def test_stock_washout_needs_the_stock_and_its_sector_to_turn_and_uses_past_closes_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=140)
+    fall_then_up = pd.Series(np.r_[np.linspace(100, 70, 80), np.linspace(70, 80, 60)], index=days)
+    fall_flat = pd.Series(np.r_[np.linspace(100, 70, 80), np.full(60, 70.0)], index=days)
+    up = pd.Series(np.linspace(100, 120, 140), index=days)
+    prices = {"W1": pd.DataFrame({"Close": fall_then_up}), "W2": pd.DataFrame({"Close": fall_then_up * 1.01}),
+              "W3": pd.DataFrame({"Close": fall_flat}),          # washed out, but no bounce of its own
+              "U1": pd.DataFrame({"Close": up}), "U2": pd.DataFrame({"Close": up * 1.02})}
+    monkeypatch.setattr(wide, "sectors", lambda: {"W1": "Mat", "W2": "Mat", "W3": "Mat", "U1": "Tech", "U2": "Tech"})
+    full = ff.stock_washout(prices, drop=0.2, bounce=5)
+    first = full["W1"].index[full["W1"] == 1]
+    assert len(first) == 1 and first[0] > days[80]                    # once, after the turn
+    assert full["W3"].sum() == 0 and full["U1"].sum() == 0            # no bounce; no washout
+    part = ff.stock_washout({a: df.iloc[:100] for a, df in prices.items()}, drop=0.2, bounce=5)
+    assert all((full[a].iloc[:100] == part[a]).all() for a in prices)
+
+
+def test_lead_lag_sector_buys_the_laggard_after_the_leaders_rise_from_past_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    flat = np.full(120, 100.0)
+    jump = flat.copy(); jump[100:] = np.linspace(102, 130, 20)              # the leaders rise from day 100
+    big = lambda c: pd.DataFrame({"Close": pd.Series(c, index=days), "Volume": 1e7})  # noqa: E731
+    small = lambda c: pd.DataFrame({"Close": pd.Series(c, index=days), "Volume": 1e4})  # noqa: E731
+    prices = {"L1": big(jump), "L2": big(jump * 1.01), "S1": small(flat), "S2": small(flat * 0.99),
+              "S3": small(flat * 1.02), "S4": small(jump * 0.5)}            # S4 is small but rises with them
+    monkeypatch.setattr(wide, "sectors", lambda: {a: "Tech" for a in prices})
+    full = ff.lead_lag_sector(prices, lead=0.03, days=5)
+    on = full["S1"].index[full["S1"] == 1]
+    assert len(on) == 1 and on[0] > days[100]
+    assert full["L1"].sum() == 0 and full["S4"].sum() == 0                   # leaders and risers are not bought
+    part = ff.lead_lag_sector({a: df.iloc[:110] for a, df in prices.items()}, lead=0.03, days=5)
+    assert all((full[a].iloc[:110] == part[a]).all() for a in prices)

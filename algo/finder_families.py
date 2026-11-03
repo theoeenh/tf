@@ -1063,6 +1063,43 @@ def sector_washout(prices: dict, drop: float = 0.15, bounce: int = 5) -> dict:
     return _own(sig.reindex(columns=close.columns, fill_value=0), prices)
 
 
+def stock_washout(prices: dict, drop: float = 0.20, bounce: int = 5) -> dict:
+    """Market data only: sector_washout (13/14, ICIR +0.78, fails only the luck check) at the level of the
+    stock, so its trades spread out in time instead of buying a whole sector on one day. On the first day a
+    stock that lost at least `drop` over 60 sessions has a positive `bounce`-day return while its sector's
+    median `bounce`-day return is positive too (the sector confirms the turn), buy it. Closes up to that
+    day only."""
+    close = _panel(prices)
+    sector, med_b = _sector_median(close, close / close.shift(bounce) - 1)
+    r60, rb = close / close.shift(60) - 1, close / close.shift(bounce) - 1
+    turn = pd.DataFrame({a: med_b[sector[a]] > 0 for a in sector.index}, index=close.index)
+    member = (r60[sector.index] <= -drop) & (rb[sector.index] > 0) & turn
+    return _own(_entries(member).reindex(columns=close.columns, fill_value=0), prices)
+
+
+def lead_lag_sector(prices: dict, lead: float = 0.03, days: int = 5) -> dict:
+    """Market data only: within a sector the big, heavily traded stocks lead and the smaller ones follow
+    (Hou 2007: news reaches the leaders first). The leaders are the sector's top third by 60-session average
+    dollar volume. On the first day the leaders' median `days`-day return reaches `lead` while a smaller
+    stock of the sector is flat or down over the same days, buy that stock. Closes and volumes up to that
+    day only."""
+    close, vol = _panel(prices), _panel(prices, "Volume")
+    dollar = (close * vol).rolling(60, min_periods=40).mean()
+    sector, _ = _sector_median(close, close)
+    ret = close / close.shift(days) - 1
+    out = pd.DataFrame(0, index=close.index, columns=close.columns)
+    for sec, names in sector.groupby(sector).groups.items():
+        names = list(names)
+        if len(names) < 3:
+            continue
+        rank = dollar[names].rank(axis=1, pct=True)
+        leader = rank > 2 / 3
+        lead_ret = ret[names].where(leader).median(axis=1)
+        member = (lead_ret >= lead).to_numpy()[:, None] & ~leader & (ret[names] <= 0) & rank.notna()
+        out[names] = _entries(member)
+    return _own(out, prices)
+
+
 def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
     """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
     days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
@@ -1504,6 +1541,14 @@ WIDE_FAMILIES = {
     # market data only: momentum built from many small moves, monthly (2026-11-02)
     "smooth_momentum": (smooth_momentum, {"top": [0.1, 0.2], "within": [0.3, 0.5]},
                         {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500"], "trend": False}),
+    # market data only: sector_washout at the stock level, with the sector confirming (2026-11-03)
+    "stock_washout": (stock_washout, {"drop": [0.15, 0.25], "bounce": [3, 5]},
+                      {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                       "segments": ["sp1500"], "trend": False}),
+    # market data only: a sector's heavily traded leaders rise, its laggards follow (2026-11-03)
+    "lead_lag_sector": (lead_lag_sector, {"lead": [0.03, 0.05], "days": [5, 10]},
+                        {"rules": ["hold 10 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
