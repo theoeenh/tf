@@ -215,3 +215,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-10-27 14:29:20,spy_put_spread,SPY,SPY261204P00742000,sell,1,1,6.56,filled,"open: sell 742 / buy 710 puts, 2026-12-04, credit 3.25 on width 32"
 2026-10-30 18:33:14,bear_call_spread,AVGO,AVGO261120C00360000,buy,1,1,2.54,filled,"close: half the credit earned (buy back $162 vs $355 received)"
 2026-10-30 18:33:16,bear_call_spread,AVGO,AVGO261120C00380000,sell,1,1,0.94,filled,"close: half the credit earned (buy back $162 vs $355 received)"
+2026-11-03 15:05:20,spy_put_spread,SPY,SPY261211P00695000,buy,1,1,4.15,filled,"open: sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30"
+2026-11-03 15:05:23,spy_put_spread,SPY,SPY261211P00725000,sell,1,1,7.71,filled,"open: sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30"

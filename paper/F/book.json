@@ -215,6 +215,28 @@
    "desc": "sell 742 / buy 710 puts, 2026-12-04, credit 3.25 on width 32",
    "opened": "2026-10-27 14:29",
    "id": "spy_put_spread-SPY-2026-10-27"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261211P00695000",
+     "qty": 1,
+     "price": 4.15
+    },
+    {
+     "symbol": "SPY261211P00725000",
+     "qty": -1,
+     "price": 7.71
+    }
+   ],
+   "expiry": "2026-12-11",
+   "cost": -355.99999999999994,
+   "max_loss": 2653.0,
+   "desc": "sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30",
+   "opened": "2026-11-03 15:05",
+   "id": "spy_put_spread-SPY-2026-11-03"
   }
  ],
  "closed": [
