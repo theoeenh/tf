@@ -1,0 +1,222 @@
+[
+  {
+    "asset": "BTC",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Back above $78k as election hedges are dropped; experts call the Democratic sweep 'priced in'. No edge."
+  },
+  {
+    "asset": "ETH",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Altseason talk and Google's crypto service against outflows from crypto ETFs. Mixed."
+  },
+  {
+    "asset": "SOL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Rebounding with bitcoin after the election; no SOL-specific news. No view."
+  },
+  {
+    "asset": "NVDA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Took back the world's-biggest-company title from Apple on election day; data-centre rules may tighten after the Democratic wins. Mixed."
+  },
+  {
+    "asset": "TSLA",
+    "bias": -1,
+    "confidence": 0.3,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 5% before the open: an analyst warns the Democratic sweep raises regulatory and merger risks for Musk's companies (SpaceX -6%), on top of margin pressure. Small short bias."
+  },
+  {
+    "asset": "GOLD",
+    "bias": -1,
+    "confidence": 0.25,
+    "horizon_days": 9,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "No new news since Tuesday's World Gold Council cut to its 2026 forecast; price still falling and below its 200-day average. Keeping a small short bias."
+  },
+  {
+    "asset": "SILVER",
+    "bias": -1,
+    "confidence": 0.2,
+    "horizon_days": 9,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Near 52-week lows after the gold forecast cut, down 17% in a month; no new news. Small short bias with the trend."
+  },
+  {
+    "asset": "AAPL",
+    "bias": -1,
+    "confidence": 0.25,
+    "horizon_days": 4,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Fell another 2% on Tuesday after its margin warning on memory prices and lost the biggest-company title to Nvidia. Keeping a small short bias for the post-earnings drift."
+  },
+  {
+    "asset": "MSFT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Up 2.7% on Tuesday; only AI-automation and product pieces. No view."
+  },
+  {
+    "asset": "AMZN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Bullish long-term pieces against possible tighter data-centre rules after the Democratic wins. Mixed."
+  },
+  {
+    "asset": "META",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Paid 7.5% to borrow for 30 years (strong demand) amid questions about paying for its AI spending; ETF selling. Mixed."
+  },
+  {
+    "asset": "GOOGL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Only market-wide AI-spending pieces; no company news. No view."
+  },
+  {
+    "asset": "AMD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Earnings 'checked every box' but Wall Street is split, and its AI deals cost $1.1bn; the stock rose 3.7% into the report. No clear edge."
+  },
+  {
+    "asset": "AVGO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "ETF buying against 'can it fall further' pieces after Marvell's crash. Mixed."
+  },
+  {
+    "asset": "NFLX",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Valuation and support-level pieces only. No view."
+  },
+  {
+    "asset": "JPM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Quarterly filing and adviser hires; nothing that moves the price. No view."
+  },
+  {
+    "asset": "XOM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Raised its dividend for the 44th year, but talk of an Iran settlement comes with a CEO's call that peace would cut oil 40%; strikes on Iran continue. Mixed."
+  },
+  {
+    "asset": "COIN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "'Next big move' against 'another 40% down' pieces after a -25% month. No view."
+  },
+  {
+    "asset": "QQQ",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "The Dow jumps nearly 1,000 points on the election result; after such a gap there is no clear edge for the next days."
+  },
+  {
+    "asset": "IWM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Only ETF holding changes. No view."
+  },
+  {
+    "asset": "TLT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 10,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "A piece on whether the midterms could cut the $1.36 trillion interest bill; nothing concrete. No view."
+  },
+  {
+    "asset": "USO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "US strikes on Iran continue while Trump talks up a settlement that one CEO says would cut oil 40%. Two-sided risk; no bias."
+  }
+]
