@@ -1,18 +1,18 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-04 20:51 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-04 21:22 UTC.
 
-**Equity $89,516** (-10.48%) · max drawdown -12.0% · 74 closed trades · 4 open
+**Equity $89,402** (-10.60%) · max drawdown -12.0% · 74 closed trades · 4 open
 
 ## Open positions
 
-- **LONG 22.0598 TSLA** (rsi2_reversion) since 2026-11-04 15:00, entry 383.25, stop 368.71, target 412.34, now +0.35R  
+- **LONG 22.0598 TSLA** (rsi2_reversion) since 2026-11-04 15:00, entry 383.25, stop 368.71, target 412.34, now +0.14R  
   *Thinking:* LONG TSLA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 15 = chop market, high volatility (ATR 1.5% of price). Plan: entry 383.25, stop 368.71, target 412.34 (2:1); risking $321.
-- **LONG 19.9756 MSFT** (donchian_trend) since 2026-11-04 15:00, entry 553.37, stop 537.31, target 585.49, now +0.27R  
+- **LONG 19.9756 MSFT** (donchian_trend) since 2026-11-04 15:00, entry 553.37, stop 537.31, target 585.49, now +0.16R  
   *Thinking:* LONG MSFT (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, high volatility (ATR 1.2% of price). Plan: entry 553.37, stop 537.31, target 585.49 (2:1); risking $321.
-- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +0.53R  
+- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +0.66R  
   *Thinking:* LONG TLT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 0.4% of price). Plan: entry 81.28, stop 80.52, target 82.79 (2:1); risking $324.
-- **LONG 33.4678 MSFT** (opening_range) since 2026-11-04 17:00, entry 557.73, stop 548.12, target 576.94, now -0.01R  
+- **LONG 33.4678 MSFT** (opening_range) since 2026-11-04 17:00, entry 557.73, stop 548.12, target 576.94, now -0.18R  
   *Thinking:* LONG MSFT (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 24 = trend market, high volatility (ATR 1.1% of price). Plan: entry 557.73, stop 548.12, target 576.94 (2:1); risking $322.
 
 ## Closed trades (newest first)
@@ -210,7 +210,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG USO (opening range breakout): price broke upside out of its opening range. Trading with the 200-bar trend. ADX 18 = chop market, high volatility (ATR 1.5% of price). Plan: entry 146.37, stop 143.01, target 153.10 (2:1); risking $356. Warning: jobs report coming up while in the trade.  
   *Lesson:* Breakout/trend setup in a choppy market (ADX < 20) failed. (-0.53R, best point +0.5R)
 - **2026-10-05 04:00 · LONG BTC · donchian_trend · -1.33R · $-472** (fees $233, event)  
-  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $355. Strong trend, so the target was widened. News: neutral tone (+0.9σ vs usual), normal coverage. AI analyst view +1: it agrees with this trade.  
+  *Thinking:* LONG BTC (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 32 = strong market, low volatility (ATR 0.3% of price). Plan: entry 86,466.71, stop 85,808.03, target 88,442.76 (3:1); risking $355. Strong trend, so the target was widened. AI analyst view +1: it agrees with this trade.  
   *Lesson:* Price gapped through the stop, so the loss was bigger than planned. (-1.33R, best point +0.8R)
 - **2026-10-02 12:00 · LONG SOL · donchian_trend · -0.91R · $-326** (fees $78, event)  
   *Thinking:* LONG SOL (trend following): price broke out of its 55-bar high. Trading with the 200-bar trend. ADX 19 = chop market, mid volatility (ATR 0.9% of price). Plan: entry 123.59, stop 120.76, target 129.27 (2:1); risking $359. Warning: jobs report coming up while in the trade.  
