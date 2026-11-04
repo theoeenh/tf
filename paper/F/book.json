@@ -2,23 +2,6 @@
  "open": [
   {
    "playbook": "long_put",
-   "underlying": "IWM",
-   "legs": [
-    {
-     "symbol": "IWM261218P00284000",
-     "qty": 2,
-     "price": 12.615
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": 2523.0,
-   "max_loss": 2528.0,
-   "desc": "IWM Dec 18 2026 284 Put, delta -0.60",
-   "opened": "2026-10-20 14:29",
-   "id": "long_put-IWM-2026-10-20"
-  },
-  {
-   "playbook": "long_put",
    "underlying": "NFLX",
    "legs": [
     {
@@ -32,24 +15,8 @@
    "max_loss": 2214.0,
    "desc": "NFLX Dec 18 2026 75 Put, delta -0.60",
    "opened": "2026-10-20 15:00",
-   "id": "long_put-NFLX-2026-10-20"
-  },
-  {
-   "playbook": "long_put",
-   "underlying": "AVGO",
-   "legs": [
-    {
-     "symbol": "AVGO261120P00347500",
-     "qty": 1,
-     "price": 22.1
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": 2210.0,
-   "max_loss": 2218.0,
-   "desc": "AVGO Nov 20 2026 347.5 Put, delta -0.59",
-   "opened": "2026-10-20 15:39",
-   "id": "long_put-AVGO-2026-10-20"
+   "id": "long_put-NFLX-2026-10-20",
+   "partial": 0.0
   },
   {
    "playbook": "long_call",
@@ -67,28 +34,6 @@
    "desc": "AAPL Dec 18 2026 335 Call, delta +0.61",
    "opened": "2026-10-20 16:56",
    "id": "long_call-AAPL-2026-10-20"
-  },
-  {
-   "playbook": "bull_put_spread",
-   "underlying": "AAPL",
-   "legs": [
-    {
-     "symbol": "AAPL261120P00310000",
-     "qty": 1,
-     "price": 2.35
-    },
-    {
-     "symbol": "AAPL261120P00327500",
-     "qty": -1,
-     "price": 5.5
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": -315.0,
-   "max_loss": 1441.0,
-   "desc": "sell 327.5 / buy 310 puts, 2026-11-20, credit 3.09 on width 17.5",
-   "opened": "2026-10-20 18:28",
-   "id": "bull_put_spread-AAPL-2026-10-20"
   },
   {
    "playbook": "bull_put_spread",
@@ -237,6 +182,29 @@
    "desc": "sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30",
    "opened": "2026-11-03 15:05",
    "id": "spy_put_spread-SPY-2026-11-03"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "BA",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "BA261218P00160000",
+     "qty": 3,
+     "price": 1.96
+    },
+    {
+     "symbol": "BA261218P00170000",
+     "qty": -3,
+     "price": 3.9
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -582.0,
+   "max_loss": 2427.0,
+   "desc": "sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10",
+   "opened": "2026-11-04 14:59",
+   "id": "bull_put_spread-BA-2026-11-04"
   }
  ],
  "closed": [
@@ -741,6 +709,81 @@
    "closed": "2026-10-30 18:29",
    "why_closed": "half the credit earned (buy back $162 vs $355 received)",
    "pnl": 195.0
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "IWM",
+   "legs": [
+    {
+     "symbol": "IWM261218P00284000",
+     "qty": 2,
+     "price": 12.615
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": 2523.0,
+   "max_loss": 2528.0,
+   "desc": "IWM Dec 18 2026 284 Put, delta -0.60",
+   "opened": "2026-10-20 14:29",
+   "id": "long_put-IWM-2026-10-20",
+   "done_legs": [
+    "IWM261218P00284000"
+   ],
+   "closed": "2026-11-04 14:56",
+   "why_closed": "15 days held",
+   "pnl": -1071.0
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "AVGO",
+   "legs": [
+    {
+     "symbol": "AVGO261120P00347500",
+     "qty": 1,
+     "price": 22.1
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2210.0,
+   "max_loss": 2218.0,
+   "desc": "AVGO Nov 20 2026 347.5 Put, delta -0.59",
+   "opened": "2026-10-20 15:39",
+   "id": "long_put-AVGO-2026-10-20",
+   "done_legs": [
+    "AVGO261120P00347500"
+   ],
+   "closed": "2026-11-04 14:56",
+   "why_closed": "15 days held",
+   "pnl": -25.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "AAPL",
+   "legs": [
+    {
+     "symbol": "AAPL261120P00310000",
+     "qty": 1,
+     "price": 2.35
+    },
+    {
+     "symbol": "AAPL261120P00327500",
+     "qty": -1,
+     "price": 5.5
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": -315.0,
+   "max_loss": 1441.0,
+   "desc": "sell 327.5 / buy 310 puts, 2026-11-20, credit 3.09 on width 17.5",
+   "opened": "2026-10-20 18:28",
+   "id": "bull_put_spread-AAPL-2026-10-20",
+   "done_legs": [
+    "AAPL261120P00327500",
+    "AAPL261120P00310000"
+   ],
+   "closed": "2026-11-04 14:56",
+   "why_closed": "half the credit earned (buy back $92 vs $315 received)",
+   "pnl": 218.0
   }
  ]
 }
