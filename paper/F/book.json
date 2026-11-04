@@ -1,24 +1,6 @@
 {
  "open": [
   {
-   "playbook": "long_put",
-   "underlying": "NFLX",
-   "legs": [
-    {
-     "symbol": "NFLX261218P00075000",
-     "qty": 3,
-     "price": 7.3
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": 2190.0,
-   "max_loss": 2214.0,
-   "desc": "NFLX Dec 18 2026 75 Put, delta -0.60",
-   "opened": "2026-10-20 15:00",
-   "id": "long_put-NFLX-2026-10-20",
-   "partial": 0.0
-  },
-  {
    "playbook": "long_call",
    "underlying": "AAPL",
    "legs": [
@@ -784,6 +766,30 @@
    "closed": "2026-11-04 14:56",
    "why_closed": "half the credit earned (buy back $92 vs $315 received)",
    "pnl": 218.0
+  },
+  {
+   "playbook": "long_put",
+   "underlying": "NFLX",
+   "legs": [
+    {
+     "symbol": "NFLX261218P00075000",
+     "qty": 3,
+     "price": 7.3
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": 2190.0,
+   "max_loss": 2214.0,
+   "desc": "NFLX Dec 18 2026 75 Put, delta -0.60",
+   "opened": "2026-10-20 15:00",
+   "id": "long_put-NFLX-2026-10-20",
+   "partial": 0.0,
+   "done_legs": [
+    "NFLX261218P00075000"
+   ],
+   "closed": "2026-11-04 15:27",
+   "why_closed": "15 days held",
+   "pnl": 570.0
   }
  ]
 }
