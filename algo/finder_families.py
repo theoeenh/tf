@@ -1100,6 +1100,36 @@ def lead_lag_sector(prices: dict, lead: float = 0.03, days: int = 5) -> dict:
     return _own(out, prices)
 
 
+def _calm(prices: dict, max_vol: float) -> pd.DataFrame:
+    """Stocks whose 60-session volatility ranks in the calmest `max_vol` share of the universe that day
+    (closes up to that day)."""
+    idx = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    close = pd.DataFrame({a: df["Close"] for a, df in prices.items()}).reindex(idx)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    return vol.rank(axis=1, pct=True) <= max_vol
+
+
+def _only_calm(sig: dict, prices: dict, max_vol: float) -> dict:
+    calm = _calm(prices, max_vol)
+    return {a: (s.astype(bool) & calm[a].reindex(s.index).fillna(False).to_numpy()).astype(int)
+            for a, s in sig.items()}
+
+
+def sector_washout_calm(prices: dict, drop: float = 0.15, bounce: int = 5, max_vol: float = 0.5) -> dict:
+    """Market data only: sector_washout (13/14, fails only the luck check) keeping only the calmer stocks of
+    the sector (60-session volatility in the lowest `max_vol` share of the universe): the calm filter gave
+    the steadiest insider idea (insider_calm_fresh) the best deflated Sharpe so far. Closes up to the
+    signal day only."""
+    return _only_calm(sector_washout(prices, drop=drop, bounce=bounce), prices, max_vol)
+
+
+def insider_calm_stress(prices: dict, buyers: int = 1, drop: float = 0.10, max_vol: float = 0.5) -> dict:
+    """insider_sector_stress (13/14: an insider buys while the stock's sector is down `drop`) for calm
+    stocks only (60-session volatility in the lowest `max_vol` share of the universe), as insider_calm_fresh
+    did for opportunistic insiders. Filings and closes up to the signal day."""
+    return _only_calm(insider_sector_stress(prices, buyers=buyers, drop=drop), prices, max_vol)
+
+
 def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
     """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
     days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
@@ -1550,6 +1580,14 @@ WIDE_FAMILIES = {
     "lead_lag_sector": (lead_lag_sector, {"lead": [0.03, 0.05], "days": [5, 10]},
                         {"rules": ["hold 10 days", "trailing 3 ATR, out in 60 days"],
                          "segments": ["sp1500"], "trend": False}),
+    # market data only: the sector washout, calm stocks only (2026-11-04)
+    "sector_washout_calm": (sector_washout_calm, {"drop": [0.10, 0.15], "bounce": [5], "max_vol": [0.3, 0.5]},
+                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500"], "trend": False}),
+    # insiders buying calm stocks of a stressed sector (2026-11-04)
+    "insider_calm_stress": (insider_calm_stress, {"buyers": [1], "drop": [0.08, 0.15], "max_vol": [0.3, 0.5]},
+                            {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500", "sector:Industrials"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

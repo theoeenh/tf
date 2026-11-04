@@ -1310,3 +1310,24 @@ def test_lead_lag_sector_buys_the_laggard_after_the_leaders_rise_from_past_data_
     assert full["L1"].sum() == 0 and full["S4"].sum() == 0                   # leaders and risers are not bought
     part = ff.lead_lag_sector({a: df.iloc[:110] for a, df in prices.items()}, lead=0.03, days=5)
     assert all((full[a].iloc[:110] == part[a]).all() for a in prices)
+
+
+def test_calm_variants_keep_only_calm_stocks_with_past_closes_only(monkeypatch):
+    """sector_washout_calm and insider_calm_stress: the base signal, kept only where the stock's 60-session
+    volatility (closes up to that day) is among the calmest."""
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    t = np.arange(120)
+    rng = np.random.default_rng(2)
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(100 + 0.1 * np.sin(t), index=days)}),
+              "WILD": pd.DataFrame({"Close": pd.Series(100 * np.exp(np.cumsum(rng.normal(0, 0.04, 120))), index=days)})}
+    on = days[100]
+    fake = lambda p, **k: {a: pd.Series((p[a].index == on).astype(int), p[a].index) for a in p}  # noqa: E731
+    monkeypatch.setattr(ff, "sector_washout", fake)
+    monkeypatch.setattr(ff, "insider_sector_stress", fake)
+    for fn in (ff.sector_washout_calm, ff.insider_calm_stress):
+        out = fn(prices, max_vol=0.5)
+        assert out["CALM"].loc[on] == 1 and out["WILD"].sum() == 0
+        part = fn({a: df.iloc[:101] for a, df in prices.items()}, max_vol=0.5)
+        assert all((out[a].iloc[:101] == part[a]).all() for a in prices)
