@@ -22,7 +22,10 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **BA** 23.41 shares around 173.31, stop 156.11
+- **CAT** 4.68 shares around 623.94, stop 537.99
+- **IBKR** 42.46 shares around 77.46, stop 67.98
+- **LKQ** 137.71 shares around 19.26, stop 16.34
 
 ## Closed trades
 

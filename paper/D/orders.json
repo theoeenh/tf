@@ -142,5 +142,57 @@
   "entry": 29.844700000000003,
   "r": 0.0851134510443915,
   "bar": "2026-11-03"
+ },
+ {
+  "asset": "BA",
+  "ticker": "BA",
+  "strategy": "insider_low_short",
+  "qty": 23.405453265784445,
+  "stop": 156.10668133212042,
+  "target": null,
+  "mark": 173.31,
+  "entry": 173.31,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-03"
+ },
+ {
+  "asset": "CAT",
+  "ticker": "CAT",
+  "strategy": "insider_low_short",
+  "qty": 4.684681788332737,
+  "stop": 537.9893443759058,
+  "target": null,
+  "mark": 623.94,
+  "entry": 623.94,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-03"
+ },
+ {
+  "asset": "IBKR",
+  "ticker": "IBKR",
+  "strategy": "insider_low_short",
+  "qty": 42.45839585291179,
+  "stop": 67.97656420340621,
+  "target": null,
+  "mark": 77.46,
+  "entry": 77.46,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-03"
+ },
+ {
+  "asset": "LKQ",
+  "ticker": "LKQ",
+  "strategy": "insider_low_short",
+  "qty": 137.707669972062,
+  "stop": 16.336041797968534,
+  "target": null,
+  "mark": 19.26,
+  "entry": 19.26,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-03"
  }
 ]
