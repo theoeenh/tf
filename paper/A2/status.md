@@ -16,8 +16,11 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **NTRS** 32.08 shares, entry 171.66, stop 160.97, now 172.60 (+0.08R)
 - **STC** 54.23 shares, entry 43.95, stop 39.14, now 44.76 (+0.12R)
 - **THRM** 70.61 shares, entry 29.84, stop 27.52, now 30.30 (+0.09R)
-- **SPY** (idle cash) 76.61 shares, now 754.35
+- **SPY** (idle cash) 60.46 shares, now 754.35
 
 ## New signals (bought at the next open)
 
-None.
+- **BA** 22.06 shares around 173.31, stop 156.11
+- **CAT** 4.42 shares around 623.94, stop 537.99
+- **IBKR** 40.02 shares around 77.46, stop 67.98
+- **LKQ** 129.81 shares around 19.26, stop 16.34
