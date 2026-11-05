@@ -1,12 +1,12 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-05 17:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-05 18:23 UTC.
 
-**Equity $88,205** (-11.80%) · max drawdown -13.0% · 78 closed trades · 1 open
+**Equity $88,241** (-11.76%) · max drawdown -13.0% · 78 closed trades · 1 open
 
 ## Open positions
 
-- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +1.09R  
+- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +1.20R  
   *Thinking:* LONG TLT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 0.4% of price). Plan: entry 81.28, stop 80.52, target 82.79 (2:1); risking $324.
 
 ## Closed trades (newest first)
@@ -246,7 +246,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (98)
+## Skipped by the learner (101)
 
 - 2026-10-29 17:00 USO opening_range: would have made +1.98R. SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.04R (avg win +1.06R, avg loss -0.95R).
 - 2026-10-29 14:00 AAPL squeeze_breakout: would have made -1.02R. SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).

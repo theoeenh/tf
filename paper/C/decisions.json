@@ -98,6 +98,15 @@
 0.07683425982076186
 ]
 },
+"AAPL|rsi2_reversion|+|2026-11-05 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.17R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2717911206071105,
+-0.16624546388131578
+]
+},
 "AAPL|squeeze_breakout|+|2026-10-07 14:00": {
 "skip": false,
 "reason": "",
@@ -1106,6 +1115,15 @@
 0.021653546845416538
 ]
 },
+"TLT|donchian_trend|+|2026-11-05 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 32% estimated chance of profit, expected -0.02R (avg win +2.42R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.31704427353351117,
+-0.024729173881022803
+]
+},
 "TLT|opening_range|+|2026-11-02 18:00": {
 "skip": false,
 "reason": "",
@@ -1122,6 +1140,15 @@
 "pred": [
 0.45993737557867703,
 -0.030018564953157745
+]
+},
+"TLT|opening_range|+|2026-11-05 18:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 45% estimated chance of profit, expected -0.05R (avg win +1.06R, avg loss -0.95R).",
+"size": 1.0,
+"pred": [
+0.4508657008199748,
+-0.04729999351110503
 ]
 },
 "TLT|rsi2_reversion|+|2026-10-26 13:00": {
