@@ -156,10 +156,36 @@
   "bar": "2026-11-04"
  },
  {
+  "asset": "LSCC",
+  "ticker": "LSCC",
+  "strategy": "insider_low_short",
+  "qty": 18.39761510516722,
+  "stop": 86.50246725296908,
+  "target": null,
+  "mark": 107.25,
+  "entry": 107.25,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-04"
+ },
+ {
+  "asset": "TBBK",
+  "ticker": "TBBK",
+  "strategy": "insider_low_short",
+  "qty": 71.88158833729102,
+  "stop": 42.0298067962738,
+  "target": null,
+  "mark": 47.34,
+  "entry": 47.34,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-04"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 60.51986291804822,
+  "qty": 53.50897545972537,
   "stop": null,
   "target": null,
   "mark": 766.81,
