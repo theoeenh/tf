@@ -1,0 +1,222 @@
+[
+  {
+    "asset": "BTC",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Back above $80k after the midterms with bullish commentary (Tom Lee, Saylor); nothing concrete beyond sentiment. No view."
+  },
+  {
+    "asset": "ETH",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Up with bitcoin (+6.6% on Wednesday); only general pieces. No view."
+  },
+  {
+    "asset": "SOL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Stablecoin adoption news (Samsung Wallet USDC on Solana) is positive but small. No view."
+  },
+  {
+    "asset": "NVDA",
+    "bias": -1,
+    "confidence": 0.2,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Dipped below $200 for the first time since August as money rotates away from AI chip stocks; below its 200-day average. Small short bias with the rotation."
+  },
+  {
+    "asset": "TSLA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Fell another 3% on Wednesday after the election worries; no new company news today. Dropping yesterday's short bias."
+  },
+  {
+    "asset": "GOLD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Gold and silver added $1 trillion after the midterm results (+3.7% on Wednesday), reversing the weak trend behind Tuesday's short bias. No view now."
+  },
+  {
+    "asset": "SILVER",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Up 5% on Wednesday with gold's post-election rally; the short bias was wrong, and the turn is too fresh to call. No view."
+  },
+  {
+    "asset": "AAPL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Rebounded 5% on Wednesday ('flash buy signal'), undoing the post-earnings drop; dropping the short bias."
+  },
+  {
+    "asset": "MSFT",
+    "bias": 1,
+    "confidence": 0.2,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "A Wall Street veteran argues the election (tighter rules for new data centres) makes Microsoft's existing ones more valuable; no analyst rates it a sell and it broke out to a 55-day high. Small long bias."
+  },
+  {
+    "asset": "AMZN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Jumped 6% on Wednesday; delivery competition and general pieces only. No view."
+  },
+  {
+    "asset": "META",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Buys an AI coding startup; Snap's miss left Meta steady. No view."
+  },
+  {
+    "asset": "GOOGL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Rose with Amazon on Wednesday; questions whether Democrats slow the AI boom. Mixed."
+  },
+  {
+    "asset": "AMD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Post-earnings: 'data centre first', Morningstar sees an Nvidia software hurdle; ETF selling. Mixed."
+  },
+  {
+    "asset": "AVGO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "ETF buying and turning-point pieces after Marvell's deal. No view."
+  },
+  {
+    "asset": "NFLX",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Ackman calls it 'incredibly cheap' after a 55% drop; ETFs net sellers. Mixed."
+  },
+  {
+    "asset": "JPM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "New high after the election (+4.2% on Wednesday); only expansion news. No view."
+  },
+  {
+    "asset": "XOM",
+    "bias": -1,
+    "confidence": 0.2,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Fell 4.6% on Wednesday as oil collapses ('physical oil went from a bidding war to a fire sale') on hopes of an Iran settlement; Wall Street split after its quarter. Small short bias with oil."
+  },
+  {
+    "asset": "COIN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Downgraded over the Binance breach, while it reassures customers that 99% of crypto is offline. Mixed."
+  },
+  {
+    "asset": "QQQ",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Futures mixed with pressure on AI shares and money rotating elsewhere after the post-election rally. No edge."
+  },
+  {
+    "asset": "IWM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "'Rotation is the new momentum trade' could favour small caps, but nothing concrete. No view."
+  },
+  {
+    "asset": "TLT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 10,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "'Inflation lost' talk after the election and oil's fall could help bonds, but there is no hard news. No view."
+  },
+  {
+    "asset": "USO",
+    "bias": -1,
+    "confidence": 0.25,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov"
+    ],
+    "reasoning": "Down 8% on Wednesday: physical oil turned into a 'fire sale' on hopes of an Iran settlement. A sharp drop invites a bounce, so only a small short bias with the news."
+  }
+]
