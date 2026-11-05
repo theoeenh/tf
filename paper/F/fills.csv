@@ -230,3 +230,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-05 15:32:26,bull_put_spread,FIS,FIS261120P00032500,sell,14,14,3.1,filled,"close: account D closed the stock"
 2026-11-05 15:32:53,bull_put_spread,CAT,CAT261218P00500000,buy,1,0,,canceled,"open: sell 530 / buy 500 puts, 2026-12-18, credit 7.10 on width 30"
 2026-11-05 15:58:28,bull_put_spread,CAT,CAT261218P00500000,buy,1,0,,canceled,"open: sell 530 / buy 500 puts, 2026-12-18, credit 7.21 on width 30"
+2026-11-05 16:27:37,bull_put_spread,CAT,CAT261218P00500000,buy,1,0,,canceled,"open: sell 530 / buy 500 puts, 2026-12-18, credit 6.55 on width 30"
