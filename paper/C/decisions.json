@@ -251,6 +251,15 @@
 -0.1642944408046142
 ]
 },
+"AMZN|rsi2_reversion|+|2026-11-05 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.14R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.27822930434251386,
+-0.14282250227338178
+]
+},
 "AMZN|vwap_reversion|+|2026-10-08 18:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 53% estimated chance of profit, expected -0.04R (avg win +0.64R, avg loss -0.81R).",
@@ -521,6 +530,24 @@
 -0.1636679169747255
 ]
 },
+"JPM|rsi2_reversion|+|2026-11-05 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 30% estimated chance of profit, expected -0.07R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.29864120018668794,
+-0.06856133291995958
+]
+},
+"JPM|vwap_reversion|+|2026-11-05 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 50% estimated chance of profit, expected -0.08R (avg win +0.64R, avg loss -0.82R).",
+"size": 1.0,
+"pred": [
+0.5021265520761492,
+-0.083473492474611
+]
+},
 "META|donchian_trend|+|2026-10-13 14:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.04R (avg win +2.43R, avg loss -1.16R).",
@@ -780,6 +807,15 @@
 "pred": [
 0.2864206689622086,
 -0.11445078244561391
+]
+},
+"MSFT|rsi2_reversion|+|2026-11-05 16:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 28% estimated chance of profit, expected -0.13R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.2810002215799057,
+-0.13274153988746995
 ]
 },
 "MSFT|squeeze_breakout|+|2026-10-05 14:00": {
