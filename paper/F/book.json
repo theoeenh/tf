@@ -38,7 +38,11 @@
    "max_loss": 2716.0,
    "desc": "sell 35 / buy 32.5 puts, 2026-11-20, credit 0.56 on width 2.5",
    "opened": "2026-10-20 19:27",
-   "id": "bull_put_spread-FIS-2026-10-20"
+   "id": "bull_put_spread-FIS-2026-10-20",
+   "done_legs": [
+    "FIS261120P00035000"
+   ],
+   "partial": -8540.0
   },
   {
    "playbook": "spy_put_spread",

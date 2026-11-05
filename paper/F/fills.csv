@@ -225,3 +225,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-04 14:58:57,bull_put_spread,BA,BA261218P00160000,buy,3,3,1.96,filled,"open: sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10"
 2026-11-04 14:59:00,bull_put_spread,BA,BA261218P00170000,sell,3,3,3.9,filled,"open: sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10"
 2026-11-04 15:29:49,long_put,NFLX,NFLX261218P00075000,sell,3,3,9.2,filled,"close: 15 days held"
+2026-11-05 15:01:57,bull_put_spread,FIS,FIS261120P00035000,buy,14,14,6.1,filled,"close: account D closed the stock"
+2026-11-05 15:02:21,bull_put_spread,FIS,FIS261120P00032500,sell,14,0,,canceled,"close: account D closed the stock"
