@@ -242,6 +242,15 @@
 0.06851173760626839
 ]
 },
+"AMZN|rsi2_reversion|+|2026-11-05 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.27241854955819617,
+-0.1642944408046142
+]
+},
 "AMZN|vwap_reversion|+|2026-10-08 18:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 53% estimated chance of profit, expected -0.04R (avg win +0.64R, avg loss -0.81R).",
@@ -492,6 +501,15 @@
 "pred": [
 0.4926921919290542,
 -0.09455444487326142
+]
+},
+"IWM|rsi2_reversion|+|2026-11-05 15:00": {
+"skip": false,
+"reason": "",
+"size": 1.0,
+"pred": [
+0.33879626940457785,
+0.07713429945789574
 ]
 },
 "JPM|rsi2_reversion|+|2026-10-30 14:00": {
