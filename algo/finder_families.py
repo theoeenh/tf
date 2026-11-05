@@ -1130,6 +1130,51 @@ def insider_calm_stress(prices: dict, buyers: int = 1, drop: float = 0.10, max_v
     return _only_calm(insider_sector_stress(prices, buyers=buyers, drop=drop), prices, max_vol)
 
 
+def _one_per_gap(sigs: list, prices: dict, gap: int) -> dict:
+    """The union of several signals; a stock signalled again within `gap` sessions is not bought twice."""
+    out = {}
+    for a, df in prices.items():
+        any_ = np.zeros(len(df), bool)
+        for s in sigs:
+            if a in s:
+                any_ |= s[a].reindex(df.index).fillna(0).to_numpy().astype(bool)
+        keep, last = np.zeros(len(df), int), -10**9
+        for i in np.flatnonzero(any_):
+            if i - last > gap:
+                keep[i], last = 1, i
+        out[a] = pd.Series(keep, df.index)
+    return out
+
+
+def calm_union(prices: dict, parts: int = 3, gap: int = 60) -> dict:
+    """Against the luck check, the union of the calm ideas whose triggers have nothing in common:
+    sector_washout_calm (market data: a sector's rebound after a deep fall), insider_calm_fresh (an
+    opportunistic insider buys a calm stock) and insider_calm_stress (an insider buys a calm stock of a
+    stressed sector), fixed versions, the first `parts` of them; unrelated triggers should smooth the
+    daily return more than insider_union's insider-only parts did. One buy per stock per `gap` sessions;
+    each part uses data up to its own signal day."""
+    comps = [lambda q: sector_washout_calm(q, drop=0.15, bounce=5, max_vol=0.5),
+             lambda q: insider_calm_fresh(q, gap=365, max_vol=0.3),
+             lambda q: insider_calm_stress(q, buyers=1, drop=0.10, max_vol=0.5)][:parts]
+    return _one_per_gap([f(prices) for f in comps], prices, gap)
+
+
+def sector_washout_leaders(prices: dict, drop: float = 0.15, bounce: int = 5, within: float = 0.5) -> dict:
+    """Market data only: sector_washout keeping, at the sector's turn, only the stocks that fell least over
+    the 60 sessions (60-session return in the best `within` share of their sector that day): relative
+    strength as the alternative to the calm filter of sector_washout_calm. Closes up to the signal day."""
+    close = _panel(prices)
+    sig = pd.DataFrame(sector_washout(prices, drop=drop, bounce=bounce)).reindex(close.index).fillna(0)
+    sector, _ = _sector_median(close, close)
+    r60 = close / close.shift(60) - 1
+    strong = pd.DataFrame(False, index=close.index, columns=close.columns)
+    for sec, names in sector.groupby(sector).groups.items():
+        names = list(names)
+        strong[names] = r60[names].rank(axis=1, pct=True, ascending=False) <= within
+    keep = sig.astype(bool) & strong.reindex(columns=sig.columns, fill_value=False)
+    return _own(keep.astype(int), prices)
+
+
 def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
     """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
     days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
@@ -1588,6 +1633,14 @@ WIDE_FAMILIES = {
     "insider_calm_stress": (insider_calm_stress, {"buyers": [1], "drop": [0.08, 0.15], "max_vol": [0.3, 0.5]},
                             {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                              "segments": ["sp1500", "sector:Industrials"], "trend": False}),
+    # the calm ideas with unrelated triggers together, against the luck check (2026-11-05)
+    "calm_union": (calm_union, {"parts": [2, 3], "gap": [60]},
+                   {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                    "segments": ["sp1500"], "trend": False}),
+    # market data only: the sector washout, the stocks that fell least (2026-11-05)
+    "sector_washout_leaders": (sector_washout_leaders, {"drop": [0.10, 0.15], "bounce": [5], "within": [0.3, 0.5]},
+                               {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],

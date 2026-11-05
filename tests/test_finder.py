@@ -1331,3 +1331,39 @@ def test_calm_variants_keep_only_calm_stocks_with_past_closes_only(monkeypatch):
         assert out["CALM"].loc[on] == 1 and out["WILD"].sum() == 0
         part = fn({a: df.iloc[:101] for a, df in prices.items()}, max_vol=0.5)
         assert all((out[a].iloc[:101] == part[a]).all() for a in prices)
+
+
+def test_calm_union_takes_each_part_once_per_gap(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=200)
+    prices = {"S1": pd.DataFrame({"Close": pd.Series(100.0, index=days)}),
+              "S2": pd.DataFrame({"Close": pd.Series(50.0, index=days)})}
+    on = {"sector_washout_calm": [10, 150], "insider_calm_fresh": [30], "insider_calm_stress": [40, 120]}
+
+    def fake(name):
+        return lambda p, **k: {a: pd.Series(np.isin(np.arange(len(p[a])), on[name]).astype(int), p[a].index)
+                               for a in p}
+    for name in on:
+        monkeypatch.setattr(ff, name, fake(name))
+    out = ff.calm_union(prices, parts=3, gap=60)
+    assert list(np.flatnonzero(out["S1"].to_numpy())) == [10, 120]      # 30, 40 within 60 of 10; 150 of 120
+    two = ff.calm_union(prices, parts=2, gap=60)                        # without insider_calm_stress
+    assert list(np.flatnonzero(two["S1"].to_numpy())) == [10, 150]
+
+
+def test_sector_washout_leaders_keeps_the_stocks_that_fell_least(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    prices = {f"M{i}": pd.DataFrame({"Close": pd.Series(np.r_[np.linspace(100, 100 - 10 * (i + 1), 80),
+                                                              np.linspace(100 - 10 * (i + 1), 101 - 10 * (i + 1), 40)],
+                                                        index=days)}) for i in range(4)}   # M0 fell least
+    monkeypatch.setattr(wide, "sectors", lambda: {a: "Mat" for a in prices})
+    on = days[90]
+    monkeypatch.setattr(ff, "sector_washout", lambda p, **k: {
+        a: pd.Series((p[a].index == on).astype(int), p[a].index) for a in p})
+    out = ff.sector_washout_leaders(prices, within=0.5)
+    assert out["M0"].loc[on] == 1 and out["M1"].loc[on] == 1 and out["M2"].sum() == 0 and out["M3"].sum() == 0
+    part = ff.sector_washout_leaders({a: df.iloc[:91] for a, df in prices.items()}, within=0.5)
+    assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
