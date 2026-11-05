@@ -585,7 +585,7 @@ GHC,Consumer Discretionary,sp400
 GIII,Consumer Discretionary,sp600
 GILD,Health Care,sp500
 GIS,Consumer Staples,sp500
-GKOS,Health Care,sp600
+GKOS,Health Care,sp400
 GL,Financials,sp500
 GLPI,Real Estate,sp400
 GLW,Information Technology,sp500
@@ -773,7 +773,6 @@ KRYS,Health Care,sp400
 KSS,Consumer Discretionary,sp600
 KTB,Consumer Discretionary,sp600
 KTOS,Industrials,sp400
-KVUE,Consumer Staples,sp500
 KWR,Materials,sp600
 L,Financials,sp500
 LAD,Consumer Discretionary,sp400
@@ -994,7 +993,7 @@ OHI,Real Estate,sp400
 OI,Materials,sp600
 OII,Energy,sp600
 OKE,Energy,sp500
-OKTA,Information Technology,sp400
+OKTA,Information Technology,sp500
 OLED,Information Technology,sp400
 OLLI,Consumer Discretionary,sp400
 OMC,Communication Services,sp500
