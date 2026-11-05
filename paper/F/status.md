@@ -1,21 +1,20 @@
 # F – Options
 
-Updated 2026-11-05 15:02 UTC. **Equity $95,218** (-4.78% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-05 15:32 UTC. **Equity $95,368** (-4.63% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 5 | $-2,044 | $+1,185 | 1 / 5 |
+| long_call | 3 | 5 | $-2,044 | $+1,516 | 1 / 5 |
 | long_put | 0 | 6 | $-1,046 | $+0 | 2 / 6 |
-| bull_put_spread | 3 | 8 | $-866 | $-5,931 | 2 / 8 |
+| bull_put_spread | 2 | 9 | $-4,226 | $-2,259 | 2 / 9 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
-| spy_put_spread | 3 | 0 | $+0 | $-479 | 0 / 0 |
+| spy_put_spread | 3 | 0 | $+0 | $-826 | 0 / 0 |
 
 ## Open positions
 
 - **long_call** AAPL: AAPL Dec 18 2026 335 Call, delta +0.61 (opened 2026-10-20 16:56, cost $+1,805, most it can lose $1,807)
-- **bull_put_spread** FIS: sell 35 / buy 32.5 puts, 2026-11-20, credit 0.56 on width 2.5 (opened 2026-10-20 19:27, cost $-840, most it can lose $2,716)
 - **spy_put_spread** SPY: sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31 (opened 2026-10-20 19:28, cost $-321, most it can lose $2,800)
 - **long_call** PEP: PEP Nov 20 2026 133 Call, delta +0.59 (opened 2026-10-21 13:58, cost $+2,610, most it can lose $2,628)
 - **bull_put_spread** CLF: sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1 (opened 2026-10-26 15:57, cost $-1,080, most it can lose $3,000)
@@ -26,21 +25,20 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $7,041; at the quotes' mid they are worth $9,685 (difference $-2,644).
+Alpaca values the positions at $3,023; at the quotes' mid they are worth $4,721 (difference $-1,698).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $2,120 | $2,208 | ok |
-| BA261218P00160000 | 3 | $723 | $758 | ok |
-| BA261218P00170000 | -3 | $-1,740 | $-1,692 | ok |
-| CLF261204C00013500 | 22 | $396 | $946 | Alpaca's price far from the quotes |
-| CLF261218P00012000 | 40 | $3,760 | $4,080 | ok |
-| CLF261218P00013000 | -40 | $-7,000 | $-6,500 | ok |
-| FIS261120P00032500 | 14 | $4,340 | $4,711 | ok |
-| PEP261120C00133000 | 6 | $5,910 | $6,627 | ok |
-| SPY261127P00715000 | 1 | $370 | $374 | ok |
-| SPY261127P00746000 | -1 | $-939 | $-925 | ok |
-| SPY261204P00710000 | 1 | $426 | $422 | ok |
-| SPY261204P00742000 | -1 | $-971 | $-970 | ok |
-| SPY261211P00695000 | 1 | $395 | $403 | ok |
-| SPY261211P00725000 | -1 | $-749 | $-756 | ok |
+| AAPL261218C00335000 | 1 | $2,210 | $2,226 | ok |
+| BA261218P00160000 | 3 | $897 | $933 | ok |
+| BA261218P00170000 | -3 | $-2,025 | $-1,988 | ok |
+| CLF261204C00013500 | 22 | $572 | $759 | Alpaca's price far from the quotes |
+| CLF261218P00012000 | 40 | $4,240 | $4,500 | ok |
+| CLF261218P00013000 | -40 | $-7,200 | $-6,860 | ok |
+| PEP261120C00133000 | 6 | $6,120 | $6,927 | ok |
+| SPY261127P00715000 | 1 | $516 | $527 | ok |
+| SPY261127P00746000 | -1 | $-1,215 | $-1,214 | ok |
+| SPY261204P00710000 | 1 | $579 | $576 | ok |
+| SPY261204P00742000 | -1 | $-1,235 | $-1,232 | ok |
+| SPY261211P00695000 | 1 | $523 | $523 | ok |
+| SPY261211P00725000 | -1 | $-959 | $-958 | ok |
