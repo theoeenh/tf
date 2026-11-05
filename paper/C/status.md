@@ -1,12 +1,12 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-05 16:52 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-05 17:22 UTC.
 
-**Equity $88,179** (-11.82%) · max drawdown -13.0% · 78 closed trades · 1 open
+**Equity $88,205** (-11.80%) · max drawdown -13.0% · 78 closed trades · 1 open
 
 ## Open positions
 
-- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +1.01R  
+- **LONG 427.1720 TLT** (rsi2_reversion) since 2026-11-03 15:00, entry 81.28, stop 80.52, target 82.79, now +1.09R  
   *Thinking:* LONG TLT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 0.4% of price). Plan: entry 81.28, stop 80.52, target 82.79 (2:1); risking $324.
 
 ## Closed trades (newest first)
