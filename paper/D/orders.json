@@ -178,5 +178,31 @@
   "entry": 29.844700000000003,
   "r": 0.23653426225888166,
   "bar": "2026-11-04"
+ },
+ {
+  "asset": "LSCC",
+  "ticker": "LSCC",
+  "strategy": "insider_low_short",
+  "qty": 19.29464256328574,
+  "stop": 86.50246725296407,
+  "target": null,
+  "mark": 107.25,
+  "entry": 107.25,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-04"
+ },
+ {
+  "asset": "TBBK",
+  "ticker": "TBBK",
+  "strategy": "insider_low_short",
+  "qty": 75.38637730603756,
+  "stop": 42.02980679627295,
+  "target": null,
+  "mark": 47.34,
+  "entry": 47.34,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-04"
  }
 ]

@@ -25,7 +25,8 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **LSCC** 19.29 shares around 107.25, stop 86.50
+- **TBBK** 75.39 shares around 47.34, stop 42.03
 
 ## Closed trades
 
