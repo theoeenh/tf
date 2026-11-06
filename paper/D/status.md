@@ -25,7 +25,10 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **BKR** 60.38 shares around 46.20, stop 39.70
+- **CRH** 40.29 shares around 95.45, stop 85.71
+- **SHEN** 255.47 shares around 9.72, stop 8.18
+- **SYY** 58.55 shares around 75.24, stop 68.54
 
 ## Closed trades
 

@@ -178,5 +178,57 @@
   "entry": 29.844700000000003,
   "r": -0.0410705583010173,
   "bar": "2026-11-05"
+ },
+ {
+  "asset": "BKR",
+  "ticker": "BKR",
+  "strategy": "insider_low_short",
+  "qty": 60.38365413073136,
+  "stop": 39.704363353092916,
+  "target": null,
+  "mark": 46.2,
+  "entry": 46.2,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-05"
+ },
+ {
+  "asset": "CRH",
+  "ticker": "CRH",
+  "strategy": "insider_low_short",
+  "qty": 40.286351858442416,
+  "stop": 85.71394154467116,
+  "target": null,
+  "mark": 95.45,
+  "entry": 95.45,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-05"
+ },
+ {
+  "asset": "SHEN",
+  "ticker": "SHEN",
+  "strategy": "insider_low_short",
+  "qty": 255.46632354030078,
+  "stop": 8.184649777668778,
+  "target": null,
+  "mark": 9.72,
+  "entry": 9.72,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-05"
+ },
+ {
+  "asset": "SYY",
+  "ticker": "SYY",
+  "strategy": "insider_low_short",
+  "qty": 58.546627850759016,
+  "stop": 68.54054879256968,
+  "target": null,
+  "mark": 75.24,
+  "entry": 75.24,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-05"
  }
 ]
