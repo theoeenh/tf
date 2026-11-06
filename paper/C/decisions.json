@@ -1178,6 +1178,15 @@
 0.03495059095395747
 ]
 },
+"TLT|rsi2_reversion|+|2026-11-06 15:00": {
+"skip": true,
+"reason": "SKIPPED by the ML learner: 31% estimated chance of profit, expected -0.05R (avg win +2.48R, avg loss -1.16R).",
+"size": 1.0,
+"pred": [
+0.30505744698020937,
+-0.04517863637127206
+]
+},
 "TLT|squeeze_breakout|+|2026-11-02 14:00": {
 "skip": true,
 "reason": "SKIPPED by the ML learner: 34% estimated chance of profit, expected -0.04R (avg win +1.55R, avg loss -0.86R).",
