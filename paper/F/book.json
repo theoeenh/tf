@@ -124,6 +124,24 @@
    "desc": "sell 530 / buy 500 puts, 2026-12-18, credit 5.77 on width 30",
    "opened": "2026-11-05 16:58",
    "id": "bull_put_spread-CAT-2026-11-05"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "BA",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "BA261211C00170000",
+     "qty": 2,
+     "price": 9.45
+    }
+   ],
+   "expiry": "2026-12-11",
+   "cost": 1889.9999999999998,
+   "max_loss": 1896.0,
+   "desc": "BA Dec 11 2026 170 Call, delta +0.60",
+   "opened": "2026-11-06 16:58",
+   "id": "long_call-BA-2026-11-06"
   }
  ],
  "closed": [

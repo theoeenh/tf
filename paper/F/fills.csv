@@ -248,3 +248,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-06 15:38:27,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.59"
 2026-11-06 15:59:27,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.60"
 2026-11-06 16:30:07,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.59"
+2026-11-06 16:58:11,long_call,BA,BA261211C00170000,buy,2,2,9.45,filled,"open: BA Dec 11 2026 170 Call, delta +0.60"
