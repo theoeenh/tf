@@ -1,6 +1,6 @@
 # F – Options
 
-Updated 2026-11-06 14:18 UTC. **Equity $91,517** (-8.48% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-06 14:29 UTC. **Equity $91,500** (-8.50% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
@@ -26,7 +26,7 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $-1,464; at the quotes' mid they are worth $1,495 (difference $-2,959).
+Alpaca values the positions at $-1,481; at the quotes' mid they are worth $1,495 (difference $-2,976).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
@@ -39,9 +39,9 @@ Alpaca values the positions at $-1,464; at the quotes' mid they are worth $1,495
 | CLF261218P00012000 | 40 | $5,400 | $5,660 | ok |
 | CLF261218P00013000 | -40 | $-8,800 | $-8,440 | ok |
 | PEP261120C00133000 | 6 | $5,400 | $6,342 | ok |
-| SPY261127P00715000 | 1 | $860 | $1,045 | ok |
-| SPY261127P00746000 | -1 | $-2,047 | $-2,133 | ok |
-| SPY261204P00710000 | 1 | $924 | $1,075 | ok |
+| SPY261127P00715000 | 1 | $861 | $1,045 | ok |
+| SPY261127P00746000 | -1 | $-2,066 | $-2,133 | ok |
+| SPY261204P00710000 | 1 | $922 | $1,075 | ok |
 | SPY261204P00742000 | -1 | $-1,983 | $-2,072 | ok |
-| SPY261211P00695000 | 1 | $815 | $960 | ok |
-| SPY261211P00725000 | -1 | $-1,505 | $-1,639 | ok |
+| SPY261211P00695000 | 1 | $805 | $960 | ok |
+| SPY261211P00725000 | -1 | $-1,492 | $-1,639 | ok |
