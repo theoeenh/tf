@@ -18,32 +18,6 @@
    "id": "long_call-AAPL-2026-10-20"
   },
   {
-   "playbook": "spy_put_spread",
-   "underlying": "SPY",
-   "legs": [
-    {
-     "symbol": "SPY261127P00715000",
-     "qty": 1,
-     "price": 2.98
-    },
-    {
-     "symbol": "SPY261127P00746000",
-     "qty": -1,
-     "price": 6.19
-    }
-   ],
-   "expiry": "2026-11-27",
-   "cost": -321.0,
-   "max_loss": 2800.0,
-   "desc": "sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31",
-   "opened": "2026-10-20 19:28",
-   "id": "spy_put_spread-SPY-2026-10-20",
-   "partial": -1538.0,
-   "done_legs": [
-    "SPY261127P00746000"
-   ]
-  },
-  {
    "playbook": "long_call",
    "underlying": "PEP",
    "source": "D",
@@ -60,33 +34,6 @@
    "desc": "PEP Nov 20 2026 133 Call, delta +0.59",
    "opened": "2026-10-21 13:58",
    "id": "long_call-PEP-2026-10-21"
-  },
-  {
-   "playbook": "bull_put_spread",
-   "underlying": "CLF",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "CLF261218P00012000",
-     "qty": 40,
-     "price": 0.44
-    },
-    {
-     "symbol": "CLF261218P00013000",
-     "qty": -40,
-     "price": 0.71
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": -1079.9999999999998,
-   "max_loss": 3000.0,
-   "desc": "sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1",
-   "opened": "2026-10-26 15:57",
-   "id": "bull_put_spread-CLF-2026-10-26",
-   "partial": -7920.0,
-   "done_legs": [
-    "CLF261218P00013000"
-   ]
   },
   {
    "playbook": "spy_put_spread",
@@ -836,6 +783,67 @@
    "closed": "2026-11-06 14:56",
    "why_closed": "account D closed the stock",
    "pnl": -2376.0
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261127P00715000",
+     "qty": 1,
+     "price": 2.98
+    },
+    {
+     "symbol": "SPY261127P00746000",
+     "qty": -1,
+     "price": 6.19
+    }
+   ],
+   "expiry": "2026-11-27",
+   "cost": -321.0,
+   "max_loss": 2800.0,
+   "desc": "sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31",
+   "opened": "2026-10-20 19:28",
+   "id": "spy_put_spread-SPY-2026-10-20",
+   "partial": -1538.0,
+   "done_legs": [
+    "SPY261127P00746000",
+    "SPY261127P00715000"
+   ],
+   "closed": "2026-11-06 15:31",
+   "why_closed": "21 days to expiry",
+   "pnl": -491.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "CLF",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "CLF261218P00012000",
+     "qty": 40,
+     "price": 0.44
+    },
+    {
+     "symbol": "CLF261218P00013000",
+     "qty": -40,
+     "price": 0.71
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -1079.9999999999998,
+   "max_loss": 3000.0,
+   "desc": "sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1",
+   "opened": "2026-10-26 15:57",
+   "id": "bull_put_spread-CLF-2026-10-26",
+   "partial": -7920.0,
+   "done_legs": [
+    "CLF261218P00013000",
+    "CLF261218P00012000"
+   ],
+   "closed": "2026-11-06 15:31",
+   "why_closed": "account D closed the stock",
+   "pnl": -2240.0
   }
  ]
 }
