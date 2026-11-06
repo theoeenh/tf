@@ -1,0 +1,222 @@
+[
+  {
+    "asset": "BTC",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell below $76k with the chip crash ($1bn of liquidations); the sell-off is easing this morning. No edge."
+  },
+  {
+    "asset": "ETH",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Down with bitcoin as the post-election rally was erased; no ETH-specific news. No view."
+  },
+  {
+    "asset": "SOL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Down with the market; product launches (Leap) are small. No view."
+  },
+  {
+    "asset": "NVDA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell 9% on Thursday in chips' worst sell-off since 2020 (Wednesday's small short was right); it leads a rebound this morning and analysts call it a buying chance. Two-sided now: no view."
+  },
+  {
+    "asset": "TSLA",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Ending Cybertruck production as Musk pivots to robotaxis ('growth drivers choked out') after an 11% fall on Thursday; shares inch up. No clear edge."
+  },
+  {
+    "asset": "GOLD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Best day since August, back above $4,000; record world debt pieces. The turn is new: no view yet."
+  },
+  {
+    "asset": "SILVER",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Steady after Wednesday's jump; no news. No view."
+  },
+  {
+    "asset": "AAPL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "First bond sale since 2025 ($7.5bn) and now worth $600bn more than Nvidia; fell less than tech on Thursday. No view."
+  },
+  {
+    "asset": "MSFT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell 3.6% on Thursday as the 'blue tsunami' rattled AI stocks (Wednesday's small long was wrong); dip-buying calls from analysts. No view."
+  },
+  {
+    "asset": "AMZN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell with AI stocks, but 'post-midterm winner' pieces for data-centre owners. Mixed."
+  },
+  {
+    "asset": "META",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "AI trade losing steam, ETF selling; a security chief's warning about its AI assistant. No clear edge."
+  },
+  {
+    "asset": "GOOGL",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "OpenAI will pay for its data centres' power after the election backlash; Alphabet invests in a chip stock. Mixed."
+  },
+  {
+    "asset": "AMD",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 3,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Up 8% before the open after the worst chip sell-off since 2020; strong data-centre growth (+97%) against a broken trend. Two-sided: no view."
+  },
+  {
+    "asset": "AVGO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Cathie Wood sold $134m; on pace for a losing year. Fund flows only: no view."
+  },
+  {
+    "asset": "NFLX",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Valuation pieces ('23% upside'); no news. No view."
+  },
+  {
+    "asset": "JPM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Flags higher interest-rate risks; systematic funds drove the tech rout, not banks. No view."
+  },
+  {
+    "asset": "XOM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "ETF selling continued (-2.3% on Thursday) while oil steadied (+1.9%). Dropping the small short."
+  },
+  {
+    "asset": "COIN",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell 9% with bitcoin; derivatives push. No view."
+  },
+  {
+    "asset": "QQQ",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 3,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Chips' second-worst day on record, a $2 trillion tech rout driven by fast systematic funds; a rebound this morning while the Dow falls on the jobs surprise. Too volatile to call."
+  },
+  {
+    "asset": "IWM",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Fell 4.6% with the market; rotation talk only. No view."
+  },
+  {
+    "asset": "TLT",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "The jobs report surprise moves rates today in an unknown direction; debt-ceiling worries for 2027. No view."
+  },
+  {
+    "asset": "USO",
+    "bias": 0,
+    "confidence": 0.0,
+    "horizon_days": 5,
+    "key_events": [
+      "US jobs report Fri 6 Nov (out this morning: a surprise)"
+    ],
+    "reasoning": "Rebounded 1.9% after Wednesday's 8% fall; no new supply news. Dropping the small short."
+  }
+]
