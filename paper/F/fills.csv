@@ -246,3 +246,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-06 15:31:33,bull_put_spread,CLF,CLF261218P00012000,sell,40,40,1.15,filled,"close: account D closed the stock"
 2026-11-06 15:32:07,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.59"
 2026-11-06 15:38:27,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.59"
+2026-11-06 15:59:27,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.60"
