@@ -37,7 +37,8 @@
    "max_loss": 2800.0,
    "desc": "sell 746 / buy 715 puts, 2026-11-27, credit 3.00 on width 31",
    "opened": "2026-10-20 19:28",
-   "id": "spy_put_spread-SPY-2026-10-20"
+   "id": "spy_put_spread-SPY-2026-10-20",
+   "partial": 0.0
   },
   {
    "playbook": "long_call",
@@ -78,7 +79,8 @@
    "max_loss": 3000.0,
    "desc": "sell 13 / buy 12 puts, 2026-12-18, credit 0.25 on width 1",
    "opened": "2026-10-26 15:57",
-   "id": "bull_put_spread-CLF-2026-10-26"
+   "id": "bull_put_spread-CLF-2026-10-26",
+   "partial": 0.0
   },
   {
    "playbook": "long_call",
@@ -96,7 +98,8 @@
    "max_loss": 2992.0,
    "desc": "CLF Dec 04 2026 13.5 Call, delta +0.59",
    "opened": "2026-10-26 17:59",
-   "id": "long_call-CLF-2026-10-26"
+   "id": "long_call-CLF-2026-10-26",
+   "partial": 0.0
   },
   {
    "playbook": "spy_put_spread",
