@@ -53,9 +53,12 @@ class _Symbols(dict):
 
 SYMBOLS = _Symbols({a: s for a, s in ALPACA_SYMBOLS.items() if a != "SPY"})
 MIN_NOTIONAL = 5.0  # ignore differences smaller than $5
-# ... and top-ups / trims under 1% of the position (fill rounding): a pending order on a held
-# stock makes Alpaca refuse its stops ("potential wash trade"), so tiny adjustments cost protection
-MIN_ADJUST = 0.01
+# ... and top-ups / trims within verify()'s tolerance: the larger of 2% of the position and $50 (fill
+# rounding; a dividend adjusting a held stock's past prices). A pending order on a held stock makes Alpaca
+# refuse its stops ("potential wash trade"), so small adjustments cost protection (2026-11-06: BBT's
+# dividend made A's book 1.1% larger, the top-up buy waited for the open and its stop with it)
+MIN_ADJUST = 0.02
+MIN_ADJUST_USD = 50.0
 CRYPTO_STOP_ROOM = 0.01  # crypto stop-limit: limit 1% past the stop, so it fills in a fast drop
 
 
@@ -227,7 +230,8 @@ def plan(want: dict[str, float], have: dict[str, float], prices: dict[str, float
         diff = target - have.get(sym, 0.0)
         if abs(diff) * prices.get(sym, 0.0) < MIN_NOTIONAL:
             continue
-        if target != 0 and have.get(sym, 0.0) * target > 0 and abs(diff) < MIN_ADJUST * abs(target):
+        if (target != 0 and have.get(sym, 0.0) * target > 0
+                and abs(diff) * prices.get(sym, 0.0) <= max(MIN_ADJUST_USD, MIN_ADJUST * abs(target) * prices.get(sym, 0.0))):
             continue  # same side, almost the right size: keep it (and its stops)
         # round down (crypto to 9 decimals, Alpaca's precision): rounding up asks for more than is held
         qty = math.floor(abs(diff) * 1e9) / 1e9 if sym in crypto_syms else round(abs(diff), 6)
@@ -818,7 +822,7 @@ def verify(alert: bool = False) -> list[str]:
                          and (w - h) * px > CASH_BUFFER * cash - MIN_NOTIONAL)
         if short_of_cash:  # crypto cannot use margin: smaller than the plan when the cash is in stocks
             print(f"{sym}: plan wants {w:g}, Alpaca has {h:g} (crypto needs cash: ${cash:,.0f} left)")
-        elif abs(w - h) * px > max(50.0, 0.02 * abs(w) * px):  # same 1-2% tolerance as plan()
+        elif abs(w - h) * px > max(MIN_ADJUST_USD, MIN_ADJUST * abs(w) * px):  # same tolerance as plan()
             problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
         held = sum(q for s, q in have.items() if norm(s) == sym)
         # an exit decided after the close is a market order queued for the next open: those shares

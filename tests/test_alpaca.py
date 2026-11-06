@@ -862,3 +862,20 @@ def test_queued_sales_of_stocks_the_plan_no_longer_holds_count_as_queued(monkeyp
     monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
                         {"is_open": False} if p == "/v2/clock" else queued)
     assert alpaca.already_queued(trades, alpaca.last_prices())
+
+
+def test_plan_does_not_top_up_a_held_stock_within_the_check_tolerance():
+    """2026-11-06: BBT went ex-dividend, the replay on adjusted prices sized A's BBT trade at 170.08 shares
+    instead of the 168.16 bought (+1.1%, $58). plan() sent a buy for the difference, its stop then had to wait
+    (no plain stop beside a pending buy) and verify alerted the phone every run until the open. Same-side
+    differences within verify's tolerance (the larger of $50 and 2%) are left alone; larger ones still trade."""
+    from algo import alpaca
+
+    held = {"BBT": 168.161735}
+    assert alpaca.plan({"BBT": 170.083475}, held, {"BBT": 30.25}) == []
+    assert alpaca.plan({"BBT": 166.5}, held, {"BBT": 30.25}) == []                 # trimming too
+    big = alpaca.plan({"BBT": 180.0}, held, {"BBT": 30.25})                        # +7%: still bought
+    assert big and big[0]["side"] == "buy" and round(big[0]["qty"], 6) == round(180.0 - 168.161735, 6)
+    # a small position: $50 is the floor (5 shares of $20 = $100; 1 more share = $20 is ignored)
+    assert alpaca.plan({"XYZ": 6.0}, {"XYZ": 5.0}, {"XYZ": 20.0}) == []
+    assert alpaca.plan({"XYZ": 0.0}, {"XYZ": 5.0}, {"XYZ": 20.0})[0]["side"] == "sell"   # exits always go out
