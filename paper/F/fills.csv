@@ -249,3 +249,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-06 15:59:27,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.60"
 2026-11-06 16:30:07,long_call,BA,BA261218C00170000,buy,2,0,,canceled,"open: BA Dec 18 2026 170 Call, delta +0.59"
 2026-11-06 16:58:11,long_call,BA,BA261211C00170000,buy,2,2,9.45,filled,"open: BA Dec 11 2026 170 Call, delta +0.60"
+2026-11-06 17:56:47,bull_put_spread,SYY,SYY261218P00072500,buy,13,0,,canceled,"open: sell 75 / buy 72.5 puts, 2026-12-18, credit 0.50 on width 2.5"
