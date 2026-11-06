@@ -1367,3 +1367,45 @@ def test_sector_washout_leaders_keeps_the_stocks_that_fell_least(monkeypatch):
     assert out["M0"].loc[on] == 1 and out["M1"].loc[on] == 1 and out["M2"].sum() == 0 and out["M3"].sum() == 0
     part = ff.sector_washout_leaders({a: df.iloc[:91] for a, df in prices.items()}, within=0.5)
     assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
+
+
+def test_insider_calm_underwater_keeps_the_calm_underwater_buys_with_past_data_only(monkeypatch):
+    """insider_underwater's signal, kept only where the stock's 60-session volatility (closes up to that day)
+    is among the calmest; the insiders' price comes from filings up to the signal day."""
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    t = np.arange(120)
+    calm = np.r_[np.full(95, 100.0) + 0.1 * np.sin(t[:95]), np.full(25, 85.0)]   # 15% under the insiders' 100
+    wild = np.r_[100 * (1 + 0.04 * (-1.0) ** t[:95]), np.full(25, 85.0)]          # swings 96-104, then 85
+    prices = {"CALM": pd.DataFrame({"Close": pd.Series(calm, index=days)}),
+              "WILD": pd.DataFrame({"Close": pd.Series(wild, index=days)})}
+    buys = pd.DataFrame({"ticker": ["CALM", "WILD"], "owner": ["x", "y"], "price": [100.0, 100.0],
+                         "shares": [1000, 1000], "filed": [days[90], days[90]], "traded": [days[89], days[89]]})
+    monkeypatch.setattr(ff, "_insider", lambda code="P": buys)
+    out = ff.insider_calm_underwater(prices, buyers=1, discount=0.10, max_vol=0.5)
+    assert out["CALM"].to_numpy().nonzero()[0].tolist() == [95] and out["WILD"].sum() == 0
+    base = ff.insider_underwater(prices, buyers=1, discount=0.10)
+    assert base["WILD"].iloc[95] == 1                                  # the calm filter removed it
+    part = ff.insider_calm_underwater({a: df.iloc[:96] for a, df in prices.items()}, buyers=1, discount=0.10,
+                                      max_vol=0.5)
+    assert all((out[a].iloc[:96] == part[a]).all() for a in prices)
+
+
+def test_insider_top_union_takes_each_part_once_per_gap(monkeypatch):
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=200)
+    prices = {"S1": pd.DataFrame({"Close": pd.Series(100.0, index=days)})}
+    on = {"insider_calm_fresh": [10], "insider_underwater": [30, 160], "insider_filing_lag": [90],
+          "insider_consensus": [100, 190]}
+
+    def fake(name):
+        return lambda p, **k: {a: pd.Series(np.isin(np.arange(len(p[a])), on[name]).astype(int), p[a].index)
+                               for a in p}
+    for name in on:
+        monkeypatch.setattr(ff, name, fake(name))
+    two = ff.insider_top_union(prices, parts=2, gap=60)["S1"]
+    assert list(np.flatnonzero(two.to_numpy())) == [10, 160]           # 30 within 60 sessions of 10
+    four = ff.insider_top_union(prices, parts=4, gap=60)["S1"]
+    assert list(np.flatnonzero(four.to_numpy())) == [10, 90, 160]      # 100 near 90, 190 near 160

@@ -1175,6 +1175,28 @@ def sector_washout_leaders(prices: dict, drop: float = 0.15, bounce: int = 5, wi
     return _own(keep.astype(int), prices)
 
 
+def insider_calm_underwater(prices: dict, buyers: int = 1, discount: float = 0.10, max_vol: float = 0.5) -> dict:
+    """insider_underwater (the stock closes `discount` under the price insiders paid in the last 90 days;
+    13/14, third-best deflated Sharpe) for calm stocks only (60-session volatility in the lowest `max_vol`
+    share of the universe): the calm filter lifted the luck check of insider_fresh (0.62 -> 0.70, now the
+    best) and of sector_washout (0.44 -> 0.56). Filings and closes up to the signal day."""
+    return _only_calm(insider_underwater(prices, buyers=buyers, discount=discount), prices, max_vol)
+
+
+def insider_top_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
+    """Does breadth beat the luck check when the parts are the best ones? The deflated Sharpe rewards a
+    higher daily Sharpe, and a book that holds few trades at a time sits in cash on most days. The union
+    of the four insider ideas closest to the bar (best deflated Sharpe 0.68-0.70), fixed S&P 1500 versions
+    chosen before this family existed: insider_calm_fresh, insider_underwater, insider_filing_lag (late
+    filers) and insider_consensus; the first `parts` of them. insider_union and calm_union mixed in
+    weaker parts. One buy per stock per `gap` sessions; each part uses data up to its own signal day."""
+    comps = [lambda q: insider_calm_fresh(q, gap=365, max_vol=0.3),
+             lambda q: insider_underwater(q, buyers=1, discount=0.15),
+             lambda q: insider_filing_lag(q, mode="late", buyers=1),
+             lambda q: insider_consensus(q, votes=2, window=10)][:parts]
+    return _one_per_gap([f(prices) for f in comps], prices, gap)
+
+
 def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
     """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
     days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
@@ -1641,6 +1663,15 @@ WIDE_FAMILIES = {
     "sector_washout_leaders": (sector_washout_leaders, {"drop": [0.10, 0.15], "bounce": [5], "within": [0.3, 0.5]},
                                {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                                 "segments": ["sp1500"], "trend": False}),
+    # insiders under water in a calm stock, against the luck check (2026-11-06)
+    "insider_calm_underwater": (insider_calm_underwater, {"buyers": [1], "discount": [0.10, 0.20],
+                                                          "max_vol": [0.3, 0.5]},
+                                {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                 "segments": ["sp1500"], "trend": False}),
+    # the four insider ideas closest to the luck check, together (2026-11-06)
+    "insider_top_union": (insider_top_union, {"parts": [2, 4], "gap": [60]},
+                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)
     "overnight_momentum": (overnight_momentum, {"lookback": [20, 60], "top": [0.05, 0.1]},
                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
