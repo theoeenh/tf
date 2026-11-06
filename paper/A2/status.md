@@ -21,11 +21,14 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **STC** 54.23 shares, entry 43.95, stop 42.30, now 48.99 (+0.72R)
 - **TBBK** 71.95 shares, entry 48.49, stop 43.18, now 47.74 (-0.14R)
 - **THRM** 70.61 shares, entry 29.84, stop 27.67, now 29.62 (-0.04R)
-- **SPY** (idle cash) 55.59 shares, now 733.00
+- **SPY** (idle cash) 37.98 shares, now 733.00
 
 ## New signals (bought at the next open)
 
-None.
+- **BKR** 57.66 shares around 46.20, stop 39.70
+- **CRH** 38.47 shares around 95.45, stop 85.71
+- **SHEN** 243.94 shares around 9.72, stop 8.18
+- **SYY** 55.90 shares around 75.24, stop 68.54
 
 ## Closed trades
 
