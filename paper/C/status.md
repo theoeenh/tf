@@ -1,12 +1,12 @@
 # Paper account – long + trend + blackout + intraday + ML, 1h bars
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-06 18:06 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~20% yearly volatility). Updated 2026-11-06 18:22 UTC.
 
-**Equity $88,371** (-11.63%) · max drawdown -13.0% · 79 closed trades · 1 open
+**Equity $88,321** (-11.68%) · max drawdown -13.0% · 79 closed trades · 1 open
 
 ## Open positions
 
-- **LONG 19.1870 MSFT** (rsi2_reversion) since 2026-11-06 14:00, entry 525.85, stop 509.31, target 558.92, now +0.62R  
+- **LONG 19.1870 MSFT** (rsi2_reversion) since 2026-11-06 14:00, entry 525.85, stop 509.31, target 558.92, now +0.47R  
   *Thinking:* LONG MSFT (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 22 = trend market, high volatility (ATR 1.2% of price). Plan: entry 525.85, stop 509.31, target 558.92 (2:1); risking $317.
 
 ## Closed trades (newest first)
@@ -249,7 +249,7 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.36% per trade (sized for ~
   *Thinking:* LONG NVDA (mean reversion): price made a sharp 2-bar dip (RSI-2 extreme). Trading with the 200-bar trend. ADX 24 = trend market, mid volatility (ATR 0.8% of price). Plan: entry 230.04, stop 225.24, target 239.65 (2:1); risking $359. News: negative tone (-1.1σ vs usual), normal coverage.  
   *Lesson:* Plan worked. Event (+0.43R).
 
-## Skipped by the learner (102)
+## Skipped by the learner (104)
 
 - 2026-11-02 14:00 USO rsi2_reversion: would have made -0.40R. SKIPPED by the ML learner: 25% estimated chance of profit, expected -0.23R (avg win +2.48R, avg loss -1.15R).
 - 2026-11-05 15:00 AMZN rsi2_reversion: would have made -1.01R. SKIPPED by the ML learner: 27% estimated chance of profit, expected -0.16R (avg win +2.48R, avg loss -1.16R).
