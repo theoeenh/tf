@@ -252,3 +252,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-06 17:56:47,bull_put_spread,SYY,SYY261218P00072500,buy,13,0,,canceled,"open: sell 75 / buy 72.5 puts, 2026-12-18, credit 0.50 on width 2.5"
 2026-11-06 18:57:05,bull_put_spread,ENPH,ENPH261218P00022500,buy,14,0,,canceled,"open: sell 25 / buy 22.5 puts, 2026-12-18, credit 0.55 on width 2.5"
 2026-11-06 19:27:09,bull_put_spread,ENPH,ENPH261218P00022500,buy,14,0,,canceled,"open: sell 25 / buy 22.5 puts, 2026-12-18, credit 0.52 on width 2.5"
+2026-11-06 20:01:40,bull_put_spread,SYY,SYY261218P00072500,buy,13,13,0.9,filled,"open: sell 75 / buy 72.5 puts, 2026-12-18, credit 0.46 on width 2.5"
+2026-11-06 20:01:42,bull_put_spread,SYY,SYY261218P00075000,sell,13,13,1.4,filled,"open: sell 75 / buy 72.5 puts, 2026-12-18, credit 0.46 on width 2.5"

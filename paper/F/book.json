@@ -142,6 +142,29 @@
    "desc": "BA Dec 11 2026 170 Call, delta +0.60",
    "opened": "2026-11-06 16:58",
    "id": "long_call-BA-2026-11-06"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "SYY",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "SYY261218P00072500",
+     "qty": 13,
+     "price": 0.9
+    },
+    {
+     "symbol": "SYY261218P00075000",
+     "qty": -13,
+     "price": 1.4
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -650.0,
+   "max_loss": 2652.0,
+   "desc": "sell 75 / buy 72.5 puts, 2026-12-18, credit 0.46 on width 2.5",
+   "opened": "2026-11-06 20:01",
+   "id": "bull_put_spread-SYY-2026-11-06"
   }
  ],
  "closed": [

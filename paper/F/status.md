@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-11-06 19:57 UTC. **Equity $92,296** (-7.70% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-06 20:01 UTC. **Equity $92,318** (-7.68% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 6 | $-4,420 | $+1,918 | 1 / 6 |
+| long_call | 3 | 6 | $-4,420 | $+1,781 | 1 / 6 |
 | long_put | 0 | 6 | $-1,046 | $+0 | 2 / 6 |
-| bull_put_spread | 2 | 10 | $-6,466 | $-793 | 2 / 10 |
+| bull_put_spread | 3 | 10 | $-6,466 | $-1,113 | 2 / 10 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
-| spy_put_spread | 2 | 1 | $-491 | $-778 | 0 / 1 |
+| spy_put_spread | 2 | 1 | $-491 | $-749 | 0 / 1 |
 
 ## Open positions
 
@@ -21,21 +21,24 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 - **bull_put_spread** BA: sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10 (opened 2026-11-04 14:59, cost $-582, most it can lose $2,427)
 - **bull_put_spread** CAT: sell 530 / buy 500 puts, 2026-12-18, credit 5.77 on width 30 (opened 2026-11-05 16:58, cost $-605, most it can lose $2,423)
 - **long_call** BA: BA Dec 11 2026 170 Call, delta +0.60 (opened 2026-11-06 16:58, cost $+1,890, most it can lose $1,896)
+- **bull_put_spread** SYY: sell 75 / buy 72.5 puts, 2026-12-18, credit 0.46 on width 2.5 (opened 2026-11-06 20:01, cost $-650, most it can lose $2,652)
 
 ## Alpaca vs book
 
-Alpaca values the positions at $4,769; at the quotes' mid they are worth $5,753 (difference $-984).
+Alpaca values the positions at $3,755; at the quotes' mid they are worth $4,908 (difference $-1,153).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $1,750 | $1,772 | ok |
-| BA261211C00170000 | 2 | $1,740 | $1,825 | ok |
-| BA261218P00160000 | 3 | $807 | $861 | ok |
-| BA261218P00170000 | -3 | $-1,845 | $-1,798 | ok |
-| CAT261218P00500000 | 1 | $1,150 | $1,202 | ok |
-| CAT261218P00530000 | -1 | $-2,100 | $-2,023 | ok |
-| PEP261120C00133000 | 6 | $4,710 | $5,355 | ok |
-| SPY261204P00710000 | 1 | $767 | $767 | ok |
-| SPY261204P00742000 | -1 | $-1,643 | $-1,671 | ok |
-| SPY261211P00695000 | 1 | $685 | $700 | ok |
-| SPY261211P00725000 | -1 | $-1,252 | $-1,236 | ok |
+| AAPL261218C00335000 | 1 | $1,750 | $1,755 | ok |
+| BA261211C00170000 | 2 | $1,740 | $1,849 | ok |
+| BA261218P00160000 | 3 | $807 | $860 | ok |
+| BA261218P00170000 | -3 | $-1,845 | $-1,779 | ok |
+| CAT261218P00500000 | 1 | $1,150 | $1,196 | ok |
+| CAT261218P00530000 | -1 | $-2,100 | $-2,007 | ok |
+| PEP261120C00133000 | 6 | $4,710 | $5,259 | ok |
+| SPY261204P00710000 | 1 | $744 | $760 | ok |
+| SPY261204P00742000 | -1 | $-1,607 | $-1,608 | ok |
+| SPY261211P00695000 | 1 | $667 | $662 | ok |
+| SPY261211P00725000 | -1 | $-1,221 | $-1,220 | ok |
+| SYY261218P00072500 | 13 | $1,040 | $1,131 | ok |
+| SYY261218P00075000 | -13 | $-2,080 | $-1,950 | ok |
