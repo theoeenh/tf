@@ -226,5 +226,31 @@
   "entry": 29.844700000000003,
   "r": -0.07004614563218543,
   "bar": "2026-11-06"
+ },
+ {
+  "asset": "CVS",
+  "ticker": "CVS",
+  "strategy": "insider_low_short",
+  "qty": 40.608802751378335,
+  "stop": 74.16241930099615,
+  "target": null,
+  "mark": 83.85,
+  "entry": 83.85,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-06"
+ },
+ {
+  "asset": "FICO",
+  "ticker": "FICO",
+  "strategy": "insider_low_short",
+  "qty": 2.7881839936903066,
+  "stop": 563.4541990649907,
+  "target": null,
+  "mark": 704.55,
+  "entry": 704.55,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-06"
  }
 ]

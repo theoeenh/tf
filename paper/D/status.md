@@ -29,7 +29,8 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **CVS** 40.61 shares around 83.85, stop 74.16
+- **FICO** 2.79 shares around 704.55, stop 563.45
 
 ## Closed trades
 
