@@ -1197,6 +1197,48 @@ def insider_top_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
     return _one_per_gap([f(prices) for f in comps], prices, gap)
 
 
+def sector_size_washout(prices: dict, drop: float = 0.15, bounce: int = 5, groups: int = 3) -> dict:
+    """Market data only, against the luck check: the sector washouts have the strongest edge (ICIR up to
+    +1.03) but buy a whole sector on one day, so their daily return comes in lumps (kurtosis 40-55). Here
+    each sector is split into `groups` size groups (60-session average dollar volume, ranked within the
+    sector that day): about three times as many, smaller groups, whose washouts come more often and less
+    together. On the first day a group (3+ stocks) has its median stock down at least `drop` over 60
+    sessions and its median `bounce`-day return positive, buy that group's stocks. Closes and volumes up
+    to that day only."""
+    close, vol = _panel(prices), _panel(prices, "Volume")
+    dollar = (close * vol).rolling(60, min_periods=40).mean()
+    sector, _ = _sector_median(close, close)
+    r60, rb = close / close.shift(60) - 1, close / close.shift(bounce) - 1
+    out = pd.DataFrame(False, index=close.index, columns=close.columns)
+    for sec, names in sector.groupby(sector).groups.items():
+        names = list(names)
+        grp = np.ceil(dollar[names].rank(axis=1, pct=True) * groups)          # 1..groups, NaN: no history
+        for k in range(1, groups + 1):
+            m = grp == k
+            ok = m.sum(axis=1) >= 3
+            hit = ok & (r60[names].where(m).median(axis=1) <= -drop) & (rb[names].where(m).median(axis=1) > 0)
+            turn = _entries(hit.to_frame("g"))["g"].astype(bool)
+            out[names] |= m & turn.to_numpy()[:, None]
+    return _own(out.astype(int), prices)
+
+
+DEFENSIVE = {"three": ("Health Care", "Utilities", "Consumer Staples"), "two": ("Health Care", "Utilities")}
+
+
+def insider_defensive(prices: dict, gap: int = 365, which: str = "three") -> dict:
+    """Is the defensive-sector result real? The best luck-check scores so far all come from single-sector
+    versions in Health Care or Utilities (insider_calm_fresh, insider_consensus, insider_underwater,
+    insider_filing_lag): each the pick of eleven sectors, a selection the luck check pays for. Pooled: an
+    opportunistic insider buyer (insider_fresh, 1 buyer, no purchase by that insider in the `gap` days
+    before) in any defensive sector (`which`: Health Care, Utilities and Consumer Staples, or the first
+    two). A real defensive edge should hold with the extra trades; a lucky pick should fade. Filings up to
+    the signal day; sectors are the fixed GICS map used by every sector family."""
+    from . import wide
+
+    keep, sec = set(DEFENSIVE[which]), wide.sectors()
+    return {a: (s if sec.get(a) in keep else s * 0) for a, s in insider_fresh(prices, buyers=1, gap=gap).items()}
+
+
 def insider_stress_leader(prices: dict, drop: float = 0.10, lead: float = 0.0) -> dict:
     """insider_sector_stress for the sector's stronger names: an insider buys (insider_cluster, 1 buyer, 30
     days) while the sector's median stock is down at least `drop` over 60 sessions and the stock itself
@@ -1670,6 +1712,14 @@ WIDE_FAMILIES = {
                                  "segments": ["sp1500"], "trend": False}),
     # the four insider ideas closest to the luck check, together (2026-11-06)
     "insider_top_union": (insider_top_union, {"parts": [2, 4], "gap": [60]},
+                          {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                           "segments": ["sp1500"], "trend": False}),
+    # market data only: the sector washout by size group within each sector, smaller lots (2026-11-07)
+    "sector_size_washout": (sector_size_washout, {"drop": [0.10, 0.15], "bounce": [5], "groups": [2, 3]},
+                            {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                             "segments": ["sp1500"], "trend": False}),
+    # opportunistic insiders in the defensive sectors pooled: is the sector result real? (2026-11-07)
+    "insider_defensive": (insider_defensive, {"gap": [365, 730], "which": ["three", "two"]},
                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                            "segments": ["sp1500"], "trend": False}),
     # market data only: overnight-return momentum, weekly (2026-10-21)

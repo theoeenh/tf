@@ -1409,3 +1409,36 @@ def test_insider_top_union_takes_each_part_once_per_gap(monkeypatch):
     assert list(np.flatnonzero(two.to_numpy())) == [10, 160]           # 30 within 60 sessions of 10
     four = ff.insider_top_union(prices, parts=4, gap=60)["S1"]
     assert list(np.flatnonzero(four.to_numpy())) == [10, 90, 160]      # 100 near 90, 190 near 160
+
+
+def test_sector_size_washout_buys_the_size_group_that_turned_from_past_data_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    fall = np.r_[np.linspace(100, 70, 90), np.linspace(70, 72, 30)]           # down 20%+, then turns up
+    prices = {**{f"BIG{i}": pd.DataFrame({"Close": fall * (1 + i / 100), "Volume": 1e6}, index=days)
+                 for i in range(3)},
+              **{f"SML{i}": pd.DataFrame({"Close": 50.0 + i, "Volume": 1e4}, index=days) for i in range(3)}}
+    monkeypatch.setattr(wide, "sectors", lambda: {a: "Mat" for a in prices})
+    out = ff.sector_size_washout(prices, drop=0.15, bounce=5, groups=2)
+    on = [np.flatnonzero(out[f"BIG{i}"].to_numpy()).tolist() for i in range(3)]
+    assert len(on[0]) == 1 and on[0] == on[1] == on[2] and on[0][0] >= 90    # once, at the turn, together
+    assert all(out[f"SML{i}"].sum() == 0 for i in range(3))                   # the flat small group: never
+    t = on[0][0]
+    part = ff.sector_size_washout({a: df.iloc[:t + 1] for a, df in prices.items()}, drop=0.15, bounce=5, groups=2)
+    assert all((out[a].iloc[:t + 1] == part[a]).all() for a in prices)
+
+
+def test_insider_defensive_keeps_only_the_defensive_sectors(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=50)
+    prices = {a: pd.DataFrame({"Close": 10.0}, index=days) for a in ("HC", "UT", "ST", "IND")}
+    monkeypatch.setattr(wide, "sectors", lambda: {"HC": "Health Care", "UT": "Utilities", "ST": "Consumer Staples",
+                                                  "IND": "Industrials"})
+    monkeypatch.setattr(ff, "insider_fresh", lambda p, **k: {a: pd.Series((np.arange(len(df)) == 10).astype(int),
+                                                                          df.index) for a, df in p.items()})
+    three = ff.insider_defensive(prices, which="three")
+    assert [a for a in prices if three[a].sum()] == ["HC", "UT", "ST"]
+    two = ff.insider_defensive(prices, which="two")
+    assert [a for a in prices if two[a].sum()] == ["HC", "UT"]
