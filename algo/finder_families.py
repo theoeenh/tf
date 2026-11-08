@@ -1222,6 +1222,27 @@ def sector_size_washout(prices: dict, drop: float = 0.15, bounce: int = 5, group
     return _own(out.astype(int), prices)
 
 
+def sector_washout_calmest(prices: dict, drop: float = 0.15, bounce: int = 5, k: int = 5) -> dict:
+    """Market data only: sector_washout (ICIR up to +1.03, fails only the luck check) with at most `k`
+    stocks per washout: at the sector's turn, only its `k` calmest members (lowest 60-session volatility
+    that day). The washouts' daily return comes in lumps (kurtosis 40-55) because each one buys a whole
+    sector at once; sector_washout_calm kept every calm member and sector_size_washout's best version went
+    back to whole sectors. A cap keeps each lump small while keeping the steadiest names. Closes up to the
+    signal day only."""
+    close = _panel(prices)
+    sig = pd.DataFrame(sector_washout(prices, drop=drop, bounce=bounce)).reindex(index=close.index,
+                                                                                 columns=close.columns)
+    sig = sig.fillna(0).astype(bool)
+    vol = close.pct_change(fill_method=None).rolling(60, min_periods=40).std()
+    sector, _ = _sector_median(close, close)
+    keep = pd.DataFrame(False, index=close.index, columns=close.columns)
+    for sec, names in sector.groupby(sector).groups.items():
+        names = list(names)
+        rank = vol[names].where(sig[names]).rank(axis=1, method="first")         # 1 = calmest signalled
+        keep[names] = (rank <= k) & sig[names]
+    return _own(keep.astype(int), prices)
+
+
 DEFENSIVE = {"three": ("Health Care", "Utilities", "Consumer Staples"), "two": ("Health Care", "Utilities")}
 
 
@@ -1718,6 +1739,10 @@ WIDE_FAMILIES = {
     "sector_size_washout": (sector_size_washout, {"drop": [0.10, 0.15], "bounce": [5], "groups": [2, 3]},
                             {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
                              "segments": ["sp1500"], "trend": False}),
+    # market data only: the sector washout, at most k (the calmest) stocks per washout (2026-11-08)
+    "sector_washout_calmest": (sector_washout_calmest, {"drop": [0.10, 0.15], "bounce": [5], "k": [5, 10]},
+                               {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"],
+                                "segments": ["sp1500"], "trend": False}),
     # opportunistic insiders in the defensive sectors pooled: is the sector result real? (2026-11-07)
     "insider_defensive": (insider_defensive, {"gap": [365, 730], "which": ["three", "two"]},
                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],

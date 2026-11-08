@@ -1442,3 +1442,21 @@ def test_insider_defensive_keeps_only_the_defensive_sectors(monkeypatch):
     assert [a for a in prices if three[a].sum()] == ["HC", "UT", "ST"]
     two = ff.insider_defensive(prices, which="two")
     assert [a for a in prices if two[a].sum()] == ["HC", "UT"]
+
+
+def test_sector_washout_calmest_keeps_the_k_calmest_with_past_closes_only(monkeypatch):
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    t = np.arange(120)
+    prices = {f"S{i}": pd.DataFrame({"Close": 100 * (1 + (i + 1) * 0.005 * (-1.0) ** t)}, index=days)
+              for i in range(6)}                                       # S0 calmest ... S5 wildest
+    monkeypatch.setattr(wide, "sectors", lambda: {a: "Mat" for a in prices})
+    on = days[90]
+    monkeypatch.setattr(ff, "sector_washout", lambda p, **k: {
+        a: pd.Series((p[a].index == on).astype(int), p[a].index) for a in p})
+    out = ff.sector_washout_calmest(prices, k=2)
+    assert [a for a in prices if out[a].sum()] == ["S0", "S1"] and out["S0"].loc[on] == 1
+    assert sum(int(out[a].sum()) for a in prices) == 2                 # one buy each, on the turn day only
+    part = ff.sector_washout_calmest({a: df.iloc[:91] for a, df in prices.items()}, k=2)
+    assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
