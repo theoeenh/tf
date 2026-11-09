@@ -4,12 +4,11 @@
   "ticker": "FICO",
   "strategy": "insider_underwater",
   "qty": 2.5023202509254534,
-  "stop": 563.4541990650787,
+  "stop": 586.5238991318588,
   "target": null,
-  "mark": 704.55,
-  "entry": 704.55,
-  "r": 0.0,
-  "pending": true,
-  "bar": "2026-11-06"
+  "mark": 723.76,
+  "entry": 705.05235,
+  "r": 0.13258828311005955,
+  "bar": "2026-11-09"
  }
 ]
