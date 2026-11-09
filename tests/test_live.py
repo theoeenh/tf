@@ -45,6 +45,20 @@ def test_engine_shadows_only_the_hourly_accounts(monkeypatch):
     for p in ("", "B_", "C_"):
         monkeypatch.setenv(f"ALPACA_{p}API_KEY_ID", "k")
         monkeypatch.setenv(f"ALPACA_{p}API_SECRET_KEY", "s")
+    monkeypatch.setattr(live, "ACCOUNTS", {"C": "C"})       # while C was hourly
     assert live.active("A,B,C") == ["C"]
     monkeypatch.delenv("ALPACA_C_API_KEY_ID")
     assert live.active("A,B,C") == []
+
+
+def test_engine_stops_at_once_when_no_account_is_hourly(monkeypatch, capsys):
+    """2026-11-09 (user's go): C trades a daily plan too, so the engine has nothing to shadow; started by
+    the outside timer, it must stop cleanly (no failed run) and touch nothing."""
+    monkeypatch.setenv("ALPACA_C_API_KEY_ID", "k")
+    monkeypatch.setenv("ALPACA_C_API_SECRET_KEY", "s")
+    assert live.ACCOUNTS == {}
+    assert live.active("A,B,C") == []
+    monkeypatch.setattr("sys.argv", ["live", "--minutes", "1"])
+    monkeypatch.setattr(live, "workspace", lambda: (_ for _ in ()).throw(AssertionError("no workspace")))
+    live.main()
+    assert "the engine stops" in capsys.readouterr().out

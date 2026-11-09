@@ -5,7 +5,9 @@
 #   B  paper/B2/ secrets ALPACA_B_API_KEY_ID, ALPACA_B_API_SECRET_KEY  (PA3F9NT51E8I)
 # (from 26 Oct 2026, user's go 2026-10-24: A = insiders + idle cash in SPY, B = asset-class trend +
 # momentum; their hourly books paper/ and paper/B/ are no longer traded)
-#   C  paper/C/  secrets ALPACA_C_API_KEY_ID, ALPACA_C_API_SECRET_KEY  (PA36I46L8ZXT)
+#   C  paper/C2/ secrets ALPACA_C_API_KEY_ID, ALPACA_C_API_SECRET_KEY  (PA36I46L8ZXT)
+# (from 9 Nov 2026, user's go 2026-11-09: C = insiders under water, daily; its hourly ML book paper/C/
+# is a record only)
 # Each account only ever uses its own keys, and the sync refuses to send if the
 # keys belong to another Alpaca account than the folder's config says.
 # Optional: secret NTFY_TOPIC (phone notifications), variable PAPER_BRANCH.
@@ -99,9 +101,11 @@ jobs:
           - account: B
             folder: B2
             update: python -m algo.rotation update
+          # C from 9 Nov 2026 (user's go 2026-11-09): insiders under water, the finder's best steady-trading
+          # 13/14 candidate that is not A's rule (daily runner); the hourly ML book paper/C/ is a record only
           - account: C
-            folder: C
-            update: python -m algo.paper update
+            folder: C2
+            update: python -m algo.runner update --no-fetch  # filings: workflow insider-backfill
           # D: early test of the most active 13/14 candidate, insider + low short selling (daily runner)
           - account: D
             folder: D

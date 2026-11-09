@@ -35,7 +35,9 @@ LOG_DIR = ROOT / "paper" / "engine"
 # The shadow decisions run in a copy of the code and accounts (prices shared), so they
 # never touch the real paper/ files: only the engine log is written to the repo.
 WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "engine-workspace"
-ACCOUNTS = {"C": "C"}  # account -> folder under paper/ (A and B trade daily / monthly plans from 26 Oct 2026)
+# account -> folder under paper/. A and B trade daily / monthly plans from 26 Oct 2026, C a daily plan from
+# 9 Nov 2026 (user's go): no hourly account is left to shadow, so the engine stops at once.
+ACCOUNTS: dict[str, str] = {}
 DECIDE_AT = (1, 17)  # minutes past the hour: crypto bars are final at once, stocks 16 minutes late
 STOP_AFTER_CLOSE_MIN = 25  # the last stock bar (15:00-16:00) is final at 16:16
 
@@ -248,6 +250,9 @@ def main() -> None:
     ap.add_argument("--accounts", default=",".join(ACCOUNTS))
     ap.add_argument("--decide-now", action="store_true", help="one decision at once (test)")
     args = ap.parse_args()
+    if not ACCOUNTS:
+        print("No hourly account to shadow (C trades a daily plan from 9 Nov 2026): the engine stops.")
+        return
     accounts = active(args.accounts)
     if not accounts:
         sys.exit("No Alpaca keys in the environment.")

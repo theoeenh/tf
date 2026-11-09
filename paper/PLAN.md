@@ -4,7 +4,7 @@ Agreed with the user on 2026-10-11, after the first live week.
 
 ## Freeze
 
-The live accounts A, B, C, D, E and F keep their rules for 8 weeks. Allowed: bug fixes (a test first, and a
+The live accounts A, B, C, D, E and F keep their rules for 8 weeks (changes the user agreed since: below). Allowed: bug fixes (a test first, and a
 check that the accounts' decisions do not change unless the bug was in them). Not allowed: new features, new
 filters, new data in the live accounts. The learner keeps learning from every closed trade, as designed (that is
 part of the rules, not a change).
@@ -44,6 +44,24 @@ account meets the criteria above. Then small, with the repository made private f
 
 ## Changes agreed during the freeze
 
+- **2026-11-09 (user's go: "strategy C doesn't work; add another best strategy from the finder even if it
+  doesn't pass the luck test; make it trade more than E; make sure it's different from A"):** from Monday
+  9 November **C trades "insiders under water"** in paper/C2/ (daily runner): the finder's `3ce4f83a88`,
+  insider_underwater(buyers=1, discount=0.29), 13/14, fails only the luck check. It buys an S&P 1500 stock the
+  day it closes 29%+ below the average price an insider paid in the last 90 days; 3 ATR trailing stop, 60
+  sessions, 0.4% risk a trade (A's exits).
+  - **Why this one:** chosen on the search and validation periods only (the vault from July 2025 was not
+    looked at).
+  - **Stronger ideas left out:** the sector washouts (ICIR up to +1.03) were checked first. They trade only in
+    sell-offs: they signalled in 3 of 14 months from May 2024 to June 2025, and not once since September 2026.
+  - **Its numbers:** about 270 trades a year in 2017-2022 and 100 in 2023 to mid-2025; E's rule makes about 20.
+    Validation: +0.38R a trade, +43%, Sharpe 1.31.
+  - **Different from A:** A buys at the insider's filing. On recent filings 1 of this rule's 15 signals was A's
+    stock on the same day.
+  - **The switch:** C starts from its paper equity at the switch ($88,267), and its MSFT is sold at Monday's
+    open. The hourly ML book paper/C/ stays as a record. With no hourly account left, the 5-minute shadow engine
+    stops at once when started.
+  - **The success criteria below apply to the new C from 9 November.**
 - **2026-10-24 (user's go):** from Monday 26 October, **A trades "insiders + SPY"** (D's insider rule
   `1591c2bcb6`, the money the trades leave idle held in SPY; reports/2026-10-20-insider-spy/) in paper/A2/, and
   **B trades asset-class trend + momentum** (each month the top 3 of 8 asset-class ETFs by 12-month return, only
