@@ -1183,6 +1183,36 @@ def insider_calm_underwater(prices: dict, buyers: int = 1, discount: float = 0.1
     return _only_calm(insider_underwater(prices, buyers=buyers, discount=discount), prices, max_vol)
 
 
+def insider_underwater_turn(prices: dict, discount: float = 0.20, confirm: str = "stock", bounce: int = 3,
+                            wait: int = 10) -> dict:
+    """insider_underwater (account C's rule from 9 Nov 2026: a stock closes `discount` under the price
+    insiders paid in the last 90 days) without catching the falling knife: after the signal, wait up to
+    `wait` sessions for the turn, the first day the `bounce`-day return of the stock itself
+    (confirm='stock') or of its sector's median stock (confirm='sector', the timing that gives the sector
+    washouts the strongest edge) is positive, and buy then; no turn in time, no trade. Filings and closes
+    up to the entry day only."""
+    base = insider_underwater(prices, buyers=1, discount=discount)
+    close = _panel(prices)
+    rb = close / close.shift(bounce) - 1
+    if confirm == "sector":
+        sector, med = _sector_median(close, rb)
+        turn = pd.DataFrame({a: med[sector[a]] > 0 for a in sector.index}, index=close.index)
+        turn = turn.reindex(columns=close.columns, fill_value=False)
+    else:
+        turn = rb > 0
+    out = {}
+    for a, s in base.items():
+        idx = prices[a].index
+        t = turn[a].reindex(idx).fillna(False).to_numpy(bool) if a in turn else np.zeros(len(idx), bool)
+        sig = np.zeros(len(idx), int)
+        for i in np.flatnonzero(s.reindex(idx).fillna(0).to_numpy()):
+            j = next((k for k in range(i, min(i + wait + 1, len(idx))) if t[k]), None)
+            if j is not None:
+                sig[j] = 1
+        out[a] = pd.Series(sig, idx)
+    return out
+
+
 def insider_top_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
     """Does breadth beat the luck check when the parts are the best ones? The deflated Sharpe rewards a
     higher daily Sharpe, and a book that holds few trades at a time sits in cash on most days. The union
@@ -1729,6 +1759,11 @@ WIDE_FAMILIES = {
     # insiders under water in a calm stock, against the luck check (2026-11-06)
     "insider_calm_underwater": (insider_calm_underwater, {"buyers": [1], "discount": [0.10, 0.20],
                                                           "max_vol": [0.3, 0.5]},
+                                {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                 "segments": ["sp1500"], "trend": False}),
+    # account C's rule, buying at the turn instead of into the fall (2026-11-09)
+    "insider_underwater_turn": (insider_underwater_turn, {"discount": [0.15, 0.25], "confirm": ["stock", "sector"],
+                                                          "bounce": [3]},
                                 {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                  "segments": ["sp1500"], "trend": False}),
     # the four insider ideas closest to the luck check, together (2026-11-06)

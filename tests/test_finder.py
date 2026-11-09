@@ -1460,3 +1460,31 @@ def test_sector_washout_calmest_keeps_the_k_calmest_with_past_closes_only(monkey
     assert sum(int(out[a].sum()) for a in prices) == 2                 # one buy each, on the turn day only
     part = ff.sector_washout_calmest({a: df.iloc[:91] for a, df in prices.items()}, k=2)
     assert all((out[a].iloc[:91] == part[a]).all() for a in prices)
+
+
+def test_insider_underwater_turn_buys_at_the_turn_with_past_data_only(monkeypatch):
+    """The under-water signal waits for the stock's (or its sector's) bounce: bought on the first day the
+    3-day return is positive within `wait` sessions, never before; no turn in time, no trade."""
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=80)
+    fall_then_turn = np.r_[np.linspace(100, 60, 56), np.linspace(60, 70, 24)]      # bottom at day 55
+    still_falling = np.linspace(100, 50, 80)
+    prices = {"TURN": pd.DataFrame({"Close": fall_then_turn}, index=days),
+              "FALL": pd.DataFrame({"Close": still_falling}, index=days)}
+    monkeypatch.setattr(wide, "sectors", lambda: {"TURN": "Tech", "FALL": "Energy"})
+    monkeypatch.setattr(ff, "insider_underwater", lambda p, **k: {
+        a: pd.Series((np.arange(len(df)) == 50).astype(int), df.index) for a, df in p.items()})
+    c = fall_then_turn
+    turn = next(k for k in range(50, 80) if c[k] / c[k - 3] > 1)          # first day up over 3 sessions
+    assert 55 < turn <= 60
+    out = ff.insider_underwater_turn(prices, confirm="stock", bounce=3, wait=10)
+    assert np.flatnonzero(out["TURN"].to_numpy()).tolist() == [turn] and out["FALL"].sum() == 0
+    sec = ff.insider_underwater_turn(prices, confirm="sector", bounce=3, wait=10)
+    assert np.flatnonzero(sec["TURN"].to_numpy()).tolist() == [turn] and sec["FALL"].sum() == 0
+    part = ff.insider_underwater_turn({a: df.iloc[:turn + 1] for a, df in prices.items()}, confirm="stock")
+    assert all((out[a].iloc[:turn + 1] == part[a]).all() for a in prices)
+    early = ff.insider_underwater_turn({a: df.iloc[:turn] for a, df in prices.items()}, confirm="stock")
+    assert early["TURN"].sum() == 0                                     # not bought before the turn
+    late = ff.insider_underwater_turn(prices, confirm="stock", bounce=3, wait=turn - 51)
+    assert late["TURN"].sum() == 0                                      # no turn within `wait`: no trade
