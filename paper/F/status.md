@@ -1,6 +1,6 @@
 # F – Options
 
-Updated 2026-11-09 13:53 UTC. **Equity $91,269** (-8.73% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-09 14:08 UTC. **Equity $91,235** (-8.76% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
@@ -25,7 +25,7 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $3,094; at the quotes' mid they are worth $4,889 (difference $-1,795).
+Alpaca values the positions at $3,060; at the quotes' mid they are worth $4,889 (difference $-1,829).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
@@ -36,9 +36,9 @@ Alpaca values the positions at $3,094; at the quotes' mid they are worth $4,889 
 | CAT261218P00500000 | 1 | $1,075 | $1,169 | ok |
 | CAT261218P00530000 | -1 | $-2,400 | $-2,003 | ok |
 | PEP261120C00133000 | 6 | $4,710 | $5,451 | ok |
-| SPY261204P00710000 | 1 | $552 | $871 | Alpaca's price far from the quotes |
-| SPY261204P00742000 | -1 | $-1,347 | $-1,755 | Alpaca's price far from the quotes |
-| SPY261211P00695000 | 1 | $513 | $769 | Alpaca's price far from the quotes |
-| SPY261211P00725000 | -1 | $-1,007 | $-1,370 | Alpaca's price far from the quotes |
+| SPY261204P00710000 | 1 | $578 | $871 | Alpaca's price far from the quotes |
+| SPY261204P00742000 | -1 | $-1,388 | $-1,755 | Alpaca's price far from the quotes |
+| SPY261211P00695000 | 1 | $533 | $769 | Alpaca's price far from the quotes |
+| SPY261211P00725000 | -1 | $-1,046 | $-1,370 | Alpaca's price far from the quotes |
 | SYY261218P00072500 | 13 | $975 | $1,170 | ok |
 | SYY261218P00075000 | -13 | $-2,340 | $-2,054 | ok |
