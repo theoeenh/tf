@@ -1183,15 +1183,10 @@ def insider_calm_underwater(prices: dict, buyers: int = 1, discount: float = 0.1
     return _only_calm(insider_underwater(prices, buyers=buyers, discount=discount), prices, max_vol)
 
 
-def insider_underwater_turn(prices: dict, discount: float = 0.20, confirm: str = "stock", bounce: int = 3,
-                            wait: int = 10) -> dict:
-    """insider_underwater (account C's rule from 9 Nov 2026: a stock closes `discount` under the price
-    insiders paid in the last 90 days) without catching the falling knife: after the signal, wait up to
-    `wait` sessions for the turn, the first day the `bounce`-day return of the stock itself
-    (confirm='stock') or of its sector's median stock (confirm='sector', the timing that gives the sector
-    washouts the strongest edge) is positive, and buy then; no turn in time, no trade. Filings and closes
-    up to the entry day only."""
-    base = insider_underwater(prices, buyers=1, discount=discount)
+def _at_turn(base: dict, prices: dict, confirm: str = "stock", bounce: int = 3, wait: int = 10) -> dict:
+    """Move each signal of `base` to the turn: the first day, from the signal day on and within `wait`
+    sessions, that the `bounce`-day return of the stock itself (confirm='stock') or of its sector's median
+    stock (confirm='sector') is positive. No turn in time, no trade. Closes up to the entry day only."""
     close = _panel(prices)
     rb = close / close.shift(bounce) - 1
     if confirm == "sector":
@@ -1211,6 +1206,27 @@ def insider_underwater_turn(prices: dict, discount: float = 0.20, confirm: str =
                 sig[j] = 1
         out[a] = pd.Series(sig, idx)
     return out
+
+
+def insider_underwater_turn(prices: dict, discount: float = 0.20, confirm: str = "stock", bounce: int = 3,
+                            wait: int = 10) -> dict:
+    """insider_underwater (account C's rule from 9 Nov 2026: a stock closes `discount` under the price
+    insiders paid in the last 90 days) without catching the falling knife: after the signal, wait up to
+    `wait` sessions for the turn, the first day the `bounce`-day return of the stock itself
+    (confirm='stock') or of its sector's median stock (confirm='sector', the timing that gives the sector
+    washouts the strongest edge) is positive, and buy then; no turn in time, no trade. Filings and closes
+    up to the entry day only."""
+    return _at_turn(insider_underwater(prices, buyers=1, discount=discount), prices, confirm, bounce, wait)
+
+
+def insider_calm_fresh_turn(prices: dict, max_vol: float = 0.3, confirm: str = "stock", wait: int = 10) -> dict:
+    """The turn that lifted insider_underwater (ICIR +0.37 -> +0.56 for insider_underwater_turn, 13/14),
+    applied to insider_calm_fresh, the idea closest to the luck check: an opportunistic insider buys a calm
+    stock (insider_fresh, 1 buyer, no purchase by that insider in the year before; 60-session volatility in
+    the lowest `max_vol` of the universe), then buy on the first day within `wait` sessions that the 3-day
+    return of the stock (confirm='stock') or of its sector's median stock (confirm='sector') is positive.
+    Filings and closes up to the entry day only."""
+    return _at_turn(insider_calm_fresh(prices, gap=365, max_vol=max_vol), prices, confirm, 3, wait)
 
 
 def insider_top_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
@@ -1764,6 +1780,11 @@ WIDE_FAMILIES = {
     # account C's rule, buying at the turn instead of into the fall (2026-11-09)
     "insider_underwater_turn": (insider_underwater_turn, {"discount": [0.15, 0.25], "confirm": ["stock", "sector"],
                                                           "bounce": [3]},
+                                {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                                 "segments": ["sp1500"], "trend": False}),
+    # the turn applied to the idea closest to the luck check (2026-11-10)
+    "insider_calm_fresh_turn": (insider_calm_fresh_turn, {"max_vol": [0.3, 0.5], "confirm": ["stock", "sector"],
+                                                          "wait": [10]},
                                 {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                  "segments": ["sp1500"], "trend": False}),
     # the four insider ideas closest to the luck check, together (2026-11-06)

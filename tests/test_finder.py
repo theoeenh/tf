@@ -1488,3 +1488,28 @@ def test_insider_underwater_turn_buys_at_the_turn_with_past_data_only(monkeypatc
     assert early["TURN"].sum() == 0                                     # not bought before the turn
     late = ff.insider_underwater_turn(prices, confirm="stock", bounce=3, wait=turn - 51)
     assert late["TURN"].sum() == 0                                      # no turn within `wait`: no trade
+
+
+def test_insider_calm_fresh_turn_moves_the_calm_insider_buy_to_the_turn(monkeypatch):
+    """insider_calm_fresh's signal, bought on the first day within `wait` sessions that the 3-day return
+    turns positive (closes up to that day only); nothing before the turn, nothing without one."""
+    from algo import finder_families as ff, wide
+
+    days = pd.bdate_range("2024-01-01", periods=60)
+    dip_then_up = np.r_[np.linspace(50, 45, 33), np.linspace(45, 48, 27)]        # low at day 32
+    prices = {"S": pd.DataFrame({"Close": dip_then_up}, index=days)}
+    monkeypatch.setattr(wide, "sectors", lambda: {"S": "Health Care"})
+    seen = {}
+
+    def fake(p, **k):
+        seen.update(k)
+        return {a: pd.Series((np.arange(len(df)) == 30).astype(int), df.index) for a, df in p.items()}
+    monkeypatch.setattr(ff, "insider_calm_fresh", fake)
+    turn = next(k for k in range(30, 60) if dip_then_up[k] / dip_then_up[k - 3] > 1)
+    out = ff.insider_calm_fresh_turn(prices, max_vol=0.5, confirm="stock", wait=10)
+    assert seen == {"gap": 365, "max_vol": 0.5}
+    assert np.flatnonzero(out["S"].to_numpy()).tolist() == [turn] and turn > 30
+    early = ff.insider_calm_fresh_turn({"S": prices["S"].iloc[:turn]}, confirm="stock")
+    assert early["S"].sum() == 0
+    none = ff.insider_calm_fresh_turn(prices, confirm="stock", wait=turn - 31)
+    assert none["S"].sum() == 0
