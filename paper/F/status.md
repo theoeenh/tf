@@ -1,6 +1,6 @@
 # F – Options
 
-Updated 2026-11-10 12:23 UTC. **Equity $93,286** (-6.71% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-10 12:53 UTC. **Equity $93,221** (-6.78% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
@@ -25,20 +25,20 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $5,111; at the quotes' mid they are worth $6,622 (difference $-1,510).
+Alpaca values the positions at $5,046; at the quotes' mid they are worth $6,622 (difference $-1,576).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $2,150 | $2,160 | ok |
+| AAPL261218C00335000 | 1 | $2,130 | $2,160 | ok |
 | BA261211C00170000 | 2 | $1,630 | $1,672 | ok |
 | BA261218P00160000 | 3 | $765 | $798 | ok |
 | BA261218P00170000 | -3 | $-1,800 | $-1,722 | ok |
 | CAT261218P00500000 | 1 | $440 | $492 | ok |
 | CAT261218P00530000 | -1 | $-930 | $-883 | ok |
 | PEP261120C00133000 | 6 | $4,830 | $5,574 | ok |
-| SPY261204P00710000 | 1 | $305 | $311 | ok |
-| SPY261204P00742000 | -1 | $-796 | $-790 | ok |
-| SPY261211P00695000 | 1 | $297 | $304 | ok |
-| SPY261211P00725000 | -1 | $-610 | $-613 | ok |
+| SPY261204P00710000 | 1 | $295 | $311 | ok |
+| SPY261204P00742000 | -1 | $-810 | $-790 | ok |
+| SPY261211P00695000 | 1 | $290 | $304 | ok |
+| SPY261211P00725000 | -1 | $-624 | $-613 | ok |
 | SYY261218P00072500 | 13 | $585 | $806 | Alpaca's price far from the quotes |
 | SYY261218P00075000 | -13 | $-1,755 | $-1,488 | ok |
