@@ -1,6 +1,6 @@
 # F – Options
 
-Updated 2026-11-10 14:15 UTC. **Equity $93,072** (-6.93% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-10 14:23 UTC. **Equity $93,065** (-6.93% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
@@ -25,7 +25,7 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $4,897; at the quotes' mid they are worth $6,622 (difference $-1,724).
+Alpaca values the positions at $4,886; at the quotes' mid they are worth $6,622 (difference $-1,736).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
@@ -36,9 +36,9 @@ Alpaca values the positions at $4,897; at the quotes' mid they are worth $6,622 
 | CAT261218P00500000 | 1 | $440 | $492 | ok |
 | CAT261218P00530000 | -1 | $-930 | $-883 | ok |
 | PEP261120C00133000 | 6 | $4,830 | $5,574 | ok |
-| SPY261204P00710000 | 1 | $369 | $311 | ok |
-| SPY261204P00742000 | -1 | $-972 | $-790 | Alpaca's price far from the quotes |
-| SPY261211P00695000 | 1 | $350 | $304 | ok |
-| SPY261211P00725000 | -1 | $-740 | $-613 | Alpaca's price far from the quotes |
+| SPY261204P00710000 | 1 | $379 | $311 | ok |
+| SPY261204P00742000 | -1 | $-994 | $-790 | Alpaca's price far from the quotes |
+| SPY261211P00695000 | 1 | $359 | $304 | ok |
+| SPY261211P00725000 | -1 | $-748 | $-613 | Alpaca's price far from the quotes |
 | SYY261218P00072500 | 13 | $585 | $806 | Alpaca's price far from the quotes |
 | SYY261218P00075000 | -13 | $-1,755 | $-1,488 | ok |
