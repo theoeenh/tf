@@ -33,7 +33,8 @@
    "max_loss": 2628.0,
    "desc": "PEP Nov 20 2026 133 Call, delta +0.59",
    "opened": "2026-10-21 13:58",
-   "id": "long_call-PEP-2026-10-21"
+   "id": "long_call-PEP-2026-10-21",
+   "partial": 0.0
   },
   {
    "playbook": "spy_put_spread",
