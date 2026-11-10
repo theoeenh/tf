@@ -1,1 +1,15 @@
-[]
+[
+ {
+  "asset": "KMT",
+  "ticker": "KMT",
+  "strategy": "insider_cluster",
+  "qty": 106.2069667189561,
+  "stop": 20.41376872198529,
+  "target": null,
+  "mark": 24.18,
+  "entry": 24.18,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-09"
+ }
+]

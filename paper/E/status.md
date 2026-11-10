@@ -11,4 +11,4 @@ None.
 
 ## New signals (bought at the next open)
 
-None.
+- **KMT** 106.21 shares around 24.18, stop 20.41
