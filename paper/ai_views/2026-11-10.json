@@ -1,0 +1,189 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US CPI came in hotter than expected this morning (headlines 10 Nov)"
+  ],
+  "reasoning": "Crypto sold off on the CPI headline ($200M of bets liquidated) and ETF outflows; nothing in the brief says the move continues or reverses."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "NVDA earnings Tuesday 17 Nov",
+   "CEO probe headlines (9 Nov)"
+  ],
+  "reasoning": "Down 22% in a month, below its 200-day average, earnings in five sessions and an open CEO probe: a large move is likely but the brief gives no direction. No view; the event is a gap risk for any position."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US CPI came in hotter than expected this morning (headlines 10 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "Nasdaq rose nearly 3% on Monday, then a hot CPI before Tuesday's open; both are known at the open. No direction stands out."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US CPI came in hotter than expected this morning (headlines 10 Nov)",
+   "December rate-hike odds were 77% after the jobs report (7 Nov)"
+  ],
+  "reasoning": "A hot CPI print pushes yields up, but it was public before the open and a hike was already mostly priced. No edge left over 1-20 days from the brief alone."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ }
+]
