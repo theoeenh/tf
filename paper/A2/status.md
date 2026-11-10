@@ -10,7 +10,7 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **BA** 22.06 shares, entry 177.09, stop 159.89, now 172.38 (-0.27R)
 - **BANC** 297.89 shares, entry 18.55, stop 17.27, now 18.12 (-0.33R)
 - **BBT** 170.08 shares, entry 30.77, stop 28.92, now 30.67 (-0.04R)
-- **BKR** 57.66 shares, entry 46.50, stop 42.08, now 48.45 (+0.30R)
+- **BKR** 57.94 shares, entry 46.28, stop 41.88, now 48.22 (+0.30R)
 - **CAT** 4.41 shares, entry 609.75, stop 523.80, now 598.88 (-0.13R)
 - **CRH** 38.46 shares, entry 92.91, stop 87.81, now 97.73 (+0.50R)
 - **CVS** 38.80 shares, entry 84.64, stop 75.84, now 85.25 (+0.06R)
