@@ -27,11 +27,13 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **SYY** 55.95 shares, entry 75.11, stop 71.63, now 78.38 (+0.49R)
 - **TBBK** 71.95 shares, entry 48.49, stop 44.46, now 49.79 (+0.24R)
 - **THRM** 70.61 shares, entry 29.84, stop 27.91, now 30.38 (+0.10R)
-- **SPY** (idle cash) 31.28 shares, now 752.69
+- **SPY** (idle cash) 18.65 shares, now 752.69
 
 ## New signals (bought at the next open)
 
-None.
+- **ECHO** 25.65 shares around 101.19, stop 86.30
+- **LKFN** 77.97 shares around 62.20, stop 57.30
+- **WCC** 6.51 shares around 316.47, stop 257.80
 
 ## Closed trades
 
