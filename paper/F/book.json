@@ -169,6 +169,24 @@
    "desc": "sell 720 / buy 690 puts, 2026-12-24, credit 3.62 on width 30",
    "opened": "2026-11-10 15:24",
    "id": "spy_put_spread-SPY-2026-11-10"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "BKR",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "BKR261218C00045000",
+     "qty": 6,
+     "price": 4.2
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": 2520.0000000000005,
+   "max_loss": 2556.0,
+   "desc": "BKR Dec 18 2026 45 Call, delta +0.71",
+   "opened": "2026-11-10 16:24",
+   "id": "long_call-BKR-2026-11-10"
   }
  ],
  "closed": [

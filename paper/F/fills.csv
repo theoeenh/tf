@@ -263,3 +263,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-10 15:24:20,spy_put_spread,SPY,SPY261224P00690000,buy,1,1,4.5,filled,"open: sell 720 / buy 690 puts, 2026-12-24, credit 3.62 on width 30"
 2026-11-10 15:24:23,spy_put_spread,SPY,SPY261224P00720000,sell,1,1,8.19,filled,"open: sell 720 / buy 690 puts, 2026-12-24, credit 3.62 on width 30"
 2026-11-10 15:54:32,long_call,BKR,BKR261218C00047000,buy,9,0,,canceled,"open: BKR Dec 18 2026 47 Call, delta +0.59"
+2026-11-10 16:24:30,long_call,BKR,BKR261218C00045000,buy,6,6,4.2,filled,"open: BKR Dec 18 2026 45 Call, delta +0.71"
