@@ -31,7 +31,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **ECHO** 26.85 shares around 101.19, stop 86.30
+- **LKFN** 81.63 shares around 62.20, stop 57.30
+- **WCC** 6.81 shares around 316.47, stop 257.80
 
 ## Closed trades
 

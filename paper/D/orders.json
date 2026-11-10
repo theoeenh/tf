@@ -250,5 +250,44 @@
   "entry": 29.844700000000003,
   "r": 0.10006859289273591,
   "bar": "2026-11-09"
+ },
+ {
+  "asset": "ECHO",
+  "ticker": "ECHO",
+  "strategy": "insider_low_short",
+  "qty": 26.84807030927419,
+  "stop": 86.29986475332684,
+  "target": null,
+  "mark": 101.19,
+  "entry": 101.19,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-09"
+ },
+ {
+  "asset": "LKFN",
+  "ticker": "LKFN",
+  "strategy": "insider_low_short",
+  "qty": 81.6271064664006,
+  "stop": 57.30246760759753,
+  "target": null,
+  "mark": 62.2,
+  "entry": 62.2,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-09"
+ },
+ {
+  "asset": "WCC",
+  "ticker": "WCC",
+  "strategy": "insider_low_short",
+  "qty": 6.814096800246975,
+  "stop": 257.80171134246393,
+  "target": null,
+  "mark": 316.47,
+  "entry": 316.47,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-09"
  }
 ]
