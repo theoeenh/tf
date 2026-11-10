@@ -18,25 +18,6 @@
    "id": "long_call-AAPL-2026-10-20"
   },
   {
-   "playbook": "long_call",
-   "underlying": "PEP",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "PEP261120C00133000",
-     "qty": 6,
-     "price": 4.35
-    }
-   ],
-   "expiry": "2026-11-20",
-   "cost": 2610.0,
-   "max_loss": 2628.0,
-   "desc": "PEP Nov 20 2026 133 Call, delta +0.59",
-   "opened": "2026-10-21 13:58",
-   "id": "long_call-PEP-2026-10-21",
-   "partial": 0.0
-  },
-  {
    "playbook": "spy_put_spread",
    "underlying": "SPY",
    "legs": [
@@ -166,6 +147,28 @@
    "desc": "sell 75 / buy 72.5 puts, 2026-12-18, credit 0.46 on width 2.5",
    "opened": "2026-11-06 20:01",
    "id": "bull_put_spread-SYY-2026-11-06"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261224P00690000",
+     "qty": 1,
+     "price": 4.5
+    },
+    {
+     "symbol": "SPY261224P00720000",
+     "qty": -1,
+     "price": 8.19
+    }
+   ],
+   "expiry": "2026-12-24",
+   "cost": -369.0,
+   "max_loss": 2638.0,
+   "desc": "sell 720 / buy 690 puts, 2026-12-24, credit 3.62 on width 30",
+   "opened": "2026-11-10 15:24",
+   "id": "spy_put_spread-SPY-2026-11-10"
   }
  ],
  "closed": [
@@ -886,6 +889,31 @@
    "closed": "2026-11-06 15:31",
    "why_closed": "account D closed the stock",
    "pnl": -2240.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "PEP",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "PEP261120C00133000",
+     "qty": 6,
+     "price": 4.35
+    }
+   ],
+   "expiry": "2026-11-20",
+   "cost": 2610.0,
+   "max_loss": 2628.0,
+   "desc": "PEP Nov 20 2026 133 Call, delta +0.59",
+   "opened": "2026-10-21 13:58",
+   "id": "long_call-PEP-2026-10-21",
+   "partial": 0.0,
+   "done_legs": [
+    "PEP261120C00133000"
+   ],
+   "closed": "2026-11-10 15:23",
+   "why_closed": "10 days to expiry",
+   "pnl": 2520.0
   }
  ]
 }
