@@ -34,7 +34,8 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **NVT** 14.39 shares around 112.48, stop 84.76
+- **SMCI** 53.15 shares around 27.79, stop 20.28
 
 ## Closed trades
 

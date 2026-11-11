@@ -286,5 +286,31 @@
   "entry": 319.30523999999997,
   "r": -0.0444062722744058,
   "bar": "2026-11-10"
+ },
+ {
+  "asset": "NVT",
+  "ticker": "NVT",
+  "strategy": "insider_low_short",
+  "qty": 14.39278262890791,
+  "stop": 84.75681174787482,
+  "target": null,
+  "mark": 112.48,
+  "entry": 112.48,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-10"
+ },
+ {
+  "asset": "SMCI",
+  "ticker": "SMCI",
+  "strategy": "insider_low_short",
+  "qty": 53.15023751679982,
+  "stop": 20.28271798330139,
+  "target": null,
+  "mark": 27.79,
+  "entry": 27.79,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-10"
  }
 ]
