@@ -1513,3 +1513,55 @@ def test_insider_calm_fresh_turn_moves_the_calm_insider_buy_to_the_turn(monkeypa
     assert early["S"].sum() == 0
     none = ff.insider_calm_fresh_turn(prices, confirm="stock", wait=turn - 31)
     assert none["S"].sum() == 0
+
+
+def test_insider_underwater_z_measures_the_fall_in_the_stocks_own_volatility(monkeypatch):
+    """The same fall under the insiders' price signals in a calm stock, not in a volatile one; the signal
+    day uses closes and filings up to that day only (a later, cheaper purchase changes nothing before)."""
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=120)
+    k = np.arange(120)
+    calm_r = np.where(k % 2 == 0, 0.005, -0.005)
+    calm_r[80:105] = -0.01                                           # a steady 22% slide from day 80
+    wild_r = np.where(k % 2 == 0, 0.06, -0.06)
+    wild_r[80:105] = -0.01
+    calm = pd.Series(100 * np.exp(np.cumsum(np.r_[0, calm_r[1:]])), days)
+    wild = pd.Series(100 * np.exp(np.cumsum(np.r_[0, wild_r[1:]])), days)
+    prices = {"CALM": pd.DataFrame({"Close": calm}), "WILD": pd.DataFrame({"Close": wild})}
+    t = pd.DataFrame([dict(ticker=a, owner="o1", filed=days[50], code="P", price=float(prices[a]["Close"].iloc[50]),
+                           shares=1000) for a in prices]
+                     + [dict(ticker="CALM", owner="o2", filed=days[115], code="P", price=1.0, shares=10**7)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    sigma = np.log(calm).diff().rolling(60, min_periods=40).std() * np.sqrt(21)
+    deep = np.log(calm / calm.iloc[50]) <= -3.0 * sigma
+    first = int(np.flatnonzero(deep.to_numpy() & (k > 50))[0])
+    out = ff.insider_underwater_z(prices, buyers=1, z=3.0)
+    assert np.flatnonzero(out["CALM"].to_numpy()).tolist() == [first] and 80 < first < 105
+    assert out["WILD"].sum() == 0                                    # the same slide is noise for WILD
+    cut = {a: df.iloc[:first + 1] for a, df in prices.items()}
+    assert ff.insider_underwater_z(cut, buyers=1, z=3.0)["CALM"].iloc[-1] == 1   # known at that close
+    cut = {a: df.iloc[:first] for a, df in prices.items()}
+    assert ff.insider_underwater_z(cut, buyers=1, z=3.0)["CALM"].sum() == 0
+    assert ff.insider_underwater_z(prices, buyers=2, z=3.0)["CALM"].iloc[:115].sum() == 0
+
+
+def test_insider_reclaim_buys_back_at_the_insiders_price_after_the_dip(monkeypatch):
+    """A stock falls 20% under the price an insider paid, then closes back at it: bought that day, only
+    if the dip was within `within` sessions; nothing before the close that reclaims it."""
+    from algo import finder_families as ff
+
+    days = pd.bdate_range("2024-01-01", periods=70)
+    close = np.r_[np.full(31, 100.0), np.linspace(98, 80, 10), 80 + 1.2 * np.arange(1, 30)]
+    prices = {"S": pd.DataFrame({"Close": close}, index=days)}
+    t = pd.DataFrame([dict(ticker="S", owner="o1", filed=days[20], code="P", price=100.0, shares=1000),
+                      dict(ticker="S", owner="o2", filed=days[62], code="P", price=10.0, shares=10**6)])
+    monkeypatch.setattr(ff, "_insider", lambda code="P": t)
+    back = int(np.flatnonzero((close >= 100) & (np.arange(70) > 40))[0])
+    last_under = int(np.flatnonzero(close <= 85)[-1])
+    out = ff.insider_reclaim(prices, dip=0.15, within=20)["S"]
+    assert np.flatnonzero(out.to_numpy()).tolist() == [back]
+    assert ff.insider_reclaim(prices, dip=0.15, within=back - last_under - 1)["S"].sum() == 0
+    assert ff.insider_reclaim(prices, dip=0.25, within=20)["S"].sum() == 0    # never 25% under
+    early = ff.insider_reclaim({"S": prices["S"].iloc[:back]}, dip=0.15, within=20)["S"]
+    assert early.sum() == 0

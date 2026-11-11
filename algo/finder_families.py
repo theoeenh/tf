@@ -1229,6 +1229,71 @@ def insider_calm_fresh_turn(prices: dict, max_vol: float = 0.3, confirm: str = "
     return _at_turn(insider_calm_fresh(prices, gap=365, max_vol=max_vol), prices, confirm, 3, wait)
 
 
+def _insider_cost(prices: dict, days: int = 90) -> dict:
+    """Per stock, on each day: the average price (value-weighted) insiders paid in open-market purchases
+    filed in the last `days` calendar days up to that day, and how many distinct insiders bought (nan / 0
+    with none). The same window as insider_underwater, which stays as it is (account C's live rule)."""
+    t = _insider("P")
+    if len(t):
+        t = t[(t["price"] > 0) & (t["shares"] > 0)].sort_values("filed")
+    by = dict(tuple(t.groupby("ticker"))) if len(t) else {}
+    out = {}
+    for a, df in prices.items():
+        cost, n = np.full(len(df), np.nan), np.zeros(len(df), int)
+        g = by.get(a)
+        if g is not None:
+            filed = pd.DatetimeIndex(g["filed"]).normalize().to_numpy()
+            val = np.concatenate([[0.0], np.cumsum((g["price"] * g["shares"]).to_numpy(float))])
+            sh = np.concatenate([[0.0], np.cumsum(g["shares"].to_numpy(float))])
+            owners = g["owner"].to_numpy()
+            idx = df.index.to_numpy()
+            hi = np.searchsorted(filed, idx, side="right")                              # filed <= d
+            lo = np.searchsorted(filed, idx - np.timedelta64(days, "D"), side="right")  # filed > d - days
+            for i in np.flatnonzero(hi > lo):
+                cost[i] = (val[hi[i]] - val[lo[i]]) / (sh[hi[i]] - sh[lo[i]])
+                n[i] = len(set(owners[lo[i]:hi[i]]))
+        out[a] = (cost, n)
+    return out
+
+
+def insider_underwater_z(prices: dict, buyers: int = 1, z: float = 3.0) -> dict:
+    """Account C's idea measured in each stock's own volatility instead of a fixed percentage: a 29% fall
+    is ordinary for a volatile biotech and extreme for a utility, so a fixed cut-off fills the book with
+    the volatile sectors (the gates that fail most after the luck check: regimes, decay, breadth). Buy
+    the first close whose log distance under the insiders' average price (purchases filed in the last 90
+    days, `buyers`+ insiders) is at least `z` monthly standard deviations (60-session daily volatility x
+    sqrt(21)). One signal per stock per 90 days; filings and closes up to that day only."""
+    cost = _insider_cost(prices)
+    out = {}
+    for a, df in prices.items():
+        close = df["Close"].astype(float)
+        sigma = (np.log(close).diff().rolling(60, min_periods=40).std() * np.sqrt(21)).to_numpy()
+        c, n = cost[a]
+        with np.errstate(invalid="ignore", divide="ignore"):
+            deep = (np.log(close.to_numpy() / c) <= -z * sigma) & (n >= buyers)
+        out[a] = pd.Series(_once_per(list(np.flatnonzero(deep)), df.index, 90), df.index)
+    return out
+
+
+def insider_reclaim(prices: dict, dip: float = 0.15, within: int = 40) -> dict:
+    """The insiders' price as a floor that holds: a stock fell at least `dip` under the average price
+    insiders paid (purchases filed in the last 90 days) at some close in the last `within` sessions, and
+    now closes back at or above that price. Unlike the turn (the first up day, often still deep under
+    water), this waits until buyers have taken the price back to where the insiders bought. One signal
+    per stock per 90 days; filings and closes up to that day only."""
+    cost = _insider_cost(prices)
+    out = {}
+    for a, df in prices.items():
+        close = df["Close"].to_numpy(float)
+        c, n = cost[a]
+        with np.errstate(invalid="ignore"):
+            under = close <= c * (1 - dip)
+            back = close >= c
+        recent = pd.Series(under).shift(1, fill_value=False).rolling(within, min_periods=1).max().to_numpy() > 0
+        out[a] = pd.Series(_once_per(list(np.flatnonzero(back & recent & (n >= 1))), df.index, 90), df.index)
+    return out
+
+
 def insider_top_union(prices: dict, parts: int = 4, gap: int = 60) -> dict:
     """Does breadth beat the luck check when the parts are the best ones? The deflated Sharpe rewards a
     higher daily Sharpe, and a book that holds few trades at a time sits in cash on most days. The union
@@ -1787,6 +1852,14 @@ WIDE_FAMILIES = {
                                                           "wait": [10]},
                                 {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
                                  "segments": ["sp1500"], "trend": False}),
+    # account C's idea in each stock's own volatility, not a fixed percentage (2026-11-11)
+    "insider_underwater_z": (insider_underwater_z, {"buyers": [1, 2], "z": [2.0, 3.0, 4.0]},
+                             {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                              "segments": ["sp1500"], "trend": False}),
+    # under water, then back at the insiders' price: the floor held (2026-11-11)
+    "insider_reclaim": (insider_reclaim, {"dip": [0.10, 0.20], "within": [20, 60]},
+                        {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
+                         "segments": ["sp1500"], "trend": False}),
     # the four insider ideas closest to the luck check, together (2026-11-06)
     "insider_top_union": (insider_top_union, {"parts": [2, 4], "gap": [60]},
                           {"rules": ["hold 40 days", "trailing 3 ATR, out in 60 days"],
