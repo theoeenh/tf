@@ -30,11 +30,12 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **TBBK** 71.95 shares, entry 48.49, stop 44.46, now 48.67 (+0.03R)
 - **THRM** 70.61 shares, entry 29.84, stop 28.02, now 29.78 (-0.01R)
 - **WCC** 6.51 shares, entry 319.31, stop 262.01, now 316.70 (-0.04R)
-- **SPY** (idle cash) 18.58 shares, now 749.92
+- **SPY** (idle cash) 14.64 shares, now 749.92
 
 ## New signals (bought at the next open)
 
-None.
+- **NVT** 13.74 shares around 112.48, stop 84.76
+- **SMCI** 50.73 shares around 27.79, stop 20.28
 
 ## Closed trades
 
