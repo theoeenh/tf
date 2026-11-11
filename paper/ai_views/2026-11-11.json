@@ -1,0 +1,189 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Report: JPMorgan sees possible forced selling of up to $2.8B at Strategy (11 Nov)"
+  ],
+  "reasoning": "Below $73k and falling with crypto; a forced-selling risk is flagged but not a certainty. No view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "NVDA earnings Tuesday 17 Nov",
+   "Baird downgrade; report of chip sales to a blacklisted Chinese university (11 Nov)"
+  ],
+  "reasoning": "Down 18% in a week, rebounding pre-market with the chip group on CoreWeave's results, earnings in four sessions and open CEO/export headlines: big moves likely, direction not given by the brief. No view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Headlines: Anthropic's new Office-style tools hit the stock pre-market (11 Nov)"
+  ],
+  "reasoning": "A competitive headline known before the open; one news day does not set a 1-20 day direction. No view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Chip rally on CoreWeave results (11 Nov pre-market)"
+  ],
+  "reasoning": "Up 6.5% in a week with the chip group; the catalyst is public before the open. No edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "Tech futures up pre-market after Tuesday's CPI dip; both known at the open, NVDA earnings next week. No direction stands out."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ }
+]
