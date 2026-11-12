@@ -1,4 +1,4 @@
-# Daily brief — Wednesday 11 November 2026
+# Daily brief — Thursday 12 November 2026
 
 ## Coming up in the next 7 days
 
@@ -6,255 +6,255 @@
 
 ## Core holdings this month (momentum)
 
-- AAPL: 31%
-- MSFT: 26%
-- TXN: 18%
-- META: 16%
-- AMD: 9%
+- AAPL: 33%
+- MSFT: 27%
+- TXN: 19%
+- MU: 11%
+- AMD: 10%
 
 ## Assets
 
-### BTC — 73,720.12 (2026-11-10)
-1 week -2.9%, 1 month -11.1%; above its 200-day average; ADX 20.
+### BTC — 73,964.47 (2026-11-11)
+1 week -2.4%, 1 month -12.0%; above its 200-day average; ADX 21.
 Signals for the next open: none.
-News (GDELT, to 2026-11-10): tone -2.1σ vs usual, coverage -0.3σ.
+News (GDELT, to 2026-10-07): tone +1.5σ vs usual, coverage -2.9σ.
 Headlines:
-- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday as Nvidia Stock Recovers (Wed, 11 Nov 2026)
-- Stock Market Today: Tech Futures Jump As CoreWeave Surges On Results; Nvidia Rebounds (Live Coverage) (Wed, 11 Nov 2026)
-- JPMorgan Says Strategy Could Face $2.8 Billion in Forced Selling. What Would That Do to the Bitcoin Price? (Wed, 11 Nov 2026)
-- MARA Holdings (MARA) Turned $1.1 Billion In Bitcoin Into Debt Relief And Buybacks (Wed, 11 Nov 2026)
-- Ripple’s David Schwartz Once Held 26 Million XRP, 1,500 Bitcoin and 40,000 Ethereum. Why Did He Sell Over 90% of His Crypto? (Wed, 11 Nov 2026)
+- Bitcoin Fell to $71,800 After Nvidia CEO Jensen Huang Resigned. Is That Why BTC Hit Its Lowest Price Since August? (Thu, 12 Nov 2026)
+- Stock Market Today: Indexes Turn Positive; Nvidia Off Lows Amid CEO Change As Apple Hits Highs (Live Coverage) (Thu, 12 Nov 2026)
+- Applied Digital Sinks 8% as Nebius Outlook and NVIDIA CEO Exit Hit AI Data Center Stocks; Cipher Digital Falls 4%, TeraWulf Slides 3% (Thu, 12 Nov 2026)
+- It’s Official: Michael Saylor’s Strategy Is Out of the MSCI Indexes (Thu, 12 Nov 2026)
+- Bit Digital Misses Q3 Revenue Estimates Despite $28.5M Profit (Thu, 12 Nov 2026)
 
-### ETH — 2,050.18 (2026-11-10)
-1 week -8.2%, 1 month -16.2%; below its 200-day average; ADX 24.
-Signals for the next open: donchian_trend SELL.
+### ETH — 2,055.88 (2026-11-11)
+1 week -8.0%, 1 month -16.8%; below its 200-day average; ADX 25.
+Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -1.1σ vs usual, coverage +0.2σ.
 Headlines:
-- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday as Nvidia Stock Recovers (Wed, 11 Nov 2026)
-- Ripple’s David Schwartz Once Held 26 Million XRP, 1,500 Bitcoin and 40,000 Ethereum. Why Did He Sell Over 90% of His Crypto? (Wed, 11 Nov 2026)
-- XRP News: Ripple’s David Schwartz Cut His Holdings By 88% – Should Investors Worry? (Wed, 11 Nov 2026)
-- Tom Lee’s Ethereum Bet Is Costing Bitmine Billions On Paper, And He’s Still Buying (Wed, 11 Nov 2026)
-- Why Is Crypto Crashing Today? Bitcoin Falls Below $73K as Zcash (ZEC) Leads Crypto Losses (Wed, 11 Nov 2026)
+- Bitcoin Fell to $71,800 After Nvidia CEO Jensen Huang Resigned. Is That Why BTC Hit Its Lowest Price Since August? (Thu, 12 Nov 2026)
+- Bit Digital Misses Q3 Revenue Estimates Despite $28.5M Profit (Thu, 12 Nov 2026)
+- BNY Taps Figment to Bring Staking to Institutional Custody Clients (Thu, 12 Nov 2026)
+- Ethereum Developers Accelerate Work On Quantum Defenses (Thu, 12 Nov 2026)
+- Bitcoin Price Crashes to $72,700 as Leveraged Traders Buy the Dip: Is the Bottom In? (Thu, 12 Nov 2026)
 
-### SOL — 83.26 (2026-11-10)
-1 week -6.6%, 1 month -21.8%; below its 200-day average; ADX 36.
-Signals for the next open: donchian_trend SELL.
+### SOL — 83.32 (2026-11-11)
+1 week -7.5%, 1 month -22.0%; below its 200-day average; ADX 37.
+Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.3σ.
 Headlines:
-- Decrypt Becomes First News Publisher to Offer Perps Trading, Powered by Solana's Phoenix (Wed, 11 Nov 2026)
-- Securitize Holdings Inc (SECZ) (Q3 2026) Earnings Call Highlights: Record Tokenized Assets and ... (Wed, 11 Nov 2026)
-- Why Is Crypto Crashing Today? Bitcoin Falls Below $73K as Zcash (ZEC) Leads Crypto Losses (Wed, 11 Nov 2026)
-- Crypto Market Today, Nov. 10: Bitcoin Slides Below $74,000 as Hot Inflation Data Sends Crypto Markets Tumbling (Tue, 10 Nov 2026)
-- Forward Industries Expands SOL Treasury to 8.7M, Secures $50M Credit Line (Tue, 10 Nov 2026)
+- Bitcoin Fell to $71,800 After Nvidia CEO Jensen Huang Resigned. Is That Why BTC Hit Its Lowest Price Since August? (Thu, 12 Nov 2026)
+- Visa Adds Western Union’s USDPT Stablecoin to Settlement Network Through Anchorage Digital (Thu, 12 Nov 2026)
+- BNY Taps Figment to Bring Staking to Institutional Custody Clients (Thu, 12 Nov 2026)
+- Bitcoin Price Crashes to $72,700 as Leveraged Traders Buy the Dip: Is the Bottom In? (Thu, 12 Nov 2026)
+- Bitcoin Gained 7% in September, but NEAR and Arbitrum Reportedly Surged 187% and 137% (Thu, 12 Nov 2026)
 
-### NVDA — 168.89 (2026-11-10)
-1 week -18.3%, 1 month -25.4%; below its 200-day average; ADX 35.
-Signals for the next open: donchian_trend SELL.
+### NVDA — 173.73 (2026-11-11)
+1 week -13.2%, 1 month -24.0%; below its 200-day average; ADX 37.
+Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -1.1σ vs usual, coverage +0.5σ.
 Headlines:
-- Nvidia stock rebounds, chip stocks surge as CoreWeave earnings boost AI trade (Wed, 11 Nov 2026)
-- Nvidia Reportedly Sold Chips to Blacklisted Chinese University as Scrutiny on Jensen Huang Mounts (Wed, 11 Nov 2026)
-- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday as Nvidia Stock Recovers (Wed, 11 Nov 2026)
-- NVIDIA Rises 4% Despite Baird Downgrade and Huang Uncertainty; AMD Climbs 5%, Broadcom Gains 4% (Wed, 11 Nov 2026)
-- CoreWeave Surges 16% as Beat-and-Raise Quarter Eases Financing Fears; Nebius Gains 13%, Oracle Advances 5% (Wed, 11 Nov 2026)
+- Jensen Huang's Nvidia ousting may signal shifting winds on China in Washington (Thu, 12 Nov 2026)
+- Nvidia Reports Earnings Tuesday Without Jensen Huang for the First Time. It Promised $108 Billion, and the Stock Fell After 3 of Its Last 4 Reports (Thu, 12 Nov 2026)
+- Experts Weigh in on Whether Nvidia's Stock Worth Buying After Jensen Huang's Exit (Thu, 12 Nov 2026)
+- Export Controls Were Supposed to Keep AI Chips Out of China. The Rental Loophole Shows Why They Haven’t (Thu, 12 Nov 2026)
+- As Jensen Huang leaves Nvidia, Citigroup Lowers Its Price Target on the Stock From $285 to $225. Does That Make Sense? (Thu, 12 Nov 2026)
 
-### TSLA — 379.78 (2026-11-10)
-1 week -4.7%, 1 month +0.5%; below its 200-day average; ADX 16.
+### TSLA — 390.84 (2026-11-11)
+1 week +1.5%, 1 month +4.2%; above its 200-day average; ADX 15.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone +1.0σ vs usual, coverage +0.2σ.
 Headlines:
-- How Much Is Tesla’s Robotaxi Actually Worth? (Wed, 11 Nov 2026)
-- Hedge Funds Shift Positioning in October Amid Sharp Rotation Out of Large Technology Stocks, Data Insights Reports (Wed, 11 Nov 2026)
-- Tesla wins major European approval with a surprising catch (Wed, 11 Nov 2026)
-- YieldMax® ETFs Announces Weekly Distributions for Group 2 ETFs (Wed, 11 Nov 2026)
-- Tesla Stock Thrives on Key-Man Drama. Nvidia Might Not Be So Lucky. (Wed, 11 Nov 2026)
+- Musk’s Chip Plan Is “Gonna Cost a Trillion Dollars.” Tesla’s Cash Flow Can’t Cover It (Thu, 12 Nov 2026)
+- How the SpaceX Stock Slump Complicates Elon Musk’s Tesla Merger (Thu, 12 Nov 2026)
+- Elon Musk’s ‘Funding Secured’ Post to Take Tesla Private Still Cost Him 8 Years Later: SEC Moves to Close Payout to TSLA Investors (Thu, 12 Nov 2026)
+- Elon Musk Says Hiring Nvidia CEO Jensen Huang 'Would Be an Honor' (Thu, 12 Nov 2026)
+- Tesla to Wind Down Cybertruck: Can Cybercab Justify the Shift? (Thu, 12 Nov 2026)
 
-### GOLD — 369.36 (2026-11-10)
-1 week +2.8%, 1 month -3.3%; below its 200-day average; ADX 19.
+### GOLD — 365.17 (2026-11-11)
+1 week -2.0%, 1 month -4.3%; below its 200-day average; ADX 18.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.2σ.
 Headlines:
 - Defiance Goes Mad ‘Maxx’ on Single-Stock ETFs (Mon, 09 Nov 2026)
 - Gold Just Had Its Best Day Since August, Back Above $4,000 (Thu, 05 Nov 2026)
 - SPDR Gold Shares vs. iShares Silver Trust: Looking for an Inflation Hedge? One Could Have the Edge (Wed, 28 Oct 2026)
-- Market Volatility Playbook: Trade the Noise, Get Paid to Ignore the Rest (Sun, 25 Oct 2026)
-- Forget the ETF Outflows: Gold Miners Offer 3X Leverage As Cash Flow Surges (Tue, 10 Nov 2026)
+- What $10,000 in Silver on Jan. 1 Is Worth Today (Thu, 12 Nov 2026)
+- Tether Gold Passes KPMG Audit: Can It Beat America’s Biggest Gold Fund? (Thu, 12 Nov 2026)
 
-### SILVER — 46.48 (2026-11-10)
-1 week +3.7%, 1 month -14.5%; below its 200-day average; ADX 31.
+### SILVER — 46.65 (2026-11-11)
+1 week -1.1%, 1 month -12.8%; below its 200-day average; ADX 30.
 Signals for the next open: none.
 News (GDELT, to 2026-09-30): tone -0.3σ vs usual, coverage +0.2σ.
 Headlines:
+- Is the iShares Silver Trust a Buy After Falling Nearly 60% From Its High? (Wed, 11 Nov 2026)
 - Silver Has Lost More Than Half Its Value Since January (Fri, 30 Oct 2026)
 - SPDR Gold Shares vs. iShares Silver Trust: Looking for an Inflation Hedge? One Could Have the Edge (Wed, 28 Oct 2026)
 - Gold, Silver In Spotlight After GLD Hits 52-Week Low, SLV Sinks To 11-Month Low – Peter Brandt Sees Signs Of A Potential Bottom (Fri, 30 Oct 2026)
-- Could Silver Skyrocket Before the End of 2026? (Tue, 10 Nov 2026)
-- SLV Crashes To Near 52-Week Lows, GLD Falls Pre-Market – World Gold Council Cuts 2026 Gold Investment Forecast By Half (Tue, 03 Nov 2026)
+- What $10,000 in Silver on Jan. 1 Is Worth Today (Thu, 12 Nov 2026)
 
-### AAPL — 348.51 (2026-11-10)
-1 week +5.0%, 1 month +2.2%; above its 200-day average; ADX 17.
+### AAPL — 355.63 (2026-11-11)
+1 week +1.8%, 1 month +4.2%; above its 200-day average; ADX 17.
+Signals for the next open: donchian_trend BUY, squeeze_breakout BUY.
+Headlines:
+- Jensen Huang vs. Steve Jobs: Can Nvidia also thrive without its visionary? (Thu, 12 Nov 2026)
+- Trump to Nvidia: Hire Tim Cook so “a Legend Replaces a Legend.” Bad Idea. (Thu, 12 Nov 2026)
+- Stock Market Today: Indexes Turn Positive; Nvidia Off Lows Amid CEO Change As Apple Hits Highs (Live Coverage) (Thu, 12 Nov 2026)
+- Trump floats Apple chairman Tim Cook as Jensen Huang’s successor (Thu, 12 Nov 2026)
+- Apple’s Growth Now Rides on Price Hikes. The Problem: “There’s a Wall” per Alex Kantrowitz (Thu, 12 Nov 2026)
+
+### MSFT — 521.13 (2026-11-11)
+1 week -6.2%, 1 month -4.1%; above its 200-day average; ADX 18.
 Signals for the next open: none.
 Headlines:
-- Famous Investors Face a Nov. 16 Holdings Deadline While Recent Filings Fill In the Gap (Wed, 11 Nov 2026)
-- How Much Capital Gains Tax Does a 61-Year-Old Owe on $750,000 of Inherited Apple Stock? (Wed, 11 Nov 2026)
-- Buy, Sell, or Hold? Wednesday’s Top Upgrades and Downgrades: Akamai Technologies, Apple, BILL Holdings, Corning, Form Factor, Guidewire Software, NVIDIA, Riot Platforms, Toast, and More (Wed, 11 Nov 2026)
-- What State Street Tech Select SPDR (XLK) Sold: Apple Leads on Nov. 9 (Wed, 11 Nov 2026)
-- What ProShares Ultra S&P500 2x Shares (SSO) Sold: Apple Leads on Monday (Wed, 11 Nov 2026)
+- Microsoft Is Fighting a Ban on Chinese Parts Inside AI Data Centers (Thu, 12 Nov 2026)
+- If This Tech Giant Doubles, Here’s What $10,000 Could Become (Thu, 12 Nov 2026)
+- atQor Named Finalist for 2026 Microsoft Partner of the Year Award in - Agents (Thu, 12 Nov 2026)
+- BDO Recognized by Microsoft for Helping Organizations Build the Governance Foundation of AI (Thu, 12 Nov 2026)
+- Alphabet’s Misunderstood TPUs Are a Hidden Catalyst Investors Haven’t Yet Noticed (Thu, 12 Nov 2026)
 
-### MSFT — 533.16 (2026-11-10)
-1 week +2.3%, 1 month -1.5%; above its 200-day average; ADX 18.
+### AMZN — 266.17 (2026-11-11)
+1 week +0.1%, 1 month +2.9%; above its 200-day average; ADX 13.
 Signals for the next open: none.
 Headlines:
-- Microsoft Stock Fell After Anthropic Launches Claude Sheets to Rival Excel (Wed, 11 Nov 2026)
-- Northern Trust leans on Microsoft FDEs to boost agentic buildout (Wed, 11 Nov 2026)
-- Microsoft stock sinks as new AI rival targets $27 billion business (Wed, 11 Nov 2026)
-- Microsoft Stock Falls as Anthropic Takes Aim at Office Work With New Claude Tools (Wed, 11 Nov 2026)
-- Kai-Fu Lee Questions Soaring AI Valuations (Wed, 11 Nov 2026)
+- Future Ready 2030: Amazon Is Helping More People Build Skills for New Careers in AI, Robotics, and Beyond (Thu, 12 Nov 2026)
+- Meta Is Handing Its AI Data Center Buildout to an Amazon Veteran (Thu, 12 Nov 2026)
+- Min Jin Lee’s Contemporary Epic American Hagwon Selected as Amazon’s Best Book of 2026 (Thu, 12 Nov 2026)
+- Global Fifth Party Logistics (5PL) Market Report 2026 | Capitalize on AI-Led Growth to $21.99 Billion by 2030 as Amazon, UPS, DHL, Kuehne + Nagel and DSV Scale Orchestration (Thu, 12 Nov 2026)
+- Cloudinary and AWS Deepen Partnership to Bring Cloudinary’s Image and Video Platform to Amazon CloudFront (Thu, 12 Nov 2026)
 
-### AMZN — 270.87 (2026-11-10)
-1 week +8.0%, 1 month +4.4%; above its 200-day average; ADX 13.
+### META — 628.77 (2026-11-11)
+1 week -0.2%, 1 month -17.5%; below its 200-day average; ADX 25.
 Signals for the next open: none.
 Headlines:
-- Cathie Wood Dumps $3 Million of This Magnificent Seven Stock (Wed, 11 Nov 2026)
-- YieldMax® ETFs Announces Weekly Distributions for Group 2 ETFs (Wed, 11 Nov 2026)
-- ETFs Are Buying Amazon (AMZN) on Monday (Wed, 11 Nov 2026)
-- Hedge Funds Shift Positioning in October Amid Sharp Rotation Out of Large Technology Stocks, Data Insights Reports (Wed, 11 Nov 2026)
-- What ProShares Ultra S&P500 2x Shares (SSO) Sold: Apple Leads on Monday (Wed, 11 Nov 2026)
+- Meta Nose-Dived 12% Over a Month: This Pro Analyst Expects 60% Gains Within 12 Months (Thu, 12 Nov 2026)
+- Meta's $27B Off-Balance-Sheet AI Deal Reminds Steve Eisman of Enron— Joseph Carlson Disagrees (Thu, 12 Nov 2026)
+- Reddit Sinks 6% as Traffic Falls 13% on Google’s AI Overviews: “Not Traffic Drivers” (Thu, 12 Nov 2026)
+- Meta Is Handing Its AI Data Center Buildout to an Amazon Veteran (Thu, 12 Nov 2026)
+- Alphabet and Meta Platforms Pay Dividends. Is Either of Them Worth Owning for Income? (Thu, 12 Nov 2026)
 
-### META — 641.39 (2026-11-10)
-1 week +3.3%, 1 month -13.7%; above its 200-day average; ADX 25.
+### GOOGL — 293.45 (2026-11-11)
+1 week +1.6%, 1 month -17.1%; below its 200-day average; ADX 29.
 Signals for the next open: none.
 Headlines:
-- Cineverse Building Upon Social Video Revenue Growth with a First-Time Spanish-Language Dog Whisperer Channel on YouTube + a Yu-Gi-Oh! Live Stream (Wed, 11 Nov 2026)
-- Meta Fined by Brazil Electoral Court for Allegedly Failing to Provide Equal Content During Presidential Campaign (Wed, 11 Nov 2026)
-- State Street Comm Services SPDR (XLC) Sells $29.9 Million of Meta on Monday (Wed, 11 Nov 2026)
-- “Demand Is Higher Than Supply”: AMD Has Ripped 141% in 2026. Is It Too Late to Buy? (Wed, 11 Nov 2026)
-- Meta Platforms (META) Wins JPMorgan Backing, Is It Still 37% Below Fair Value? (Wed, 11 Nov 2026)
+- SpaceX's Expanding Ambitions: ETFs to Play Its Next Growth Phase (Thu, 12 Nov 2026)
+- Experts Weigh in on Whether Nvidia's Stock Worth Buying After Jensen Huang's Exit (Thu, 12 Nov 2026)
+- Alphabet vs. Broadcom: the best AI stocks for risk and reward (Thu, 12 Nov 2026)
+- Reddit CEO Steve Huffman explains the 'paradox' of AI for his company (Thu, 12 Nov 2026)
+- AI Governance for Boards, 6th Palm Beach CorpGov Forum (Thu, 12 Nov 2026)
 
-### GOOGL — 287.38 (2026-11-10)
-1 week +2.6%, 1 month -18.5%; below its 200-day average; ADX 30.
+### AMD — 552.90 (2026-11-11)
+1 week +13.1%, 1 month -8.7%; above its 200-day average; ADX 22.
 Signals for the next open: none.
 Headlines:
-- Anthropic is hiding its best AI: Fable 5.2 and the IPO (Wed, 11 Nov 2026)
-- How Much Is Tesla’s Robotaxi Actually Worth? (Wed, 11 Nov 2026)
-- Market Chatter: Anthropic IPO Valuation Could Rise to $1.5 Trillion on Strong Demand (Wed, 11 Nov 2026)
-- Plurai raises $13M to build the simulation infrastructure for trustworthy, self-improving AI agents (Wed, 11 Nov 2026)
-- 3 Beaten-Down Stocks With a Real Catalyst for a Comeback (Wed, 11 Nov 2026)
+- AMD CEO Lisa Su on data center backlash: Tech has to sell the vision (Thu, 12 Nov 2026)
+- AMD CEO Dr. Lisa Su reflects on her biggest lessons of 2026 (Thu, 12 Nov 2026)
+- AMD CEO Dr. Lisa Su continues making the 'right, big bets' (Thu, 12 Nov 2026)
+- AMD Remains Top Pick in CPU Space Amid Expanding Market for Servers, BofA Says (Thu, 12 Nov 2026)
+- AMD support and resistance levels to watch (Thu, 12 Nov 2026)
 
-### AMD — 515.21 (2026-11-10)
-1 week +6.5%, 1 month -13.3%; above its 200-day average; ADX 24.
+### AVGO — 345.22 (2026-11-11)
+1 week +6.1%, 1 month -3.4%; below its 200-day average; ADX 25.
+Signals for the next open: rsi2_reversion SELL.
+Headlines:
+- AMD, Broadcom stocks jump as Nvidia CEO Jensen Huang resigns (Thu, 12 Nov 2026)
+- Alphabet vs. Broadcom: the best AI stocks for risk and reward (Thu, 12 Nov 2026)
+- Broadcom Rallies 5% as Traders Bet on Chip Rivals After Jensen Huang’s Exit; NVIDIA Falls 5%, AMD Climbs 2% (Thu, 12 Nov 2026)
+- Broadcom and Qualcomm Each Lost at Least 9% Thursday. Only One Is Guiding for 93% Growth (Thu, 12 Nov 2026)
+- Roundhill Investments Launches Roundhill Magnificent Seven Plus ETF (MAGP) (Thu, 12 Nov 2026)
+
+### NFLX — 64.54 (2026-11-11)
+1 week -2.8%, 1 month -8.4%; below its 200-day average; ADX 25.
 Signals for the next open: none.
 Headlines:
-- NVIDIA Rises 4% Despite Baird Downgrade and Huang Uncertainty; AMD Climbs 5%, Broadcom Gains 4% (Wed, 11 Nov 2026)
-- Supermicro Now Shipping Next-Generation Servers Powered by 6th Gen AMD EPYC™ 9006 Series CPUs for Cloud, HPC, and Agentic AI Workloads (Wed, 11 Nov 2026)
-- MU, AMD, AVGO, Other Chip Stocks Surge As CoreWeave Earnings Reignite AI Trade — Nasdaq-100 Futures Jump (Wed, 11 Nov 2026)
-- Server CPU strength persists as AMD and Arm gain share: UBS (Wed, 11 Nov 2026)
-- AMD sees $709 million reversal as major ETFs pile in (Wed, 11 Nov 2026)
+- Will Content Capex Weigh on Netflix's Free Cash Flow Trajectory? (Thu, 12 Nov 2026)
+- Netflix’s Thanksgiving Eve NFL Game Is the Next Test After a $300 Million Ad Cut (Thu, 12 Nov 2026)
+- Netflix Wipes Out Five Years of Gains (Wed, 11 Nov 2026)
+- Clarion Partners’ loan on Netflix-occupied Hollywood campus hits market (Wed, 11 Nov 2026)
+- Netflix (NFLX) Stock May Be a ‘Loser’ This Year, But You Can Still Scalp Profits From It (Wed, 11 Nov 2026)
 
-### AVGO — 331.98 (2026-11-10)
-1 week -0.0%, 1 month -6.4%; below its 200-day average; ADX 27.
+### JPM — 343.39 (2026-11-11)
+1 week -2.5%, 1 month +3.6%; above its 200-day average; ADX 16.
 Signals for the next open: none.
 Headlines:
-- NVIDIA Rises 4% Despite Baird Downgrade and Huang Uncertainty; AMD Climbs 5%, Broadcom Gains 4% (Wed, 11 Nov 2026)
-- MU, AMD, AVGO, Other Chip Stocks Surge As CoreWeave Earnings Reignite AI Trade — Nasdaq-100 Futures Jump (Wed, 11 Nov 2026)
-- Goldman Sees Anthropic Revenue at “$685B by 2030.” Broadcom Is Tied to $161 Billion in Lease Deals (Wed, 11 Nov 2026)
-- US High Relative Profitability (DUHP) Adds Broadcom and Micron on Nov. 9 (Wed, 11 Nov 2026)
-- iShares PHLX SOX Semiconductor (SOXX) Buys $394.7 Million More AMD on Nov. 9 (Wed, 11 Nov 2026)
+- Tony Robbins: 4 rules the world's greatest investors follow (Thu, 12 Nov 2026)
+- TransUnion to Present at 2026 J.P. Morgan Ultimate Services Investor Conference (Thu, 12 Nov 2026)
+- Invesco KBW Bank ETF (KBWB) Adds Wells Fargo and JPMorgan on Nov. 10 (Thu, 12 Nov 2026)
+- JPMorgan Names Top 3 Picks Among Auto Parts Stocks (Thu, 12 Nov 2026)
+- JPMorgan Holds $29 Billion in Data Center Loans as Lenders Turn “Reluctant” on AI Debt (Thu, 12 Nov 2026)
 
-### NFLX — 63.26 (2026-11-10)
-1 week -0.3%, 1 month -10.4%; below its 200-day average; ADX 26.
+### XOM — 166.71 (2026-11-11)
+1 week -1.5%, 1 month -4.2%; above its 200-day average; ADX 30.
 Signals for the next open: none.
 Headlines:
-- Ramit Sethi Says There's Only So Much You Can Cut From Your Budget, But No Limit To What You Can Earn. An Extra $1K A Month Is A $12K Raise (Wed, 11 Nov 2026)
-- Netflix trades at under 18x earnings after a steep valuation reset (Wed, 11 Nov 2026)
-- Will Netflix Ever Pay a Dividend? (Wed, 11 Nov 2026)
-- NFLX Stock Slips Overnight: Co-CEO Gregory Peters Sells $1.74M Worth Of Company Shares (Wed, 11 Nov 2026)
-- What Could Lift Netflix Stock From Here? (Tue, 10 Nov 2026)
+- Oil Price is Still High: Boon for ExxonMobil's Upstream Business? (Thu, 12 Nov 2026)
+- Your $300,000 in XLE Holds $116,286 in Just Two Oil Companies (Thu, 12 Nov 2026)
+- What iShares Global Energy ETF (IXC) Sold: Exxon Mobil Leads on Nov. 10 (Thu, 12 Nov 2026)
+- ETFs Are Net Sellers of ExxonMobil (XOM) on Nov. 10 (Thu, 12 Nov 2026)
+- Market Chatter: Exxon Mobil to Evaluate Seven Areas in Venezuela for Potential Oil and Gas Projects (Thu, 12 Nov 2026)
 
-### JPM — 342.07 (2026-11-10)
-1 week +1.2%, 1 month +2.3%; above its 200-day average; ADX 15.
+### COIN — 136.27 (2026-11-11)
+1 week -10.1%, 1 month -25.0%; below its 200-day average; ADX 31.
 Signals for the next open: none.
 Headlines:
-- Expression Therapeutics CEO to Attend 45th J.P. Morgan Healthcare Conference 2027 (Wed, 11 Nov 2026)
-- JPMorgan Says Strategy Could Face $2.8 Billion in Forced Selling. What Would That Do to the Bitcoin Price? (Wed, 11 Nov 2026)
-- GEV, VRT, HUBB In Focus — JPMorgan Sees Potential AI Stock Rebound, But Remains Cautious On Electrical Equipment Sector (Wed, 11 Nov 2026)
-- Meta Platforms (META) Wins JPMorgan Backing, Is It Still 37% Below Fair Value? (Wed, 11 Nov 2026)
-- JPMorgan Chase (JPM) Takes Lead Role In A Major AI IPO (Wed, 11 Nov 2026)
+- Coinbase (COIN) Stock Fair Value Moves Lower After Mixed Analyst Target Changes (Thu, 12 Nov 2026)
+- Prediction: The Next Phase of Coinbase Could Be Its Most Important Yet (Thu, 12 Nov 2026)
+- SEC Reportedly Backs CFTC Against Stock-Perps Injunction (Thu, 12 Nov 2026)
+- Coinbase’s Bank Charter Is Bad News for Circle. Here’s the $1.4 Billion That Matters (Thu, 12 Nov 2026)
+- Coinbase (COIN) Stock Could Look Pricey On New Trust Charter News (Wed, 11 Nov 2026)
 
-### XOM — 164.47 (2026-11-10)
-1 week -7.3%, 1 month -4.5%; above its 200-day average; ADX 30.
-Signals for the next open: rsi2_reversion BUY.
-Headlines:
-- Oil giant Exxon plots Venezuela return ahead of Democrat crackdown (Wed, 11 Nov 2026)
-- ExxonMobil Is Up 43% in a Year. Will Its “Lasting Improvements” Outlast the Iran War? (Wed, 11 Nov 2026)
-- Enbridge vs. ExxonMobil: Which Energy Stock Is a Better Buy for 2027? (Tue, 10 Nov 2026)
-- How Much Do You Really Need Invested to Replace a $175,000 Salary With Dividends? (Tue, 10 Nov 2026)
-- Democrats Take Congress: 4 Dividend Stocks From Oil to Telecom Worth Buying (Tue, 10 Nov 2026)
-
-### COIN — 132.13 (2026-11-10)
-1 week -9.2%, 1 month -26.8%; below its 200-day average; ADX 31.
+### QQQ — 690.38 (2026-11-11)
+1 week -0.2%, 1 month -7.2%; above its 200-day average; ADX 32.
 Signals for the next open: none.
 Headlines:
-- Coinbase Global vs. Toast: Which Financial Stock Is a Better Buy for 2027? (Wed, 11 Nov 2026)
-- OKXICE Tokenized Stock Venue to Open Nov. 23; Circle, Coinbase, Robinhood Among 70+ Assets (Wed, 11 Nov 2026)
-- Coinbase's national trust charter approval is a major win for crypto custody (Tue, 10 Nov 2026)
-- Coinbase Gets National Bank Charter Approval (Tue, 10 Nov 2026)
-- Coinbase Falls 4%, Robinhood Slides 3% as Hot Inflation Data Drags Bitcoin Lower; Webull Declines 2% (Tue, 10 Nov 2026)
+- Jensen Huang Is Out. Here’s How Much Nvidia’s Selloff Cost a $10,000 QQQ Position (Thu, 12 Nov 2026)
+- Exchange-Traded Funds, Equity Futures Lower Pre-Bell Thursday Amid Nvidia Leadership Uncertainty (Thu, 12 Nov 2026)
+- INVESCO QQQ (QQQ) Adds Apple and NVIDIA on Tuesday (Thu, 12 Nov 2026)
+- ETFs Bought $83.8 Million of Alphabet (GOOG) on Nov. 10 (Thu, 12 Nov 2026)
+- ETFs Bought $88.9 Million of Costco (COST) on Nov. 10 (Thu, 12 Nov 2026)
 
-### QQQ — 674.76 (2026-11-10)
-1 week -1.5%, 1 month -9.6%; below its 200-day average; ADX 33.
-Signals for the next open: none.
-Headlines:
-- Invesco QQQ Trust (QQQ) Buys $206.7 Million More Apple on Nov. 9 (Wed, 11 Nov 2026)
-- Micron draws $554 million in ETF buying after steep selloff (Wed, 11 Nov 2026)
-- ETFs Bought $293.8 Million of Qualcomm (QCOM) on Nov. 9 (Wed, 11 Nov 2026)
-- ETFs Are Buying Analog Devices (ADI) on Monday (Wed, 11 Nov 2026)
-- 42 ETFs Add to Texas Instruments (TXN) on Monday (Wed, 11 Nov 2026)
-
-### IWM — 280.58 (2026-11-10)
-1 week +0.3%, 1 month +1.0%; above its 200-day average; ADX 22.
+### IWM — 283.09 (2026-11-11)
+1 week -0.3%, 1 month +2.3%; above its 200-day average; ADX 21.
 Signals for the next open: none.
 Headlines:
 - Are These 6 Small-Cap ETFs Worth a Look Right Now? (Tue, 10 Nov 2026)
 - Is Webull the Best Trading App for Dead Customers? After a $4.2M Finra Fine, the Company Can Neither Confirm Nor Deny. (Thu, 05 Nov 2026)
+- NVIDIA’s Leadership Crisis Is Dragging the S&P 500 Lower. Here’s What Else Is Moving (Thu, 12 Nov 2026)
+- What iShares Russell 2000 (IWM) Sold: Glaukos Leads on Nov. 10 (Thu, 12 Nov 2026)
 - What iShares Russell 2000 Index Fund (IWM) Bought: Glaukos Leads on Nov. 9 (Wed, 11 Nov 2026)
-- Hims & Hers Celebrated Its Eli Lilly Deal, Then Lost a Quarter of Its Value in a Week (Tue, 10 Nov 2026)
-- Stock Market Today: Hotter CPI Reading Hasn’t Deterred Stocks From Rising (Tue, 10 Nov 2026)
 
-### TLT — 80.88 (2026-11-10)
-1 week -0.3%, 1 month +3.6%; below its 200-day average; ADX 16.
+### TLT — 80.92 (2026-11-11)
+1 week -1.0%, 1 month +3.7%; below its 200-day average; ADX 16.
 Signals for the next open: none.
 Headlines:
+- Which Long-Term Bond ETF Is the Better Buy: State Street’s SPLB or iShares’ TLT? (Wed, 11 Nov 2026)
 - Wall Street Is Already Bracing for a 2027 Debt Ceiling Fight (Thu, 05 Nov 2026)
 - Bonds Reclaim Haven Status (Thu, 22 Oct 2026)
+- The 2-Year Treasury Yield Just Had Its Biggest Jump in 19 Months (Wed, 11 Nov 2026)
 - Foreign-Linked Buyers Took Their Smallest Share of a 3-Year Treasury Auction in 15 Months (Tue, 10 Nov 2026)
-- A 50-Basis-Point Fed Hike Was Unthinkable – After CPI, Economists Can't Rule It Out (Tue, 10 Nov 2026)
-- Treasury Yields Could Be Heading Lower. What the Charts Show. (Mon, 09 Nov 2026)
 
-### USO — 141.45 (2026-11-10)
-1 week -10.6%, 1 month -6.3%; above its 200-day average; ADX 28.
+### USO — 141.47 (2026-11-11)
+1 week -2.7%, 1 month -7.6%; above its 200-day average; ADX 28.
 Signals for the next open: rsi2_reversion BUY.
 Headlines:
+- Sector Update: Energy Stocks Edge Higher Pre-Bell Wednesday (Wed, 11 Nov 2026)
 - Sector Update: Energy Stocks Decline Premarket Wednesday (Wed, 04 Nov 2026)
 - USO Jumps To Over 11-Year High As Brent Tops $116, WTI Crosses $100 Amid Escalating Middle East Tensions (Fri, 23 Oct 2026)
-- Energy ETFs: How to Play the Sector's Surge (Tue, 20 Oct 2026)
-- Exchange-Traded Funds Gain as US Equities Advance After Midday (Tue, 20 Oct 2026)
+- Sector Update: Energy Stocks Rise Pre-Bell Thursday (Thu, 12 Nov 2026)
 - Oil Prices Just Fell to Their Lowest Since August as Trump Says the Iran War Is ‘Effectively Over’ (Tue, 10 Nov 2026)
 
 ## Paper account
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-11-11 14:22 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-11-12 16:55 UTC.
 
-**Equity $89,637** (-10.36%) · max drawdown -11.7% · 61 closed trades · 3 open
+**Equity $89,696** (-10.30%) · max drawdown -11.7% · 61 closed trades · 4 open
 
 
 ## AI analyst track record
 
-27 scored views: right 37% of the time, average -0.17 ATR in the called direction.
+29 scored views: right 34% of the time, average -0.23 ATR in the called direction.
 
 | Asset | Views | Right | Avg ATR in called direction |
 |---|---:|---:|---:|
-| AAPL | 1 | 0% | -0.29 |
+| AAPL | 3 | 0% | -0.77 |
 | AMZN | 1 | 0% | -0.27 |
 | BTC | 5 | 20% | -0.53 |
 | COIN | 1 | 0% | -0.92 |
@@ -281,7 +281,7 @@ market picture give an edge over the next 1–20 trading days. Rules:
 - Flag scheduled events that could gap the price (earnings, Fed decision, jobs report).
 - Explain your reasoning in 1–3 sentences a finance student can check later.
 
-Write a JSON list to `paper/ai_views/2026-11-11.json`, one object per asset:
+Write a JSON list to `paper/ai_views/2026-11-12.json`, one object per asset:
 `{"asset": "NVDA", "bias": -2..2, "confidence": 0..1, "horizon_days": 1..20,
   "key_events": ["..."], "reasoning": "..."}`
 Then run `python -m pytest -q tests/test_analyst.py` to check the file parses.

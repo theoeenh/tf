@@ -1,0 +1,196 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Fell to about $71,800 on the Nvidia news (12 Nov)",
+   "Strategy removed from the MSCI indexes (12 Nov): forced selling by index funds was flagged as a risk"
+  ],
+  "reasoning": "Down 12% in a month with a forced-selling risk now confirmed, but the size and timing of any selling are not in the brief. No view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": -1,
+  "confidence": 0.25,
+  "horizon_days": 5,
+  "key_events": [
+   "CEO Jensen Huang out (headlines 12 Nov), after the board probe",
+   "NVDA earnings Tuesday 17 Nov, the first without him",
+   "Citigroup cuts its price target (285 to 225)"
+  ],
+  "reasoning": "The founder-CEO leaves in a scandal three sessions before earnings, the export-control question is open and analysts are cutting targets: the uncertainty is not resolved by one day's fall. Much is already in the price (-24% in a month, off its lows today), so a mild view, low confidence; earnings can gap it either way."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Headlines: cost of Musk's chip plan, SpaceX merger doubts (12 Nov)"
+  ],
+  "reasoning": "Headline noise without a dated catalyst; up 1% over the month. No view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "AMD up with Broadcom on Nvidia's CEO exit (12 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "Same as Broadcom: the rotation is in today's price and Nvidia's results next week can reverse it. No view."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Chip rivals bid up on Nvidia's CEO exit: Broadcom +5% (12 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "Up on a rival's trouble, a move already made in today's session; the next catalyst (Nvidia's results) cuts both ways for the group. No view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Futures lower pre-bell on Nvidia's leadership change; indexes turned positive in the session (12 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "The index absorbed the Nvidia news within the session; Nvidia's earnings next Tuesday are the next gap risk. No direction stands out."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ }
+]
