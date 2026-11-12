@@ -6,10 +6,11 @@ insider trade the SEC published.
 Research only (the strategy finder): nothing here trades. The live accounts keep their own
 universe; a strategy found here would first go through the finder's gates and the vault.
 
-- members      today's S&P 500, 400 and 600 lists (Wikipedia), with sector and index. Survivorship bias: companies that fell out of
-               the index since 2016 are missing, which flatters any long strategy. The finder
-               measures every signal against the same stocks' ordinary drift and against random
-               entries on the same stocks, which removes most of that bias from the comparison.
+- members      today's S&P 500, 400 and 600 lists (Wikipedia), with sector and index: what the trading
+               accounts use. The finder's research does NOT use today's list for the past (from
+               2026-11-12): it uses who was a member on each day, companies that later left included
+               (algo/wide_pit.py, data/wide/members_history.csv). Until then the research ran on
+               today's members only, which flatters any long strategy (survivorship bias).
 - daily bars   Alpaca, split- and dividend-adjusted, 2016 -> now, data/wide/daily.csv.gz
                (not committed: about 30 MB; GitHub caches it between runs)
 - insider      SEC "Insider Transactions Data Sets" (every Form 4 of every company, one zip per
@@ -98,8 +99,12 @@ def members(refresh: bool = False) -> list[str]:
 
 
 def sectors() -> dict[str, str]:
+    """Sector of today's members, plus (for the research) of the companies that left the indexes."""
+    from . import wide_pit
+
     m = _table()
-    return dict(zip(m["symbol"], m["sector"]))
+    past = wide_pit.sectors() if wide_pit.available() else {}
+    return past | dict(zip(m["symbol"], m["sector"]))  # today's list decides for today's members
 
 
 def index_of() -> dict[str, str]:
@@ -148,7 +153,7 @@ def _bars(symbols: list[str], start: str) -> pd.DataFrame:
 def update_bars() -> pd.DataFrame:
     """Everything again each time (one request per 50 symbols): adjusted prices change with
     every split and dividend, so appending would mix two adjustments."""
-    syms = members()
+    syms = research_symbols()
     parts = []
     for i in range(0, len(syms), 50):
         parts.append(_bars(syms[i:i + 50], START))
@@ -157,6 +162,65 @@ def update_bars() -> pd.DataFrame:
     WIDE_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(WIDE_DIR / "daily.csv.gz", index=False)
     return df
+
+
+def research_symbols() -> list[str]:
+    """Today's members plus every stock that was a member at some point (the research universe)."""
+    from . import wide_pit
+
+    return sorted(set(members()) | (set(wide_pit.ever()) if wide_pit.available() else set()))
+
+
+TAIL = 65  # sessions a vanished stock is carried at its last price, so the backtest can close its trades
+WORTHLESS = 0.01
+
+
+def closing_bars(g: pd.DataFrame, n: int = TAIL, until: pd.Timestamp | None = None, gone: bool = True) -> pd.DataFrame:
+    """What a holder had when a stock's bars end, as `n` flat bars with no volume after its last real one
+    (the backtest engine only closes a trade on a bar). gone=False: the stock only left the indexes and
+    still trades: its last price. gone=True, it stopped trading: at a steady price it was bought out and
+    is paid its last price; under $1, or after a collapse into the end (down 40% or more in its last 20
+    sessions and 70% or more in a year), it failed and is booked as worthless (SVB was halted at $106 the
+    day after closing at $268, down from $500 a year before; its holders got nothing)."""
+    last = float(g["Close"].iloc[-1])
+    month = float(g["Close"].iloc[-21]) if len(g) > 20 else last
+    year = float(g["Close"].iloc[-251]) if len(g) > 250 else float(g["Close"].iloc[0])
+    failed = gone and (last < 1.0 or (last <= 0.6 * month and last <= 0.3 * year))
+    px = WORTHLESS if failed else last
+    days = pd.bdate_range(g.index[-1] + pd.Timedelta(days=1), periods=n)
+    if until is not None:
+        days = days[days <= until]  # never past the end of the data
+    tail = pd.DataFrame({"Open": px, "High": px, "Low": px, "Close": px, "Volume": 0.0}, index=days)
+    return pd.concat([g, tail])
+
+
+def load_daily_pit(min_days: int = 250) -> dict[str, pd.DataFrame]:
+    """Daily bars for the research: every stock that was ever a member, each over the days it may be
+    used (wide_pit.cut). A stock whose bars stop before the end of the data gets its closing bars
+    (closing_bars: no volume, so no strategy reads them as prices; see finder.signals)."""
+    from . import wide_pit
+
+    df = pd.read_csv(WIDE_DIR / "daily.csv.gz", parse_dates=["date"])
+    end = df["date"].max()
+    known = set(wide_pit.ever())
+    out = {}
+    for sym, g in df.groupby("symbol"):
+        if sym not in known:
+            continue  # only on today's list since a few days: no history as a member yet
+        g = g.set_index("date").sort_index()[COLUMNS]
+        g = g[g["Volume"] > 0]
+        g.index.name = "Date"
+        every = g.index
+        g = wide_pit.cut(g, *wide_pit.window(sym))
+        if len(g) < min_days or not (g["Close"] > 0).all():
+            continue
+        if g.index[-1] < end - pd.Timedelta(days=10):  # its bars end before the data does
+            later = every[every > g.index[-1]]
+            gone = not (len(later) and later[0] - g.index[-1] <= wide_pit.MAX_GAP)  # or it only left the indexes
+            g = closing_bars(g, until=end, gone=gone)
+            g.index.name = "Date"
+        out[sym] = g
+    return out
 
 
 def load_daily(min_days: int = 500) -> dict[str, pd.DataFrame]:
@@ -222,7 +286,7 @@ def update_insider() -> pd.DataFrame:
     old = pd.read_csv(path, parse_dates=["filed", "traded"]) if path.exists() else pd.DataFrame()
     done_path = WIDE_DIR / "insider_quarters.txt"
     done = set(done_path.read_text().split()) if done_path.exists() else set()
-    tickers = set(members())
+    tickers = set(research_symbols())  # filings carry the ticker of their day: the leavers' too
     import hashlib
 
     stamp = "members:" + hashlib.sha1(",".join(sorted(tickers)).encode()).hexdigest()[:12]
@@ -512,6 +576,14 @@ def update_short_volume(start: str = START, name: str = "short_volume", keep_day
     old = pd.read_csv(path, dtype={"date": str}) if path.exists() else pd.DataFrame()
     done = set(done_path.read_text().split()) if done_path.exists() else set()
     tickers = set(members())
+    if keep_days is None:  # the research copy: every stock ever a member; a new list reads every day again
+        import hashlib
+
+        tickers = set(research_symbols())
+        stamp = "members:" + hashlib.sha1(",".join(sorted(tickers)).encode()).hexdigest()[:12]
+        if stamp not in done and wide_pit_ready():
+            old, done = pd.DataFrame(), set()
+        done.add(stamp)
     days = [d.strftime("%Y%m%d") for d in pd.bdate_range(start, pd.Timestamp.now(tz="America/New_York").tz_localize(None))]
     todo = [d for d in days if d not in done]
     recent = (pd.Timestamp.now() - pd.Timedelta(days=5)).strftime("%Y%m%d")
@@ -537,6 +609,12 @@ def update_short_volume(start: str = START, name: str = "short_volume", keep_day
     return old
 
 
+def wide_pit_ready() -> bool:
+    from . import wide_pit
+
+    return wide_pit.available()
+
+
 def load_short_volume() -> pd.DataFrame:
     """Short share of off-exchange volume per (day, stock) as a wide table, usable from the NEXT session
     (FINRA publishes it after the close)."""
@@ -555,15 +633,24 @@ def costs(symbols) -> dict:
     """US stocks: no commission at Alpaca, regulatory fees on sales, slippage by company size."""
     from .engine import Costs
 
+    from . import wide_pit
+
     idx = index_of()
+    if wide_pit.available():  # a company that left: the index it was last in
+        idx = wide_pit.last_index() | idx
     return {s: Costs(fee_bps=0.2, slippage_bps=SLIPPAGE_BPS.get(idx.get(s), 15), short_borrow_apr=0.01)
             for s in symbols}
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    from . import wide_pit
+
     m = members(refresh=True)
     print(f"{len(m)} members")
+    if wide_pit.available():  # today's lists close / open membership spells (the past never changes)
+        h = wide_pit.update()
+        print(f"membership history: {h['symbol'].nunique()} stocks ever members, {int(h['end'].isna().sum())} today")
     ins = update_insider()
     print(f"insider: {len(ins)} trades, {int((ins['code'] == 'P').sum()) if len(ins) else 0} open-market purchases")
     d = update_bars()

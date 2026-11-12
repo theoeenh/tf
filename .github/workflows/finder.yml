@@ -1,6 +1,8 @@
 # Nightly strategy finder: new families first, then rounds of improved children of the best
 # candidates (aimed at why they failed). Research only: nothing here trades or touches Alpaca.
-# Every attempt is written to paper/finder/registry.csv (the deflated Sharpe bar rises with it).
+# Every attempt is written to paper/finder/registry.csv, with its weekly returns in paper/finder/returns/
+# (the luck check counts every attempt: algo/luck.py). The S&P 1500 research uses the members of each day
+# (algo/wide_pit.py; data/wide/members_history.csv is brought up to date here every night).
 # The vault period stays sealed: only `python -m algo.finder vault <id>`, run by hand once per
 # candidate that passed every gate, ever loads it.
 name: finder
@@ -96,7 +98,7 @@ jobs:
             git show "origin/$branch:paper/finder/registry.csv" > "$RUNNER_TEMP/remote.csv" 2>/dev/null || true
             python -m algo.finder merge "$RUNNER_TEMP/remote.csv"
             python -m algo.finder report
-            git add paper/finder paper/forward data/wide/members.csv data/wide/fundamentals.csv.gz
+            git add paper/finder paper/forward data/wide/members.csv data/wide/members_history.csv data/wide/fundamentals.csv.gz
             git diff --cached --quiet || git commit -q -m "finder: nightly loop $(date -u +'%Y-%m-%d')"
             git checkout -q -- .  # other files the run touched (downloaded data) are not saved here
             git clean -fdq data/  # nor new data files (they would block the rebase if committed meanwhile)

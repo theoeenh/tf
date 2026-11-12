@@ -1,0 +1,165 @@
+# One-off (started by hand): every strategy the finder ever tried is scored again from scratch, after a
+# change of the research data or of the scoring. 2026-11-12: the S&P 1500 research now uses the members
+# of each day, companies that later left included (algo/wide_pit.py), and keeps each try's weekly
+# returns for the luck check (algo/luck.py). Research only: nothing here trades or touches an account.
+# The registry is the list of tries; nothing new is tried. The sealed vault period is never loaded.
+name: finder-rescore
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "strategies per slice (empty = all; a small number = a trial run that saves nothing)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: finder  # never at the same time as the nightly finder: both write the registry
+  cancel-in-progress: false
+
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/wide/daily.csv.gz
+            data/wide/insider.csv.gz
+            data/wide/insider_quarters.txt
+            data/wide/ml_scores_*.pkl
+            data/wide/ml_insider_*.pkl
+            data/wide/earnings.csv.gz
+            data/wide/short_volume.csv.gz
+            data/wide/short_volume_days.txt
+          key: wide-data-${{ github.run_id }}
+          restore-keys: wide-data-
+      # prices, insider filings and short volume of every stock that was ever a member (Alpaca market
+      # data: account A's keys, read only, no trading call)
+      - name: Research data for every member of each day
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+        run: |
+          python -m algo.wide
+          python - <<'PY'
+          from algo import wide, wide_pit
+          p = wide.load_daily_pit()
+          gone = sum(1 for df in p.values() if df["Volume"].iloc[-1] == 0)
+          print(f"research prices: {len(p)} stocks ever members with bars, {gone} of them no longer trading")
+          assert wide_pit.available() and len(p) > 1500, "the membership history or the prices are missing"
+          PY
+
+  score:
+    needs: data
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]  # 16 = the ML families
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/*_alpaca.csv
+            data/news
+            data/social
+          key: market-data-none
+          restore-keys: market-data-
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/wide/daily.csv.gz
+            data/wide/insider.csv.gz
+            data/wide/insider_quarters.txt
+            data/wide/ml_scores_*.pkl
+            data/wide/ml_insider_*.pkl
+            data/wide/earnings.csv.gz
+            data/wide/short_volume.csv.gz
+            data/wide/short_volume_days.txt
+          key: wide-data-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Score this slice again
+        env:  # market data only (the hourly bars are brought up to date); no trading call
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          OMP_NUM_THREADS: "1"
+          OPENBLAS_NUM_THREADS: "1"
+        run: >
+          python -m algo.finder rescore --shard ${{ matrix.shard }} --of 16 --workers 4
+          ${{ inputs.limit && format('--limit {0}', inputs.limit) || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rescore-part-${{ matrix.shard }}
+          path: paper/finder/rescore/
+          if-no-files-found: warn
+          retention-days: 14
+
+  merge:
+    needs: score
+    if: always() && needs.data.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PAPER_BRANCH || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rescore-part-*
+          path: paper/finder/rescore/
+          merge-multiple: true
+      - name: Put the slices together (the registry, the weekly returns, old against new)
+        run: |
+          ls paper/finder/rescore/
+          python -m algo.finder rescore-merge
+          head -40 paper/finder/report.md
+      - name: Save (not for a trial run)
+        if: inputs.limit == ''
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          branch="$(git rev-parse --abbrev-ref HEAD)"
+          rm -rf paper/finder/rescore
+          for i in 1 2 3 4 5; do
+            git add paper/finder
+            git diff --cached --quiet || git commit -q -m "finder: every strategy scored again on the members of each day ($(date -u +'%Y-%m-%d'))"
+            git fetch -q origin "$branch"
+            git rebase -X theirs -q "origin/$branch" && git push -q && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
+          done
+          exit 1
+      - name: Alert the phone
+        if: always() && inputs.limit == ''
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: >
+          python -c "from algo import notify; notify.send('finder: every strategy scored again',
+          'Status: ${{ job.status }}. See paper/finder/report.md (GitHub Actions run ${{ github.run_id }}).',
+          'bar_chart', 'default')"

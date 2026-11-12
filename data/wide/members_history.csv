@@ -1,0 +1,3068 @@
+symbol,index,start,end,sector
+A,sp500,2015-12-01,,Health Care
+AA,sp500,2015-12-01,2016-11-01,Materials
+AA,sp400,2022-01-01,,Materials
+AAA,sp500,2025-02-01,2025-03-01,Health Care
+AAL,sp500,2015-12-01,2024-10-01,Industrials
+AAL,sp400,2024-10-01,,Industrials
+AAMI,sp600,2025-10-01,,Financials
+AAN,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+AAN,sp600,2021-04-01,2023-10-01,Consumer Discretionary
+AAOI,sp600,2018-09-01,2021-12-01,Information Technology
+AAON,sp600,2018-09-01,2024-06-01,Industrials
+AAON,sp400,2024-06-01,,Industrials
+AAP,sp400,2015-12-01,2016-12-01,Consumer Discretionary
+AAP,sp500,2015-12-01,2023-09-01,Consumer Discretionary
+AAP,sp600,2023-09-01,,Consumer Discretionary
+AAPL,sp500,2015-12-01,,Information Technology
+AAT,sp600,2018-09-01,,Real Estate
+AAWW,sp600,2018-09-01,2023-04-01,Industrials
+AAXN,sp600,2018-09-01,2019-10-01,Industrials
+AAXN,sp400,2019-10-01,2021-04-01,Industrials
+ABBV,sp500,2015-12-01,,Health Care
+ABC,sp500,2015-12-01,2023-09-01,Health Care
+ABCB,sp600,2018-09-01,,Financials
+ABG,sp600,2018-09-01,,Consumer Discretionary
+ABM,sp600,2018-09-01,,Industrials
+ABMD,sp400,2016-12-01,2018-08-01,Health Care
+ABMD,sp500,2018-06-01,2023-01-01,Health Care
+ABNB,sp500,2023-10-01,,Consumer Discretionary
+ABR,sp600,2023-07-01,,Financials
+ABT,sp500,2015-12-01,,Health Care
+ABTX,sp600,2021-04-01,2022-11-01,Financials
+ACA,sp600,2021-04-01,,Industrials
+ACAD,sp600,2025-02-01,,Health Care
+ACC,sp400,2015-12-01,2022-08-01,Real Estate
+ACE,sp500,2015-12-01,2016-02-01,Financials
+ACET,sp600,2018-09-01,2020-08-01,Health Care
+ACGL,sp500,2022-11-01,,Financials
+ACHC,sp400,2017-05-01,2025-10-01,Health Care
+ACHC,sp600,2025-10-01,,Health Care
+ACI,sp400,2025-04-01,,Consumer Staples
+ACIW,sp400,2015-12-01,2023-12-01,Information Technology
+ACIW,sp600,2023-12-01,,Information Technology
+ACLS,sp600,2018-09-01,,Information Technology
+ACM,sp400,2015-12-01,,Industrials
+ACMR,sp600,2025-12-01,,Information Technology
+ACN,sp500,2015-12-01,,Information Technology
+ACOR,sp600,2018-09-01,2020-08-01,Health Care
+ACT,sp600,2025-05-01,,Financials
+ACXM,sp400,2015-12-01,2018-12-01,Information Technology
+ACXM,sp600,2018-12-01,2020-08-01,Information Technology
+ADAM,sp600,2025-10-01,,Real Estate
+ADBE,sp500,2015-12-01,,Information Technology
+ADC,sp600,2018-09-01,2023-03-01,Real Estate
+ADC,sp400,2023-03-01,,Real Estate
+ADEA,sp600,2022-11-01,,Information Technology
+ADI,sp500,2015-12-01,,Information Technology
+ADIG,sp600,2026-09-01,,Information Technology
+ADM,sp500,2015-12-01,,Consumer Staples
+ADMA,sp600,2024-10-01,,Health Care
+ADNT,sp400,2018-09-01,2024-10-01,Consumer Discretionary
+ADNT,sp600,2024-10-01,,Consumer Discretionary
+ADP,sp500,2015-12-01,,Industrials
+ADS,sp500,2015-12-01,2020-08-01,Information Technology
+ADS,sp400,2021-01-01,2022-05-01,Information Technology
+ADSK,sp500,2015-12-01,,Information Technology
+ADT,sp500,2015-12-01,2016-06-01,Industrials
+ADT,sp600,2026-03-01,,Consumer Discretionary
+ADTN,sp600,2018-09-01,2024-07-01,Information Technology
+ADUS,sp600,2021-04-01,,Health Care
+ADVS,sp400,2015-12-01,2016-12-01,Information Technology
+AEE,sp500,2015-12-01,,Utilities
+AEGN,sp600,2018-09-01,2021-06-01,Industrials
+AEIS,sp600,2018-09-01,2026-03-01,Information Technology
+AEIS,sp400,2026-02-01,,Information Technology
+AEL,sp600,2018-09-01,2024-06-01,Financials
+AEO,sp400,2015-12-01,2022-10-01,Consumer Discretionary
+AEO,sp600,2022-10-01,,Consumer Discretionary
+AEP,sp500,2015-12-01,,Utilities
+AES,sp500,2015-12-01,,Utilities
+AESI,sp600,2024-12-01,,Energy
+AET,sp500,2015-12-01,2019-01-01,Health Care
+AFG,sp400,2015-12-01,,Financials
+AFL,sp500,2015-12-01,,Financials
+AGCO,sp400,2015-12-01,,Industrials
+AGN,sp500,2015-12-01,2020-06-01,Health Care
+AGNC,sp400,2026-10-01,,Financials
+AGNT,sp600,2026-06-01,,Real Estate
+AGO,sp600,2021-04-01,,Financials
+AGTI,sp600,2023-01-01,2024-06-01,Health Care
+AGX,sp600,2026-04-01,,Industrials
+AGYS,sp600,2018-09-01,,Information Technology
+AHCO,sp600,2022-09-01,,Health Care
+AHH,sp600,2018-09-01,2026-04-01,Real Estate
+AHL,sp400,2015-12-01,2019-10-01,Financials
+AHL,sp600,2019-10-01,2021-04-01,Financials
+AHR,sp400,2026-02-01,,Real Estate
+AIG,sp500,2015-12-01,,Financials
+AIN,sp600,2018-09-01,,Industrials
+AIR,sp600,2018-09-01,,Industrials
+AIRC,sp400,2021-01-01,2024-07-01,Real Estate
+AIRE,sp400,2025-02-01,2025-03-01,Information Technology
+AIT,sp600,2018-09-01,2024-04-01,Industrials
+AIT,sp400,2024-04-01,,Industrials
+AIV,sp500,2015-12-01,2021-01-01,Real Estate
+AIZ,sp500,2015-12-01,,Financials
+AJG,sp400,2015-12-01,2016-12-01,Financials
+AJG,sp500,2016-06-01,,Financials
+AJRD,sp600,2018-09-01,2023-09-01,Industrials
+AKAM,sp500,2015-12-01,,Information Technology
+AKR,sp600,2018-09-01,,Real Estate
+AKRX,sp400,2015-12-01,2020-01-01,Health Care
+AKRX,sp600,2020-01-01,2020-11-01,Health Care
+AKRX,sp400,2020-11-01,2021-01-01,Health Care
+AKS,sp600,2018-09-01,2021-04-01,Materials
+AL,sp600,2024-04-01,2026-05-01,Industrials
+ALB,sp400,2015-12-01,2016-12-01,Materials
+ALB,sp500,2016-08-01,,Materials
+ALE,sp400,2018-04-01,2026-01-01,Utilities
+ALEX,sp400,2015-12-01,2020-12-01,Real Estate
+ALEX,sp600,2020-12-01,2026-04-01,Real Estate
+ALG,sp600,2018-09-01,,Industrials
+ALGM,sp400,2023-01-01,,Information Technology
+ALGN,sp400,2015-12-01,2017-08-01,Health Care
+ALGN,sp500,2017-07-01,,Health Care
+ALGT,sp600,2018-09-01,,Industrials
+ALHC,sp600,2026-06-01,,Health Care
+ALK,sp400,2015-12-01,2016-12-01,Industrials
+ALK,sp500,2016-06-01,2024-01-01,Industrials
+ALK,sp600,2024-01-01,2025-04-01,Industrials
+ALK,sp400,2025-04-01,,Industrials
+ALKS,sp600,2024-01-01,,Health Care
+ALL,sp500,2015-12-01,,Financials
+ALLE,sp500,2015-12-01,,Industrials
+ALLY,sp400,2023-11-01,,Financials
+ALRM,sp600,2018-09-01,,Financials
+ALSN,sp400,2026-08-01,,Industrials
+ALTM,sp400,2024-01-01,2025-04-01,Materials
+ALTR,sp500,2015-12-01,2016-01-01,Information Technology
+ALTR,sp400,2024-07-01,2025-04-01,Information Technology
+ALV,sp400,2023-04-01,,Consumer Discretionary
+ALXN,sp500,2015-12-01,2021-08-01,Health Care
+AM,sp400,2019-11-01,,Energy
+AMAG,sp600,2018-09-01,2021-04-01,Health Care
+AMAT,sp500,2015-12-01,,Information Technology
+AMBC,sp600,2018-09-01,2025-04-01,Financials
+AMCR,sp500,2019-07-01,,Materials
+AMCX,sp400,2015-12-01,2021-01-01,Communication Services
+AMCX,sp600,2021-04-01,2024-10-01,Consumer Discretionary
+AMD,sp400,2015-12-01,2017-04-01,Information Technology
+AMD,sp500,2017-04-01,,Information Technology
+AME,sp500,2015-12-01,,Industrials
+AMED,sp600,2018-09-01,2019-10-01,Health Care
+AMED,sp400,2019-10-01,2025-09-01,Health Care
+AMEH,sp600,2021-07-01,2024-06-01,Health Care
+AMG,sp500,2015-12-01,2020-01-01,Financials
+AMG,sp400,2020-11-01,,Financials
+AMGN,sp500,2015-12-01,,Health Care
+AMH,sp400,2024-03-01,,Real Estate
+AMKR,sp400,2021-04-01,,Information Technology
+AMN,sp600,2018-09-01,,Health Care
+AMP,sp500,2015-12-01,,Financials
+AMPH,sp600,2018-09-01,,Health Care
+AMR,sp600,2023-12-01,,Materials
+AMRX,sp600,2026-02-01,,Health Care
+AMSF,sp600,2018-09-01,,Financials
+AMT,sp500,2015-12-01,,Real Estate
+AMTM,sp500,2024-10-01,2025-01-01,Industrials
+AMTM,sp600,2025-01-01,,Industrials
+AMWD,sp600,2018-09-01,2026-07-01,Industrials
+AMZN,sp500,2015-12-01,,Consumer Discretionary
+AN,sp500,2015-12-01,2017-09-01,Consumer Discretionary
+AN,sp400,2017-09-01,,Consumer Discretionary
+ANDE,sp600,2018-09-01,,Consumer Staples
+ANDV,sp500,2017-08-01,2018-10-01,Energy
+ANET,sp500,2018-09-01,,Information Technology
+ANF,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+ANF,sp600,2018-09-01,2024-08-01,Consumer Discretionary
+ANF,sp400,2024-08-01,,Consumer Discretionary
+ANGI,sp600,2025-05-01,2026-04-01,Communication Services
+ANGO,sp600,2018-09-01,2023-10-01,Health Care
+ANIK,sp600,2018-09-01,2023-10-01,Health Care
+ANIP,sp600,2018-09-01,,Health Care
+ANN,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+ANSS,sp400,2015-12-01,2017-08-01,Information Technology
+ANSS,sp500,2017-07-01,2025-08-01,Information Technology
+ANTM,sp500,2015-12-01,2022-07-01,Health Care
+AOL,sp400,2015-12-01,2017-01-01,Information Technology
+AON,sp500,2015-12-01,,Financials
+AORT,sp600,2022-02-01,,Health Care
+AOS,sp400,2015-12-01,2017-08-01,Industrials
+AOS,sp500,2017-08-01,,Industrials
+AOSL,sp600,2022-06-01,,Information Technology
+APA,sp500,2015-12-01,,Energy
+APAM,sp600,2023-07-01,,Financials
+APC,sp500,2015-12-01,2019-09-01,Energy
+APD,sp500,2015-12-01,,Materials
+APEI,sp600,2018-09-01,2022-10-01,Consumer Discretionary
+APG,sp400,2025-07-01,,Industrials
+APH,sp500,2015-12-01,,Information Technology
+APLE,sp600,2023-10-01,,Real Estate
+APLS,sp600,2026-03-01,2026-06-01,Health Care
+APO,sp500,2025-01-01,,Financials
+APOG,sp600,2018-09-01,,Industrials
+APOL,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+APP,sp500,2025-10-01,,Communication Services
+APPF,sp400,2024-04-01,,Information Technology
+APPS,sp400,2021-10-01,2022-07-01,Information Technology
+APPS,sp600,2022-08-01,2024-04-01,Information Technology
+APTV,sp500,2018-01-01,,Consumer Discretionary
+APY,sp400,2018-07-01,2021-01-01,Energy
+AR,sp400,2022-11-01,,Energy
+ARCB,sp600,2018-09-01,,Industrials
+ARCH,sp600,2024-04-01,2025-02-01,Materials
+ARE,sp400,2015-12-01,2017-04-01,Real Estate
+ARE,sp500,2017-04-01,,Real Estate
+ARES,sp500,2026-01-01,,Financials
+ARG,sp500,2015-12-01,2016-06-01,Materials
+ARI,sp600,2018-09-01,2026-08-01,Real Estate
+ARLO,sp600,2021-04-01,,Information Technology
+ARMK,sp400,2023-04-01,,Consumer Discretionary
+ARNC,sp500,2016-11-01,2020-05-01,Industrials
+ARNC,sp600,2021-04-01,2023-09-01,Materials
+AROC,sp600,2018-09-01,,Energy
+ARR,sp600,2018-09-01,,Real Estate
+ARRS,sp400,2015-12-01,2019-10-01,Information Technology
+ARRS,sp600,2019-10-01,2021-04-01,Information Technology
+ARW,sp400,2015-12-01,,Information Technology
+ARWR,sp400,2020-11-01,2025-02-01,Health Care
+ARWR,sp600,2025-02-01,2026-03-01,Health Care
+ARWR,sp400,2026-03-01,,Health Care
+ASB,sp400,2015-12-01,,Financials
+ASGN,sp600,2018-09-01,2018-12-01,Information Technology
+ASGN,sp400,2018-11-01,2026-04-01,Information Technology
+ASGN,sp600,2026-04-01,2026-06-01,Information Technology
+ASH,sp400,2015-12-01,,Materials
+ASIX,sp600,2018-09-01,2026-01-01,Materials
+ASNA,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+ASNA,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+ASO,sp600,2022-04-01,,Consumer Discretionary
+ASRT,sp600,2018-12-01,2021-04-01,Health Care
+ASTE,sp600,2018-09-01,,Industrials
+ASTH,sp600,2024-06-01,,Health Care
+ATEN,sp600,2022-05-01,,Information Technology
+ATGE,sp400,2017-11-01,2021-08-01,Consumer Discretionary
+ATGE,sp600,2021-08-01,2026-05-01,Consumer Discretionary
+ATI,sp400,2017-01-01,2021-01-01,Industrials
+ATI,sp600,2021-04-01,2025-04-01,Materials
+ATI,sp400,2025-04-01,,Industrials
+ATML,sp400,2015-12-01,2017-01-01,Information Technology
+ATMU,sp600,2026-05-01,,Industrials
+ATNI,sp600,2018-09-01,2024-07-01,Communication Services
+ATO,sp400,2015-12-01,2021-01-01,Utilities
+ATO,sp500,2019-03-01,,Utilities
+ATR,sp400,2015-12-01,,Materials
+ATU,sp600,2018-09-01,2021-04-01,Industrials
+ATVI,sp500,2015-12-01,2023-11-01,Communication Services
+ATW,sp400,2015-12-01,2016-04-01,Energy
+AUB,sp600,2023-04-01,,Financials
+AVA,sp600,2018-09-01,,Utilities
+AVAV,sp600,2018-09-01,2025-08-01,Industrials
+AVAV,sp400,2025-08-01,,Industrials
+AVB,sp500,2015-12-01,2026-09-01,Real Estate
+AVD,sp600,2018-09-01,2023-11-01,Materials
+AVGO,sp500,2015-12-01,,Information Technology
+AVID,sp600,2022-09-01,2023-12-01,Information Technology
+AVNS,sp600,2018-09-01,2018-12-01,Health Care
+AVNS,sp400,2018-11-01,2021-06-01,Health Care
+AVNS,sp600,2021-06-01,2026-08-01,Health Care
+AVNT,sp400,2021-01-01,,Materials
+AVP,sp400,2015-12-01,2018-04-01,Consumer Staples
+AVP,sp600,2018-09-01,2021-04-01,Consumer Staples
+AVT,sp400,2015-12-01,,Information Technology
+AVTA,sp600,2023-03-01,2023-12-01,Financials
+AVTR,sp400,2024-08-01,,Health Care
+AVY,sp500,2015-12-01,,Materials
+AWI,sp600,2024-01-01,,Industrials
+AWK,sp500,2016-04-01,,Utilities
+AWR,sp600,2018-09-01,,Utilities
+AX,sp600,2021-04-01,,Financials
+AXE,sp600,2018-09-01,2021-04-01,Information Technology
+AXL,sp600,2018-09-01,2026-05-01,Consumer Discretionary
+AXON,sp400,2021-04-01,2023-05-01,Industrials
+AXON,sp500,2023-06-01,,Industrials
+AXP,sp500,2015-12-01,,Financials
+AXTA,sp400,2023-04-01,,Materials
+AYI,sp400,2015-12-01,2017-01-01,Industrials
+AYI,sp500,2016-06-01,2018-07-01,Industrials
+AYI,sp400,2018-08-01,,Industrials
+AZO,sp500,2015-12-01,,Consumer Discretionary
+AZPN,sp400,2021-06-01,2025-04-01,Information Technology
+AZTA,sp400,2021-12-01,2024-12-01,Health Care
+AZTA,sp600,2024-12-01,,Health Care
+AZZ,sp600,2018-09-01,,Industrials
+B,sp600,2018-09-01,2025-02-01,Industrials
+BA,sp500,2015-12-01,,Industrials
+BABY,sp600,2018-09-01,2021-04-01,Health Care
+BAC,sp500,2015-12-01,,Financials
+BAH,sp400,2026-01-01,,Industrials
+BALL,sp500,2022-06-01,,Materials
+BANC,sp600,2018-09-01,,Financials
+BANF,sp600,2021-04-01,,Financials
+BANR,sp600,2018-09-01,,Financials
+BAX,sp500,2015-12-01,,Health Care
+BBBY,sp500,2015-12-01,2017-08-01,Consumer Discretionary
+BBBY,sp400,2017-08-01,2021-01-01,Consumer Discretionary
+BBBY,sp600,2021-04-01,2023-04-01,Consumer Discretionary
+BBT,sp500,2015-12-01,2020-01-01,Financials
+BBT,sp600,2025-10-01,,Financials
+BBWI,sp500,2021-08-01,2024-10-01,Consumer Discretionary
+BBWI,sp600,2024-10-01,2025-04-01,Consumer Discretionary
+BBWI,sp400,2025-04-01,,Consumer Discretionary
+BBY,sp500,2015-12-01,,Consumer Discretionary
+BC,sp400,2015-12-01,,Consumer Discretionary
+BCC,sp600,2018-09-01,,Industrials
+BCEI,sp600,2018-12-01,2021-12-01,Energy
+BCO,sp400,2017-10-01,,Industrials
+BCOR,sp600,2018-09-01,2023-03-01,Financials
+BCPC,sp600,2018-09-01,,Materials
+BCR,sp500,2015-12-01,2018-02-01,Health Care
+BDC,sp400,2015-12-01,,Information Technology
+BDN,sp600,2021-04-01,2026-01-01,Real Estate
+BDX,sp500,2015-12-01,,Health Care
+BE,sp500,2026-10-01,,Industrials
+BEAT,sp600,2018-09-01,2021-04-01,Health Care
+BEAV,sp400,2015-12-01,2017-05-01,Industrials
+BEL,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+BELFB,sp600,2018-09-01,2021-08-01,Information Technology
+BEN,sp500,2015-12-01,,Financials
+BERY,sp400,2023-07-01,2025-04-01,Materials
+BF-B,sp500,2015-12-01,,Consumer Staples
+BFAM,sp600,2026-06-01,,Consumer Discretionary
+BFGV,sp600,2018-09-01,2018-12-01,
+BFH,sp400,2022-05-01,2022-11-01,Financials
+BFH,sp600,2022-11-01,,Financials
+BFS,sp600,2018-09-01,,Real Estate
+BG,sp500,2023-04-01,,Consumer Staples
+BGC,sp600,2024-04-01,,Financials
+BGFV,sp600,2018-12-01,2021-04-01,Consumer Discretionary
+BGG,sp600,2018-09-01,2021-04-01,Industrials
+BGS,sp600,2018-09-01,2025-10-01,Consumer Staples
+BHE,sp600,2018-09-01,,Information Technology
+BHF,sp500,2017-09-01,2019-04-01,Financials
+BHF,sp400,2019-10-01,,Financials
+BHGE,sp500,2017-07-01,2019-11-01,Energy
+BHI,sp500,2015-12-01,2017-07-01,Energy
+BHLB,sp600,2018-09-01,2025-10-01,Financials
+BID,sp400,2015-12-01,2019-11-01,Consumer Discretionary
+BID,sp600,2019-11-01,2021-04-01,Consumer Discretionary
+BID,sp400,2020-11-01,2020-12-01,Consumer Discretionary
+BIG,sp400,2015-12-01,2019-10-01,Consumer Discretionary
+BIG,sp600,2019-10-01,2023-07-01,Consumer Discretionary
+BIIB,sp500,2015-12-01,,Health Care
+BILL,sp400,2025-01-01,,Information Technology
+BIO,sp400,2015-12-01,2021-01-01,Health Care
+BIO,sp500,2020-08-01,2024-10-01,Health Care
+BIO,sp400,2024-10-01,,Health Care
+BIVV,sp400,2017-02-01,2018-04-01,Health Care
+BJ,sp400,2020-11-01,,Consumer Staples
+BJRI,sp600,2018-09-01,,Consumer Discretionary
+BK,sp500,2015-12-01,2026-06-01,Financials
+BKE,sp600,2018-09-01,,Consumer Discretionary
+BKH,sp400,2015-12-01,,Utilities
+BKNG,sp500,2018-03-01,,Consumer Discretionary
+BKR,sp500,2019-11-01,,Energy
+BKS,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+BKU,sp600,2021-04-01,,Financials
+BL,sp600,2024-04-01,,Information Technology
+BLD,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+BLD,sp400,2021-01-01,2026-08-01,Consumer Discretionary
+BLDR,sp400,2021-01-01,2024-01-01,Industrials
+BLDR,sp500,2024-01-01,2026-10-01,Industrials
+BLFS,sp600,2021-09-01,,Health Care
+BLK,sp500,2015-12-01,,Financials
+BLKB,sp400,2017-07-01,2026-07-01,Information Technology
+BLKB,sp600,2026-08-01,,Information Technology
+BLL,sp500,2015-12-01,2022-06-01,Materials
+BLMN,sp600,2021-04-01,2026-04-01,Consumer Discretionary
+BMI,sp600,2018-09-01,,Information Technology
+BMR,sp400,2015-12-01,2017-01-01,Financials
+BMRN,sp400,2024-07-01,,Health Care
+BMS,sp400,2015-12-01,2019-10-01,Materials
+BMS,sp600,2019-10-01,2021-04-01,Materials
+BMY,sp500,2015-12-01,,Health Care
+BNED,sp600,2018-09-01,2022-05-01,Consumer Discretionary
+BNL,sp600,2026-05-01,,Real Estate
+BNY,sp500,2026-06-01,,Financials
+BOFI,sp600,2018-09-01,2021-04-01,Financials
+BOH,sp400,2015-12-01,2023-07-01,Financials
+BOH,sp600,2023-07-01,,Financials
+BOOM,sp600,2021-04-01,2023-07-01,Energy
+BOOT,sp600,2021-04-01,,Consumer Discretionary
+BOX,sp600,2024-04-01,,Information Technology
+BPFH,sp600,2018-09-01,2021-08-01,Financials
+BR,sp400,2015-12-01,2018-08-01,Information Technology
+BR,sp500,2018-07-01,,Industrials
+BRBR,sp400,2022-04-01,2026-07-01,Consumer Staples
+BRC,sp600,2018-09-01,,Industrials
+BRCD,sp400,2017-01-01,2017-11-01,Information Technology
+BRCM,sp500,2015-12-01,2016-02-01,Information Technology
+BRK-B,sp500,2015-12-01,,Financials
+BRKL,sp600,2018-09-01,2025-10-01,Financials
+BRKR,sp400,2022-01-01,,Health Care
+BRKS,sp600,2018-09-01,2021-04-01,Information Technology
+BRKS,sp400,2021-02-01,2021-12-01,Information Technology
+BRO,sp400,2015-12-01,2021-10-01,Financials
+BRO,sp500,2021-10-01,,Financials
+BROS,sp400,2026-02-01,,Consumer Discretionary
+BRS,sp600,2018-09-01,2021-04-01,Energy
+BRX,sp400,2019-10-01,,Real Estate
+BSIG,sp600,2021-04-01,2025-10-01,Financials
+BSX,sp500,2015-12-01,,Health Care
+BSY,sp400,2025-11-01,,Information Technology
+BTSG,sp600,2025-11-01,2026-08-01,Health Care
+BTSG,sp400,2026-08-01,,Health Care
+BTU,sp400,2015-12-01,2017-01-01,Energy
+BTU,sp600,2024-02-01,,Energy
+BURL,sp400,2023-12-01,,Consumer Discretionary
+BWA,sp500,2015-12-01,2025-04-01,Consumer Discretionary
+BWA,sp600,2025-04-01,2026-01-01,Consumer Discretionary
+BWA,sp400,2026-01-01,,Consumer Discretionary
+BWLD,sp400,2015-12-01,2018-03-01,Consumer Discretionary
+BWXT,sp400,2023-07-01,,Industrials
+BX,sp500,2023-10-01,,Financials
+BXLT,sp500,2015-12-01,2016-07-01,Health Care
+BXMT,sp600,2023-10-01,,Financials
+BXP,sp500,2015-12-01,,Real Estate
+BXS,sp400,2015-12-01,2021-11-01,Financials
+BYD,sp400,2018-03-01,,Consumer Discretionary
+C,sp500,2015-12-01,,Financials
+CA,sp500,2015-12-01,2018-12-01,Information Technology
+CAA,sp400,2017-01-01,2018-03-01,Consumer Discretionary
+CAB,sp400,2015-12-01,2017-11-01,Consumer Discretionary
+CABO,sp400,2017-01-01,2024-05-01,Communication Services
+CABO,sp600,2024-05-01,2026-08-01,Communication Services
+CACC,sp600,2026-08-01,,Financials
+CACI,sp600,2018-09-01,2019-10-01,Information Technology
+CACI,sp400,2019-10-01,,Industrials
+CADE,sp600,2021-04-01,2021-11-01,Financials
+CADE,sp400,2021-11-01,2026-02-01,Financials
+CAG,sp500,2015-12-01,2026-07-01,Consumer Staples
+CAG,sp600,2026-08-01,,Consumer Staples
+CAH,sp500,2015-12-01,,Health Care
+CAKE,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+CAKE,sp600,2021-04-01,,Consumer Discretionary
+CAL,sp600,2018-09-01,2025-12-01,Consumer Discretionary
+CALM,sp600,2018-09-01,,Consumer Staples
+CALX,sp400,2022-02-01,2024-04-01,Information Technology
+CALX,sp600,2024-04-01,,Information Technology
+CALY,sp600,2026-04-01,,Consumer Discretionary
+CAM,sp500,2015-12-01,2016-05-01,Energy
+CAMP,sp600,2018-09-01,2022-10-01,Information Technology
+CAR,sp400,2016-12-01,,Industrials
+CARA,sp600,2021-05-01,2023-07-01,Health Care
+CARG,sp600,2023-07-01,,Communication Services
+CARR,sp500,2020-05-01,,Industrials
+CARS,sp400,2017-07-01,2019-11-01,Information Technology
+CARS,sp600,2019-11-01,2021-04-01,Communication Services
+CARS,sp600,2022-01-01,2026-04-01,Communication Services
+CART,sp400,2025-02-01,,Consumer Staples
+CASH,sp600,2018-09-01,,Financials
+CASY,sp400,2017-01-01,2026-05-01,Consumer Staples
+CASY,sp500,2026-05-01,,Consumer Staples
+CAT,sp500,2015-12-01,,Industrials
+CATM,sp600,2018-09-01,2021-07-01,Information Technology
+CATO,sp600,2018-09-01,2023-01-01,Consumer Discretionary
+CATY,sp400,2015-12-01,2023-11-01,Financials
+CATY,sp600,2023-10-01,,Financials
+CAVA,sp400,2025-04-01,,Consumer Discretionary
+CB,sp500,2015-12-01,,Financials
+CBB,sp600,2018-09-01,2021-10-01,Communication Services
+CBG,sp500,2015-12-01,2018-04-01,Real Estate
+CBL,sp600,2018-09-01,2021-04-01,Real Estate
+CBM,sp600,2018-09-01,2021-04-01,Health Care
+CBOE,sp400,2015-12-01,2017-03-01,Financials
+CBOE,sp500,2017-03-01,,Financials
+CBRE,sp500,2018-04-01,,Real Estate
+CBRL,sp400,2017-01-01,2023-04-01,Consumer Discretionary
+CBRL,sp600,2023-04-01,,Consumer Discretionary
+CBS,sp500,2015-12-01,2020-01-01,Communication Services
+CBSH,sp400,2015-12-01,,Financials
+CBT,sp400,2015-12-01,,Materials
+CBU,sp600,2018-09-01,,Financials
+CC,sp400,2017-02-01,2025-04-01,Materials
+CC,sp600,2025-04-01,,Materials
+CCE,sp500,2015-12-01,2016-06-01,Consumer Staples
+CCI,sp500,2015-12-01,,Real Estate
+CCK,sp400,2023-07-01,,Materials
+CCL,sp500,2015-12-01,,Consumer Discretionary
+CCMP,sp600,2018-09-01,2020-11-01,Information Technology
+CCMP,sp400,2020-11-01,2022-08-01,Information Technology
+CCOI,sp600,2018-09-01,,Communication Services
+CCP,sp400,2017-01-01,2017-10-01,Real Estate
+CCRN,sp600,2018-09-01,2024-10-01,Health Care
+CCS,sp600,2021-04-01,,Consumer Discretionary
+CCSI,sp600,2021-11-01,2024-04-01,Information Technology
+CDAY,sp400,2020-11-01,2021-10-01,Information Technology
+CDAY,sp500,2021-10-01,2024-02-01,Industrials
+CDE,sp400,2026-07-01,,Materials
+CDK,sp400,2015-12-01,2022-07-01,Information Technology
+CDMO,sp600,2021-11-01,2024-01-01,Health Care
+CDNS,sp400,2015-12-01,2017-10-01,Information Technology
+CDNS,sp500,2017-10-01,,Information Technology
+CDP,sp400,2023-11-01,,Real Estate
+CDR,sp600,2018-09-01,2021-04-01,Real Estate
+CDW,sp500,2019-10-01,,Information Technology
+CE,sp500,2019-01-01,2025-04-01,Materials
+CE,sp600,2025-04-01,,Materials
+CEB,sp400,2015-12-01,2017-05-01,Industrials
+CECO,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+CEG,sp500,2022-03-01,,Utilities
+CEIX,sp600,2018-09-01,2025-02-01,Energy
+CELG,sp500,2015-12-01,2019-12-01,Health Care
+CELH,sp600,2021-04-01,2022-09-01,Consumer Staples
+CELH,sp400,2022-08-01,,Consumer Staples
+CENT,sp600,2018-09-01,,Consumer Staples
+CENTA,sp600,2018-09-01,,Consumer Staples
+CENX,sp600,2018-09-01,,Materials
+CERN,sp500,2015-12-01,2022-06-01,Health Care
+CERT,sp600,2023-04-01,,Health Care
+CEVA,sp600,2018-09-01,2026-01-01,Information Technology
+CF,sp500,2015-12-01,,Materials
+CFFN,sp600,2021-04-01,,Financials
+CFG,sp500,2016-02-01,,Financials
+CFR,sp400,2015-12-01,,Financials
+CFX,sp400,2019-10-01,2022-05-01,Industrials
+CG,sp400,2023-12-01,,Financials
+CGNX,sp400,2015-12-01,,Information Technology
+CHCO,sp600,2018-09-01,,Financials
+CHCT,sp600,2018-09-01,2024-10-01,Health Care
+CHD,sp400,2015-12-01,2017-01-01,Consumer Staples
+CHD,sp500,2016-01-01,,Consumer Staples
+CHDN,sp400,2017-01-01,,Consumer Discretionary
+CHE,sp400,2018-08-01,,Health Care
+CHEF,sp600,2021-04-01,,Consumer Staples
+CHFC,sp400,2017-01-01,2019-09-01,Financials
+CHH,sp400,2020-11-01,,Consumer Discretionary
+CHK,sp500,2015-12-01,2018-04-01,Energy
+CHK,sp400,2018-04-01,2020-12-01,Energy
+CHK,sp600,2020-12-01,2021-04-01,Energy
+CHK,sp400,2023-09-01,2024-11-01,Energy
+CHRD,sp400,2023-04-01,,Energy
+CHRS,sp600,2021-04-01,2023-10-01,Health Care
+CHRW,sp500,2015-12-01,,Industrials
+CHS,sp400,2015-12-01,2017-08-01,Consumer Discretionary
+CHS,sp600,2018-09-01,2024-02-01,Consumer Discretionary
+CHSP,sp600,2018-09-01,2021-04-01,Real Estate
+CHTR,sp500,2016-10-01,,Communication Services
+CHUY,sp600,2018-09-01,2024-11-01,Consumer Discretionary
+CHWY,sp400,2024-12-01,,Consumer Discretionary
+CHX,sp400,2021-01-01,2025-08-01,Energy
+CI,sp500,2015-12-01,,Health Care
+CIEN,sp400,2015-12-01,2026-03-01,Information Technology
+CIEN,sp500,2026-03-01,,Information Technology
+CINF,sp500,2015-12-01,,Financials
+CIR,sp600,2018-09-01,2023-11-01,Industrials
+CIT,sp400,2020-12-01,2022-02-01,Financials
+CIVI,sp600,2021-12-01,2023-10-01,Energy
+CIVI,sp400,2023-11-01,2026-02-01,Energy
+CJ,sp600,2018-09-01,2021-04-01,Energy
+CKH,sp600,2018-09-01,2021-05-01,Industrials
+CL,sp500,2015-12-01,,Consumer Staples
+CLB,sp400,2017-08-01,2021-01-01,Energy
+CLB,sp600,2021-04-01,2026-08-01,Energy
+CLC,sp400,2015-12-01,2017-04-01,Industrials
+CLD,sp600,2018-09-01,2021-04-01,Energy
+CLDT,sp600,2018-09-01,2024-07-01,Real Estate
+CLF,sp400,2021-04-01,,Materials
+CLFD,sp600,2022-09-01,2024-01-01,Information Technology
+CLGX,sp400,2015-12-01,2021-07-01,Industrials
+CLH,sp400,2015-12-01,,Industrials
+CLI,sp400,2015-12-01,2021-01-01,Real Estate
+CLI,sp600,2021-04-01,2022-01-01,Real Estate
+CLSK,sp600,2025-04-01,,Information Technology
+CLW,sp600,2018-09-01,2024-12-01,Materials
+CLX,sp500,2015-12-01,,Consumer Staples
+CMA,sp500,2015-12-01,2024-07-01,Financials
+CMA,sp600,2024-07-01,2025-01-01,Financials
+CMA,sp400,2025-02-01,2026-02-01,Financials
+CMC,sp400,2015-12-01,,Materials
+CMCSA,sp500,2015-12-01,,Communication Services
+CMCSK,sp500,2015-12-01,2016-01-01,Consumer Discretionary
+CMD,sp400,2018-04-01,2021-07-01,Health Care
+CME,sp500,2015-12-01,,Financials
+CMG,sp500,2015-12-01,,Consumer Discretionary
+CMI,sp500,2015-12-01,,Industrials
+CMO,sp600,2018-09-01,2021-12-01,Real Estate
+CMP,sp400,2015-12-01,2022-02-01,Materials
+CMP,sp600,2022-02-01,2024-10-01,Materials
+CMS,sp500,2015-12-01,,Utilities
+CMTL,sp600,2018-09-01,2023-07-01,Information Technology
+CNC,sp400,2015-12-01,2017-01-01,Health Care
+CNC,sp500,2016-04-01,,Health Care
+CNH,sp400,2024-10-01,,Industrials
+CNK,sp400,2015-12-01,2021-09-01,Communication Services
+CNK,sp600,2021-10-01,,Communication Services
+CNL,sp400,2015-12-01,2017-01-01,Utilities
+CNM,sp400,2023-12-01,,Industrials
+CNMD,sp600,2018-09-01,,Health Care
+CNO,sp400,2015-12-01,,Financials
+CNP,sp500,2015-12-01,,Utilities
+CNR,sp600,2025-02-01,,Energy
+CNS,sp600,2024-05-01,,Financials
+CNSL,sp600,2018-09-01,2025-02-01,Communication Services
+CNW,sp400,2015-12-01,2017-01-01,Industrials
+CNX,sp500,2015-12-01,2016-04-01,Energy
+CNX,sp400,2017-01-01,,Energy
+CNXC,sp400,2021-01-01,2026-07-01,Industrials
+CNXC,sp600,2026-08-01,,Industrials
+CNXN,sp600,2021-04-01,,Information Technology
+COCO,sp600,2026-04-01,,Consumer Staples
+COF,sp500,2015-12-01,,Financials
+COG,sp500,2015-12-01,2021-10-01,Energy
+COH,sp500,2015-12-01,2017-11-01,Consumer Discretionary
+COHR,sp400,2017-04-01,2022-07-01,Information Technology
+COHR,sp400,2022-10-01,2026-04-01,Information Technology
+COHR,sp500,2026-04-01,,Information Technology
+COHU,sp600,2018-09-01,,Information Technology
+COIN,sp500,2025-06-01,,Financials
+COKE,sp600,2018-09-01,2022-08-01,Consumer Staples
+COKE,sp400,2022-08-01,,Consumer Staples
+COL,sp500,2015-12-01,2019-01-01,Industrials
+COLB,sp600,2018-09-01,2023-03-01,Financials
+COLB,sp400,2023-03-01,,Financials
+COLL,sp600,2021-04-01,,Health Care
+COLM,sp400,2020-12-01,,Consumer Discretionary
+CON,sp600,2024-12-01,,Health Care
+CONE,sp400,2017-04-01,2022-04-01,Real Estate
+CONN,sp600,2021-04-01,2023-01-01,Consumer Discretionary
+COO,sp400,2015-12-01,2017-01-01,Health Care
+COO,sp500,2016-10-01,,Health Care
+COOP,sp600,2021-04-01,2025-10-01,Financials
+COP,sp500,2015-12-01,,Energy
+COR,sp400,2017-10-01,2022-01-01,Real Estate
+COR,sp500,2023-10-01,,Health Care
+CORE,sp600,2018-09-01,2021-10-01,Consumer Discretionary
+CORT,sp600,2018-09-01,2026-11-12,Health Care
+CORT,sp400,2026-10-01,,Health Care
+COST,sp500,2015-12-01,,Consumer Staples
+COTY,sp500,2016-10-01,2020-10-01,Consumer Staples
+COTY,sp400,2021-01-01,2026-07-01,Consumer Staples
+COTY,sp600,2026-08-01,,Consumer Staples
+CPAY,sp500,2024-04-01,,Financials
+CPB,sp500,2015-12-01,2026-07-01,Consumer Staples
+CPB,sp600,2026-08-01,,Consumer Staples
+CPE,sp400,2017-10-01,2019-11-01,Energy
+CPE,sp600,2019-11-01,2024-04-01,Energy
+CPF,sp600,2018-09-01,,Financials
+CPGX,sp500,2015-12-01,2016-08-01,Energy
+CPK,sp600,2021-04-01,,Utilities
+CPRI,sp500,2019-02-01,2020-06-01,Consumer Discretionary
+CPRI,sp400,2021-02-01,2026-10-01,Consumer Discretionary
+CPRT,sp400,2015-12-01,2018-08-01,Industrials
+CPRT,sp500,2018-07-01,,Industrials
+CPRX,sp600,2022-10-01,2026-08-01,Health Care
+CPS,sp600,2018-09-01,2022-04-01,Consumer Discretionary
+CPSI,sp600,2018-09-01,2023-10-01,Health Care
+CPT,sp400,2015-12-01,2022-05-01,Real Estate
+CPT,sp500,2022-05-01,,Real Estate
+CR,sp400,2015-12-01,,Industrials
+CRAY,sp600,2018-09-01,2021-04-01,Information Technology
+CRBG,sp400,2026-01-01,,Financials
+CRC,sp400,2015-12-01,2017-01-01,Energy
+CRC,sp600,2023-07-01,,Energy
+CREE,sp400,2015-12-01,2021-12-01,Information Technology
+CRGY,sp600,2024-11-01,,Energy
+CRH,sp500,2026-02-01,,Materials
+CRI,sp400,2015-12-01,2025-02-01,Consumer Discretionary
+CRI,sp600,2025-01-01,,Consumer Discretionary
+CRK,sp600,2023-03-01,,Energy
+CRL,sp400,2015-12-01,2021-06-01,Health Care
+CRL,sp500,2021-06-01,,Health Care
+CRM,sp500,2015-12-01,,Information Technology
+CRMT,sp600,2021-04-01,2024-04-01,Consumer Discretionary
+CRNC,sp400,2021-08-01,2022-04-01,Information Technology
+CRNC,sp600,2022-04-01,2024-07-01,Information Technology
+CROX,sp600,2018-09-01,2021-07-01,Consumer Discretionary
+CROX,sp400,2021-07-01,,Consumer Discretionary
+CRR,sp600,2018-09-01,2021-04-01,Energy
+CRS,sp400,2015-12-01,2021-01-01,Industrials
+CRS,sp600,2021-04-01,2025-01-01,Materials
+CRS,sp400,2025-02-01,,Industrials
+CRSR,sp600,2022-03-01,,Information Technology
+CRUS,sp400,2017-01-01,,Information Technology
+CRVL,sp600,2018-09-01,,Health Care
+CRWD,sp500,2024-07-01,,Information Technology
+CRY,sp600,2018-09-01,2022-02-01,Health Care
+CRZO,sp600,2018-09-01,2021-04-01,Energy
+CSAL,sp400,2015-12-01,2017-05-01,Real Estate
+CSC,sp500,2015-12-01,2016-01-01,Information Technology
+CSC,sp400,2017-01-01,2017-05-01,Information Technology
+CSCO,sp500,2015-12-01,,Information Technology
+CSGP,sp500,2022-09-01,,Real Estate
+CSGS,sp600,2018-09-01,2026-06-01,Industrials
+CSII,sp600,2021-04-01,2023-05-01,Health Care
+CSL,sp400,2015-12-01,,Industrials
+CSR,sp600,2021-04-01,,Real Estate
+CSRA,sp500,2016-01-01,2018-05-01,Information Technology
+CST,sp400,2015-12-01,2017-07-01,Consumer Discretionary
+CSW,sp600,2025-09-01,,Industrials
+CSWI,sp600,2024-10-01,2025-09-01,Industrials
+CSX,sp500,2015-12-01,,Industrials
+CTAS,sp500,2015-12-01,,Industrials
+CTB,sp400,2017-03-01,2018-08-01,Consumer Discretionary
+CTB,sp600,2018-09-01,2021-07-01,Consumer Discretionary
+CTKB,sp600,2023-05-01,2026-08-01,Health Care
+CTL,sp500,2015-12-01,2020-10-01,Communication Services
+CTLT,sp400,2017-01-01,2021-01-01,Health Care
+CTLT,sp500,2020-10-01,2025-01-01,Health Care
+CTRA,sp500,2021-10-01,2026-06-01,Energy
+CTRE,sp600,2018-09-01,2026-04-01,Real Estate
+CTRE,sp400,2026-04-01,,Real Estate
+CTRL,sp600,2018-09-01,2021-04-01,Information Technology
+CTS,sp600,2018-09-01,,Information Technology
+CTSH,sp500,2015-12-01,,Information Technology
+CTVA,sp500,2019-06-01,2026-10-01,Materials
+CTVA,sp400,2026-11-01,,Materials
+CTXS,sp500,2015-12-01,2022-10-01,Information Technology
+CUB,sp600,2018-09-01,2021-06-01,Industrials
+CUBE,sp400,2023-01-01,,Real Estate
+CUBI,sp600,2018-09-01,,Financials
+CURB,sp600,2024-10-01,,Real Estate
+CUTR,sp600,2018-09-01,2023-07-01,Health Care
+CUZ,sp400,2017-01-01,,Real Estate
+CVBF,sp600,2018-09-01,,Financials
+CVC,sp500,2015-12-01,2016-07-01,Consumer Discretionary
+CVCO,sp600,2018-09-01,,Consumer Discretionary
+CVET,sp400,2019-10-01,2020-11-01,Health Care
+CVET,sp600,2021-04-01,2022-11-01,Health Care
+CVG,sp400,2015-12-01,2018-11-01,Information Technology
+CVG,sp600,2018-12-01,2021-04-01,Information Technology
+CVGW,sp600,2018-09-01,2024-10-01,Consumer Staples
+CVI,sp600,2023-04-01,,Energy
+CVLT,sp400,2015-12-01,,Information Technology
+CVNA,sp500,2026-02-01,,Consumer Discretionary
+CVS,sp500,2015-12-01,,Health Care
+CVSA,sp600,2026-05-01,,Consumer Discretionary
+CVX,sp500,2015-12-01,,Energy
+CW,sp400,2017-01-01,,Industrials
+CWEN,sp600,2023-12-01,,Utilities
+CWEN-A,sp600,2023-12-01,,Utilities
+CWK,sp600,2023-01-01,,Real Estate
+CWST,sp600,2026-01-01,,Industrials
+CWT,sp600,2018-09-01,,Utilities
+CXM,sp600,2024-04-01,,Information Technology
+CXO,sp500,2016-03-01,2021-02-01,Energy
+CXT,sp400,2023-04-01,,Information Technology
+CXW,sp400,2015-12-01,2021-01-01,Real Estate
+CXW,sp600,2021-04-01,,Industrials
+CY,sp400,2015-12-01,2020-12-01,Information Technology
+CY,sp600,2020-12-01,2021-04-01,Information Technology
+CYH,sp400,2015-12-01,2017-01-01,Health Care
+CYH,sp600,2018-09-01,2024-01-01,Health Care
+CYN,sp400,2015-12-01,2017-01-01,Financials
+CYT,sp400,2015-12-01,2017-01-01,Materials
+CYTK,sp600,2018-09-01,2024-04-01,Health Care
+CYTK,sp400,2024-04-01,,Health Care
+CZR,sp400,2019-10-01,2021-04-01,Consumer Discretionary
+CZR,sp500,2021-04-01,2025-10-01,Consumer Discretionary
+CZR,sp600,2025-10-01,,Consumer Discretionary
+D,sp500,2015-12-01,,Utilities
+DAKT,sp600,2018-09-01,2021-12-01,Information Technology
+DAL,sp500,2015-12-01,,Industrials
+DAN,sp400,2015-12-01,2023-07-01,Consumer Discretionary
+DAN,sp600,2023-07-01,,Consumer Discretionary
+DAR,sp600,2018-09-01,2020-12-01,Consumer Staples
+DAR,sp400,2020-12-01,,Consumer Staples
+DASH,sp500,2025-04-01,,Consumer Discretionary
+DAVE,sp600,2026-07-01,,Financials
+DAY,sp500,2024-02-01,2026-03-01,Industrials
+DBD,sp400,2015-12-01,2018-07-01,Information Technology
+DBD,sp600,2018-09-01,2023-01-01,Information Technology
+DBD,sp600,2026-05-01,,Information Technology
+DBI,sp600,2021-04-01,2024-10-01,Consumer Discretionary
+DBX,sp400,2023-07-01,,Information Technology
+DCH,sp600,2026-05-01,,Consumer Discretionary
+DCI,sp400,2015-12-01,,Industrials
+DCOM,sp600,2018-09-01,,Financials
+DCT,sp400,2017-01-01,2018-09-01,Real Estate
+DCT,sp600,2018-09-01,2018-12-01,Real Estate
+DD,sp500,2015-12-01,2017-09-01,Industrials
+DD,sp500,2019-06-01,,Industrials
+DDD,sp400,2015-12-01,2018-07-01,Information Technology
+DDD,sp600,2018-09-01,2024-10-01,Industrials
+DDOG,sp500,2025-08-01,,Information Technology
+DDS,sp400,2017-03-01,2021-01-01,Consumer Discretionary
+DE,sp500,2015-12-01,,Industrials
+DEA,sp600,2018-09-01,,Real Estate
+DECK,sp400,2015-12-01,2024-04-01,Consumer Discretionary
+DECK,sp500,2024-04-01,,Consumer Discretionary
+DEI,sp400,2015-12-01,2023-07-01,Real Estate
+DEI,sp600,2023-07-01,,Real Estate
+DELL,sp500,2024-10-01,,Information Technology
+DF,sp400,2015-12-01,2018-04-01,Consumer Staples
+DF,sp600,2018-09-01,2021-04-01,Consumer Staples
+DFH,sp600,2024-12-01,,Consumer Discretionary
+DFIN,sp600,2018-09-01,,Financials
+DFS,sp500,2015-12-01,2025-06-01,Financials
+DG,sp500,2015-12-01,,Consumer Staples
+DGII,sp600,2018-09-01,,Information Technology
+DGX,sp500,2015-12-01,,Health Care
+DHC,sp600,2021-04-01,2023-01-01,Real Estate
+DHI,sp500,2015-12-01,,Consumer Discretionary
+DHR,sp500,2015-12-01,,Health Care
+DIN,sp600,2018-09-01,2024-10-01,Consumer Discretionary
+DINO,sp400,2022-04-01,,Energy
+DIOD,sp600,2018-09-01,,Information Technology
+DIS,sp500,2015-12-01,,Communication Services
+DISCA,sp500,2015-12-01,2022-05-01,Communication Services
+DISCK,sp500,2015-12-01,2022-05-01,Communication Services
+DISH,sp500,2017-04-01,2023-07-01,Communication Services
+DISH,sp600,2023-07-01,2024-01-01,Communication Services
+DKS,sp400,2015-12-01,,Consumer Discretionary
+DLB,sp400,2023-09-01,,Information Technology
+DLPH,sp500,2015-12-01,2018-01-01,Consumer Discretionary
+DLPH,sp400,2018-01-01,2021-01-01,Consumer Discretionary
+DLR,sp500,2016-06-01,,Real Estate
+DLTR,sp500,2015-12-01,,Consumer Staples
+DLX,sp400,2015-12-01,2021-01-01,Industrials
+DLX,sp600,2021-04-01,,Industrials
+DMC,sp600,2026-08-01,,Consumer Staples
+DNB,sp500,2015-12-01,2017-05-01,Industrials
+DNB,sp400,2017-05-01,2019-10-01,Industrials
+DNB,sp600,2019-10-01,2021-04-01,Industrials
+DNKN,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+DNOW,sp400,2015-12-01,2021-01-01,Industrials
+DNOW,sp600,2021-04-01,,Industrials
+DNR,sp400,2015-12-01,2017-04-01,Energy
+DNR,sp600,2018-09-01,2021-04-01,Energy
+DO,sp500,2015-12-01,2016-10-01,Energy
+DO,sp400,2017-01-01,2019-10-01,Energy
+DO,sp600,2019-10-01,2021-04-01,Energy
+DOC,sp400,2021-01-01,2024-03-01,Real Estate
+DOC,sp500,2024-03-01,,Real Estate
+DOCN,sp600,2024-06-01,2026-05-01,Information Technology
+DOCN,sp400,2026-05-01,,Information Technology
+DOCS,sp400,2023-07-01,,Health Care
+DOCU,sp400,2024-11-01,,Information Technology
+DORM,sp600,2018-09-01,,Consumer Discretionary
+DOUG,sp600,2022-01-01,2023-07-01,Real Estate
+DOV,sp500,2015-12-01,,Industrials
+DOW,sp500,2015-12-01,2017-09-01,Materials
+DOW,sp500,2019-04-01,,Materials
+DPLO,sp600,2018-09-01,2021-04-01,Health Care
+DPS,sp500,2015-12-01,2018-07-01,Consumer Staples
+DPZ,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+DPZ,sp500,2020-06-01,,Consumer Discretionary
+DRC,sp400,2015-12-01,2017-01-01,Energy
+DRE,sp400,2015-12-01,2017-08-01,Real Estate
+DRE,sp500,2017-08-01,2022-11-01,Real Estate
+DRH,sp600,2018-09-01,,Real Estate
+DRI,sp500,2015-12-01,,Consumer Discretionary
+DRQ,sp400,2015-12-01,2019-10-01,Energy
+DRQ,sp600,2019-10-01,2025-09-01,Energy
+DSPG,sp600,2018-09-01,2022-01-01,Information Technology
+DST,sp400,2015-12-01,2018-05-01,Information Technology
+DSW,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+DT,sp400,2022-10-01,,Information Technology
+DTE,sp500,2015-12-01,,Utilities
+DTM,sp400,2021-07-01,,Energy
+DUK,sp500,2015-12-01,,Utilities
+DUOL,sp400,2024-05-01,,Consumer Discretionary
+DV,sp400,2015-12-01,2017-11-01,Consumer Discretionary
+DV,sp600,2023-02-01,,Communication Services
+DVA,sp500,2015-12-01,,Health Care
+DVAX,sp600,2022-06-01,2026-03-01,Health Care
+DVN,sp500,2015-12-01,,Energy
+DWA,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+DWDP,sp500,2017-09-01,2019-06-01,Materials
+DXC,sp500,2017-05-01,2023-11-01,Information Technology
+DXC,sp600,2023-11-01,,Information Technology
+DXCM,sp500,2020-06-01,,Health Care
+DXPE,sp600,2018-09-01,,Industrials
+DY,sp400,2017-01-01,2023-04-01,Industrials
+DY,sp600,2023-04-01,2026-01-01,Industrials
+DY,sp400,2026-01-01,,Industrials
+EA,sp500,2015-12-01,2026-09-01,Communication Services
+EAT,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+EAT,sp600,2021-04-01,2026-11-12,Consumer Discretionary
+EAT,sp400,2026-10-01,,Consumer Discretionary
+EBAY,sp500,2015-12-01,,Consumer Discretionary
+EBC,sp600,2026-08-01,,Financials
+EBIX,sp600,2018-09-01,2023-11-01,Information Technology
+EBS,sp600,2018-09-01,2021-04-01,Health Care
+EBS,sp400,2021-01-01,2022-01-01,Health Care
+EBS,sp600,2021-12-01,2023-09-01,Health Care
+ECG,sp600,2024-12-01,,Industrials
+ECHO,sp600,2018-09-01,2021-12-01,Industrials
+ECHO,sp500,2026-07-01,,Communication Services
+ECL,sp500,2015-12-01,,Materials
+ECOL,sp600,2018-09-01,2022-05-01,Industrials
+ECPG,sp600,2018-09-01,,Financials
+ED,sp500,2015-12-01,,Utilities
+EDR,sp400,2016-12-01,2018-11-01,Real Estate
+EDR,sp600,2018-12-01,2021-04-01,Real Estate
+EE,sp600,2018-09-01,2021-04-01,Utilities
+EEFT,sp400,2022-02-01,,Financials
+EFC,sp600,2021-06-01,,Financials
+EFII,sp600,2018-09-01,2021-04-01,Information Technology
+EFOR,sp600,2026-06-01,,Information Technology
+EFX,sp500,2015-12-01,,Industrials
+EG,sp500,2023-08-01,,Financials
+EGBN,sp600,2021-04-01,,Financials
+EGHT,sp600,2018-09-01,2023-10-01,Information Technology
+EGL,sp600,2018-09-01,2021-04-01,Industrials
+EGN,sp400,2015-12-01,2019-10-01,Energy
+EGN,sp600,2019-10-01,2021-04-01,Energy
+EGOV,sp600,2018-09-01,2021-05-01,Information Technology
+EGP,sp600,2018-09-01,2019-10-01,Real Estate
+EGP,sp400,2019-10-01,,Real Estate
+EGRX,sp600,2018-09-01,2023-07-01,Health Care
+EHAB,sp600,2022-08-01,2024-10-01,Health Care
+EHC,sp400,2018-02-01,,Health Care
+EHTH,sp600,2018-09-01,2022-10-01,Financials
+EIG,sp600,2018-09-01,,Financials
+EIX,sp500,2015-12-01,,Utilities
+EL,sp500,2015-12-01,,Consumer Staples
+ELAN,sp400,2025-10-01,,Health Care
+ELF,sp600,2021-04-01,2024-02-01,Consumer Staples
+ELF,sp400,2024-02-01,,Consumer Staples
+ELME,sp600,2023-12-01,2026-03-01,Real Estate
+ELS,sp400,2023-09-01,,Real Estate
+ELV,sp500,2022-07-01,,Health Care
+ELY,sp600,2018-09-01,2021-07-01,Consumer Discretionary
+ELY,sp400,2021-07-01,2022-10-01,Consumer Discretionary
+EMBC,sp600,2022-05-01,2026-08-01,Health Care
+EMC,sp500,2015-12-01,2016-10-01,Information Technology
+EME,sp400,2016-12-01,2025-10-01,Industrials
+EME,sp500,2025-10-01,,Industrials
+EMN,sp500,2015-12-01,2025-12-01,Materials
+EMN,sp600,2025-12-01,,Materials
+EMR,sp500,2015-12-01,,Industrials
+ENDP,sp500,2015-12-01,2017-03-01,Health Care
+ENDP,sp400,2017-04-01,2018-08-01,Health Care
+ENDP,sp600,2018-09-01,2022-06-01,Health Care
+ENH,sp400,2017-01-01,2017-04-01,Financials
+ENOV,sp400,2022-05-01,2025-02-01,Health Care
+ENOV,sp600,2025-02-01,,Health Care
+ENPH,sp400,2021-01-01,2021-02-01,Information Technology
+ENPH,sp500,2021-02-01,2025-10-01,Information Technology
+ENPH,sp600,2025-10-01,,Information Technology
+ENR,sp400,2015-12-01,2023-11-01,Consumer Staples
+ENR,sp600,2023-10-01,,Consumer Staples
+ENS,sp400,2017-01-01,,Industrials
+ENSG,sp600,2018-09-01,2024-10-01,Health Care
+ENSG,sp400,2024-11-01,,Health Care
+ENTA,sp600,2018-09-01,2023-10-01,Health Care
+ENTG,sp400,2025-04-01,,Information Technology
+ENV,sp400,2021-07-01,2023-12-01,Information Technology
+ENV,sp600,2023-12-01,2024-12-01,Information Technology
+ENVA,sp600,2018-09-01,,Financials
+EOG,sp500,2015-12-01,,Energy
+EPAC,sp600,2021-04-01,,Industrials
+EPAM,sp500,2022-01-01,2026-07-01,Information Technology
+EPAM,sp600,2026-07-01,,Information Technology
+EPAY,sp600,2018-09-01,2022-06-01,Information Technology
+EPC,sp400,2017-01-01,2021-04-01,Consumer Staples
+EPC,sp600,2021-04-01,,Consumer Staples
+EPR,sp400,2017-01-01,,Real Estate
+EPRT,sp600,2021-04-01,,Real Estate
+EQH,sp400,2024-01-01,,Financials
+EQIX,sp500,2015-12-01,,Real Estate
+EQR,sp500,2015-12-01,2026-09-01,Real Estate
+EQT,sp500,2015-12-01,2018-12-01,Energy
+EQT,sp400,2019-10-01,2022-10-01,Energy
+EQT,sp500,2022-11-01,,Energy
+EQY,sp400,2015-12-01,2017-04-01,Real Estate
+ERA,sp600,2018-09-01,2021-04-01,Energy
+ERI,sp400,2018-09-01,2021-01-01,Consumer Discretionary
+ERIE,sp400,2023-09-01,2024-10-01,Financials
+ERIE,sp500,2024-10-01,,Financials
+ES,sp500,2015-12-01,,Utilities
+ESAB,sp400,2022-05-01,,Industrials
+ESE,sp600,2018-09-01,,Industrials
+ESI,sp600,2025-04-01,,Materials
+ESIO,sp600,2018-09-01,2021-04-01,Information Technology
+ESL,sp400,2015-12-01,2019-10-01,Industrials
+ESL,sp600,2019-10-01,2021-04-01,Industrials
+ESND,sp600,2018-09-01,2021-04-01,Industrials
+ESNT,sp400,2021-01-01,,Financials
+ESRX,sp500,2015-12-01,2019-01-01,Health Care
+ESS,sp500,2015-12-01,,Real Estate
+ESV,sp500,2015-12-01,2016-04-01,Energy
+ESV,sp400,2017-01-01,2019-08-01,Energy
+ETD,sp600,2021-09-01,2026-08-01,Consumer Discretionary
+ETFC,sp500,2015-12-01,2020-11-01,Financials
+ETH,sp600,2018-09-01,2021-09-01,Consumer Discretionary
+ETN,sp500,2015-12-01,,Industrials
+ETR,sp500,2015-12-01,,Utilities
+ETRN,sp400,2019-10-01,2024-08-01,Energy
+ETSY,sp400,2019-11-01,2021-01-01,Consumer Discretionary
+ETSY,sp500,2020-10-01,2024-10-01,Consumer Discretionary
+ETSY,sp600,2024-10-01,,Consumer Discretionary
+EV,sp400,2015-12-01,2021-04-01,Financials
+EVHC,sp500,2017-01-01,2018-11-01,Health Care
+EVR,sp400,2018-05-01,,Financials
+EVRG,sp500,2018-07-01,,Utilities
+EVTC,sp600,2018-09-01,,Financials
+EW,sp500,2015-12-01,,Health Care
+EWBC,sp400,2015-12-01,,Financials
+EXC,sp500,2015-12-01,,Utilities
+EXE,sp400,2024-11-01,2025-04-01,Energy
+EXE,sp500,2025-04-01,,Energy
+EXEL,sp400,2018-08-01,,Health Care
+EXLS,sp600,2018-09-01,2022-11-01,Information Technology
+EXLS,sp400,2022-10-01,,Industrials
+EXP,sp400,2015-12-01,,Materials
+EXPD,sp500,2015-12-01,,Industrials
+EXPE,sp500,2015-12-01,,Consumer Discretionary
+EXPI,sp600,2023-07-01,2026-06-01,Real Estate
+EXPO,sp600,2018-09-01,2023-04-01,Industrials
+EXPO,sp400,2023-04-01,,Industrials
+EXPR,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+EXR,sp400,2015-12-01,2017-01-01,Financials
+EXR,sp500,2016-02-01,,Real Estate
+EXTN,sp600,2018-09-01,2021-04-01,Energy
+EXTR,sp600,2018-09-01,,Information Technology
+EYE,sp600,2022-07-01,,Consumer Discretionary
+EZPW,sp600,2018-09-01,,Financials
+F,sp500,2015-12-01,,Consumer Discretionary
+FA,sp600,2026-07-01,,Industrials
+FAF,sp400,2015-12-01,,Financials
+FANG,sp500,2019-01-01,,Energy
+FARO,sp600,2018-09-01,2023-07-01,Information Technology
+FAST,sp500,2015-12-01,,Industrials
+FB,sp500,2015-12-01,2022-07-01,Communication Services
+FBC,sp600,2021-04-01,2023-01-01,Financials
+FBHS,sp400,2015-12-01,2017-01-01,
+FBHS,sp500,2016-07-01,2023-01-01,Industrials
+FBIN,sp400,2023-01-01,,Industrials
+FBK,sp600,2021-04-01,,Financials
+FBNC,sp600,2021-04-01,,Financials
+FBP,sp600,2018-09-01,,Financials
+FBRT,sp600,2021-12-01,,Real Estate
+FCF,sp600,2018-09-01,,Financials
+FCFS,sp600,2018-09-01,2019-11-01,Financials
+FCFS,sp400,2019-11-01,,Financials
+FCN,sp400,2015-12-01,2017-09-01,Industrials
+FCN,sp600,2018-09-01,2020-12-01,Industrials
+FCN,sp400,2020-12-01,,Industrials
+FCPT,sp600,2018-09-01,,Real Estate
+FCS,sp400,2015-12-01,2017-01-01,Information Technology
+FCX,sp500,2015-12-01,,Materials
+FDP,sp600,2021-04-01,2026-08-01,Consumer Staples
+FDS,sp400,2015-12-01,2022-01-01,Financials
+FDS,sp500,2022-01-01,,Financials
+FDX,sp500,2015-12-01,,Industrials
+FDXF,sp500,2026-07-01,,Industrials
+FE,sp500,2015-12-01,,Utilities
+FEIC,sp400,2015-12-01,2017-01-01,Information Technology
+FELE,sp600,2018-09-01,,Industrials
+FERG,sp500,2026-09-01,,Industrials
+FF,sp600,2018-09-01,2023-10-01,Materials
+FFBC,sp600,2018-09-01,,Financials
+FFIN,sp600,2018-09-01,2019-10-01,Financials
+FFIN,sp400,2019-10-01,,Financials
+FFIV,sp500,2015-12-01,,Information Technology
+FG,sp600,2026-06-01,,Financials
+FHB,sp600,2021-04-01,,Financials
+FHI,sp400,2020-08-01,2020-11-01,Financials
+FHI,sp400,2021-01-01,,Financials
+FHN,sp400,2015-12-01,,Financials
+FI,sp500,2023-07-01,2025-12-01,Financials
+FIBK,sp600,2025-12-01,,Financials
+FICO,sp400,2015-12-01,2023-04-01,Information Technology
+FICO,sp500,2023-04-01,,Information Technology
+FII,sp400,2015-12-01,2020-08-01,Financials
+FII,sp600,2020-08-01,2020-11-01,Financials
+FII,sp400,2020-11-01,2021-01-01,Financials
+FIS,sp500,2015-12-01,,Financials
+FISV,sp500,2015-12-01,2023-07-01,Financials
+FISV,sp500,2025-12-01,,Financials
+FITB,sp500,2015-12-01,,Financials
+FIVE,sp400,2018-05-01,,Consumer Discretionary
+FIVN,sp600,2026-08-01,,Information Technology
+FIX,sp600,2018-09-01,2024-01-01,Industrials
+FIX,sp400,2024-01-01,2026-01-01,Industrials
+FIX,sp500,2026-01-01,,Industrials
+FIZZ,sp600,2021-04-01,,Consumer Staples
+FL,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+FL,sp500,2016-05-01,2019-09-01,Consumer Discretionary
+FL,sp400,2019-10-01,2023-11-01,Consumer Discretionary
+FL,sp600,2023-10-01,2025-10-01,Consumer Discretionary
+FLEX,sp400,2024-12-01,2026-07-01,Information Technology
+FLEX,sp500,2026-07-01,,Information Technology
+FLG,sp400,2025-02-01,,Financials
+FLGT,sp600,2021-04-01,2025-04-01,Health Care
+FLIR,sp500,2015-12-01,2021-06-01,Information Technology
+FLO,sp400,2015-12-01,2026-06-01,Consumer Staples
+FLO,sp600,2026-06-01,,Consumer Staples
+FLOW,sp600,2018-09-01,2022-05-01,Industrials
+FLR,sp500,2015-12-01,2019-06-01,Industrials
+FLR,sp400,2019-10-01,,Industrials
+FLS,sp500,2015-12-01,2021-04-01,Industrials
+FLS,sp400,2021-04-01,,Industrials
+FLT,sp500,2018-07-01,2024-04-01,Financials
+FMBI,sp600,2018-09-01,2022-03-01,Financials
+FMC,sp500,2015-12-01,2025-04-01,Materials
+FMC,sp600,2025-04-01,,Materials
+FMER,sp400,2015-12-01,2017-01-01,Financials
+FN,sp600,2018-09-01,2024-10-01,Information Technology
+FN,sp400,2024-10-01,,Information Technology
+FNB,sp400,2017-01-01,,Financials
+FND,sp400,2023-11-01,,Consumer Discretionary
+FNF,sp400,2023-11-01,,Financials
+FNFG,sp400,2015-12-01,2016-08-01,Financials
+FNSR,sp600,2018-09-01,2021-04-01,Information Technology
+FOE,sp600,2021-04-01,2022-05-01,Materials
+FORM,sp600,2018-09-01,2026-11-12,Information Technology
+FORM,sp400,2026-11-01,,Information Technology
+FORR,sp600,2018-09-01,2024-04-01,Industrials
+FOSL,sp500,2015-12-01,2016-02-01,Consumer Discretionary
+FOSL,sp400,2017-01-01,2017-04-01,Consumer Discretionary
+FOSL,sp600,2018-09-01,2022-10-01,Consumer Discretionary
+FOUR,sp400,2024-12-01,,Financials
+FOX,sp500,2015-12-01,,Communication Services
+FOXA,sp500,2015-12-01,,Communication Services
+FOXF,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+FOXF,sp400,2021-01-01,2024-04-01,Consumer Discretionary
+FOXF,sp600,2024-05-01,,Consumer Discretionary
+FR,sp400,2017-01-01,,Real Estate
+FRAN,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+FRC,sp500,2019-02-01,2023-05-01,Financials
+FRGI,sp600,2018-09-01,2022-05-01,Consumer Discretionary
+FRPT,sp600,2025-04-01,,Consumer Staples
+FRT,sp400,2015-12-01,2017-01-01,Financials
+FRT,sp500,2016-02-01,,Real Estate
+FSB,sp600,2018-09-01,2021-04-01,Financials
+FSLR,sp500,2015-12-01,2017-04-01,Information Technology
+FSLR,sp400,2017-04-01,2023-01-01,Information Technology
+FSLR,sp500,2023-01-01,,Information Technology
+FSP,sp600,2018-09-01,2023-04-01,Real Estate
+FSS,sp600,2018-09-01,,Industrials
+FTD,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+FTDR,sp600,2022-08-01,,Consumer Discretionary
+FTI,sp500,2015-12-01,2021-03-01,Energy
+FTI,sp400,2025-10-01,,Energy
+FTK,sp600,2018-09-01,2021-04-01,Materials
+FTNT,sp400,2015-12-01,2018-11-01,Information Technology
+FTNT,sp500,2018-11-01,,Information Technology
+FTNT,sp600,2018-12-01,2021-04-01,Information Technology
+FTR,sp500,2015-12-01,2017-04-01,Communication Services
+FTR,sp400,2017-04-01,2018-01-01,Communication Services
+FTR,sp600,2018-09-01,2021-04-01,Communication Services
+FTRE,sp600,2023-07-01,,Health Care
+FTV,sp500,2016-08-01,,Industrials
+FUL,sp600,2018-09-01,,Materials
+FULT,sp400,2015-12-01,2023-07-01,Financials
+FULT,sp600,2023-07-01,,Financials
+FUN,sp600,2024-09-01,,Consumer Discretionary
+FWRD,sp600,2018-09-01,2026-08-01,Industrials
+FYBR,sp400,2022-10-01,2026-02-01,Communication Services
+G,sp400,2021-06-01,,Industrials
+GAP,sp400,2024-08-01,,Consumer Discretionary
+GAS,sp500,2015-12-01,2016-08-01,Utilities
+GATX,sp400,2017-01-01,,Industrials
+GBCI,sp600,2018-09-01,2021-04-01,Financials
+GBCI,sp400,2021-01-01,,Financials
+GBX,sp600,2018-09-01,,Industrials
+GCI,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+GCO,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+GCP,sp600,2021-04-01,2022-10-01,Materials
+GD,sp500,2015-12-01,,Industrials
+GDDY,sp400,2023-11-01,2024-07-01,Information Technology
+GDDY,sp500,2024-07-01,,Information Technology
+GDEN,sp600,2022-04-01,2026-06-01,Consumer Discretionary
+GDOT,sp600,2018-09-01,2019-10-01,Financials
+GDOT,sp400,2019-10-01,2020-12-01,Financials
+GDOT,sp600,2020-12-01,2025-04-01,Financials
+GDYN,sp600,2025-02-01,2026-08-01,Information Technology
+GE,sp500,2015-12-01,,Industrials
+GEF,sp400,2015-12-01,,Materials
+GEHC,sp500,2023-02-01,,Health Care
+GEN,sp500,2022-12-01,,Information Technology
+GEO,sp400,2017-04-01,2021-01-01,Real Estate
+GEO,sp600,2021-04-01,,Industrials
+GEOS,sp600,2018-09-01,2021-04-01,Energy
+GES,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+GES,sp600,2018-09-01,2026-02-01,Consumer Discretionary
+GEV,sp500,2024-05-01,,Industrials
+GFF,sp600,2018-09-01,,Industrials
+GGG,sp400,2015-12-01,,Industrials
+GGP,sp500,2015-12-01,2018-09-01,Real Estate
+GHC,sp400,2015-12-01,,Consumer Discretionary
+GHL,sp600,2018-09-01,2022-06-01,Financials
+GIFI,sp600,2018-09-01,2021-04-01,Energy
+GIII,sp600,2018-09-01,,Consumer Discretionary
+GILD,sp500,2015-12-01,,Health Care
+GIS,sp500,2015-12-01,,Consumer Staples
+GKOS,sp600,2021-04-01,2026-11-12,Health Care
+GKOS,sp400,2026-11-01,,Health Care
+GL,sp500,2019-09-01,,Financials
+GLPI,sp400,2023-11-01,,Real Estate
+GLT,sp600,2018-09-01,2022-10-01,Materials
+GLUU,sp600,2021-04-01,2021-05-01,Communication Services
+GLW,sp500,2015-12-01,,Information Technology
+GM,sp500,2015-12-01,,Consumer Discretionary
+GMCR,sp500,2015-12-01,2016-04-01,Consumer Staples
+GME,sp500,2015-12-01,2016-05-01,Consumer Discretionary
+GME,sp400,2017-01-01,2021-01-01,Consumer Discretionary
+GME,sp600,2021-04-01,2021-09-01,Consumer Discretionary
+GME,sp400,2021-08-01,,Consumer Discretionary
+GMED,sp400,2017-01-01,,Health Care
+GMS,sp600,2021-04-01,2025-10-01,Industrials
+GMT,sp400,2015-12-01,2017-01-01,Industrials
+GNBC,sp600,2018-09-01,2021-04-01,Financials
+GNL,sp600,2018-09-01,,Real Estate
+GNRC,sp400,2020-12-01,2021-04-01,Industrials
+GNRC,sp500,2021-04-01,,Industrials
+GNTX,sp400,2015-12-01,,Consumer Discretionary
+GNW,sp400,2017-01-01,2021-06-01,Financials
+GNW,sp600,2021-05-01,,Financials
+GO,sp400,2021-01-01,2024-07-01,Consumer Staples
+GO,sp600,2024-07-01,,Consumer Staples
+GOGO,sp600,2022-05-01,2026-08-01,Communication Services
+GOLF,sp600,2025-03-01,,Consumer Discretionary
+GOOG,sp500,2015-12-01,,Communication Services
+GOOGL,sp500,2015-12-01,,Communication Services
+GOV,sp600,2018-09-01,2021-04-01,Real Estate
+GPC,sp500,2015-12-01,,Consumer Discretionary
+GPI,sp600,2018-09-01,,Consumer Discretionary
+GPK,sp400,2023-07-01,,Materials
+GPMT,sp600,2021-04-01,2023-04-01,Financials
+GPN,sp400,2015-12-01,2017-01-01,
+GPN,sp500,2016-05-01,,Financials
+GPOR,sp400,2015-12-01,2019-10-01,Energy
+GPOR,sp600,2019-10-01,2021-04-01,Energy
+GPOR,sp600,2026-08-01,,Energy
+GPRE,sp600,2018-09-01,2025-04-01,Energy
+GPS,sp500,2015-12-01,2022-03-01,Consumer Discretionary
+GPS,sp400,2022-03-01,2024-08-01,Consumer Discretionary
+GRBK,sp600,2022-08-01,,Consumer Discretionary
+GRMN,sp500,2015-12-01,,Consumer Discretionary
+GRUB,sp400,2019-10-01,2021-07-01,Consumer Discretionary
+GS,sp500,2015-12-01,,Financials
+GSHD,sp600,2023-09-01,,Financials
+GT,sp500,2015-12-01,2019-03-01,Consumer Discretionary
+GT,sp400,2019-10-01,2026-08-01,Consumer Discretionary
+GT,sp600,2026-08-01,,Consumer Discretionary
+GTES,sp600,2024-08-01,,Industrials
+GTLS,sp600,2018-09-01,2022-05-01,Industrials
+GTLS,sp400,2022-04-01,2026-08-01,Industrials
+GTM,sp400,2025-06-01,2026-04-01,Communication Services
+GTM,sp600,2026-04-01,,Communication Services
+GTY,sp600,2018-09-01,,Real Estate
+GVA,sp400,2015-12-01,2020-11-01,Industrials
+GVA,sp600,2020-11-01,,Industrials
+GWB,sp600,2018-09-01,2022-02-01,Financials
+GWR,sp400,2015-12-01,2020-09-01,Industrials
+GWR,sp600,2020-09-01,2021-04-01,Industrials
+GWR,sp400,2020-11-01,2020-12-01,Industrials
+GWRE,sp400,2025-02-01,,Information Technology
+GWRS,sp400,2020-09-01,2020-11-01,Industrials
+GWW,sp500,2015-12-01,,Industrials
+GXO,sp400,2021-09-01,,Industrials
+GXP,sp400,2015-12-01,2018-08-01,Utilities
+H,sp400,2023-11-01,,Consumer Discretionary
+HA,sp600,2018-09-01,2023-11-01,Industrials
+HAE,sp400,2018-08-01,,Health Care
+HAFC,sp600,2018-09-01,,Financials
+HAIN,sp400,2015-12-01,2022-10-01,Consumer Staples
+HAIN,sp600,2022-11-01,2025-04-01,Consumer Staples
+HAL,sp500,2015-12-01,,Energy
+HALO,sp400,2021-01-01,,Health Care
+HAR,sp500,2015-12-01,2017-04-01,Consumer Discretionary
+HAS,sp500,2015-12-01,,Consumer Discretionary
+HASI,sp600,2023-10-01,,Financials
+HAYN,sp600,2018-09-01,2024-12-01,Materials
+HAYW,sp600,2023-10-01,,Industrials
+HBAN,sp500,2015-12-01,,Financials
+HBHC,sp400,2015-12-01,2018-12-01,Financials
+HBHC,sp600,2018-12-01,2021-04-01,Financials
+HBI,sp500,2015-12-01,2022-01-01,Consumer Discretionary
+HBI,sp400,2022-01-01,2023-04-01,Consumer Discretionary
+HBI,sp600,2023-04-01,2025-12-01,Consumer Discretionary
+HCA,sp500,2015-12-01,,Health Care
+HCC,sp400,2015-12-01,2017-01-01,Financials
+HCC,sp600,2021-04-01,,Materials
+HCI,sp600,2018-09-01,,Financials
+HCN,sp500,2015-12-01,2018-03-01,Real Estate
+HCP,sp500,2015-12-01,2019-12-01,Real Estate
+HCSG,sp400,2018-03-01,2021-10-01,Industrials
+HCSG,sp600,2021-10-01,,Industrials
+HD,sp500,2015-12-01,,Consumer Discretionary
+HE,sp400,2015-12-01,2023-11-01,Utilities
+HE,sp600,2026-01-01,,Utilities
+HELE,sp400,2017-01-01,2024-10-01,Consumer Discretionary
+HELE,sp600,2024-10-01,2026-01-01,Consumer Discretionary
+HES,sp500,2015-12-01,2025-08-01,Energy
+HF,sp600,2018-09-01,2019-07-01,Real Estate
+HFC,sp400,2015-12-01,2018-08-01,Energy
+HFC,sp500,2018-07-01,2021-07-01,Energy
+HFC,sp400,2021-07-01,2022-04-01,Energy
+HFWA,sp600,2018-09-01,,Financials
+HGV,sp400,2023-04-01,,Consumer Discretionary
+HI,sp600,2018-09-01,2026-03-01,Industrials
+HIBB,sp600,2018-09-01,2024-08-01,Consumer Discretionary
+HIG,sp500,2015-12-01,,Financials
+HII,sp400,2015-12-01,2018-03-01,Industrials
+HII,sp500,2018-02-01,,Industrials
+HIMS,sp600,2024-11-01,2025-04-01,Health Care
+HIMS,sp400,2025-04-01,,Health Care
+HIW,sp400,2015-12-01,2023-11-01,Real Estate
+HIW,sp600,2023-10-01,,Real Estate
+HL,sp600,2025-10-01,2026-01-01,Materials
+HL,sp400,2026-01-01,,Materials
+HLI,sp400,2024-01-01,,Financials
+HLIT,sp600,2018-09-01,,Information Technology
+HLNE,sp400,2024-10-01,,Financials
+HLS,sp400,2017-01-01,2018-02-01,Health Care
+HLT,sp500,2017-07-01,,Consumer Discretionary
+HLX,sp400,2015-12-01,2017-01-01,Energy
+HLX,sp600,2018-09-01,,Energy
+HME,sp400,2015-12-01,2017-01-01,Financials
+HMN,sp600,2018-09-01,,Financials
+HMST,sp600,2018-09-01,2023-07-01,Financials
+HMSY,sp400,2015-12-01,2017-01-01,Health Care
+HMSY,sp600,2018-09-01,2021-04-01,Health Care
+HNGR,sp600,2021-04-01,2022-11-01,Health Care
+HNI,sp400,2015-12-01,2021-04-01,Industrials
+HNI,sp600,2021-04-01,,Industrials
+HNT,sp400,2015-12-01,2017-01-01,Health Care
+HOG,sp500,2015-12-01,2020-08-01,Consumer Discretionary
+HOG,sp400,2021-01-01,,Consumer Discretionary
+HOLX,sp400,2015-12-01,2016-12-01,Health Care
+HOLX,sp500,2016-04-01,2026-05-01,Health Care
+HOMB,sp400,2017-07-01,,Financials
+HON,sp500,2015-12-01,,Industrials
+HONA,sp500,2026-07-01,,Industrials
+HOOD,sp500,2025-10-01,,Financials
+HOPE,sp600,2018-09-01,,Financials
+HOT,sp500,2015-12-01,2016-10-01,Consumer Discretionary
+HOUS,sp600,2022-07-01,2024-07-01,Real Estate
+HP,sp500,2015-12-01,2020-06-01,Energy
+HP,sp600,2021-04-01,,Energy
+HPE,sp500,2015-12-01,,Information Technology
+HPP,sp400,2021-01-01,2022-10-01,Financials
+HPP,sp600,2022-10-01,2025-01-01,Financials
+HPQ,sp500,2015-12-01,,Information Technology
+HPR,sp600,2018-09-01,2021-04-01,Energy
+HPT,sp400,2015-12-01,2020-04-01,Real Estate
+HPT,sp600,2020-04-01,2020-11-01,Real Estate
+HPT,sp400,2020-11-01,2021-01-01,Real Estate
+HQY,sp600,2018-09-01,2018-12-01,
+HQY,sp400,2018-10-01,,Health Care
+HR,sp400,2017-01-01,,Real Estate
+HRB,sp500,2015-12-01,2020-10-01,Consumer Discretionary
+HRB,sp400,2021-01-01,,Consumer Discretionary
+HRC,sp400,2015-12-01,2022-01-01,Health Care
+HRL,sp500,2015-12-01,,Consumer Staples
+HRMY,sp600,2021-11-01,,Health Care
+HRS,sp500,2015-12-01,2019-07-01,Industrials
+HSC,sp400,2015-12-01,2017-01-01,Industrials
+HSC,sp600,2018-09-01,2023-12-01,Industrials
+HSIC,sp500,2015-12-01,,Health Care
+HSII,sp600,2018-09-01,2026-01-01,Industrials
+HSKA,sp600,2018-09-01,2023-07-01,Health Care
+HSNI,sp400,2015-12-01,2018-02-01,Consumer Discretionary
+HST,sp500,2015-12-01,,Real Estate
+HSTM,sp600,2018-09-01,,Health Care
+HSY,sp500,2015-12-01,,Consumer Staples
+HT,sp600,2018-09-01,2023-04-01,Real Estate
+HTA,sp400,2023-12-01,2024-01-01,Real Estate
+HTH,sp600,2021-04-01,,Financials
+HTLD,sp600,2018-09-01,,Industrials
+HTO,sp600,2025-09-01,,Utilities
+HTZ,sp400,2023-04-01,2024-07-01,Industrials
+HTZ,sp600,2024-07-01,2026-09-01,Industrials
+HUB-B,sp400,2015-12-01,2017-01-01,Industrials
+HUBB,sp400,2017-01-01,2023-11-01,Industrials
+HUBB,sp500,2023-11-01,,Industrials
+HUBG,sp600,2018-09-01,,Industrials
+HUBS,sp400,2026-10-01,,Information Technology
+HUM,sp500,2015-12-01,,Health Care
+HVT,sp600,2018-09-01,2024-10-01,Consumer Discretionary
+HWC,sp400,2018-12-01,,Financials
+HWKN,sp600,2018-09-01,,Materials
+HWM,sp500,2020-04-01,,Industrials
+HXL,sp400,2021-01-01,,Industrials
+HYH,sp400,2015-12-01,2018-11-01,Health Care
+HYH,sp600,2018-12-01,2021-04-01,Health Care
+HZO,sp600,2018-09-01,,Consumer Discretionary
+IAA,sp400,2021-01-01,2023-04-01,Industrials
+IAC,sp600,2024-06-01,2026-07-01,Communication Services
+IART,sp400,2018-08-01,2024-07-01,Health Care
+IART,sp600,2024-07-01,,Health Care
+IBKR,sp400,2018-02-01,2019-01-01,Financials
+IBKR,sp600,2019-01-01,2019-10-01,Financials
+IBKR,sp400,2019-10-01,2025-09-01,Financials
+IBKR,sp500,2025-09-01,,Financials
+IBM,sp500,2015-12-01,,Information Technology
+IBOC,sp400,2015-12-01,,Financials
+IBP,sp600,2018-09-01,,Consumer Discretionary
+IBTX,sp600,2021-04-01,2025-02-01,Financials
+ICE,sp500,2015-12-01,,Financials
+ICHR,sp600,2021-04-01,,Information Technology
+ICUI,sp400,2018-04-01,2023-12-01,Health Care
+ICUI,sp600,2023-12-01,,Health Care
+IDA,sp400,2015-12-01,,Utilities
+IDCC,sp400,2015-12-01,2021-05-01,Information Technology
+IDCC,sp600,2021-05-01,2026-04-01,Information Technology
+IDCC,sp400,2026-04-01,,Information Technology
+IDTI,sp400,2015-12-01,2019-10-01,Information Technology
+IDTI,sp600,2019-10-01,2021-04-01,Information Technology
+IDXX,sp400,2015-12-01,2017-02-01,Health Care
+IDXX,sp500,2017-02-01,,Health Care
+IESC,sp400,2026-08-01,,Industrials
+IEX,sp400,2015-12-01,2019-10-01,Industrials
+IEX,sp500,2019-09-01,,Industrials
+IEX,sp600,2019-10-01,2021-04-01,Industrials
+IFF,sp500,2015-12-01,,Materials
+IIIN,sp600,2018-12-01,2026-08-01,Industrials
+IIPR,sp600,2021-04-01,,Real Estate
+IIVI,sp600,2018-09-01,2019-11-01,Information Technology
+IIVI,sp400,2019-11-01,2022-10-01,Information Technology
+ILG,sp400,2017-10-01,2018-09-01,Consumer Discretionary
+ILG,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+ILMN,sp500,2015-12-01,2024-07-01,Health Care
+ILMN,sp400,2024-07-01,2026-10-01,Health Care
+ILMN,sp500,2026-10-01,,Health Care
+ILPT,sp600,2021-04-01,2023-04-01,Real Estate
+IM,sp400,2015-12-01,2017-01-01,Information Technology
+INCR,sp400,2017-05-01,2018-05-01,Health Care
+INCY,sp500,2017-03-01,,Health Care
+INDB,sp600,2018-09-01,,Financials
+INDV,sp600,2026-01-01,,Health Care
+INFA,sp400,2015-12-01,2017-01-01,Information Technology
+INFO,sp500,2017-07-01,2022-03-01,Industrials
+INGN,sp600,2018-09-01,2023-07-01,Health Care
+INGR,sp400,2015-12-01,,Consumer Staples
+INN,sp600,2018-09-01,2026-04-01,Real Estate
+INSP,sp600,2024-10-01,,Health Care
+INSW,sp600,2025-02-01,,Energy
+INT,sp400,2015-12-01,2021-09-01,Energy
+INT,sp600,2021-09-01,2023-09-01,Energy
+INTC,sp500,2015-12-01,,Information Technology
+INTL,sp600,2018-09-01,2021-04-01,Financials
+INTU,sp500,2015-12-01,,Information Technology
+INVA,sp600,2018-09-01,,Health Care
+INVH,sp500,2022-09-01,,Real Estate
+INVX,sp600,2025-09-01,,Energy
+IOSP,sp600,2018-09-01,,Materials
+IP,sp500,2015-12-01,,Materials
+IPAR,sp600,2018-09-01,,Consumer Staples
+IPG,sp500,2015-12-01,2025-12-01,Communication Services
+IPGP,sp400,2015-12-01,2018-04-01,Information Technology
+IPGP,sp500,2018-04-01,2022-07-01,Information Technology
+IPGP,sp400,2022-07-01,,Information Technology
+IPHS,sp600,2018-09-01,2021-04-01,Materials
+IQV,sp500,2017-12-01,,Health Care
+IR,sp500,2015-12-01,,Industrials
+IRBT,sp600,2018-09-01,2024-04-01,Consumer Discretionary
+IRDM,sp600,2018-09-01,2021-04-01,Communication Services
+IRDM,sp400,2021-04-01,2026-01-01,Communication Services
+IRDM,sp600,2026-01-01,,Communication Services
+IRM,sp500,2015-12-01,,Real Estate
+IRT,sp600,2018-09-01,2022-06-01,Real Estate
+IRT,sp400,2022-06-01,,Real Estate
+IRWD,sp600,2022-06-01,2025-02-01,Health Care
+ISBC,sp600,2021-04-01,2022-05-01,Financials
+ISCA,sp400,2015-12-01,2019-11-01,Consumer Discretionary
+ISCA,sp600,2019-11-01,2020-11-01,Consumer Discretionary
+ISCA,sp400,2020-11-01,2021-01-01,Consumer Discretionary
+ISIL,sp400,2015-12-01,2017-03-01,Information Technology
+ISRG,sp500,2015-12-01,,Health Care
+IT,sp400,2015-12-01,2017-05-01,Information Technology
+IT,sp500,2017-05-01,,Information Technology
+ITG,sp600,2018-09-01,2021-04-01,Financials
+ITGR,sp600,2018-09-01,,Health Care
+ITOS,sp600,2022-02-01,2023-11-01,Health Care
+ITRI,sp400,2015-12-01,2017-01-01,Information Technology
+ITRI,sp600,2018-09-01,,Information Technology
+ITT,sp400,2015-12-01,,Industrials
+ITW,sp500,2015-12-01,,Industrials
+IVC,sp600,2018-09-01,2021-12-01,Health Care
+IVR,sp600,2018-09-01,2024-01-01,Real Estate
+IVT,sp600,2026-08-01,,Real Estate
+IVZ,sp500,2015-12-01,,Financials
+J,sp500,2020-01-01,,Industrials
+JACK,sp400,2016-12-01,2022-03-01,Consumer Discretionary
+JACK,sp600,2022-03-01,2025-10-01,Consumer Discretionary
+JAH,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+JAZZ,sp400,2021-01-01,,Health Care
+JBGS,sp400,2017-08-01,2023-04-01,Real Estate
+JBGS,sp600,2023-04-01,,Real Estate
+JBHT,sp400,2015-12-01,2017-01-01,Industrials
+JBHT,sp500,2015-12-01,,Industrials
+JBL,sp400,2015-12-01,2024-01-01,Information Technology
+JBL,sp500,2024-01-01,,Information Technology
+JBLU,sp400,2015-12-01,2023-11-01,Industrials
+JBLU,sp600,2023-10-01,,Industrials
+JBSS,sp600,2018-09-01,,Consumer Staples
+JBT,sp600,2018-09-01,2025-09-01,Industrials
+JBTM,sp600,2025-09-01,,Industrials
+JCI,sp500,2015-12-01,,Industrials
+JCOM,sp400,2017-01-01,2021-11-01,Information Technology
+JCP,sp400,2015-12-01,2017-07-01,Consumer Discretionary
+JCP,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+JDSU,sp400,2015-12-01,2017-01-01,Information Technology
+JEC,sp500,2015-12-01,2020-01-01,Industrials
+JEF,sp500,2018-06-01,2019-10-01,Financials
+JEF,sp400,2019-11-01,,Financials
+JHG,sp400,2017-06-01,2026-08-01,Financials
+JHX,sp400,2026-11-12,,Materials
+JJSF,sp600,2018-09-01,,Consumer Staples
+JKHY,sp400,2015-12-01,2019-10-01,Information Technology
+JKHY,sp500,2018-12-01,,Financials
+JKHY,sp600,2019-10-01,2021-04-01,Information Technology
+JLL,sp400,2015-12-01,,Real Estate
+JNJ,sp500,2015-12-01,,Health Care
+JNPR,sp500,2015-12-01,2025-07-01,Information Technology
+JNS,sp400,2015-12-01,2017-06-01,Financials
+JOE,sp600,2021-04-01,,Real Estate
+JOY,sp400,2017-01-01,2017-05-01,Industrials
+JPM,sp500,2015-12-01,,Financials
+JRVR,sp600,2018-09-01,2024-01-01,Financials
+JW-A,sp400,2015-12-01,2023-01-01,Communication Services
+JWN,sp500,2015-12-01,2020-08-01,Consumer Discretionary
+JWN,sp400,2021-01-01,2025-06-01,Consumer Discretionary
+JXN,sp600,2023-09-01,,Financials
+JYNT,sp600,2021-06-01,2023-01-01,Health Care
+K,sp500,2015-12-01,2026-01-01,Consumer Staples
+KAI,sp600,2025-03-01,,Industrials
+KALU,sp600,2018-09-01,,Materials
+KAMN,sp600,2018-09-01,2024-05-01,Industrials
+KAR,sp400,2019-11-01,2022-01-01,Industrials
+KAR,sp600,2022-01-01,2026-02-01,Industrials
+KATE,sp400,2015-12-01,2017-08-01,Consumer Discretionary
+KBH,sp400,2015-12-01,,Consumer Discretionary
+KBR,sp400,2015-12-01,,Industrials
+KD,sp400,2021-12-01,,Information Technology
+KDP,sp500,2022-07-01,,Consumer Staples
+KELYA,sp600,2018-09-01,2025-01-01,Industrials
+KEM,sp600,2018-09-01,2021-04-01,Information Technology
+KEX,sp400,2015-12-01,,Industrials
+KEY,sp500,2015-12-01,,Financials
+KEYS,sp400,2015-12-01,2018-12-01,Information Technology
+KEYS,sp500,2018-12-01,,Information Technology
+KEYS,sp600,2018-12-01,2021-04-01,Information Technology
+KFY,sp600,2018-09-01,,Industrials
+KGS,sp600,2025-08-01,,Energy
+KHC,sp500,2015-12-01,,Consumer Staples
+KIM,sp500,2015-12-01,,Real Estate
+KIRK,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+KKR,sp500,2024-07-01,,Financials
+KLAC,sp500,2015-12-01,,Information Technology
+KLG,sp600,2023-11-01,2025-10-01,Consumer Staples
+KLIC,sp600,2018-09-01,,Information Technology
+KLXI,sp400,2015-12-01,2018-10-01,Industrials
+KLXI,sp600,2018-12-01,2021-04-01,Industrials
+KMB,sp500,2015-12-01,,Consumer Staples
+KMI,sp500,2015-12-01,,Energy
+KMPR,sp400,2015-12-01,2026-04-01,Financials
+KMPR,sp600,2026-04-01,,Financials
+KMT,sp400,2015-12-01,2023-04-01,Industrials
+KMT,sp600,2023-04-01,,Industrials
+KMX,sp500,2015-12-01,2025-11-01,Consumer Discretionary
+KMX,sp600,2025-11-01,,Consumer Discretionary
+KN,sp400,2015-12-01,2018-06-01,Information Technology
+KN,sp600,2018-09-01,,Information Technology
+KNF,sp400,2023-07-01,,Materials
+KNSL,sp400,2021-02-01,,Financials
+KNTK,sp600,2025-09-01,,Energy
+KNX,sp400,2017-08-01,,Industrials
+KO,sp500,2015-12-01,,Consumer Staples
+KOP,sp600,2018-09-01,,Materials
+KOPN,sp600,2018-09-01,2021-04-01,Information Technology
+KORS,sp500,2015-12-01,2019-02-01,Consumer Discretionary
+KR,sp500,2015-12-01,,Consumer Staples
+KRA,sp600,2018-09-01,2022-04-01,Materials
+KRC,sp400,2015-12-01,,Real Estate
+KREF,sp600,2021-04-01,2026-04-01,Financials
+KRG,sp600,2018-09-01,2021-11-01,Real Estate
+KRG,sp400,2021-11-01,,Real Estate
+KRMN,sp600,2026-08-01,,Industrials
+KRYS,sp600,2024-07-01,2026-08-01,Health Care
+KRYS,sp400,2026-08-01,,Health Care
+KS,sp600,2018-09-01,2021-04-01,Materials
+KSS,sp500,2015-12-01,2020-10-01,Consumer Discretionary
+KSS,sp400,2021-01-01,2023-11-01,Consumer Discretionary
+KSS,sp600,2023-11-01,,Consumer Discretionary
+KSU,sp500,2015-12-01,2022-01-01,Industrials
+KTB,sp600,2021-04-01,,Consumer Discretionary
+KTOS,sp600,2025-04-01,2025-10-01,Industrials
+KTOS,sp400,2025-10-01,,Industrials
+KVUE,sp500,2023-09-01,2026-11-01,Consumer Staples
+KW,sp600,2023-04-01,2026-07-01,Real Estate
+KWR,sp600,2018-09-01,,Materials
+L,sp500,2015-12-01,,Financials
+LABL,sp600,2018-09-01,2021-04-01,Industrials
+LAD,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+LAD,sp400,2021-01-01,,Consumer Discretionary
+LAMR,sp400,2015-12-01,,Real Estate
+LANC,sp400,2015-12-01,2025-09-01,Consumer Staples
+LAUR,sp600,2026-04-01,,Consumer Discretionary
+LAZ,sp600,2026-08-01,,Financials
+LB,sp500,2015-12-01,2021-08-01,Consumer Discretionary
+LBRT,sp600,2023-10-01,,Energy
+LCI,sp600,2018-09-01,2021-07-01,Health Care
+LCII,sp600,2018-09-01,,Consumer Discretionary
+LDL,sp600,2018-09-01,2021-11-01,Industrials
+LDOS,sp400,2015-12-01,2019-10-01,Information Technology
+LDOS,sp500,2019-09-01,,Industrials
+LDOS,sp600,2019-10-01,2021-04-01,Information Technology
+LEA,sp400,2020-11-01,,Consumer Discretionary
+LECO,sp400,2015-12-01,,Industrials
+LEG,sp500,2015-12-01,2022-01-01,Consumer Discretionary
+LEG,sp400,2022-01-01,2024-07-01,Consumer Discretionary
+LEG,sp600,2024-07-01,,Consumer Discretionary
+LEN,sp500,2015-12-01,,Consumer Discretionary
+LESL,sp600,2022-10-01,2025-03-01,Consumer Discretionary
+LEU,sp600,2026-08-01,,Energy
+LFST,sp600,2026-06-01,,Health Care
+LFUS,sp400,2017-01-01,,Information Technology
+LGIH,sp600,2018-09-01,,Consumer Discretionary
+LGND,sp600,2018-09-01,2018-12-01,Health Care
+LGND,sp400,2018-12-01,2021-10-01,Health Care
+LGND,sp600,2021-10-01,,Health Care
+LH,sp500,2015-12-01,,Health Care
+LHCG,sp600,2018-09-01,2020-12-01,Health Care
+LHCG,sp400,2020-12-01,2023-03-01,Health Care
+LHO,sp400,2015-12-01,2019-10-01,Real Estate
+LHO,sp600,2019-10-01,2021-04-01,Real Estate
+LHX,sp500,2019-07-01,,Industrials
+LIF,sp600,2026-04-01,,Information Technology
+LII,sp400,2015-12-01,2025-01-01,Industrials
+LII,sp500,2025-01-01,,Industrials
+LIN,sp500,2018-11-01,,Materials
+LION,sp600,2018-09-01,2021-04-01,Financials
+LITE,sp400,2018-05-01,2026-04-01,Information Technology
+LITE,sp500,2026-04-01,,Information Technology
+LIVN,sp400,2017-01-01,,Health Care
+LKFN,sp600,2021-09-01,,Financials
+LKQ,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+LKQ,sp500,2016-06-01,2026-01-01,Consumer Discretionary
+LKQ,sp600,2026-01-01,,Consumer Discretionary
+LKSD,sp600,2018-09-01,2021-04-01,Industrials
+LL,sp600,2018-09-01,2023-01-01,Consumer Discretionary
+LLL,sp500,2015-12-01,2019-07-01,Industrials
+LLTC,sp500,2015-12-01,2017-04-01,Information Technology
+LLY,sp500,2015-12-01,,Health Care
+LM,sp500,2015-12-01,2017-01-01,Financials
+LM,sp400,2017-01-01,2021-01-01,Financials
+LMAT,sp600,2018-09-01,,Health Care
+LMNX,sp600,2018-09-01,2021-08-01,Health Care
+LMT,sp500,2015-12-01,,Industrials
+LNC,sp500,2015-12-01,2023-10-01,Financials
+LNC,sp600,2023-10-01,,Financials
+LNCE,sp400,2017-01-01,2018-05-01,Consumer Staples
+LNN,sp600,2018-09-01,,Materials
+LNT,sp400,2015-12-01,2017-01-01,Utilities
+LNT,sp500,2016-08-01,,Utilities
+LNTH,sp600,2018-09-01,2022-11-01,Health Care
+LNTH,sp400,2022-11-01,,Health Care
+LNW,sp400,2022-05-01,2025-12-01,Consumer Discretionary
+LOCO,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+LOGM,sp400,2017-03-01,2020-12-01,Information Technology
+LOGM,sp600,2020-12-01,2021-04-01,Information Technology
+LOPE,sp400,2020-11-01,,Consumer Discretionary
+LOW,sp500,2015-12-01,,Consumer Discretionary
+LPG,sp600,2021-04-01,,Energy
+LPI,sp600,2021-04-01,2023-09-01,Energy
+LPNT,sp400,2015-12-01,2019-10-01,Health Care
+LPNT,sp600,2019-10-01,2021-04-01,Health Care
+LPSN,sp600,2018-09-01,2023-07-01,Financials
+LPT,sp400,2015-12-01,2020-12-01,Real Estate
+LPT,sp600,2020-12-01,2021-04-01,Real Estate
+LPX,sp400,2015-12-01,,Industrials
+LQDA,sp600,2026-08-01,,Health Care
+LQDT,sp600,2018-09-01,,Industrials
+LRCX,sp500,2015-12-01,,Information Technology
+LRN,sp600,2022-08-01,,Consumer Discretionary
+LSCC,sp400,2021-05-01,,Information Technology
+LSI,sp400,2017-01-01,2023-09-01,Real Estate
+LSTR,sp400,2015-12-01,,Industrials
+LTC,sp600,2018-09-01,,Real Estate
+LTH,sp600,2026-04-01,,Consumer Discretionary
+LTHM,sp600,2021-04-01,2024-02-01,Materials
+LTXB,sp600,2018-09-01,2021-04-01,Financials
+LUK,sp500,2015-12-01,2018-06-01,Financials
+LULU,sp500,2023-11-01,,Consumer Discretionary
+LUMN,sp500,2020-10-01,2023-04-01,Communication Services
+LUMN,sp600,2023-04-01,,Communication Services
+LUV,sp500,2015-12-01,,Industrials
+LVLT,sp500,2015-12-01,2017-11-01,Communication Services
+LVS,sp500,2019-11-01,,Consumer Discretionary
+LW,sp400,2017-01-01,2019-10-01,Consumer Staples
+LW,sp500,2019-01-01,2026-04-01,Consumer Staples
+LW,sp600,2019-10-01,2021-04-01,Consumer Staples
+LW,sp600,2026-04-01,,Consumer Staples
+LXK,sp400,2015-12-01,2017-01-01,Information Technology
+LXP,sp600,2018-09-01,,Real Estate
+LXU,sp600,2018-09-01,2021-04-01,Materials
+LYB,sp500,2015-12-01,,Materials
+LYFT,sp600,2026-04-01,,Industrials
+LYLT,sp600,2021-12-01,2022-08-01,Communication Services
+LYV,sp400,2015-12-01,2020-11-01,Communication Services
+LYV,sp500,2020-01-01,,Communication Services
+LYV,sp600,2020-11-01,2021-04-01,Consumer Discretionary
+LZ,sp600,2026-03-01,,Industrials
+LZB,sp600,2018-09-01,,Consumer Discretionary
+M,sp500,2015-12-01,2020-05-01,Consumer Discretionary
+M,sp600,2021-04-01,2022-01-01,Consumer Discretionary
+M,sp400,2022-01-01,,Consumer Discretionary
+MA,sp500,2015-12-01,,Financials
+MAA,sp400,2015-12-01,2017-01-01,Financials
+MAA,sp500,2017-01-01,,Real Estate
+MAC,sp500,2015-12-01,2020-01-01,Real Estate
+MAC,sp400,2020-11-01,2023-07-01,Real Estate
+MAC,sp600,2023-07-01,,Real Estate
+MAN,sp400,2015-12-01,2025-10-01,Industrials
+MAN,sp600,2025-10-01,,Industrials
+MANH,sp400,2015-12-01,,Information Technology
+MANT,sp600,2018-09-01,2022-10-01,Industrials
+MAR,sp500,2015-12-01,,Consumer Discretionary
+MARA,sp600,2024-06-01,,Information Technology
+MAS,sp500,2015-12-01,,Industrials
+MASI,sp400,2017-04-01,2026-07-01,Health Care
+MAT,sp500,2015-12-01,2019-07-01,Consumer Discretionary
+MAT,sp400,2019-10-01,,Consumer Discretionary
+MATV,sp600,2023-10-01,2025-04-01,Materials
+MATW,sp600,2018-09-01,,Consumer Discretionary
+MATX,sp600,2018-09-01,,Industrials
+MBC,sp600,2023-01-01,,Industrials
+MBFI,sp400,2016-08-01,2019-10-01,Financials
+MBFI,sp600,2019-10-01,2021-04-01,Financials
+MBGL,sp600,2026-08-01,,Industrials
+MBIN,sp600,2026-03-01,,Financials
+MC,sp600,2023-07-01,,Financials
+MCD,sp500,2015-12-01,,Consumer Discretionary
+MCHP,sp500,2015-12-01,,Information Technology
+MCK,sp500,2015-12-01,,Health Care
+MCO,sp500,2015-12-01,,Financials
+MCRI,sp600,2018-09-01,,Consumer Discretionary
+MCS,sp600,2018-09-01,2024-07-01,Consumer Discretionary
+MCW,sp600,2022-11-01,2026-06-01,Consumer Discretionary
+MCY,sp400,2015-12-01,2022-10-01,Financials
+MCY,sp600,2022-10-01,,Financials
+MD,sp400,2015-12-01,2021-01-01,Health Care
+MD,sp600,2021-04-01,,Health Care
+MDC,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+MDC,sp600,2018-09-01,2024-05-01,Consumer Discretionary
+MDCO,sp600,2018-09-01,2021-04-01,Health Care
+MDLZ,sp500,2015-12-01,,Consumer Staples
+MDP,sp400,2015-12-01,2021-01-01,Communication Services
+MDP,sp600,2021-04-01,2022-01-01,Consumer Discretionary
+MDR,sp400,2018-07-01,2019-11-01,Energy
+MDR,sp600,2019-11-01,2021-04-01,Energy
+MDRX,sp400,2015-12-01,2021-01-01,Health Care
+MDRX,sp600,2021-04-01,2024-04-01,Health Care
+MDSO,sp400,2017-07-01,2020-11-01,Health Care
+MDSO,sp600,2020-11-01,2021-04-01,Health Care
+MDT,sp500,2015-12-01,,Health Care
+MDU,sp400,2015-12-01,2024-11-01,Industrials
+MDU,sp600,2024-11-01,,Utilities
+MDXG,sp600,2018-09-01,2021-04-01,Health Care
+MED,sp600,2018-09-01,2024-07-01,Consumer Staples
+MEDP,sp400,2021-01-01,,Health Care
+MEI,sp600,2018-09-01,2024-07-01,Information Technology
+MENT,sp400,2015-12-01,2017-05-01,Information Technology
+MERC,sp600,2021-04-01,2024-10-01,Materials
+MET,sp500,2015-12-01,,Financials
+META,sp500,2022-07-01,,Communication Services
+MFP,sp600,2026-08-01,,Industrials
+MGEE,sp600,2024-04-01,,Utilities
+MGLN,sp600,2018-09-01,2022-02-01,Health Care
+MGM,sp500,2017-08-01,,Consumer Discretionary
+MGPI,sp600,2018-09-01,2026-01-01,Consumer Staples
+MGY,sp600,2024-04-01,,Energy
+MHFI,sp500,2015-12-01,2016-06-01,Financials
+MHK,sp500,2015-12-01,2026-01-01,Consumer Discretionary
+MHK,sp600,2026-01-01,,Consumer Discretionary
+MHLD,sp600,2018-09-01,2021-04-01,Financials
+MHO,sp600,2018-09-01,,Consumer Discretionary
+MIDD,sp400,2021-01-01,,Industrials
+MIK,sp400,2017-04-01,2019-11-01,Consumer Discretionary
+MIK,sp600,2019-11-01,2021-05-01,Consumer Discretionary
+MIME,sp400,2021-09-01,2022-06-01,Information Technology
+MINI,sp600,2018-09-01,2021-04-01,Industrials
+MIR,sp600,2025-10-01,,Information Technology
+MJN,sp500,2015-12-01,2017-07-01,Consumer Staples
+MKC,sp500,2015-12-01,,Consumer Staples
+MKSI,sp400,2017-11-01,,Information Technology
+MKTX,sp400,2017-01-01,2019-10-01,Financials
+MKTX,sp500,2019-08-01,2025-10-01,Financials
+MKTX,sp600,2019-10-01,2021-04-01,Financials
+MKTX,sp600,2025-10-01,,Financials
+MLAB,sp600,2021-04-01,2025-10-01,Health Care
+MLHR,sp400,2015-12-01,2021-12-01,Industrials
+MLI,sp600,2018-09-01,2024-12-01,Industrials
+MLI,sp400,2024-12-01,,Industrials
+MLKN,sp400,2021-12-01,2022-11-01,Industrials
+MLKN,sp600,2022-11-01,,Industrials
+MLM,sp500,2015-12-01,,Materials
+MMC,sp500,2015-12-01,2026-02-01,Financials
+MMI,sp600,2021-04-01,,Real Estate
+MMM,sp500,2015-12-01,,Industrials
+MMS,sp400,2015-12-01,,Industrials
+MMSI,sp600,2018-09-01,,Health Care
+MNK,sp500,2015-12-01,2017-08-01,Health Care
+MNK,sp400,2017-08-01,2019-11-01,Health Care
+MNK,sp600,2019-11-01,2021-04-01,Health Care
+MNRO,sp600,2018-09-01,2026-08-01,Consumer Discretionary
+MNST,sp500,2015-12-01,,Consumer Staples
+MNTA,sp600,2018-09-01,2021-04-01,Health Care
+MO,sp500,2015-12-01,,Consumer Staples
+MODG,sp400,2022-10-01,2024-01-01,Consumer Discretionary
+MODG,sp600,2024-01-01,2026-04-01,Consumer Discretionary
+MODV,sp600,2021-04-01,2024-05-01,Health Care
+MOG-A,sp600,2018-09-01,2026-04-01,Industrials
+MOG-A,sp400,2026-04-01,,Industrials
+MOH,sp400,2017-01-01,2022-03-01,Health Care
+MOH,sp500,2022-04-01,2026-04-01,Health Care
+MOH,sp600,2026-04-01,2026-08-01,Health Care
+MOH,sp400,2026-08-01,,Health Care
+MON,sp500,2015-12-01,2018-07-01,Materials
+MORN,sp400,2023-11-01,,Financials
+MOS,sp500,2015-12-01,,Materials
+MOV,sp600,2018-09-01,2024-10-01,Consumer Discretionary
+MP,sp400,2022-08-01,2024-10-01,Materials
+MP,sp600,2024-10-01,2025-10-01,Materials
+MP,sp400,2025-10-01,,Materials
+MPAA,sp600,2018-09-01,2023-04-01,Consumer Discretionary
+MPC,sp500,2015-12-01,,Energy
+MPT,sp600,2026-03-01,,Real Estate
+MPW,sp400,2017-01-01,2024-04-01,Real Estate
+MPW,sp600,2024-04-01,2026-03-01,Real Estate
+MPWR,sp400,2017-01-01,2021-04-01,Information Technology
+MPWR,sp500,2021-03-01,,Information Technology
+MRCY,sp400,2019-11-01,2020-11-01,Industrials
+MRCY,sp400,2021-01-01,2023-09-01,Industrials
+MRCY,sp600,2023-09-01,,Industrials
+MRK,sp500,2015-12-01,,Health Care
+MRNA,sp500,2021-08-01,,Health Care
+MRO,sp500,2015-12-01,2024-12-01,Energy
+MRP,sp600,2025-02-01,,Real Estate
+MRSH,sp500,2026-02-01,,Financials
+MRTN,sp600,2021-04-01,,Industrials
+MRVL,sp500,2026-07-01,,Information Technology
+MS,sp500,2015-12-01,,Financials
+MSA,sp400,2015-12-01,,Industrials
+MSCC,sp400,2016-03-01,2018-08-01,Information Technology
+MSCI,sp400,2015-12-01,2018-05-01,Financials
+MSCI,sp500,2018-05-01,,Financials
+MSEX,sp600,2021-08-01,,Utilities
+MSFT,sp500,2015-12-01,,Information Technology
+MSGK,sp600,2026-11-12,,Communication Services
+MSGS,sp600,2023-09-01,2026-11-12,Communication Services
+MSI,sp500,2015-12-01,,Information Technology
+MSM,sp400,2015-12-01,,Industrials
+MSTR,sp600,2018-09-01,2021-10-01,Information Technology
+MTB,sp500,2015-12-01,,Financials
+MTCH,sp500,2021-10-01,2026-04-01,Communication Services
+MTCH,sp600,2026-04-01,,Communication Services
+MTD,sp400,2015-12-01,2017-01-01,Health Care
+MTD,sp500,2016-10-01,,Health Care
+MTDR,sp400,2017-07-01,2021-01-01,Energy
+MTDR,sp600,2021-04-01,2022-05-01,Energy
+MTDR,sp400,2022-05-01,,Energy
+MTG,sp400,2021-01-01,,Financials
+MTH,sp600,2018-09-01,,Consumer Discretionary
+MTN,sp400,2023-11-01,,Consumer Discretionary
+MTOR,sp600,2021-04-01,2022-09-01,Industrials
+MTRN,sp600,2018-09-01,,Materials
+MTRX,sp600,2018-09-01,2022-01-01,Industrials
+MTSC,sp600,2018-09-01,2021-05-01,Information Technology
+MTSI,sp400,2022-09-01,,Information Technology
+MTUS,sp600,2024-06-01,,Materials
+MTX,sp400,2015-12-01,2022-10-01,Materials
+MTX,sp600,2022-10-01,,Materials
+MTZ,sp400,2018-12-01,,Industrials
+MU,sp500,2015-12-01,,Information Technology
+MUR,sp500,2015-12-01,2017-08-01,Energy
+MUR,sp400,2017-08-01,,Energy
+MUSA,sp400,2015-12-01,,Consumer Discretionary
+MWA,sp600,2025-04-01,,Industrials
+MXIM,sp500,2019-01-01,2021-09-01,Information Technology
+MXL,sp600,2018-09-01,,Information Technology
+MYE,sp600,2018-09-01,2024-12-01,Materials
+MYGN,sp600,2018-09-01,2026-04-01,Health Care
+MYL,sp500,2015-12-01,2020-12-01,Health Care
+MYRG,sp600,2018-09-01,,Industrials
+MZTI,sp400,2025-09-01,,Consumer Staples
+NABL,sp600,2023-04-01,,Information Technology
+NANO,sp600,2018-09-01,2021-04-01,Information Technology
+NARI,sp400,2022-05-01,2024-04-01,Health Care
+NARI,sp600,2024-04-01,2025-03-01,Health Care
+NATI,sp400,2015-12-01,2023-11-01,Information Technology
+NATL,sp600,2023-11-01,,Financials
+NAVG,sp600,2018-09-01,2021-04-01,Financials
+NAVI,sp500,2015-12-01,2018-07-01,Financials
+NAVI,sp400,2018-08-01,2023-07-01,Financials
+NAVI,sp600,2023-07-01,,Financials
+NBHC,sp600,2018-09-01,,Financials
+NBIX,sp400,2021-05-01,,Health Care
+NBL,sp500,2015-12-01,2020-11-01,Energy
+NBR,sp400,2015-12-01,2019-10-01,Energy
+NBR,sp600,2019-10-01,2025-04-01,Energy
+NBTB,sp600,2018-09-01,,Financials
+NCI,sp600,2018-09-01,2021-04-01,Industrials
+NCLH,sp500,2017-11-01,,Consumer Discretionary
+NCR,sp400,2015-12-01,2023-11-01,Information Technology
+NDAQ,sp500,2015-12-01,,Financials
+NDSN,sp400,2015-12-01,2022-03-01,Industrials
+NDSN,sp500,2022-03-01,,Industrials
+NE,sp400,2017-01-01,2017-06-01,Energy
+NE,sp600,2018-09-01,2020-10-01,Energy
+NE,sp600,2025-10-01,,Energy
+NEE,sp500,2015-12-01,,Utilities
+NEM,sp500,2015-12-01,,Materials
+NEO,sp600,2021-04-01,,Health Care
+NEOG,sp600,2018-09-01,2021-04-01,Health Care
+NEOG,sp400,2021-01-01,2025-04-01,Health Care
+NEOG,sp600,2025-04-01,,Health Care
+NEU,sp400,2015-12-01,,Materials
+NEWM,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+NEX,sp600,2023-04-01,2023-09-01,Energy
+NFBK,sp600,2018-09-01,2024-07-01,Financials
+NFG,sp400,2015-12-01,,Utilities
+NFLX,sp500,2015-12-01,,Communication Services
+NFX,sp500,2015-12-01,2019-03-01,Energy
+NGVT,sp600,2018-09-01,2019-10-01,Materials
+NGVT,sp400,2019-10-01,2023-07-01,Materials
+NGVT,sp600,2023-07-01,,Materials
+NHC,sp600,2024-01-01,,Health Care
+NHI,sp600,2026-08-01,,Real Estate
+NI,sp500,2015-12-01,,Utilities
+NIC,sp600,2026-08-01,,Financials
+NJR,sp400,2017-01-01,,Utilities
+NKE,sp500,2015-12-01,,Consumer Discretionary
+NKTR,sp500,2018-04-01,2019-11-01,Health Care
+NKTR,sp400,2019-11-01,2022-01-01,Health Care
+NKTR,sp600,2022-01-01,2023-05-01,Health Care
+NLOK,sp500,2019-12-01,2022-12-01,Information Technology
+NLS,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+NLSN,sp500,2015-12-01,2022-11-01,Industrials
+NLY,sp400,2022-10-01,,Financials
+NMIH,sp600,2018-09-01,,Financials
+NNN,sp400,2015-12-01,,Real Estate
+NOC,sp500,2015-12-01,,Industrials
+NOG,sp600,2023-02-01,,Energy
+NOV,sp500,2015-12-01,2021-10-01,Energy
+NOV,sp400,2021-10-01,,Energy
+NOVT,sp400,2022-08-01,,Information Technology
+NOW,sp500,2019-12-01,,Information Technology
+NP,sp600,2018-09-01,2022-08-01,Materials
+NPK,sp600,2018-09-01,,Industrials
+NPO,sp600,2018-09-01,,Industrials
+NR,sp600,2018-09-01,2021-04-01,Energy
+NRG,sp500,2015-12-01,,Utilities
+NSA,sp600,2018-09-01,2021-06-01,Real Estate
+NSA,sp400,2021-06-01,2026-08-01,Real Estate
+NSC,sp500,2015-12-01,,Industrials
+NSIT,sp600,2018-09-01,,Industrials
+NSP,sp600,2018-09-01,2019-10-01,Industrials
+NSP,sp400,2019-10-01,2026-01-01,Industrials
+NSP,sp600,2026-01-01,,Industrials
+NSR,sp400,2015-12-01,2017-10-01,Information Technology
+NSSC,sp600,2026-04-01,,Information Technology
+NTAP,sp500,2015-12-01,,Information Technology
+NTCT,sp400,2017-01-01,2021-12-01,Information Technology
+NTCT,sp600,2021-12-01,,Information Technology
+NTGR,sp600,2018-09-01,2023-10-01,Information Technology
+NTNX,sp400,2025-10-01,,Information Technology
+NTRI,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+NTRS,sp500,2015-12-01,,Financials
+NTST,sp600,2026-07-01,,Real Estate
+NTUS,sp600,2021-04-01,2022-08-01,Health Care
+NUE,sp500,2015-12-01,,Materials
+NUS,sp400,2017-04-01,2023-01-01,Consumer Staples
+NUS,sp600,2023-01-01,2024-10-01,Consumer Staples
+NUVA,sp400,2017-01-01,2023-01-01,Health Care
+NUVA,sp600,2023-01-01,2023-09-01,Health Care
+NVDA,sp500,2015-12-01,,Information Technology
+NVEE,sp600,2022-01-01,2025-08-01,Industrials
+NVR,sp400,2015-12-01,2019-11-01,Consumer Discretionary
+NVR,sp500,2019-10-01,,Consumer Discretionary
+NVR,sp600,2019-11-01,2021-04-01,Consumer Discretionary
+NVRI,sp600,2023-12-01,2026-07-01,Industrials
+NVST,sp400,2021-05-01,,Health Care
+NVT,sp400,2018-06-01,,Industrials
+NWBI,sp600,2018-09-01,,Financials
+NWE,sp400,2017-01-01,,Utilities
+NWL,sp500,2015-12-01,2023-10-01,Consumer Discretionary
+NWL,sp600,2023-10-01,,Consumer Discretionary
+NWN,sp600,2018-09-01,,Utilities
+NWS,sp500,2015-12-01,,Communication Services
+NWSA,sp500,2015-12-01,,Communication Services
+NX,sp600,2018-09-01,,Industrials
+NXGN,sp600,2021-04-01,2023-12-01,Health Care
+NXPI,sp500,2021-04-01,,Information Technology
+NXRT,sp600,2021-04-01,,Real Estate
+NXST,sp400,2023-01-01,,Communication Services
+NXT,sp400,2024-07-01,,Industrials
+NYCB,sp400,2015-12-01,2025-02-01,Financials
+NYMT,sp600,2018-09-01,2025-10-01,Real Estate
+NYT,sp400,2015-12-01,,Communication Services
+O,sp500,2015-12-01,,Real Estate
+OA,sp400,2015-12-01,2018-08-01,Industrials
+OAS,sp400,2018-06-01,2020-11-01,Energy
+OAS,sp600,2020-11-01,2021-04-01,Energy
+OC,sp400,2019-11-01,,Industrials
+OCLR,sp600,2018-09-01,2021-04-01,Information Technology
+OCR,sp400,2015-12-01,2017-01-01,Health Care
+ODFL,sp400,2015-12-01,2020-11-01,Industrials
+ODFL,sp500,2020-01-01,,Industrials
+ODFL,sp600,2020-11-01,2021-04-01,Industrials
+ODP,sp400,2015-12-01,2021-01-01,Consumer Discretionary
+ODP,sp600,2021-04-01,2025-05-01,Consumer Discretionary
+OFC,sp400,2015-12-01,2023-11-01,Real Estate
+OFG,sp600,2018-09-01,,Financials
+OFIX,sp600,2018-09-01,2024-01-01,Health Care
+OGE,sp400,2015-12-01,,Utilities
+OGN,sp500,2021-07-01,2023-11-01,Health Care
+OGN,sp600,2023-11-01,,Health Care
+OGS,sp400,2015-12-01,,Utilities
+OHI,sp400,2015-12-01,,Real Estate
+OI,sp500,2015-12-01,2017-01-01,Materials
+OI,sp400,2017-01-01,2021-04-01,Materials
+OI,sp600,2021-04-01,,Materials
+OII,sp400,2015-12-01,2020-11-01,Energy
+OII,sp600,2020-11-01,,Energy
+OIS,sp400,2015-12-01,2017-11-01,Energy
+OIS,sp600,2018-09-01,2024-04-01,Energy
+OKE,sp500,2015-12-01,,Energy
+OKTA,sp400,2025-04-01,2026-11-01,Information Technology
+OKTA,sp500,2026-11-01,,Information Technology
+OLED,sp400,2019-10-01,,Information Technology
+OLLI,sp400,2018-08-01,,Consumer Discretionary
+OLN,sp400,2015-12-01,2026-11-01,Materials
+OMC,sp500,2015-12-01,,Communication Services
+OMCL,sp600,2018-09-01,2022-08-01,Health Care
+OMCL,sp400,2022-07-01,2023-11-01,Health Care
+OMCL,sp600,2023-10-01,,Health Care
+OMI,sp400,2015-12-01,2018-04-01,Health Care
+OMI,sp600,2018-09-01,2025-10-01,Health Care
+ON,sp500,2022-07-01,,Information Technology
+ONB,sp600,2018-09-01,2022-03-01,Financials
+ONB,sp400,2022-03-01,,Financials
+ONL,sp600,2021-12-01,2023-10-01,Real Estate
+ONTO,sp600,2021-04-01,2023-11-01,Information Technology
+ONTO,sp400,2023-11-01,,Information Technology
+OPB,sp600,2018-09-01,2020-10-01,Financials
+OPCH,sp400,2021-09-01,,Health Care
+OPI,sp600,2021-04-01,2023-10-01,Real Estate
+OPLN,sp600,2026-02-01,,Industrials
+OPRX,sp600,2021-11-01,2023-04-01,Health Care
+ORA,sp400,2022-08-01,,Utilities
+ORCL,sp500,2015-12-01,,Information Technology
+ORGO,sp600,2021-07-01,2023-04-01,Health Care
+ORI,sp400,2015-12-01,,Financials
+ORIT,sp600,2018-09-01,2021-04-01,Financials
+ORLY,sp500,2015-12-01,,Consumer Discretionary
+ORN,sp600,2018-09-01,2021-04-01,Industrials
+OSIS,sp600,2018-09-01,,Information Technology
+OSK,sp400,2015-12-01,,Industrials
+OSPN,sp600,2018-09-01,2024-01-01,Information Technology
+OSUR,sp600,2018-09-01,2024-07-01,Health Care
+OSW,sp600,2026-03-01,,Consumer Discretionary
+OTIS,sp500,2020-05-01,,Industrials
+OTTR,sp600,2023-03-01,,Utilities
+OUT,sp600,2022-10-01,,Real Estate
+OVV,sp400,2023-07-01,,Energy
+OXM,sp600,2018-09-01,2026-08-01,Consumer Discretionary
+OXY,sp500,2015-12-01,,Energy
+OZK,sp400,2018-08-01,,Financials
+OZRK,sp400,2015-12-01,2018-08-01,Financials
+P,sp400,2026-06-01,2026-10-01,Information Technology
+P,sp500,2026-10-01,,Information Technology
+PACW,sp400,2015-12-01,2023-04-01,Financials
+PACW,sp600,2023-05-01,2023-12-01,Financials
+PAG,sp400,2023-09-01,,Consumer Discretionary
+PAHC,sp600,2018-09-01,,Health Care
+PANW,sp500,2023-07-01,,Information Technology
+PARA,sp500,2022-03-01,2025-09-01,Communication Services
+PARR,sp600,2018-09-01,,Energy
+PATH,sp400,2026-02-01,,Information Technology
+PATK,sp600,2018-09-01,,Consumer Discretionary
+PAY,sp400,2015-12-01,2018-09-01,Information Technology
+PAY,sp600,2018-09-01,2021-04-01,Information Technology
+PAYC,sp500,2020-02-01,2026-04-01,Industrials
+PAYC,sp600,2026-04-01,,Industrials
+PAYO,sp600,2022-11-01,,Financials
+PAYX,sp500,2015-12-01,,Industrials
+PB,sp400,2015-12-01,,Financials
+PBCT,sp500,2015-12-01,2022-05-01,Financials
+PBF,sp400,2017-05-01,2021-01-01,Energy
+PBF,sp600,2021-04-01,2023-01-01,Energy
+PBF,sp400,2023-01-01,,Energy
+PBH,sp400,2017-01-01,2021-04-01,Health Care
+PBH,sp600,2021-04-01,,Health Care
+PBI,sp500,2015-12-01,2017-03-01,Industrials
+PBI,sp400,2017-03-01,2019-10-01,Industrials
+PBI,sp600,2019-10-01,,Industrials
+PCAR,sp500,2015-12-01,,Industrials
+PCG,sp500,2015-12-01,2019-02-01,Utilities
+PCG,sp500,2022-11-01,,Utilities
+PCH,sp400,2015-12-01,2026-02-01,Real Estate
+PCL,sp500,2015-12-01,2016-03-01,Financials
+PCLN,sp500,2015-12-01,2018-03-01,Consumer Discretionary
+PCP,sp500,2015-12-01,2016-02-01,Industrials
+PCRX,sp600,2021-04-01,,Health Care
+PCTY,sp400,2021-01-01,,Industrials
+PDCE,sp600,2018-09-01,2022-03-01,Energy
+PDCE,sp400,2022-03-01,2023-09-01,Energy
+PDCO,sp500,2015-12-01,2018-04-01,Health Care
+PDCO,sp400,2018-04-01,2024-02-01,Health Care
+PDCO,sp600,2024-02-01,2025-05-01,Health Care
+PDFS,sp600,2018-09-01,,Information Technology
+PEAK,sp500,2019-12-01,2024-03-01,Real Estate
+PEB,sp400,2019-10-01,2023-04-01,Real Estate
+PEB,sp600,2023-04-01,,Real Estate
+PECO,sp600,2023-07-01,,Real Estate
+PEG,sp500,2015-12-01,,Utilities
+PEGA,sp400,2025-06-01,,Information Technology
+PEI,sp600,2018-09-01,2021-04-01,Real Estate
+PEN,sp400,2019-11-01,,Health Care
+PENG,sp600,2025-09-01,,Information Technology
+PENN,sp600,2018-09-01,2018-12-01,Consumer Discretionary
+PENN,sp400,2018-11-01,2021-04-01,Consumer Discretionary
+PENN,sp500,2021-04-01,2022-09-01,Consumer Discretionary
+PENN,sp400,2022-10-01,2024-07-01,Consumer Discretionary
+PENN,sp600,2024-07-01,,Consumer Discretionary
+PEP,sp500,2015-12-01,,Consumer Staples
+PERY,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+PES,sp600,2018-09-01,2021-04-01,Energy
+PETS,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+PFBC,sp600,2018-09-01,,Financials
+PFE,sp500,2015-12-01,,Health Care
+PFG,sp500,2015-12-01,,Financials
+PFGC,sp400,2021-10-01,,Consumer Staples
+PFS,sp600,2018-09-01,,Financials
+PG,sp500,2015-12-01,,Consumer Staples
+PGNX,sp600,2018-09-01,2021-04-01,Health Care
+PGNY,sp400,2021-05-01,2024-10-01,Health Care
+PGNY,sp600,2024-10-01,,Health Care
+PGR,sp500,2015-12-01,,Financials
+PGTI,sp600,2018-09-01,2024-05-01,Industrials
+PH,sp500,2015-12-01,,Industrials
+PHIN,sp600,2023-07-01,,Consumer Discretionary
+PHM,sp500,2015-12-01,,Consumer Discretionary
+PI,sp600,2024-10-01,,Information Technology
+PII,sp400,2015-12-01,,Consumer Discretionary
+PINC,sp600,2023-10-01,2025-12-01,Health Care
+PINS,sp400,2026-01-01,,Communication Services
+PIPR,sp600,2021-04-01,,Financials
+PJC,sp600,2018-09-01,2021-04-01,Financials
+PJT,sp600,2024-01-01,,Financials
+PK,sp400,2019-11-01,,Real Estate
+PKE,sp600,2018-09-01,2023-04-01,Industrials
+PKG,sp400,2015-12-01,2017-08-01,Materials
+PKG,sp500,2017-08-01,,Materials
+PKI,sp500,2015-12-01,2023-06-01,Health Care
+PLAB,sp600,2018-09-01,,Information Technology
+PLAY,sp600,2018-09-01,2026-04-01,Consumer Discretionary
+PLCE,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+PLCM,sp400,2015-12-01,2017-01-01,Information Technology
+PLD,sp500,2015-12-01,,Real Estate
+PLMR,sp600,2021-04-01,,Financials
+PLNT,sp400,2023-07-01,,Consumer Discretionary
+PLT,sp400,2015-12-01,2020-11-01,Information Technology
+PLT,sp600,2020-11-01,2021-06-01,Information Technology
+PLTR,sp500,2024-10-01,,Information Technology
+PLUS,sp600,2018-09-01,,Information Technology
+PLXS,sp600,2018-09-01,,Information Technology
+PM,sp500,2015-12-01,,Consumer Staples
+PMT,sp600,2018-09-01,,Real Estate
+PNC,sp500,2015-12-01,,Financials
+PNFP,sp400,2018-01-01,,Financials
+PNM,sp400,2015-12-01,2025-02-01,Utilities
+PNR,sp500,2015-12-01,,Industrials
+PNRA,sp400,2015-12-01,2017-08-01,Consumer Discretionary
+PNTG,sp600,2021-04-01,2023-04-01,Health Care
+PNW,sp500,2015-12-01,,Utilities
+PODD,sp500,2023-04-01,,Health Care
+POL,sp400,2015-12-01,2021-01-01,Materials
+POLY,sp600,2021-06-01,2022-09-01,Information Technology
+POM,sp500,2015-12-01,2016-04-01,Utilities
+POOL,sp400,2017-01-01,2021-01-01,Consumer Discretionary
+POOL,sp500,2020-11-01,2026-07-01,Consumer Discretionary
+POOL,sp600,2026-08-01,,Consumer Discretionary
+POR,sp400,2022-07-01,,Utilities
+POST,sp400,2015-12-01,,Consumer Staples
+POWI,sp600,2018-09-01,2022-01-01,Information Technology
+POWI,sp400,2022-01-01,2026-01-01,Information Technology
+POWI,sp600,2026-01-01,,Information Technology
+POWL,sp600,2018-09-01,,Industrials
+PPBI,sp600,2018-09-01,2025-09-01,Financials
+PPC,sp400,2019-11-01,,Consumer Staples
+PPG,sp500,2015-12-01,,Materials
+PPL,sp500,2015-12-01,,Utilities
+PPLI,sp600,2026-07-01,,Communication Services
+PR,sp400,2023-11-01,,Energy
+PRA,sp600,2018-09-01,2026-07-01,Financials
+PRAA,sp600,2018-09-01,2026-08-01,Financials
+PRAH,sp400,2018-08-01,2021-07-01,Health Care
+PRDO,sp600,2021-04-01,,Consumer Discretionary
+PRFT,sp600,2018-09-01,2024-11-01,Information Technology
+PRG,sp400,2021-01-01,2022-05-01,Financials
+PRG,sp600,2022-05-01,,Financials
+PRGO,sp500,2015-12-01,2021-10-01,Health Care
+PRGO,sp400,2021-10-01,2026-01-01,Health Care
+PRGO,sp600,2026-01-01,,Health Care
+PRGS,sp600,2018-09-01,,Information Technology
+PRI,sp400,2015-12-01,,Financials
+PRIM,sp600,2026-01-01,,Industrials
+PRK,sp600,2021-04-01,,Financials
+PRKS,sp600,2025-10-01,,Consumer Discretionary
+PRLB,sp600,2018-09-01,,Industrials
+PRSC,sp600,2018-09-01,2021-04-01,Health Care
+PRSP,sp600,2018-09-01,2021-04-01,Information Technology
+PRSP,sp400,2021-01-01,2021-06-01,Information Technology
+PRSU,sp600,2025-07-01,,Consumer Discretionary
+PRU,sp500,2015-12-01,,Financials
+PRVA,sp600,2023-07-01,,Health Care
+PRXL,sp400,2017-01-01,2017-11-01,Health Care
+PSA,sp500,2015-12-01,,Real Estate
+PSB,sp600,2018-12-01,2019-10-01,Real Estate
+PSB,sp400,2019-10-01,2022-08-01,Real Estate
+PSKY,sp500,2025-09-01,2026-11-01,Communication Services
+PSMT,sp600,2021-04-01,,Consumer Staples
+PSN,sp400,2024-10-01,,Industrials
+PSTG,sp400,2024-02-01,2026-06-01,Information Technology
+PSX,sp500,2015-12-01,,Energy
+PTC,sp400,2015-12-01,2021-05-01,Information Technology
+PTC,sp500,2021-05-01,,Information Technology
+PTCT,sp600,2025-12-01,,Health Care
+PTEN,sp400,2015-12-01,2021-01-01,Energy
+PTEN,sp600,2021-04-01,,Energy
+PTGX,sp600,2024-08-01,,Health Care
+PTON,sp600,2026-07-01,,Consumer Discretionary
+PUMP,sp600,2018-09-01,2025-10-01,Energy
+PVAC,sp600,2018-09-01,2022-03-01,Energy
+PVH,sp500,2015-12-01,2022-09-01,Consumer Discretionary
+PVH,sp400,2022-10-01,,Consumer Discretionary
+PVTB,sp400,2017-01-01,2017-07-01,Financials
+PWR,sp500,2015-12-01,,Industrials
+PX,sp500,2015-12-01,2018-11-01,Materials
+PXD,sp500,2015-12-01,2024-05-01,Energy
+PYPL,sp500,2015-12-01,,Financials
+PZZA,sp400,2017-01-01,2023-11-01,Consumer Discretionary
+PZZA,sp600,2023-10-01,,Consumer Discretionary
+Q,sp500,2017-09-01,2017-12-01,Information Technology
+Q,sp500,2025-12-01,,Information Technology
+QCOM,sp500,2015-12-01,,Information Technology
+QCP,sp400,2017-01-01,2018-09-01,Real Estate
+QDEL,sp400,2021-01-01,2024-08-01,Health Care
+QDEL,sp600,2024-08-01,,Health Care
+QEP,sp400,2017-01-01,2019-11-01,Energy
+QEP,sp600,2019-11-01,2021-04-01,Energy
+QHC,sp600,2018-09-01,2021-04-01,Health Care
+QLYS,sp600,2018-09-01,2021-04-01,Information Technology
+QLYS,sp400,2021-01-01,,Information Technology
+QNST,sp600,2018-09-01,,Communication Services
+QRVO,sp500,2015-12-01,2025-01-01,Information Technology
+QRVO,sp600,2025-01-01,,Information Technology
+QSII,sp600,2018-09-01,2018-12-01,
+QTWO,sp600,2025-10-01,,Information Technology
+QURE,sp600,2021-10-01,2023-10-01,Health Care
+R,sp500,2015-12-01,2017-07-01,Industrials
+R,sp400,2017-08-01,,Industrials
+RAI,sp500,2015-12-01,2017-08-01,Consumer Staples
+RAL,sp600,2025-08-01,,Information Technology
+RAMP,sp400,2018-12-01,2022-07-01,Information Technology
+RAMP,sp600,2022-06-01,,Information Technology
+RAVN,sp600,2018-09-01,2022-01-01,Industrials
+RAX,sp400,2015-12-01,2017-01-01,Information Technology
+RBA,sp400,2024-07-01,,Industrials
+RBC,sp400,2015-12-01,2022-01-01,Industrials
+RBC,sp400,2023-11-01,,Industrials
+RC,sp600,2021-04-01,2026-01-01,Financials
+RCII,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+RCII,sp600,2018-09-01,2023-12-01,Consumer Discretionary
+RCL,sp500,2015-12-01,,Consumer Discretionary
+RCM,sp600,2021-04-01,2021-06-01,Health Care
+RCM,sp400,2021-07-01,2024-12-01,Health Care
+RCUS,sp600,2022-05-01,,Health Care
+RDC,sp400,2015-12-01,2019-03-01,Energy
+RDC,sp600,2019-03-01,2019-04-01,Energy
+RDDT,sp500,2026-09-01,,Communication Services
+RDN,sp600,2023-04-01,,Financials
+RDNT,sp600,2021-04-01,,Health Care
+RE,sp400,2015-12-01,2018-01-01,Financials
+RE,sp500,2017-07-01,2023-08-01,Financials
+RECN,sp600,2018-09-01,2021-04-01,Industrials
+REG,sp400,2015-12-01,2017-04-01,Real Estate
+REG,sp500,2017-03-01,,Real Estate
+REGI,sp600,2018-09-01,2022-07-01,Energy
+REGN,sp500,2015-12-01,,Health Care
+REI,sp600,2018-09-01,2021-04-01,Energy
+RELY,sp600,2026-06-01,,Financials
+RES,sp600,2021-04-01,,Energy
+REX,sp600,2018-09-01,,Energy
+REXR,sp400,2021-01-01,,Real Estate
+REYN,sp600,2025-10-01,,Consumer Staples
+REZI,sp600,2021-04-01,,Industrials
+RF,sp500,2015-12-01,,Financials
+RGA,sp400,2015-12-01,,Financials
+RGEN,sp600,2018-09-01,2019-11-01,Health Care
+RGEN,sp400,2019-11-01,,Health Care
+RGLD,sp400,2015-12-01,,Materials
+RGNX,sp600,2018-09-01,2025-01-01,Health Care
+RGP,sp600,2021-04-01,2024-07-01,Industrials
+RGR,sp600,2018-09-01,2026-01-01,Consumer Discretionary
+RGS,sp600,2018-09-01,2021-11-01,Consumer Discretionary
+RH,sp400,2017-01-01,2017-02-01,Consumer Discretionary
+RH,sp600,2018-09-01,2020-12-01,Consumer Discretionary
+RH,sp400,2020-12-01,,Consumer Discretionary
+RHI,sp500,2015-12-01,2024-07-01,Industrials
+RHI,sp600,2024-07-01,,Industrials
+RHP,sp600,2025-04-01,,Real Estate
+RHT,sp500,2015-12-01,2019-08-01,Information Technology
+RIG,sp500,2015-12-01,2017-08-01,Energy
+RIG,sp400,2017-08-01,2021-01-01,Energy
+RILY,sp600,2021-05-01,2024-10-01,Financials
+RITM,sp600,2026-04-01,,Financials
+RJF,sp400,2015-12-01,2017-04-01,Financials
+RJF,sp500,2017-04-01,,Financials
+RKT,sp400,2015-12-01,2017-01-01,Materials
+RL,sp500,2015-12-01,,Consumer Discretionary
+RLGY,sp400,2018-11-01,2019-10-01,Real Estate
+RLGY,sp600,2021-04-01,2022-07-01,Real Estate
+RLI,sp600,2018-09-01,2021-04-01,Financials
+RLI,sp400,2021-01-01,,Financials
+RMAX,sp600,2018-09-01,2023-10-01,Real Estate
+RMBS,sp600,2018-09-01,2024-01-01,Information Technology
+RMBS,sp400,2024-01-01,,Information Technology
+RMD,sp400,2015-12-01,2017-08-01,Health Care
+RMD,sp500,2017-08-01,,Health Care
+RNG,sp600,2026-03-01,,Information Technology
+RNR,sp400,2015-12-01,,Financials
+RNST,sp600,2021-04-01,,Financials
+ROAD,sp600,2026-08-01,,Industrials
+ROCC,sp600,2022-03-01,2023-07-01,Energy
+ROCK,sp600,2018-09-01,,Industrials
+ROG,sp600,2018-09-01,,Information Technology
+ROIC,sp600,2018-09-01,2025-03-01,Real Estate
+ROIV,sp400,2024-04-01,,Health Care
+ROK,sp500,2015-12-01,,Industrials
+ROKU,sp400,2026-07-01,2026-11-12,Communication Services
+ROL,sp400,2015-12-01,2021-01-01,Industrials
+ROL,sp500,2018-10-01,,Industrials
+ROP,sp500,2015-12-01,,Information Technology
+ROSE,sp400,2015-12-01,2017-01-01,Energy
+ROST,sp500,2015-12-01,,Consumer Discretionary
+ROVI,sp400,2015-12-01,2017-01-01,Information Technology
+RPAI,sp600,2021-04-01,2021-11-01,Real Estate
+RPM,sp400,2015-12-01,,Materials
+RPT,sp600,2018-09-01,2024-02-01,Real Estate
+RRC,sp500,2015-12-01,2018-07-01,Energy
+RRC,sp400,2018-08-01,2019-11-01,Energy
+RRC,sp600,2019-11-01,2022-04-01,Energy
+RRC,sp400,2022-03-01,,Energy
+RRD,sp400,2015-12-01,2017-01-01,Industrials
+RRD,sp600,2018-09-01,2021-04-01,Industrials
+RRGB,sp600,2018-09-01,2022-06-01,Consumer Discretionary
+RRR,sp600,2025-12-01,,Consumer Discretionary
+RRX,sp400,2022-01-01,,Industrials
+RS,sp400,2015-12-01,,Materials
+RSG,sp500,2015-12-01,,Industrials
+RSI,sp600,2026-08-01,,Consumer Discretionary
+RTEC,sp600,2018-09-01,2021-04-01,Information Technology
+RTN,sp500,2015-12-01,2020-05-01,Industrials
+RTX,sp500,2020-05-01,,Industrials
+RUN,sp400,2021-01-01,2024-04-01,Industrials
+RUN,sp600,2024-05-01,,Industrials
+RUSHA,sp600,2024-02-01,,Industrials
+RUTH,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+RVTY,sp500,2023-06-01,,Health Care
+RWT,sp600,2018-09-01,2026-08-01,Real Estate
+RXO,sp400,2022-11-01,2023-02-01,Industrials
+RXO,sp600,2023-01-01,,Industrials
+RYAM,sp600,2018-09-01,2023-07-01,Materials
+RYAN,sp400,2024-07-01,,Financials
+RYN,sp400,2015-12-01,,Real Estate
+SABR,sp400,2017-05-01,2023-01-01,Information Technology
+SABR,sp600,2023-01-01,,Consumer Discretionary
+SAFE,sp600,2021-04-01,,Real Estate
+SAFM,sp400,2017-11-01,2022-08-01,Consumer Staples
+SAFT,sp600,2018-09-01,,Financials
+SAH,sp600,2018-09-01,,Consumer Discretionary
+SAIA,sp600,2018-09-01,2021-09-01,Industrials
+SAIA,sp400,2021-09-01,,Industrials
+SAIC,sp400,2015-12-01,,Industrials
+SAIL,sp400,2021-01-01,2022-09-01,Information Technology
+SAM,sp400,2015-12-01,2026-10-01,Consumer Staples
+SANM,sp600,2018-09-01,2026-08-01,Information Technology
+SANM,sp400,2026-07-01,,Information Technology
+SARO,sp400,2026-02-01,,Industrials
+SATS,sp600,2024-01-01,2025-04-01,Communication Services
+SATS,sp400,2025-04-01,2026-04-01,Communication Services
+SATS,sp500,2026-04-01,2026-07-01,Communication Services
+SBAC,sp500,2017-09-01,,Real Estate
+SBCF,sp600,2018-09-01,,Financials
+SBH,sp400,2017-01-01,2021-01-01,Consumer Discretionary
+SBH,sp600,2021-04-01,,Consumer Discretionary
+SBNY,sp400,2015-12-01,2022-01-01,Financials
+SBNY,sp500,2022-01-01,2023-04-01,Financials
+SBRA,sp400,2017-10-01,,Real Estate
+SBSI,sp600,2018-09-01,,Financials
+SBUX,sp500,2015-12-01,,Consumer Discretionary
+SCG,sp500,2015-12-01,2019-02-01,Utilities
+SCHL,sp600,2018-09-01,,Consumer Discretionary
+SCHW,sp500,2015-12-01,,Financials
+SCI,sp400,2015-12-01,,Consumer Discretionary
+SCL,sp600,2018-09-01,,Materials
+SCOR,sp400,2017-01-01,2017-03-01,Information Technology
+SCSC,sp600,2018-09-01,,Information Technology
+SCVL,sp600,2018-09-01,2026-01-01,Consumer Discretionary
+SDGR,sp600,2023-07-01,,Health Care
+SE,sp500,2015-12-01,2017-03-01,Energy
+SEDG,sp600,2018-09-01,2019-11-01,Information Technology
+SEDG,sp400,2019-11-01,2020-11-01,Information Technology
+SEDG,sp600,2020-11-01,2021-04-01,Information Technology
+SEDG,sp400,2021-01-01,2022-01-01,Information Technology
+SEDG,sp500,2022-01-01,2024-01-01,Information Technology
+SEDG,sp600,2024-01-01,,Information Technology
+SEE,sp500,2015-12-01,2024-01-01,Materials
+SEE,sp600,2024-01-01,2026-05-01,Materials
+SEI,sp600,2026-08-01,,Energy
+SEIC,sp400,2015-12-01,,Financials
+SEM,sp600,2018-09-01,2026-08-01,Health Care
+SENEA,sp600,2018-09-01,2023-07-01,Consumer Staples
+SEZL,sp600,2026-01-01,,Financials
+SF,sp400,2015-12-01,,Financials
+SFBS,sp600,2018-09-01,,Financials
+SFG,sp400,2015-12-01,2017-01-01,Financials
+SFLY,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+SFM,sp400,2017-01-01,,Consumer Staples
+SFNC,sp600,2018-09-01,,Financials
+SGH,sp600,2021-04-01,2025-09-01,Information Technology
+SGI,sp400,2025-03-01,,Consumer Discretionary
+SGMS,sp400,2018-03-01,2022-05-01,Consumer Discretionary
+SHAK,sp600,2018-09-01,,Consumer Discretionary
+SHC,sp400,2022-07-01,,Health Care
+SHEN,sp600,2021-04-01,,Communication Services
+SHO,sp600,2022-08-01,,Real Estate
+SHOO,sp600,2018-09-01,,Consumer Discretionary
+SHW,sp500,2015-12-01,,Materials
+SIG,sp400,2015-12-01,2017-01-01,Consumer Discretionary
+SIG,sp500,2015-12-01,2018-04-01,Consumer Discretionary
+SIG,sp400,2018-04-01,2019-11-01,Consumer Discretionary
+SIG,sp600,2019-11-01,,Consumer Discretionary
+SIGI,sp600,2018-09-01,2019-11-01,Financials
+SIGI,sp400,2019-11-01,,Financials
+SIRI,sp400,2026-07-01,,Communication Services
+SIRO,sp400,2015-12-01,2017-01-01,Health Care
+SITC,sp600,2021-04-01,2026-01-01,Real Estate
+SITM,sp400,2022-01-01,2023-07-01,Information Technology
+SITM,sp600,2023-07-01,2026-04-01,Information Technology
+SITM,sp400,2026-04-01,,Information Technology
+SIVB,sp400,2015-12-01,2018-04-01,Financials
+SIVB,sp500,2018-04-01,2023-04-01,Financials
+SIX,sp400,2017-11-01,2022-08-01,Consumer Discretionary
+SIX,sp600,2022-08-01,2024-09-01,Consumer Discretionary
+SJI,sp600,2018-09-01,2023-02-01,Utilities
+SJM,sp500,2015-12-01,,Consumer Staples
+SJW,sp600,2023-01-01,2025-09-01,Utilities
+SKT,sp400,2015-12-01,2020-12-01,Real Estate
+SKT,sp600,2020-12-01,,Real Estate
+SKX,sp400,2017-01-01,2025-10-01,Consumer Discretionary
+SKY,sp600,2025-01-01,,Consumer Discretionary
+SKYD,sp500,2026-11-01,,Communication Services
+SKYW,sp600,2018-09-01,,Industrials
+SLAB,sp400,2015-12-01,,Information Technology
+SLB,sp500,2015-12-01,,Energy
+SLCA,sp600,2018-09-01,2024-08-01,Energy
+SLG,sp500,2015-12-01,2021-04-01,Real Estate
+SLG,sp400,2021-04-01,2023-04-01,Real Estate
+SLG,sp600,2023-04-01,,Real Estate
+SLGN,sp400,2015-12-01,,Materials
+SLH,sp400,2015-12-01,2017-01-01,Information Technology
+SLM,sp400,2015-12-01,,Financials
+SLP,sp600,2021-04-01,2025-10-01,Health Care
+SLQT,sp600,2021-07-01,2022-11-01,Financials
+SLVM,sp600,2021-10-01,,Materials
+SM,sp400,2015-12-01,2019-10-01,Energy
+SM,sp600,2019-10-01,,Energy
+SMCI,sp600,2018-09-01,2018-12-01,
+SMCI,sp400,2023-01-01,2024-04-01,Information Technology
+SMCI,sp500,2024-04-01,,Information Technology
+SMG,sp400,2015-12-01,,Materials
+SMP,sp600,2018-09-01,,Consumer Discretionary
+SMPL,sp600,2021-04-01,,Consumer Staples
+SMTC,sp400,2015-12-01,2017-01-01,Information Technology
+SMTC,sp600,2018-09-01,2019-10-01,Information Technology
+SMTC,sp400,2019-10-01,2023-01-01,Information Technology
+SMTC,sp600,2023-01-01,2026-08-01,Information Technology
+SMTC,sp400,2026-07-01,,Information Technology
+SN,sp400,2026-06-01,,Consumer Discretionary
+SNA,sp500,2015-12-01,,Industrials
+SNBR,sp600,2018-09-01,2023-12-01,Consumer Discretionary
+SNCY,sp600,2022-08-01,2026-06-01,Industrials
+SNDK,sp500,2015-12-01,2016-06-01,Information Technology
+SNDK,sp600,2025-03-01,2025-12-01,Information Technology
+SNDK,sp500,2025-12-01,,Information Technology
+SNDR,sp600,2024-08-01,,Industrials
+SNEX,sp600,2021-04-01,,Financials
+SNH,sp400,2015-12-01,2021-01-01,Real Estate
+SNI,sp500,2015-12-01,2018-04-01,Consumer Discretionary
+SNPS,sp400,2015-12-01,2017-04-01,Information Technology
+SNPS,sp500,2017-04-01,,Information Technology
+SNV,sp400,2015-12-01,2026-02-01,Financials
+SNX,sp400,2017-01-01,,Information Technology
+SO,sp500,2015-12-01,,Utilities
+SOLS,sp500,2025-11-01,2026-02-01,Materials
+SOLS,sp600,2026-01-01,2026-04-01,Materials
+SOLS,sp400,2026-04-01,,Materials
+SOLV,sp500,2024-04-01,,Health Care
+SON,sp400,2015-12-01,,Materials
+SONC,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+SONO,sp600,2022-05-01,,Consumer Discretionary
+SPG,sp500,2015-12-01,,Real Estate
+SPGI,sp500,2016-06-01,,Financials
+SPHR,sp600,2026-04-01,,Communication Services
+SPLS,sp500,2015-12-01,2017-10-01,Consumer Discretionary
+SPN,sp400,2015-12-01,2019-10-01,Energy
+SPN,sp600,2019-10-01,2021-04-01,Energy
+SPNT,sp600,2021-07-01,,Financials
+SPOK,sp600,2018-09-01,2021-09-01,Communication Services
+SPPI,sp600,2018-09-01,2022-03-01,Health Care
+SPSC,sp600,2018-09-01,,Information Technology
+SPTN,sp600,2018-09-01,2025-10-01,Consumer Staples
+SPW,sp400,2015-12-01,2016-04-01,Industrials
+SPWR,sp400,2021-11-01,2023-07-01,Industrials
+SPWR,sp600,2023-07-01,2024-09-01,Industrials
+SPXC,sp400,2016-04-01,2017-01-01,Industrials
+SPXC,sp600,2018-09-01,2026-01-01,Industrials
+SPXC,sp400,2026-01-01,,Industrials
+SR,sp600,2018-09-01,2021-04-01,Utilities
+SR,sp400,2021-01-01,,Utilities
+SRC,sp400,2019-10-01,2024-02-01,Real Estate
+SRCI,sp600,2018-09-01,2021-04-01,Energy
+SRCL,sp500,2015-12-01,2019-01-01,Industrials
+SRCL,sp400,2019-10-01,2024-12-01,Industrials
+SRDX,sp600,2018-09-01,2023-04-01,Health Care
+SRE,sp500,2015-12-01,,Utilities
+SRPT,sp400,2024-07-01,2025-10-01,Health Care
+SRPT,sp600,2025-10-01,,Health Care
+SSB,sp400,2023-04-01,,Financials
+SSD,sp600,2018-09-01,2021-04-01,Industrials
+SSD,sp400,2021-01-01,,Industrials
+SSP,sp600,2018-09-01,2024-05-01,Consumer Discretionary
+SSTK,sp600,2018-09-01,2026-07-01,Communication Services
+ST,sp400,2023-11-01,,Industrials
+STAA,sp400,2021-05-01,2023-09-01,Health Care
+STAA,sp600,2023-09-01,,Health Care
+STAG,sp400,2023-05-01,,Real Estate
+STAR,sp600,2018-12-01,2023-04-01,Real Estate
+STBA,sp600,2018-09-01,,Financials
+STC,sp600,2018-09-01,,Financials
+STE,sp400,2015-12-01,2020-11-01,Health Care
+STE,sp500,2020-01-01,,Health Care
+STE,sp600,2020-11-01,2021-04-01,Health Care
+STEL,sp600,2022-11-01,2026-08-01,Financials
+STEP,sp600,2024-07-01,,Financials
+STI,sp500,2015-12-01,2020-01-01,Financials
+STJ,sp500,2015-12-01,2017-02-01,Health Care
+STL,sp400,2017-11-01,2022-02-01,Financials
+STLD,sp400,2015-12-01,2023-01-01,Materials
+STLD,sp500,2023-01-01,,Materials
+STMP,sp600,2018-09-01,2021-10-01,Consumer Discretionary
+STOR,sp400,2021-01-01,2023-03-01,Real Estate
+STR,sp400,2015-12-01,2016-12-01,Utilities
+STRA,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+STRA,sp400,2021-01-01,2021-09-01,Consumer Discretionary
+STRA,sp600,2021-08-01,,Consumer Discretionary
+STRL,sp600,2025-05-01,2025-12-01,Industrials
+STRL,sp400,2025-12-01,,Industrials
+STT,sp500,2015-12-01,,Financials
+STWD,sp400,2023-04-01,,Financials
+STX,sp500,2015-12-01,,Information Technology
+STZ,sp500,2015-12-01,,Consumer Staples
+SUI,sp400,2026-10-01,,Real Estate
+SUNE,sp400,2015-12-01,2017-01-01,Information Technology
+SUP,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+SUPN,sp600,2018-09-01,,Health Care
+SVC,sp400,2020-04-01,2020-11-01,Real Estate
+SVC,sp400,2021-01-01,2021-07-01,Real Estate
+SVC,sp600,2021-07-01,2025-01-01,Real Estate
+SVU,sp400,2015-12-01,2017-01-01,Consumer Staples
+SVU,sp600,2018-09-01,2021-04-01,Consumer Staples
+SW,sp500,2024-08-01,,Materials
+SWAV,sp400,2022-07-01,2024-07-01,Health Care
+SWI,sp400,2015-12-01,2017-01-01,Information Technology
+SWI,sp600,2024-09-01,2025-05-01,Information Technology
+SWK,sp500,2015-12-01,,Industrials
+SWKS,sp500,2015-12-01,,Information Technology
+SWM,sp600,2018-09-01,2023-10-01,Materials
+SWN,sp500,2015-12-01,2017-05-01,Energy
+SWN,sp400,2017-05-01,2020-11-01,Energy
+SWN,sp600,2020-11-01,2022-08-01,Energy
+SWN,sp400,2022-07-01,2024-11-01,Energy
+SWX,sp400,2017-01-01,,Utilities
+SXC,sp600,2018-09-01,2026-04-01,Materials
+SXI,sp600,2018-09-01,,Industrials
+SXT,sp400,2015-12-01,2023-11-01,Materials
+SXT,sp600,2023-10-01,,Materials
+SYF,sp500,2015-12-01,,Financials
+SYK,sp500,2015-12-01,,Health Care
+SYKE,sp600,2018-09-01,2021-10-01,Information Technology
+SYMC,sp500,2015-12-01,2019-12-01,Information Technology
+SYNA,sp400,2017-01-01,,Information Technology
+SYNH,sp400,2018-05-01,2023-11-01,Health Care
+SYY,sp500,2015-12-01,,Consumer Staples
+T,sp500,2015-12-01,,Communication Services
+TALO,sp600,2021-04-01,,Energy
+TAP,sp500,2015-12-01,2026-10-01,Consumer Staples
+TBBK,sp600,2021-06-01,,Financials
+TBI,sp600,2018-09-01,2024-04-01,Industrials
+TBK,sp600,2021-04-01,2023-09-01,Financials
+TCB,sp400,2015-12-01,2017-10-01,Financials
+TCBI,sp400,2017-04-01,,Financials
+TCF,sp400,2017-10-01,2019-10-01,Financials
+TCF,sp600,2019-10-01,2021-04-01,Financials
+TCF,sp400,2021-01-01,2021-07-01,Financials
+TCMD,sp600,2021-04-01,2022-06-01,Health Care
+TCO,sp400,2015-12-01,2021-02-01,Real Estate
+TDC,sp500,2015-12-01,2017-07-01,Information Technology
+TDC,sp400,2017-08-01,2025-04-01,Information Technology
+TDC,sp600,2025-04-01,,Information Technology
+TDG,sp500,2016-07-01,,Industrials
+TDS,sp400,2015-12-01,2022-01-01,Communication Services
+TDS,sp600,2022-01-01,,Communication Services
+TDW,sp400,2015-12-01,2017-01-01,Energy
+TDW,sp600,2024-07-01,,Energy
+TDY,sp400,2015-12-01,2021-01-01,Industrials
+TDY,sp500,2020-08-01,,Information Technology
+TE,sp500,2015-12-01,2016-08-01,Utilities
+TECD,sp400,2015-12-01,2021-01-01,Information Technology
+TECH,sp400,2015-12-01,2021-09-01,Health Care
+TECH,sp500,2021-09-01,,Health Care
+TEL,sp500,2015-12-01,,Information Technology
+TER,sp400,2015-12-01,2021-01-01,Information Technology
+TER,sp500,2020-10-01,,Information Technology
+TEX,sp400,2015-12-01,,Industrials
+TFC,sp500,2020-01-01,,Financials
+TFIN,sp600,2023-09-01,,Financials
+TFX,sp400,2015-12-01,2019-10-01,Health Care
+TFX,sp500,2019-02-01,2025-04-01,Health Care
+TFX,sp600,2019-10-01,2021-04-01,Health Care
+TFX,sp600,2025-04-01,,Health Care
+TG,sp600,2018-09-01,2023-07-01,Materials
+TGI,sp400,2015-12-01,2017-03-01,Industrials
+TGI,sp600,2018-09-01,2025-08-01,Industrials
+TGNA,sp500,2015-12-01,2017-07-01,Consumer Discretionary
+TGNA,sp400,2017-07-01,2024-10-01,Communication Services
+TGNA,sp600,2024-10-01,2026-04-01,Communication Services
+TGT,sp500,2015-12-01,,Consumer Staples
+TGTX,sp600,2024-10-01,,Health Care
+THC,sp500,2015-12-01,2016-05-01,Health Care
+THC,sp400,2017-01-01,,Health Care
+THG,sp400,2015-12-01,,Financials
+THO,sp400,2015-12-01,,Consumer Discretionary
+THOR,sp400,2015-12-01,2017-01-01,Health Care
+THRM,sp600,2018-09-01,,Consumer Discretionary
+THRY,sp600,2021-12-01,2026-01-01,Communication Services
+THS,sp400,2015-12-01,2021-10-01,Consumer Staples
+THS,sp600,2021-10-01,2026-03-01,Consumer Staples
+TIF,sp500,2015-12-01,2021-02-01,Consumer Discretionary
+TILE,sp600,2018-09-01,,Industrials
+TIME,sp400,2015-12-01,2017-07-01,Consumer Discretionary
+TISI,sp600,2018-09-01,2021-10-01,Industrials
+TIVO,sp600,2018-09-01,2021-04-01,Information Technology
+TJX,sp500,2015-12-01,,Consumer Discretionary
+TKO,sp400,2023-11-01,2025-04-01,Communication Services
+TKO,sp500,2025-04-01,,Communication Services
+TKR,sp400,2015-12-01,,Industrials
+TLN,sp400,2015-12-01,2017-01-01,Utilities
+TLN,sp400,2025-09-01,,Utilities
+TLRD,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+TMDX,sp600,2024-10-01,,Health Care
+TMHC,sp400,2020-12-01,2026-08-01,Consumer Discretionary
+TMK,sp500,2015-12-01,2019-09-01,Financials
+TMO,sp500,2015-12-01,,Health Care
+TMP,sp600,2018-09-01,,Financials
+TMST,sp400,2015-12-01,2017-01-01,Materials
+TMST,sp600,2018-09-01,2024-06-01,Materials
+TMUS,sp500,2019-08-01,,Communication Services
+TNC,sp600,2021-04-01,,Industrials
+TNDM,sp400,2021-10-01,2023-04-01,Health Care
+TNDM,sp600,2023-04-01,,Health Care
+TNL,sp400,2021-04-01,,Consumer Discretionary
+TOL,sp400,2015-12-01,,Consumer Discretionary
+TOST,sp400,2026-08-01,,Financials
+TPC,sp600,2026-08-01,,Industrials
+TPH,sp400,2017-01-01,2022-05-01,Consumer Discretionary
+TPH,sp600,2022-05-01,2026-06-01,Consumer Discretionary
+TPL,sp400,2024-07-01,2024-12-01,Energy
+TPL,sp500,2024-12-01,,Energy
+TPR,sp500,2017-11-01,,Consumer Discretionary
+TPRE,sp600,2018-09-01,2021-07-01,Financials
+TPX,sp400,2015-12-01,2025-03-01,Consumer Discretionary
+TR,sp400,2015-12-01,2022-01-01,Consumer Staples
+TR,sp600,2022-01-01,,Consumer Staples
+TREE,sp400,2018-04-01,2021-11-01,Financials
+TREE,sp600,2021-11-01,2023-07-01,Financials
+TREX,sp600,2018-09-01,2019-10-01,Industrials
+TREX,sp400,2019-10-01,,Industrials
+TRGP,sp400,2021-07-01,2022-11-01,Energy
+TRGP,sp500,2022-11-01,,Energy
+TRHC,sp600,2021-04-01,2022-03-01,Health Care
+TRIP,sp500,2015-12-01,2020-01-01,Communication Services
+TRIP,sp400,2020-11-01,2023-11-01,Communication Services
+TRIP,sp600,2023-10-01,,Communication Services
+TRMB,sp400,2015-12-01,2021-02-01,Information Technology
+TRMB,sp500,2021-02-01,,Information Technology
+TRMK,sp400,2015-12-01,2021-09-01,Financials
+TRMK,sp600,2021-10-01,,Financials
+TRN,sp400,2015-12-01,2022-07-01,Industrials
+TRN,sp600,2022-06-01,,Industrials
+TRNO,sp600,2025-01-01,,Real Estate
+TROW,sp500,2015-12-01,,Financials
+TRST,sp600,2018-09-01,,Financials
+TRU,sp400,2025-10-01,,Industrials
+TRUP,sp600,2021-04-01,,Financials
+TRV,sp500,2015-12-01,,Financials
+TSCO,sp500,2015-12-01,,Consumer Discretionary
+TSE,sp600,2021-04-01,2023-10-01,Materials
+TSLA,sp500,2021-01-01,,Consumer Discretionary
+TSN,sp500,2015-12-01,,Consumer Staples
+TSO,sp500,2015-12-01,2017-08-01,Energy
+TSS,sp500,2015-12-01,2019-10-01,Information Technology
+TT,sp500,2020-04-01,,Industrials
+TTC,sp400,2017-01-01,,Industrials
+TTD,sp500,2025-08-01,2026-10-01,Communication Services
+TTEC,sp600,2018-09-01,2024-07-01,Industrials
+TTEK,sp600,2018-09-01,2019-09-01,Industrials
+TTEK,sp400,2019-09-01,,Industrials
+TTGT,sp600,2021-04-01,2025-10-01,Communication Services
+TTI,sp600,2018-09-01,2021-04-01,Energy
+TTMI,sp600,2018-09-01,2026-02-01,Information Technology
+TTMI,sp400,2026-02-01,,Information Technology
+TTS,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+TTWO,sp400,2017-04-01,2018-04-01,Information Technology
+TTWO,sp500,2018-04-01,,Communication Services
+TUP,sp400,2015-12-01,2019-11-01,Consumer Discretionary
+TUP,sp600,2019-11-01,2023-01-01,Consumer Discretionary
+TVPT,sp600,2018-09-01,2021-04-01,Information Technology
+TVTY,sp600,2018-09-01,2022-08-01,Health Care
+TW,sp400,2015-12-01,2017-01-01,Industrials
+TWC,sp500,2015-12-01,2016-06-01,Consumer Discretionary
+TWI,sp600,2018-09-01,2026-04-01,Materials
+TWLO,sp400,2025-09-01,2026-11-01,Information Technology
+TWLO,sp500,2026-10-01,,Information Technology
+TWNK,sp600,2022-02-01,2023-12-01,Consumer Staples
+TWO,sp600,2021-07-01,2026-08-01,Financials
+TWTR,sp500,2018-07-01,2022-11-01,Communication Services
+TWX,sp500,2015-12-01,2018-07-01,Consumer Discretionary
+TXN,sp500,2015-12-01,,Information Technology
+TXNM,sp400,2025-02-01,,Utilities
+TXRH,sp400,2016-12-01,,Consumer Discretionary
+TXT,sp500,2015-12-01,,Industrials
+TYC,sp500,2015-12-01,2016-10-01,Industrials
+TYL,sp400,2015-12-01,2021-01-01,Information Technology
+TYL,sp500,2020-08-01,,Information Technology
+TYPE,sp600,2018-09-01,2021-04-01,Information Technology
+UA,sp500,2015-12-01,2022-07-01,Consumer Discretionary
+UA,sp400,2022-07-01,2026-01-01,Consumer Discretionary
+UA,sp600,2026-01-01,,Consumer Discretionary
+UA-C,sp500,2016-09-01,2017-01-01,Consumer Discretionary
+UAA,sp500,2017-01-01,2022-07-01,Consumer Discretionary
+UAA,sp400,2022-07-01,2026-01-01,Consumer Discretionary
+UAA,sp600,2026-01-01,,Consumer Discretionary
+UAL,sp500,2015-12-01,,Industrials
+UBA,sp600,2018-09-01,2023-09-01,Real Estate
+UBER,sp500,2024-01-01,,Industrials
+UBSI,sp400,2017-05-01,,Financials
+UCB,sp600,2025-10-01,,Financials
+UCBI,sp600,2018-09-01,2025-10-01,Financials
+UCTT,sp600,2018-09-01,,Information Technology
+UDR,sp400,2015-12-01,2017-01-01,Financials
+UDR,sp500,2016-04-01,,Real Estate
+UE,sp400,2015-12-01,2022-03-01,Real Estate
+UE,sp600,2022-03-01,,Real Estate
+UEIC,sp600,2018-09-01,2023-04-01,Consumer Discretionary
+UFCS,sp600,2018-09-01,,Financials
+UFI,sp600,2018-09-01,2022-11-01,Consumer Discretionary
+UFPI,sp600,2018-09-01,2023-03-01,Industrials
+UFPI,sp400,2023-03-01,,Industrials
+UFPT,sp600,2023-07-01,,Health Care
+UFS,sp400,2015-12-01,2021-05-01,Materials
+UFS,sp600,2021-05-01,2021-12-01,Materials
+UGI,sp400,2015-12-01,,Utilities
+UHS,sp500,2015-12-01,,Health Care
+UHT,sp600,2018-09-01,2026-08-01,Real Estate
+UIHC,sp600,2018-09-01,2021-10-01,Financials
+UIS,sp600,2021-04-01,2023-04-01,Information Technology
+ULS,sp400,2026-01-01,,Industrials
+ULTA,sp500,2016-05-01,,Consumer Discretionary
+ULTI,sp400,2015-12-01,2019-10-01,Information Technology
+ULTI,sp600,2019-10-01,2021-04-01,Information Technology
+UMBF,sp400,2017-01-01,,Financials
+UMPQ,sp400,2015-12-01,2023-03-01,Financials
+UNF,sp600,2018-09-01,,Industrials
+UNFI,sp400,2015-12-01,2021-01-01,Consumer Staples
+UNFI,sp600,2021-04-01,,Consumer Staples
+UNH,sp500,2015-12-01,,Health Care
+UNIT,sp400,2017-05-01,2020-12-01,Real Estate
+UNIT,sp600,2020-12-01,,Communication Services
+UNM,sp500,2015-12-01,2021-10-01,Financials
+UNM,sp400,2021-10-01,,Financials
+UNP,sp500,2015-12-01,,Industrials
+UNT,sp400,2015-12-01,2017-01-01,Energy
+UNT,sp600,2018-09-01,2021-04-01,Energy
+UNVR,sp400,2021-01-01,2023-09-01,Industrials
+UPBD,sp600,2023-12-01,,Consumer Discretionary
+UPS,sp500,2015-12-01,,Industrials
+UPWK,sp600,2025-12-01,,Industrials
+URBN,sp500,2015-12-01,2017-04-01,Consumer Discretionary
+URBN,sp400,2017-04-01,2022-07-01,Consumer Discretionary
+URBN,sp600,2022-06-01,,Consumer Discretionary
+URI,sp500,2015-12-01,,Industrials
+USB,sp500,2015-12-01,,Financials
+USCR,sp600,2018-09-01,2021-10-01,Materials
+USFD,sp400,2023-04-01,,Consumer Staples
+USLM,sp600,2026-08-01,,Materials
+USNA,sp600,2021-04-01,2025-11-01,Consumer Staples
+USPH,sp600,2018-09-01,,Health Care
+UTHR,sp400,2015-12-01,,Health Care
+UTI,sp600,2026-07-01,,Consumer Discretionary
+UTL,sp600,2021-06-01,,Utilities
+UTX,sp500,2015-12-01,2020-05-01,Industrials
+UVE,sp600,2018-09-01,2023-10-01,Financials
+UVV,sp600,2018-09-01,,Consumer Staples
+V,sp500,2015-12-01,,Financials
+VAC,sp400,2018-09-01,2026-01-01,Consumer Discretionary
+VAC,sp600,2026-01-01,,Consumer Discretionary
+VAL,sp400,2015-12-01,2017-07-01,Energy
+VAL,sp400,2019-08-01,2019-11-01,Energy
+VAL,sp600,2019-11-01,2021-04-01,Energy
+VAL,sp400,2023-04-01,,Energy
+VAR,sp500,2015-12-01,2021-05-01,Health Care
+VBTX,sp600,2021-04-01,2025-11-01,Financials
+VC,sp400,2018-08-01,,Consumer Discretionary
+VCEL,sp600,2021-04-01,,Health Care
+VCTR,sp600,2025-08-01,,Financials
+VCYT,sp600,2025-08-01,,Health Care
+VECO,sp600,2018-09-01,,Information Technology
+VEEV,sp500,2026-06-01,,Health Care
+VFC,sp500,2015-12-01,2024-05-01,Consumer Discretionary
+VFC,sp600,2024-05-01,2025-04-01,Consumer Discretionary
+VFC,sp400,2025-04-01,,Consumer Discretionary
+VG,sp600,2018-09-01,2022-08-01,Communication Services
+VGNT,sp600,2026-04-01,,Consumer Discretionary
+VGR,sp600,2019-09-01,2024-11-01,Consumer Staples
+VIAB,sp500,2015-12-01,2020-01-01,Communication Services
+VIAC,sp500,2020-01-01,2022-03-01,Communication Services
+VIAV,sp600,2018-09-01,2026-08-01,Information Technology
+VIAV,sp400,2026-07-01,,Information Technology
+VICI,sp500,2022-06-01,,Real Estate
+VICR,sp600,2018-09-01,2022-01-01,Industrials
+VICR,sp400,2022-01-01,2023-11-01,Industrials
+VICR,sp600,2023-11-01,2026-04-01,Industrials
+VICR,sp400,2026-04-01,,Industrials
+VIR,sp600,2022-05-01,,Health Care
+VIRT,sp600,2024-07-01,,Financials
+VITL,sp600,2026-01-01,2026-08-01,Consumer Staples
+VIVO,sp600,2018-09-01,2023-02-01,Health Care
+VLO,sp500,2015-12-01,,Energy
+VLTO,sp500,2023-11-01,,Industrials
+VLY,sp400,2015-12-01,,Financials
+VMC,sp500,2015-12-01,,Materials
+VMI,sp400,2015-12-01,,Industrials
+VMRK,sp500,2026-09-01,,Real Estate
+VNDA,sp600,2021-04-01,2023-10-01,Health Care
+VNO,sp500,2015-12-01,2023-02-01,Real Estate
+VNO,sp400,2023-02-01,,Real Estate
+VNOM,sp400,2024-10-01,,Energy
+VNT,sp500,2020-11-01,2021-04-01,Information Technology
+VNT,sp400,2021-04-01,,Information Technology
+VOYA,sp400,2022-01-01,,Financials
+VRA,sp600,2018-09-01,2022-06-01,Consumer Discretionary
+VRE,sp600,2022-01-01,2026-07-01,Real Estate
+VREX,sp600,2018-09-01,2024-10-01,Health Care
+VRRM,sp600,2023-03-01,,Industrials
+VRSK,sp500,2015-12-01,,Industrials
+VRSN,sp500,2015-12-01,,Information Technology
+VRT,sp500,2026-04-01,,Industrials
+VRTS,sp600,2018-09-01,,Financials
+VRTU,sp600,2018-09-01,2021-04-01,Information Technology
+VRTV,sp600,2018-09-01,2023-12-01,Industrials
+VRTX,sp500,2015-12-01,,Health Care
+VSAT,sp400,2017-01-01,2023-04-01,Information Technology
+VSAT,sp600,2023-04-01,,Information Technology
+VSCO,sp400,2021-09-01,2023-07-01,Consumer Discretionary
+VSCO,sp600,2023-07-01,2026-06-01,Consumer Discretionary
+VSEC,sp600,2026-04-01,,Industrials
+VSH,sp400,2015-12-01,2025-02-01,Information Technology
+VSH,sp600,2025-01-01,,Information Technology
+VSI,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+VSM,sp400,2017-01-01,2019-11-01,Information Technology
+VSM,sp600,2019-11-01,2020-11-01,Information Technology
+VSM,sp400,2020-11-01,2021-01-01,Information Technology
+VSNT,sp600,2026-01-01,,Communication Services
+VST,sp400,2023-11-01,2024-06-01,Utilities
+VST,sp500,2024-06-01,,Utilities
+VSTO,sp400,2015-12-01,2017-04-01,Consumer Discretionary
+VSTO,sp600,2018-09-01,2025-02-01,Consumer Discretionary
+VSTS,sp400,2023-11-01,2024-01-01,Industrials
+VSTS,sp600,2024-01-01,,Industrials
+VSXY,sp600,2026-06-01,,Consumer Discretionary
+VTLE,sp600,2023-09-01,2026-01-01,Energy
+VTOL,sp600,2021-04-01,,Energy
+VTR,sp500,2015-12-01,,Real Estate
+VTRS,sp500,2020-12-01,,Health Care
+VVC,sp400,2015-12-01,2019-10-01,Utilities
+VVC,sp600,2019-10-01,2021-04-01,Utilities
+VVI,sp600,2018-09-01,2025-07-01,Industrials
+VVV,sp400,2017-06-01,,Consumer Discretionary
+VVX,sp600,2026-08-01,,Industrials
+VYLR,sp500,2026-10-01,,Consumer Staples
+VYX,sp400,2023-11-01,2024-01-01,Information Technology
+VYX,sp600,2024-02-01,,Information Technology
+VZ,sp500,2015-12-01,,Communication Services
+WAB,sp400,2015-12-01,2019-10-01,Industrials
+WAB,sp500,2019-03-01,,Industrials
+WAB,sp600,2019-10-01,2020-08-01,Industrials
+WABC,sp600,2018-09-01,,Financials
+WAFD,sp400,2015-12-01,2023-04-01,Financials
+WAFD,sp600,2023-04-01,,Financials
+WAGE,sp600,2018-09-01,2020-08-01,Industrials
+WAL,sp400,2024-10-01,,Financials
+WAT,sp500,2015-12-01,,Health Care
+WAY,sp600,2025-10-01,,Health Care
+WBA,sp500,2015-12-01,2025-09-01,Consumer Staples
+WBD,sp500,2022-05-01,2026-10-01,Communication Services
+WBMD,sp400,2017-01-01,2017-10-01,Information Technology
+WBS,sp400,2015-12-01,2026-10-01,Financials
+WCC,sp400,2023-07-01,,Industrials
+WCG,sp400,2015-12-01,2018-10-01,Health Care
+WCG,sp500,2018-10-01,2020-02-01,Health Care
+WCG,sp600,2018-12-01,2020-08-01,Health Care
+WCN,sp400,2015-12-01,2017-01-01,Industrials
+WD,sp600,2018-09-01,,Financials
+WDAY,sp500,2025-01-01,,Information Technology
+WDC,sp500,2015-12-01,,Information Technology
+WDFC,sp600,2018-09-01,,Consumer Staples
+WDR,sp400,2015-12-01,2017-05-01,Financials
+WDR,sp600,2018-09-01,2021-06-01,Financials
+WEC,sp500,2015-12-01,,Utilities
+WELL,sp500,2018-03-01,,Real Estate
+WEN,sp400,2015-12-01,2025-10-01,Consumer Discretionary
+WEN,sp600,2025-10-01,,Consumer Discretionary
+WERN,sp400,2015-12-01,2024-07-01,Industrials
+WERN,sp600,2024-07-01,,Industrials
+WETF,sp400,2015-12-01,2017-04-01,Financials
+WETF,sp600,2018-09-01,2023-09-01,Financials
+WEX,sp400,2015-12-01,,Financials
+WFC,sp500,2015-12-01,,Financials
+WFM,sp500,2015-12-01,2017-09-01,Consumer Staples
+WFRD,sp400,2023-11-01,,Energy
+WGL,sp400,2015-12-01,2018-08-01,Utilities
+WGO,sp600,2018-09-01,,Consumer Discretionary
+WH,sp600,2018-09-01,2020-08-01,Consumer Discretionary
+WH,sp400,2021-01-01,,Consumer Discretionary
+WHC,sp600,2018-09-01,2018-12-01,
+WHD,sp600,2024-07-01,,Energy
+WHR,sp500,2015-12-01,2024-04-01,Consumer Discretionary
+WHR,sp400,2024-04-01,,Consumer Discretionary
+WINA,sp600,2026-02-01,,Consumer Discretionary
+WING,sp600,2018-09-01,2021-04-01,Consumer Discretionary
+WING,sp400,2021-01-01,,Consumer Discretionary
+WIRE,sp600,2018-09-01,2024-08-01,Industrials
+WKC,sp600,2023-09-01,,Energy
+WLH,sp600,2018-09-01,2020-08-01,Consumer Discretionary
+WLK,sp400,2022-11-01,,Materials
+WLTW,sp500,2016-02-01,2022-02-01,Financials
+WLY,sp400,2023-01-01,2023-07-01,Communication Services
+WLY,sp600,2023-07-01,,Communication Services
+WM,sp500,2015-12-01,,Industrials
+WMB,sp500,2015-12-01,,Energy
+WMG,sp400,2024-07-01,,Communication Services
+WMS,sp400,2023-04-01,,Industrials
+WMT,sp500,2015-12-01,,Consumer Staples
+WNC,sp600,2018-12-01,2025-04-01,Industrials
+WNR,sp400,2015-12-01,2017-07-01,Energy
+WOLF,sp400,2021-12-01,2024-10-01,Information Technology
+WOLF,sp600,2024-10-01,2025-08-01,Information Technology
+WOOF,sp400,2015-12-01,2017-10-01,Health Care
+WOR,sp400,2015-12-01,2023-12-01,Materials
+WOR,sp600,2023-12-01,,Industrials
+WPC,sp400,2023-12-01,,Real Estate
+WPG,sp400,2015-12-01,2018-06-01,Real Estate
+WPG,sp600,2018-09-01,2021-04-01,Real Estate
+WPX,sp400,2015-12-01,2021-02-01,Energy
+WR,sp400,2015-12-01,2018-08-01,Utilities
+WRB,sp400,2015-12-01,2021-01-01,Financials
+WRB,sp500,2020-01-01,,Financials
+WRBY,sp600,2026-08-01,,Consumer Discretionary
+WRE,sp600,2020-08-01,2023-12-01,Real Estate
+WRI,sp400,2015-12-01,2021-09-01,Real Estate
+WRK,sp500,2015-12-01,2024-08-01,Materials
+WRLD,sp600,2018-09-01,,Financials
+WS,sp600,2023-12-01,,Materials
+WSBC,sp600,2026-08-01,,Financials
+WSC,sp600,2025-04-01,,Industrials
+WSFS,sp600,2021-04-01,,Financials
+WSM,sp400,2015-12-01,2025-04-01,Consumer Discretionary
+WSM,sp500,2025-04-01,,Consumer Discretionary
+WSO,sp400,2015-12-01,,Industrials
+WSR,sp600,2018-09-01,2026-08-01,Real Estate
+WST,sp400,2016-12-01,2021-01-01,Health Care
+WST,sp500,2020-06-01,,Health Care
+WT,sp600,2023-09-01,,Financials
+WTFC,sp400,2017-05-01,,Financials
+WTR,sp400,2015-12-01,2020-04-01,Utilities
+WTR,sp600,2020-04-01,2020-08-01,Utilities
+WTRG,sp400,2020-04-01,,Utilities
+WTS,sp600,2018-09-01,2022-02-01,Industrials
+WTS,sp400,2022-02-01,,Industrials
+WTW,sp400,2018-10-01,2019-10-01,Consumer Discretionary
+WTW,sp500,2022-02-01,,Financials
+WU,sp500,2015-12-01,2022-01-01,Information Technology
+WU,sp400,2022-01-01,2025-11-01,Financials
+WU,sp600,2025-10-01,,Financials
+WW,sp400,2019-10-01,2021-10-01,Consumer Discretionary
+WW,sp600,2021-10-01,2023-04-01,Consumer Discretionary
+WWAV,sp400,2015-12-01,2017-05-01,Consumer Staples
+WWD,sp400,2015-12-01,,Industrials
+WWE,sp400,2018-09-01,2023-11-01,Communication Services
+WWW,sp600,2018-09-01,,Consumer Discretionary
+WY,sp500,2015-12-01,,Real Estate
+WYN,sp500,2015-12-01,2018-06-01,Consumer Discretionary
+WYND,sp400,2018-08-01,2021-04-01,Consumer Discretionary
+WYNN,sp500,2015-12-01,,Consumer Discretionary
+X,sp400,2015-12-01,2025-07-01,Materials
+XEC,sp500,2015-12-01,2020-04-01,Energy
+XEC,sp400,2020-12-01,2021-11-01,Energy
+XEL,sp500,2015-12-01,,Utilities
+XHR,sp600,2020-08-01,,Real Estate
+XL,sp500,2015-12-01,2018-10-01,Financials
+XLNX,sp500,2015-12-01,2022-03-01,Information Technology
+XNCR,sp600,2020-08-01,,Health Care
+XOM,sp500,2015-12-01,,Energy
+XOXO,sp600,2018-09-01,2020-08-01,Information Technology
+XPEL,sp600,2022-03-01,,Consumer Discretionary
+XPER,sp600,2018-09-01,2024-07-01,Information Technology
+XPO,sp400,2019-10-01,,Industrials
+XRAY,sp500,2015-12-01,2024-05-01,Health Care
+XRAY,sp400,2024-04-01,,Health Care
+XRX,sp500,2015-12-01,2021-04-01,Information Technology
+XRX,sp400,2021-04-01,2023-11-01,Information Technology
+XRX,sp600,2023-10-01,2025-10-01,Information Technology
+XYL,sp500,2015-12-01,,Industrials
+XYZ,sp500,2025-08-01,,Financials
+Y,sp400,2015-12-01,2022-11-01,Financials
+YELP,sp400,2019-10-01,2022-07-01,Communication Services
+YELP,sp600,2022-06-01,,Communication Services
+YETI,sp400,2021-06-01,,Consumer Discretionary
+YHOO,sp500,2015-12-01,2017-07-01,Information Technology
+YOU,sp600,2024-10-01,,Information Technology
+YUM,sp500,2015-12-01,,Consumer Discretionary
+ZBH,sp500,2015-12-01,,Health Care
+ZBRA,sp400,2015-12-01,2020-11-01,Information Technology
+ZBRA,sp500,2020-01-01,,Information Technology
+ZD,sp400,2021-11-01,2024-10-01,Communication Services
+ZD,sp600,2024-10-01,,Communication Services
+ZEUS,sp600,2018-09-01,2024-10-01,Materials
+ZI,sp400,2023-07-01,2025-06-01,Communication Services
+ZIMV,sp600,2022-04-01,2023-04-01,Health Care
+ZINV,sp600,2022-03-01,2022-04-01,Health Care
+ZION,sp500,2015-12-01,2024-04-01,Financials
+ZION,sp400,2024-04-01,,Financials
+ZTS,sp500,2015-12-01,,Health Care
+ZUMZ,sp600,2018-09-01,2023-07-01,Consumer Discretionary
+ZWS,sp600,2024-10-01,,Industrials
+ZYXI,sp600,2020-08-01,2023-10-01,Health Care

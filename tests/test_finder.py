@@ -248,7 +248,7 @@ def test_graduate_trades_only_after_it_graduates(monkeypatch, tmp_path):
     df = pd.DataFrame({"Open": c, "High": c * 1.01, "Low": c * 0.99, "Close": c, "Volume": 1e6}, idx)
     cand = F.Candidate("momentum_12_1", {"top": 0.5}, dict(F.DAILY_RULES["hold 5 days"]), data="daily500")
     monkeypatch.setattr(F, "load", lambda include_vault=False, data="hourly": {"X": df, "Y": df * 1.1})
-    monkeypatch.setattr(F, "signals", lambda c, p: {a: pd.Series(1, d.index) for a, d in p.items()})
+    monkeypatch.setattr(F, "signals", lambda c, p, pit=False: {a: pd.Series(1, d.index) for a, d in p.items()})
     monkeypatch.setattr("algo.wide.costs", lambda syms: {s: F.COSTS["NVDA"] for s in syms})
     monkeypatch.setattr(forward, "FWD", tmp_path)
     info = {"since": "2026-01-05", "label": cand.label(), "candidate": json.dumps(asdict(cand))}

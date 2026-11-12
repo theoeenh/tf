@@ -44,6 +44,20 @@ account meets the criteria above. Then small, with the repository made private f
 
 ## Changes agreed during the freeze
 
+- **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
+  the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
+  paper/research/2026-11-12-finder-review.md.
+  - **The members of each day.** S&P 1500 backtests no longer run on today's index members applied to the
+    past. They use who was a member on each day, companies that later left included
+    (data/wide/members_history.csv). Small caps enter in September 2018, where the record starts.
+  - **A measured luck check.** Check 5 of the 14 (deflated Sharpe, pass mark 0.90) keeps its formula and its
+    pass mark. Its bar is now measured on the tries' own weekly returns instead of counting every try as
+    independent, and a strategy is judged on the part of its returns its own stocks do not explain.
+  - **Every old try is scored again** on the new data. Nothing new is tried.
+  - **Vault tests wait** (paper/finder/hold.json) until the user has seen the re-scored registry: the vault
+    can be used once per strategy. Remove the file to resume the automatic path below.
+  - **No new strategy families** until the review is done (the evening routine's "add 1-2 families" step
+    is skipped; the finder section of the daily report stays).
 - **2026-11-09 (user's go: "strategy C doesn't work; add another best strategy from the finder even if it
   doesn't pass the luck test; make it trade more than E; make sure it's different from A"):** from Monday
   9 November **C trades "insiders under water"** in paper/C2/ (daily runner): the finder's `3ce4f83a88`,

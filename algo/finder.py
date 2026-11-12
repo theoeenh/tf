@@ -17,8 +17,12 @@
    - trading: the strategy alone through the portfolio engine with real costs and exits
      (return, Sharpe, max drawdown, trades, average R)
    - versus random entries with the same exits and number of signals
-   - deflated Sharpe: the chance the Sharpe is real after accounting for how many strategies
-     were tried (Bailey & Lopez de Prado); the bar rises with every attempt
+   - deflated Sharpe (the luck check, algo/luck.py): the chance the Sharpe is above what the best
+     of all the tries would reach by chance. The bar is measured by replaying history with every
+     try's weekly returns (paper/finder/returns/), so near-copies of a try barely raise it and a
+     new idea does; the Sharpe is of the part of the returns the strategy's universe does not explain
+   - S&P 1500 data: who was a member on each day, companies that later left included
+     (algo/wide_pit.py); never today's list applied to the past
 3. Shelf life (search + validation months): share of positive months, longest losing run,
    first half vs second half (decay), every market regime (up / down / flat months), breadth
    (share of assets where it works).
@@ -31,12 +35,14 @@ import itertools
 import json
 import logging
 import math
+import os
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+from . import luck
 from . import strategies as S
 from .engine import ExitRule
 from .indicators import atr
@@ -121,33 +127,59 @@ class Candidate:
 
 # ------------------------------------------------------------------ data (vault sealed)
 
+MIN_BARS = 60  # bars a stock needs outside the vault to be part of the research (indicator warm-up)
+
+
+def point_in_time(data: str = "daily500") -> bool:
+    """Does the research on this data set use who was an index member on each day? (the S&P 1500
+    once its membership history is there; the hourly universe is a fixed hand-picked list)"""
+    from . import wide_pit
+
+    return data == "daily500" and wide_pit.available()
+
+
 def load(include_vault: bool = False, data: str = "hourly") -> dict[str, pd.DataFrame]:
     if data == "daily500":
         from . import wide
 
-        prices = wide.load_daily()
+        prices = wide.load_daily_pit() if point_in_time(data) else wide.load_daily()
     else:
         prices = load_prices("alpaca", "1h", UNIVERSE_WIDE)
     if not include_vault:  # the vault months are not even in memory
         prices = {a: df[df.index < pd.Timestamp(VAULT_START)] for a, df in prices.items()}
+        # a stock whose bars (almost) all lie in the vault has nothing to show outside it
+        few = MIN_BARS if point_in_time(data) else 1
+        prices = {a: df for a, df in prices.items() if len(df) >= few}
+    _bench.clear()
     return prices
 
 
-def signals(c: Candidate, prices) -> dict[str, pd.Series]:
-    if c.data == "daily500":
+def signals(c: Candidate, prices, pit: bool = False) -> dict[str, pd.Series]:
+    """pit=True (the research: scoring, vault, forward test): a signal counts only on the days the stock
+    was a member of the strategy's segment, as known that day (wide_pit). pit=False: today's members,
+    whatever the day (the trading accounts' runner, which trades today's list)."""
+    pit = pit and point_in_time(c.data)
+    if pit:
+        from . import wide_pit
+
+        keep = wide_pit.segment_ever(c.assets)
+    elif c.data == "daily500":
         from . import wide
 
         keep = wide.segment(c.assets)
     else:
         keep = ASSET_SETS[c.assets]
     prices = {a: df for a, df in prices.items() if keep(a)}
+    seen = prices
+    if pit:  # a vanished stock's closing bars (no volume) are for the backtest's exits, not prices to read
+        seen = {a: (df[df["Volume"] > 0] if df["Volume"].iloc[-1] == 0 else df) for a, df in prices.items()}
     if c.family in WIDE_FAMILIES:
-        raw = WIDE_FAMILIES[c.family][0](prices, **c.params)
+        raw = WIDE_FAMILIES[c.family][0](seen, **c.params)
     elif c.family in PANEL_FAMILIES:  # cross-asset families see the whole universe at once
-        raw = PANEL_FAMILIES[c.family][0](prices, **c.params)
+        raw = PANEL_FAMILIES[c.family][0](seen, **c.params)
     else:
         fn = FAMILIES[c.family][0]
-        raw = {a: fn(df, **c.params) for a, df in prices.items()
+        raw = {a: fn(df, **c.params) for a, df in seen.items()
                if not (c.family == "opening_range" and a in S_CRYPTO)}
     out = {}
     for a, s in raw.items():
@@ -157,8 +189,34 @@ def signals(c: Candidate, prices) -> dict[str, pd.Series]:
             s = S.with_trend(s, S.daily_trend(df))
         if not c.short:
             s = s.clip(lower=0)
+        if pit:
+            s = s.where(wide_pit.mask(c.assets, a, df.index) & (df["Volume"].to_numpy() > 0), 0)
         out[a] = s
     return out
+
+
+_bench: dict = {}
+
+
+def benchmark(c: Candidate, prices) -> pd.Series:
+    """Daily equal-weight return of the stocks the strategy may trade (the members of its segment that
+    day): what it earns by being invested, with no skill. The luck check takes it out (luck.hedged)."""
+    key = (id(prices), c.data, c.assets)
+    if key not in _bench:
+        if point_in_time(c.data):
+            from . import wide_pit
+
+            _bench[key] = wide_pit.universe_returns(prices, c.assets)
+        else:
+            if c.data == "daily500":
+                from . import wide
+
+                keep = wide.segment(c.assets)
+            else:
+                keep = ASSET_SETS[c.assets]
+            cols = {a: df["Close"].resample("D").last().dropna().pct_change() for a, df in prices.items() if keep(a)}
+            _bench[key] = pd.DataFrame(cols).mean(axis=1).fillna(0.0) if cols else pd.Series(dtype=float)
+    return _bench[key]
 
 
 from .data import ASSET_CLASS  # noqa: E402
@@ -335,9 +393,12 @@ def registry() -> pd.DataFrame:
     return pd.read_csv(path) if path.exists() else pd.DataFrame()
 
 
-def evaluate(c: Candidate, prices) -> dict:
-    sig = signals(c, prices)
-    row = {"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c))}
+def evaluate(c: Candidate, prices, weekly: dict | None = None) -> dict:
+    """One score card. weekly (optional): receives the try's weekly hedged returns of the search window
+    under its id, for the luck check (run() saves them to paper/finder/returns/)."""
+    sig = signals(c, prices, pit=True)
+    row = {"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c)),
+           "universe": "members of the day" if point_in_time(c.data) else "fixed list"}
     search, validation = PERIODS[c.data]
     for w, (a, b) in (("s", search), ("v", validation)):
         win = {k: v[(v.index >= pd.Timestamp(a)) & (v.index <= pd.Timestamp(b))] for k, v in sig.items()}
@@ -345,8 +406,14 @@ def evaluate(c: Candidate, prices) -> dict:
         ic = monthly_ic(ev)
         row |= {f"{w}_events": len(ev), f"{w}_ic": float(ic.mean()) if len(ic) else np.nan,
                 f"{w}_icir": icir(ic), f"{w}_months": len(ic)}
-        st = trading_stats(backtest(c, prices, sig, a, b))
+        res = backtest(c, prices, sig, a, b)
+        st = trading_stats(res)
         row |= {f"{w}_{k}": v for k, v in st.items()}
+        if w == "s":
+            wk, beta = luck.hedged(res.equity.resample("D").last().dropna(), benchmark(c, prices))
+            row["s_beta"] = beta
+            if weekly is not None:
+                weekly[c.id] = wk
         rnd = [trading_stats(backtest(c, prices, sig, a, b, seed=sd)) for sd in range(SEEDS)]
         row |= {f"{w}_rand_avg_r": float(np.nanmean([r["avg_r"] for r in rnd])),
                 f"{w}_rand_return": float(np.mean([r["return"] for r in rnd]))}
@@ -417,14 +484,73 @@ def plateau(rows: pd.DataFrame) -> pd.Series:
     return out
 
 
+_returns: dict = {}
+_bars: dict = {}
+LUCK: dict = {}  # the last luck check: tries, the bar, as many independent tries (for the report)
+
+
+def stored_returns(data: str) -> pd.DataFrame:
+    """weeks x tries of one data set from paper/finder/returns/ (read again only when a file changes)."""
+    folder = OUT / "returns"
+    key = (str(folder), data, tuple(sorted((p.name, p.stat().st_size) for p in folder.glob(f"{data}-*.npz"))))
+    if key not in _returns:
+        _returns.clear()
+        _returns[key] = luck.load(folder, data)
+    return _returns[key]
+
+
+def luck_scores(rows: pd.DataFrame) -> pd.DataFrame:
+    """Per try: s_dsr (the luck check) and s_h_t (t-statistic of its hedged weekly returns). The bar is
+    measured on every try of the registry that has its weekly returns stored. A try without them (scored
+    before 2026-11-12 and not scored again) still raises the bar, as one more independent try, and cannot
+    pass itself: no returns, no verdict. With no returns stored at all, the old formula applies."""
+    data = rows["candidate"].map(lambda x: json.loads(x).get("data", "hourly"))
+    stat, mats, ids = {}, [], []
+    for d in sorted(data.unique()):
+        store = stored_returns(d)
+        have = [i for i in rows.loc[data == d, "id"] if i in store.columns]
+        if not have:
+            continue
+        x = store[have].to_numpy(np.float32)
+        st = luck.stats(x)
+        stat |= {i: (st["sr"][k], st["n"], st["skew"][k], st["kurt"][k], st["t"][k]) for k, i in enumerate(have)}
+        mats.append(x)
+        ids += have
+    bar = None
+    if mats:
+        k = luck.key(mats, ids)
+        if k not in _bars:
+            _bars.clear()
+            _bars[k] = luck.null_max(mats)
+        bar = float(_bars[k].mean())
+        missing = int(len(rows) - len(ids))
+        if missing:  # tries whose returns are not stored still count: each as one more independent try
+            bar = luck.expected_max(luck.effective_n(bar) + missing)
+        LUCK.clear()
+        LUCK.update({"tries": int(len(rows)), "bar_t": bar, "independent_tries": luck.effective_n(bar),
+                     "without_returns": missing})
+    srs = {d: rows.loc[data == d, "s_sr_daily"].fillna(0).tolist() for d in data.unique()}
+    dsr, ht = [], []
+    for r, d in zip(rows.itertuples(), data):
+        if r.id in stat:
+            sr, n, skew, kurt, t = stat[r.id]
+            dsr.append(luck.deflated(sr, n, skew, kurt, bar))
+            ht.append(float(t))
+        elif bar is None:  # no weekly returns stored anywhere (before 2026-11-12, tests): the old formula
+            dsr.append(deflated_sharpe(r.s_sr_daily, int(r.s_n_days), r.s_skew, r.s_kurt, srs[d], n_trials=len(rows)))
+            ht.append(np.nan)
+        else:  # the measured bar is in force: a try without its returns cannot be judged (score it again)
+            dsr.append(np.nan)
+            ht.append(np.nan)
+    return pd.DataFrame({"s_dsr": dsr, "s_h_t": ht}, index=rows.index)
+
+
 def score(rows: pd.DataFrame) -> pd.DataFrame:
-    """Deflated Sharpe with N = every attempt so far, then the gates."""
+    """The luck check (deflated Sharpe against the measured bar), then the gates."""
     rows = with_enough_months(rows.copy().reset_index(drop=True))
     rows["plateau"] = plateau(rows)
-    data = rows["candidate"].map(lambda x: json.loads(x).get("data", "hourly"))
-    srs = {d: rows.loc[data == d, "s_sr_daily"].fillna(0).tolist() for d in data.unique()}
-    rows["s_dsr"] = [deflated_sharpe(r.s_sr_daily, int(r.s_n_days), r.s_skew, r.s_kurt, srs[d], n_trials=len(rows))
-                     for r, d in zip(rows.itertuples(), data)]
+    lk = luck_scores(rows)
+    rows["s_dsr"], rows["s_h_t"] = lk["s_dsr"], lk["s_h_t"]
     passed, failed = [], []
     for _, r in rows.iterrows():
         f = [g for g, ok in GATES.items() if not _safe(ok, r)]
@@ -447,6 +573,8 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
     reg = registry()
     done = set(reg["id"]) if len(reg) else set()
     new = []
+    stamp = f"{pd.Timestamp.now():%Y%m%d-%H%M%S}-{os.getpid()}"
+    weekly: dict[str, dict] = {}  # per data set: the weekly hedged returns of this run's tries
     for i, c in enumerate(candidates, 1):
         if c.id in done:
             continue
@@ -454,12 +582,13 @@ def run(candidates: list[Candidate]) -> pd.DataFrame:
         try:
             if c.data not in data:
                 data[c.data] = load(data=c.data)
-            new.append(evaluate(c, data[c.data]))
+            new.append(evaluate(c, data[c.data], weekly.setdefault(c.data, {})))
         except (OSError, KeyError, ValueError) as exc:  # e.g. research data missing tonight: skip, not counted
             log.warning("skipped %s: %r", c.label(), exc)
             continue
         reg = pd.concat([reg, pd.DataFrame(new[-1:])], ignore_index=True)
         reg.to_csv(OUT / "registry.csv", index=False)  # saved after every attempt
+        luck.save(OUT / "returns", c.data, stamp, weekly[c.data])  # with its returns (this run's small file)
     reg = score(reg)
     reg.to_csv(OUT / "registry.csv", index=False)
     report(reg)
@@ -612,7 +741,7 @@ def backfill() -> None:
             prices = data[c.data]
             a, b = PERIODS[c.data][0]
             win = {k: v[(v.index >= pd.Timestamp(a)) & (v.index <= pd.Timestamp(b))]
-                   for k, v in signals(c, prices).items()}
+                   for k, v in signals(c, prices, pit=True).items()}
             for k, v in edge_curve(c, win, prices).items():
                 reg.at[i, k] = v
         except (OSError, KeyError, ValueError) as exc:
@@ -676,7 +805,7 @@ def vault(cid: str) -> dict:
         raise SystemExit(f"{cid} already had its vault test on {used[cid]['date']}: {used[cid]['result']}")
     c = Candidate(**json.loads(row.iloc[0]["candidate"]))
     prices = load(include_vault=True, data=c.data)
-    sig = signals(c, prices)
+    sig = signals(c, prices, pit=True)
     end = max(df.index[-1] for df in prices.values())
     st = trading_stats(backtest(c, prices, sig, VAULT_START, end))
     rnd = [trading_stats(backtest(c, prices, sig, VAULT_START, end, seed=s)) for s in range(SEEDS)]
@@ -692,6 +821,106 @@ def vault(cid: str) -> dict:
                  "search_icir": s_icir}
     log_path.write_text(json.dumps(used, indent=1, default=float))
     return used[cid]
+
+
+ML_FAMILIES = {"ml_rank", "ml_rank_short", "ml_rank_fund", "insider_ml"}
+_DATA: dict = {}
+
+
+def _rescore_one(cand: str):
+    c = Candidate(**json.loads(cand))
+    weekly: dict = {}
+    try:
+        row = evaluate(c, _DATA[c.data], weekly)
+    except Exception as exc:  # noqa: BLE001  (one bad try must not stop the other thousands)
+        return c.id, c.data, None, None, repr(exc)
+    return c.id, c.data, row, weekly.get(c.id), None
+
+
+def rescore(shard: int = 0, of: int = 1, workers: int = 1, limit: int | None = None) -> Path:
+    """Every strategy of the registry scored again from scratch, after a change of the data or of the
+    scoring (2026-11-12: members of each day instead of today's list, and the weekly returns the luck
+    check needs). The registry is the list of tries: nothing new is tried. shard / of: this machine's
+    slice, 0 .. of-1 plus slice `of` for the ML families (several machines share the work);
+    rescore_merge() puts the slices together. Results go to
+    paper/finder/rescore/part-<shard>/, saved as they come (a restart goes on where it stopped)."""
+    import multiprocessing as mp
+
+    reg = registry()
+    part = OUT / "rescore" / f"part-{shard:02d}"
+    part.mkdir(parents=True, exist_ok=True)
+    done_path = part / "registry.csv"
+    done = pd.read_csv(done_path) if done_path.exists() else pd.DataFrame()
+    todo = []
+    for cid, fam, cand in zip(reg["id"], reg["family"], reg["candidate"]):
+        # the ML families train their models once: all on one extra slice (number `of`), not on every machine
+        mine = of if fam in ML_FAMILIES else int(hashlib.sha1(cid.encode()).hexdigest(), 16) % of
+        if mine == shard and (done.empty or cid not in set(done["id"])):
+            todo.append(cand)
+    todo = todo[:limit]
+    for d in sorted({json.loads(x).get("data", "hourly") for x in todo}):
+        _DATA[d] = load(data=d)
+    log.info("shard %d of %d: %d strategies to score again (%d done before)", shard, of, len(todo), len(done))
+    rows, failed = [], []
+    weekly: dict[str, dict] = {}
+    stamp = f"part{shard:02d}-{pd.Timestamp.now():%Y%m%d-%H%M%S}"
+
+    def save():
+        if rows:
+            pd.concat([done, pd.DataFrame(rows)], ignore_index=True).to_csv(done_path, index=False)
+        for d, w in weekly.items():
+            luck.save(part / "returns", d, stamp, w)
+        pd.DataFrame(failed, columns=["id", "error"]).to_csv(part / "failed.csv", index=False)
+
+    pool = mp.get_context("fork").Pool(workers) if workers > 1 else None  # the prices are shared, not copied
+    results = pool.imap_unordered(_rescore_one, todo, chunksize=2) if pool else map(_rescore_one, todo)
+    for n, (cid, d, row, wk, err) in enumerate(results, 1):
+        if err:
+            failed.append((cid, err))
+            log.warning("could not score %s again: %s", cid, err)
+        else:
+            rows.append(row)
+            if wk is not None:
+                weekly.setdefault(d, {})[cid] = wk
+        if n % 25 == 0:
+            log.info("shard %d: %d/%d", shard, n, len(todo))
+            save()
+    if pool:
+        pool.close()
+        pool.join()
+    save()
+    return part
+
+
+def rescore_merge() -> pd.DataFrame:
+    """The slices of rescore() become the registry. Every try stays in it: one that could not be scored
+    again keeps its old row, marked, and is treated as one more independent try by the luck check. The
+    old and new numbers of every try are kept side by side in paper/finder/rescore_compare.csv."""
+    old = registry()
+    parts = sorted((OUT / "rescore").glob("part-*/registry.csv"))
+    new = pd.concat([pd.read_csv(p) for p in parts], ignore_index=True).drop_duplicates("id", keep="last")
+    new = new[new["id"].isin(old["id"])]
+    kept = old[~old["id"].isin(new["id"])].copy()
+    if "universe" not in kept:
+        kept["universe"] = np.nan
+    # a try a nightly run scored meanwhile with the new method keeps its row; an old one is marked
+    kept["universe"] = kept["universe"].where(kept["universe"].notna(), "not scored again")
+    order = {cid: i for i, cid in enumerate(old["id"])}
+    reg = pd.concat([new, kept], ignore_index=True)
+    reg = reg.sort_values("id", key=lambda s: s.map(order)).reset_index(drop=True)
+    for p in sorted((OUT / "rescore").glob("part-*/returns/*.npz")):
+        (OUT / "returns").mkdir(parents=True, exist_ok=True)
+        (OUT / "returns" / p.name).write_bytes(p.read_bytes())
+    reg = score(reg)
+    cols = ["gates_passed", "s_events", "s_ic", "s_icir", "s_avg_r", "s_rand_avg_r", "s_return", "s_sr_daily",
+            "s_dsr", "v_ic", "v_avg_r", "v_return", "failed"]
+    was = score(old) if "gates_passed" not in old else old
+    cmp_ = was[["id", "family", "label"] + [c for c in cols if c in was]].merge(
+        reg[["id", "universe", "s_beta", "s_h_t"] + [c for c in cols if c in reg]], on="id", suffixes=("_old", "_new"))
+    cmp_.to_csv(OUT / "rescore_compare.csv", index=False)
+    reg.to_csv(OUT / "registry.csv", index=False)
+    report(reg)
+    return reg
 
 
 def merge(other: str) -> int:
@@ -711,6 +940,11 @@ def promote() -> list[dict]:
     reg = score(registry())
     used = json.loads((OUT / "vault_log.json").read_text()) if (OUT / "vault_log.json").exists() else {}
     out = []
+    hold = OUT / "hold.json"
+    if hold.exists():  # the vault can be used once per strategy: no test while a person has asked to look first
+        ready = reg[(reg["gates_passed"] == len(GATES)) & ~reg["id"].isin(used)]
+        log.warning("vault tests on hold (%s): %d strategies waiting", json.loads(hold.read_text()).get("why", ""), len(ready))
+        return out
     for r in reg[reg["gates_passed"] == len(GATES)].itertuples():
         if r.id in used:
             continue
@@ -736,7 +970,7 @@ def report(reg: pd.DataFrame) -> Path:
     n = len(reg)
     top = reg.sort_values(["gates_passed", "s_icir"], ascending=False).head(25)
     md = [f"# Strategy finder – {pd.Timestamp.now():%Y-%m-%d}", "",
-          f"**{n} strategies tried so far** (every attempt counts: the deflated Sharpe bar rises with N). "
+          f"**{n} strategies tried so far** (every attempt counts in the luck check, below). "
           f"Hourly (live universe): search {SEARCH[0]} → {SEARCH[1][:10]}, validation {VALIDATION[0]} → "
           f"{VALIDATION[1][:10]}. S&P 500 daily: search {PERIODS['daily500'][0][0]} → {PERIODS['daily500'][0][1][:10]}, "
           f"validation {PERIODS['daily500'][1][0]} → {PERIODS['daily500'][1][1][:10]}. Both: "
@@ -749,8 +983,10 @@ def report(reg: pd.DataFrame) -> Path:
         md.append(f"| {r.gates_passed}/{len(GATES)} | `{r.id}` {r.label.replace('|', '·')} | {r.s_ic:+.3f} | {r.s_icir:+.2f} | "
                   f"{r.v_ic:+.3f} | {r.s_avg_r:+.2f} / {r.s_rand_avg_r:+.2f} | {r.v_avg_r:+.2f} / {r.v_rand_avg_r:+.2f} | "
                   f"{r.v_return:+.1%} | {r.s_dsr:.2f} | {r.get('pos_months', np.nan):.0%} | "
-                  f"{int(r.get('regimes_positive', 0))}/{int(r.get('regimes_seen', 0))} | {r.get('breadth', np.nan):.0%} | "
+                  f"{int(np.nan_to_num(r.get('regimes_positive', 0)))}/{int(np.nan_to_num(r.get('regimes_seen', 0)))} | "
+                  f"{r.get('breadth', np.nan):.0%} | "
                   f"{(r.failed or 'none – vault candidate').split(';')[0]} |")
+    md += ["", "## The luck check (deflated Sharpe)", ""] + luck_lines(reg)
     camp = campaigns(reg)
     alive = camp[camp["status"] == "improving"]
     md += ["", f"## Campaigns: each idea refined round by round (max {MAX_ROUNDS} rounds)", "",
@@ -785,6 +1021,34 @@ def report(reg: pd.DataFrame) -> Path:
     return path
 
 
+def luck_lines(reg: pd.DataFrame) -> list[str]:
+    """The luck check in words, for the report (and paper/finder/luck.json for the dashboard)."""
+    if not LUCK:
+        return ["No weekly returns stored yet: the old formula applies (every try counted as independent)."]
+    passed = reg[reg["s_dsr"] >= 0.90] if "s_dsr" in reg else reg.iloc[:0]
+    out = [f"- **{LUCK['tries']} tries count.** Replaying history with no skill in any of them, the luckiest "
+           f"one reaches a t-statistic of **{LUCK['bar_t']:.2f}** on average: that is the bar.",
+           f"- The same bar as **{LUCK['independent_tries']:.0f} independent tries** would set: most tries are "
+           "versions of the same few ideas and move together.",
+           "- A strategy is judged on the part of its weekly returns that the stocks it may trade do not explain "
+           "(being invested in a rising market is not skill).",
+           f"- **{len(passed)} strategies clear the bar** (deflated Sharpe >= 0.90)."]
+    if LUCK.get("without_returns"):
+        out.append(f"- {LUCK['without_returns']} tries have no weekly returns stored: each counts as one more "
+                   "independent try, and cannot pass until it is scored again.")
+    if "s_h_t" in reg and reg["s_h_t"].notna().any():
+        b = reg.loc[reg["s_h_t"].idxmax()]
+        out.append(f"- Highest t-statistic: {b['s_h_t']:.2f}, `{b['id']}` {str(b['label']).replace('|', '·')} "
+                   f"(deflated Sharpe {b['s_dsr']:.2f}).")
+    if "universe" in reg:
+        u = reg["universe"].fillna("today's list (old)").value_counts()
+        out.append("- Stocks each try was tested on: " + ", ".join(f"{k}: {v}" for k, v in u.items()) + ".")
+    if (OUT / "hold.json").exists():
+        out.append(f"- **Vault tests are on hold:** {json.loads((OUT / 'hold.json').read_text()).get('why', '')}")
+    (OUT / "luck.json").write_text(json.dumps(LUCK | {"cleared": int(len(passed))}, indent=1))
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -796,6 +1060,12 @@ def main() -> None:
     sub.add_parser("promote")
     mg = sub.add_parser("merge")
     mg.add_argument("other")
+    rs = sub.add_parser("rescore")
+    rs.add_argument("--shard", type=int, default=0)
+    rs.add_argument("--of", type=int, default=1)
+    rs.add_argument("--workers", type=int, default=1)
+    rs.add_argument("--limit", type=int, default=None)
+    sub.add_parser("rescore-merge")
     v = sub.add_parser("vault")
     v.add_argument("id")
     args = ap.parse_args()
@@ -812,6 +1082,12 @@ def main() -> None:
         print(promote() or "no new strategy passed every gate")
     elif args.cmd == "report":
         print(report(score(registry())))
+    elif args.cmd == "rescore":
+        print(rescore(args.shard, args.of, args.workers, args.limit))
+    elif args.cmd == "rescore-merge":
+        reg = rescore_merge()
+        print(f"{len(reg)} strategies in the registry, {int((reg['universe'] == 'not scored again').sum())} "
+              f"not scored again; luck check: {LUCK}")
     else:
         print(vault(args.id))
 

@@ -49,7 +49,7 @@ def update_one(cid: str, info: dict, data: dict) -> dict:
     if c.data not in data:
         data[c.data] = F.load(include_vault=True, data=c.data)
     prices = data[c.data]
-    sig = F.signals(c, prices)
+    sig = F.signals(c, prices, pit=True)  # the members of each day, as in the research
     end = max(df.index[-1] for df in prices.values())
     since = pd.Timestamp(info["since"])
     out = {"id": cid, "label": info["label"], "since": info["since"], "through": str(end)[:16],
