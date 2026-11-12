@@ -730,6 +730,7 @@ JBSS,Consumer Staples,sp600
 JBTM,Industrials,sp600
 JCI,Industrials,sp500
 JEF,Financials,sp400
+JHX,Materials,sp400
 JJSF,Consumer Staples,sp600
 JKHY,Financials,sp500
 JLL,Real Estate,sp400
@@ -1156,7 +1157,6 @@ ROCK,Industrials,sp600
 ROG,Information Technology,sp600
 ROIV,Health Care,sp400
 ROK,Industrials,sp500
-ROKU,Communication Services,sp400
 ROL,Industrials,sp500
 ROP,Information Technology,sp500
 ROST,Consumer Discretionary,sp500
