@@ -12,7 +12,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 - **BBT** 179.42 shares, entry 30.77, stop 28.92, now 30.68 (-0.04R)
 - **BKR** 60.68 shares, entry 46.28, stop 43.13, now 48.86 (+0.40R)
 - **CAT** 4.63 shares, entry 609.75, stop 523.80, now 605.28 (-0.05R)
-- **CRH** 40.28 shares, entry 92.91, stop 88.46, now 93.92 (+0.10R)
+- **CRH** 40.42 shares, entry 92.62, stop 88.19, now 93.63 (+0.10R)
 - **CVS** 40.61 shares, entry 84.64, stop 80.64, now 89.79 (+0.53R)
 - **ECHO** 26.85 shares, entry 100.64, stop 89.55, now 98.13 (-0.17R)
 - **ENPH** 66.37 shares, entry 28.32, stop 25.02, now 26.78 (-0.25R)
