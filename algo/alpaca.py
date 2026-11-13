@@ -271,6 +271,19 @@ def at_the_open(orders: list[dict]) -> list[dict]:
             else o | {"time_in_force": "day", "note": (o["note"] + " at the open").strip()} for o in orders]
 
 
+ORDER_PAGE = 500  # the most orders Alpaca returns in one answer (its default is 50)
+
+
+def open_orders(nested: bool = False) -> list[dict]:
+    """Every open order. Alpaca answers 50 unless asked for more (2026-11-13: account A's 27 stocks
+    had 54 stop orders, and the stops of the last ones were not seen). A full page may hide more: an
+    error, not a silent cut."""
+    out = request("GET", f"/v2/orders?status=open&limit={ORDER_PAGE}" + ("&nested=true" if nested else ""))
+    if len(out) >= ORDER_PAGE:
+        raise AlpacaError(f"{len(out)} open orders or more: the list may be cut")
+    return out
+
+
 def last_prices() -> dict[str, float]:
     orders = json.loads((PAPER_DIR / "orders.json").read_text())
     status = {SYMBOLS[o["asset"]]: abs(o.get("mark") or o.get("stop") or 0.0) for o in orders}
@@ -490,7 +503,7 @@ def sync(send: bool = False) -> list[dict]:
         return []
     if send:  # 1) cancel the stops and targets of the last run
         request("DELETE", "/v2/orders")
-        _wait(lambda: not request("GET", "/v2/orders?status=open"))
+        _wait(lambda: not open_orders())
     try:
         return _trade_and_protect(send, trades, prices)
     except Exception as exc:
@@ -507,7 +520,7 @@ def retry_stand_ins() -> list[str]:
     2026-10-28), so the stand-in is cancelled and the planned stop sent; if Alpaca still refuses it, a new
     stand-in goes in at once (stops cannot trigger while the market is closed). Market orders stay queued."""
     out = []
-    for o in request("GET", "/v2/orders?status=open&nested=true"):
+    for o in open_orders(nested=True):
         planned = _planned_stop(o)
         if planned is None or o.get("type") != "stop":
             continue
@@ -598,7 +611,7 @@ def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
                 protective += protect(sym, q, [t for t in alive if SYMBOLS[t["asset"]] == sym], live.get(sym))
         protective = no_wash(protective, {(o["symbol"], o["side"]) for o in todo})[0]
         want = Counter(_order_key(o) for o in todo + protective)
-        open_ = Counter(_order_key(o) for o in request("GET", "/v2/orders?status=open&nested=true"))
+        open_ = Counter(_order_key(o) for o in open_orders(nested=True))
     except (AlpacaError, OSError, KeyError, ValueError, TypeError):
         return False
     return bool(want) and want == open_
@@ -611,7 +624,7 @@ def emergency_protect(trades: list[dict], exc: Exception) -> None:
     placed, failed = [], []
     try:
         held = positions()
-        open_syms = {o["symbol"] for o in request("GET", "/v2/orders?status=open")}
+        open_syms = {o["symbol"] for o in open_orders()}
     except AlpacaError as e:
         held, open_syms = {}, set()
         failed.append(f"positions unreadable ({e})")
@@ -787,7 +800,7 @@ def verify(alert: bool = False) -> list[str]:
         seen = {}
     want = wanted(live, seen)
     have = positions()
-    orders = request("GET", "/v2/orders?status=open&nested=true")
+    orders = open_orders(nested=True)
     norm = lambda s: s.replace("/", "")
     pending = {}  # market / limit entries not filled yet (e.g. queued while the market is closed)
     stops = {}

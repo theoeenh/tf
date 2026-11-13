@@ -904,3 +904,34 @@ def test_verify_ignores_a_rest_the_plan_no_longer_wants_and_the_sync_never_sells
     # a position the plan does want keeps the $1 rule: 0.03 AMD without a stop is $3, not dust
     _fake_alpaca(monkeypatch, {"AMD": 0.03}, [], {"AMD": 0.03})
     assert alpaca.verify() == ["AMD: 0.03 held, only 0 covered by a stop"]
+
+
+def test_more_than_fifty_open_orders_are_all_read(monkeypatch):
+    """2026-11-13: account A held 27 stocks, each with two stop orders (whole shares and the fraction): 54
+    open orders. Alpaca answers 50 orders unless asked for more, so the last positions' stops were not
+    seen and every run reported them without a stop (account D, with 26 stocks, since 11 November)."""
+    from algo import alpaca
+
+    names = [f"S{k:02d}" for k in range(27)]
+    monkeypatch.setattr(alpaca, "SYMBOLS", {n: n for n in names} | alpaca.SYMBOLS)
+    held = {n: 10.5 for n in names}
+    orders = [{"symbol": n, "side": "sell", "type": "stop", "qty": q, "time_in_force": tif}
+              for n in names for q, tif in (("10", "gtc"), ("0.5", "day"))]
+    _fake_alpaca(monkeypatch, held, orders, held)
+    asked = []
+
+    def request(method, path, body=None, base=None):
+        if path.startswith("/v2/orders?status=open"):
+            asked.append(path)
+            return orders if "limit=500" in path else orders[:50]      # Alpaca's default page is 50
+        if path == "/v2/account":
+            return {"non_marginable_buying_power": "1000000", "equity": "100000"}
+        raise AssertionError(path)
+
+    monkeypatch.setattr(alpaca, "request", request)
+    assert alpaca.verify() == []
+    assert asked and all("limit=500" in p for p in asked)
+    assert len(alpaca.open_orders()) == 54
+    monkeypatch.setattr(alpaca, "request", lambda *a, **k: [orders[0]] * 500)
+    with pytest.raises(alpaca.AlpacaError):                            # a full page may hide more: say so
+        alpaca.open_orders()
