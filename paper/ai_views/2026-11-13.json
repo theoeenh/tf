@@ -1,0 +1,196 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": -1,
+  "confidence": 0.2,
+  "horizon_days": 3,
+  "key_events": [
+   "NVDA earnings Tuesday 17 Nov, the first without Jensen Huang",
+   "CEO exit (12 Nov); the stock 'struggles' again on 13 Nov; lost the most-valuable-company title"
+  ],
+  "reasoning": "Same view as Thursday, held to the earnings: the leadership question is open and the results come in two sessions. Much is priced (-25% in a month) and headlines disagree on today's direction, so low confidence; the earnings can gap it either way."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Report: Tesla and SpaceX could announce a merger as soon as December (13 Nov)"
+  ],
+  "reasoning": "Up 16% in a week on merger talk with no date or terms in the brief. No view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Headlines about a CEO search around Tim Cook (13 Nov)"
+  ],
+  "reasoning": "Unclear headline, no dated event; the stock is quiet (+3% in a week). No view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Service outage (13 Nov)"
+  ],
+  "reasoning": "An outage headline without a lasting effect in the brief. No view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Chip rivals give back part of Thursday's jump (AMD -3%, 13 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "Up 45% in a week on Nvidia's trouble and now retreating: a crowded move with Nvidia's results ahead. No direction stands out."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Broadcom -2% after Thursday's +5% (13 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "As AMD: the rotation is unwinding in part; Nvidia's results decide the next move for the group. No view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "Producer prices below forecasts: futures higher pre-bell (13 Nov)",
+   "NVDA earnings Tuesday 17 Nov"
+  ],
+  "reasoning": "A cool inflation print lifts the index while its largest chip name struggles; both are in the price at the open. No view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief's headlines or calendar stands out for the next 1-20 days; no view."
+ }
+]
