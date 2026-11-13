@@ -879,3 +879,28 @@ def test_plan_does_not_top_up_a_held_stock_within_the_check_tolerance():
     # a small position: $50 is the floor (5 shares of $20 = $100; 1 more share = $20 is ignored)
     assert alpaca.plan({"XYZ": 6.0}, {"XYZ": 5.0}, {"XYZ": 20.0}) == []
     assert alpaca.plan({"XYZ": 0.0}, {"XYZ": 5.0}, {"XYZ": 20.0})[0]["side"] == "sell"   # exits always go out
+
+
+def test_verify_ignores_a_rest_the_plan_no_longer_wants_and_the_sync_never_sells(monkeypatch):
+    """2026-11-12: account A's stop on STC filled for the plan's 54.23 shares; Alpaca had held 0.0231 more
+    (97 cents). Once STC is out of the plan the rest was priced at a default $100 and reported as a
+    position without a stop at every run. It is under Alpaca's $1 minimum order and under the $5 below
+    which the sync leaves a difference alone: nothing can or will be done about it, so it is dust."""
+    from algo import alpaca
+
+    stop = {"symbol": "AMD", "side": "sell", "type": "stop", "qty": "5"}
+    _fake_alpaca(monkeypatch, {"STC": 0.023106, "AMD": 5.0}, [stop], {"AMD": 5.0})
+    asked = []
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: asked.append(list(syms)) or {"STC": 42.04})
+    assert alpaca.verify() == []
+    assert ["STC"] in asked                                  # priced at the market, not at a default
+    # no price to be had: still dust at the default price (0.0231 x $100 is under $5)
+    _fake_alpaca(monkeypatch, {"STC": 0.023106, "AMD": 5.0}, [stop], {"AMD": 5.0})
+    assert alpaca.verify() == []
+    # a rest worth more than $5 is a real position without a stop (the sync sells it at its next run)
+    _fake_alpaca(monkeypatch, {"STC": 0.5, "AMD": 5.0}, [stop], {"AMD": 5.0})
+    monkeypatch.setattr(alpaca, "live_prices", lambda syms: {"STC": 42.04})
+    assert alpaca.verify() == ["STC: 0.5 held, only 0 covered by a stop"]
+    # a position the plan does want keeps the $1 rule: 0.03 AMD without a stop is $3, not dust
+    _fake_alpaca(monkeypatch, {"AMD": 0.03}, [], {"AMD": 0.03})
+    assert alpaca.verify() == ["AMD: 0.03 held, only 0 covered by a stop"]

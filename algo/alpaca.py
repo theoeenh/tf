@@ -624,7 +624,7 @@ def emergency_protect(trades: list[dict], exc: Exception) -> None:
                 value = abs(q) * live_prices([sym]).get(sym, float("inf"))
             except AlpacaError:
                 value = float("inf")
-            if value >= 1.0:  # dust (< $1, left over from rounding) needs no stop, as in verify()
+            if value >= MIN_NOTIONAL:  # a rest sync leaves alone (< $5, from rounding) needs no stop, as in verify()
                 failed.append(f"{sym}: no stop level in the plan (${value:,.0f} held)")
             continue
         for o in protect(sym, q, mine):
@@ -801,6 +801,12 @@ def verify(alert: bool = False) -> list[str]:
             elif x is o and x.get("type") in ("market", "limit") and not o.get("order_class"):
                 pending[norm(x["symbol"])] = pending.get(norm(x["symbol"]), 0.0) + sign * q
     prices = last_prices()
+    # held but not in the plan (any more): the plan has no price for it, so the market's (as sync does)
+    stray = sorted(s for s in have if not any(norm(x) == norm(s) for x in want))
+    try:
+        spot = {norm(s): p for s, p in live_prices(stray).items()} if stray else {}
+    except (AlpacaError, OSError):
+        spot = {}
     core: dict[str, float] = {}  # holdings the plan keeps without a stop (idle cash in SPY, a monthly rotation)
     for t in json.loads((PAPER_DIR / "orders.json").read_text()):
         if t.get("stop") is None:
@@ -817,7 +823,7 @@ def verify(alert: bool = False) -> list[str]:
         if any(norm(SYMBOLS[a]) == sym for a in CRYPTO) and w < 0:
             w = 0.0  # crypto shorts are held flat
         h = sum(q for s, q in have.items() if norm(s) == sym) + pending.get(sym, 0.0)
-        px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or 100.0
+        px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or spot.get(sym, 0.0) or 100.0
         short_of_cash = (sym in crypto and h < w and cash is not None
                          and (w - h) * px > CASH_BUFFER * cash - MIN_NOTIONAL)
         if short_of_cash:  # crypto cannot use margin: smaller than the plan when the cash is in stocks
@@ -832,7 +838,11 @@ def verify(alert: bool = False) -> list[str]:
         # the fractional rest's stop is a day order (Alpaca's rule), gone after the close until the next
         # run renews it: whole shares covered is enough
         whole_covered = abs(held) - covered < 1.0 and covered >= math.floor(abs(held) + 1e-9) > 0
-        if abs(held) * px >= 1.0 and covered < 0.98 * abs(held) and not whole_covered:  # dust (< $1): no stop
+        # dust needs no stop: under $1 of a position the plan wants; under MIN_NOTIONAL of one it does not
+        # want (any more), the size below which sync leaves a difference alone (2026-11-12: 97 cents of
+        # STC left after its stop filled for the plan's quantity, under Alpaca's $1 minimum order)
+        dust = 1.0 if any(norm(s) == sym for s in want) else MIN_NOTIONAL
+        if abs(held) * px >= dust and covered < 0.98 * abs(held) and not whole_covered:
             problems.append(f"{sym}: {abs(held):g} held, only {covered:g} covered by a stop")
     if alert and problems:
         from . import notify
