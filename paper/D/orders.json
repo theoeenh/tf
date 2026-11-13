@@ -298,5 +298,44 @@
   "entry": 319.30523999999997,
   "r": 0.13490695196856384,
   "bar": "2026-11-12"
+ },
+ {
+  "asset": "BX",
+  "ticker": "BX",
+  "strategy": "insider_low_short",
+  "qty": 31.22562613901669,
+  "stop": 105.86452164515292,
+  "target": null,
+  "mark": 118.54,
+  "entry": 118.54,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-12"
+ },
+ {
+  "asset": "COHR",
+  "ticker": "COHR",
+  "strategy": "insider_low_short",
+  "qty": 5.591556458239188,
+  "stop": 161.29474526856643,
+  "target": null,
+  "mark": 232.08,
+  "entry": 232.08,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-12"
+ },
+ {
+  "asset": "IOSP",
+  "ticker": "IOSP",
+  "strategy": "insider_low_short",
+  "qty": 44.2957433901334,
+  "stop": 70.17460987107363,
+  "target": null,
+  "mark": 79.11,
+  "entry": 79.11,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-12"
  }
 ]

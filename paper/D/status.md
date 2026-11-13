@@ -35,7 +35,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **BX** 31.23 shares around 118.54, stop 105.86
+- **COHR** 5.59 shares around 232.08, stop 161.29
+- **IOSP** 44.30 shares around 79.11, stop 70.17
 
 ## Closed trades
 
