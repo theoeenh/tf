@@ -1,4 +1,4 @@
-# Strategy finder – 2026-11-12
+# Strategy finder – 2026-11-13
 
 **6528 strategies tried so far** (every attempt counts in the luck check, below). Hourly (live universe): search 2023-01-11 → 2024-12-31, validation 2025-01-01 → 2025-06-30. S&P 500 daily: search 2017-01-01 → 2022-12-31, validation 2023-01-01 → 2025-06-30. Both: vault from 2025-07-01 (sealed). 14 gates; only a candidate passing all of them may take its one vault test.
 
@@ -8,17 +8,17 @@
 | 13/14 | `67eb95bdc3` insider_sector_wave(buyers=2, companies=4) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.904 | +0.67 | +1.191 | +0.12 / -0.11 | +0.06 / -0.01 | +1.8% | 0.00 | 65% | 3/3 | 81% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `f9ccddc802` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.7) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.687 | +0.65 | +1.241 | +0.24 / +0.08 | +0.57 / +0.15 | +29.0% | 0.00 | 77% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `8916c925de` insider_deep_value(buyers=3, below=0.42) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.713 | +0.64 | +0.587 | +0.08 / +0.01 | +0.13 / -0.18 | +5.7% | 0.00 | 67% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `fa544cc8ce` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.35) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.881 | +0.64 | +0.489 | +0.39 / +0.11 | +0.60 / +0.13 | +29.1% | 0.00 | 67% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `fa544cc8ce` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.35) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.881 | +0.64 | +0.489 | +0.39 / +0.11 | +0.60 / +0.13 | +29.1% | 0.01 | 67% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `0c7113d1ab` insider_sector_laggard(buyers=1, lag=0.2) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +0.974 | +0.64 | +0.876 | +0.26 / +0.01 | +0.06 / -0.10 | +7.7% | 0.00 | 72% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `ca8c628ca0` sector_washout_calm(drop=0.14, bounce=2, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.102 | +0.63 | +0.571 | +0.27 / +0.09 | +0.37 / +0.02 | +23.9% | 0.00 | 74% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `ca8c628ca0` sector_washout_calm(drop=0.14, bounce=2, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.102 | +0.63 | +0.571 | +0.27 / +0.09 | +0.37 / +0.02 | +23.9% | 0.01 | 74% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `ce023528e4` sector_washout_calm(drop=0.14, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +2.039 | +0.62 | +1.169 | +0.30 / +0.14 | +0.46 / +0.08 | +21.7% | 0.00 | 67% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `99d3a04982` insider_fresh_wave(buyers=2, companies=4) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.742 | +0.61 | +2.179 | +0.04 / +0.04 | +0.04 / -0.03 | +1.1% | 0.00 | 71% | 3/3 | 81% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `52e69f2b97` insider_stress_low_short(drop=0.1, max_rank=0.7) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.640 | +0.60 | +0.713 | +0.40 / +0.02 | +0.33 / +0.03 | +30.6% | 0.00 | 62% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `6f40333ad9` sector_washout_calm(drop=0.14, bounce=4, max_vol=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.888 | +0.60 | +1.695 | +0.17 / +0.09 | +0.42 / +0.07 | +19.3% | 0.00 | 85% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `17f8874c25` insider_sector_laggard(buyers=1, lag=0.05) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Industrials, daily | +1.450 | +0.59 | +1.632 | +0.08 / -0.05 | +0.07 / -0.03 | +4.8% | 0.00 | 68% | 3/3 | 70% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `aaf65c5351` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.300 | +0.59 | +1.245 | +0.37 / +0.09 | +0.35 / +0.10 | +19.6% | 0.00 | 86% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `aaf65c5351` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.300 | +0.59 | +1.245 | +0.37 / +0.09 | +0.35 / +0.10 | +19.6% | 0.01 | 86% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `4ee26e6dda` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, max_bars=60 · no trend filter · S&P 1500, daily | +2.300 | +0.59 | +1.245 | +0.26 / +0.21 | +0.59 / +0.28 | +27.2% | 0.00 | 86% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `83ec2e8ba0` sector_washout_calm(drop=0.14, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.115 | +0.58 | +1.859 | +0.29 / +0.10 | +0.39 / +0.04 | +23.1% | 0.00 | 79% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `83ec2e8ba0` sector_washout_calm(drop=0.14, bounce=4, max_vol=0.3) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +2.115 | +0.58 | +1.859 | +0.29 / +0.10 | +0.39 / +0.04 | +23.1% | 0.01 | 79% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `e24c15fd2c` insider_deep_value(buyers=3, below=0.3) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.171 | +0.58 | +0.619 | +0.02 / -0.03 | +0.15 / -0.15 | +11.1% | 0.00 | 64% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `e04023c4d4` insider_deep_value(buyers=1, below=0.3) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Industrials, daily | +1.415 | +0.58 | +0.562 | +0.14 / +0.04 | +0.33 / +0.03 | +11.9% | 0.00 | 67% | 3/3 | 65% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `5b907a23fc` insider_deep_value(buyers=4, below=0.21) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.209 | +0.58 | +0.663 | +0.02 / -0.01 | +0.19 / -0.08 | +11.5% | 0.00 | 59% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
@@ -27,17 +27,16 @@
 | 13/14 | `f562cba6d6` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.7) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · S&P 1500, daily | +1.801 | +0.57 | +2.310 | +0.24 / +0.06 | +0.62 / +0.10 | +36.1% | 0.00 | 86% | 3/3 | 91% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `56814bb4c7` sector_washout_calmest(drop=0.15, bounce=4, k=14) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.383 | +0.56 | +0.405 | +0.29 / +0.11 | +0.76 / +0.18 | +29.8% | 0.00 | 70% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `56f63f893b` sector_washout_calmest(drop=0.15, bounce=4, k=10) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.349 | +0.56 | +0.466 | +0.16 / +0.10 | +0.71 / +0.13 | +25.9% | 0.00 | 67% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
-| 13/14 | `cdd7bc6c72` insider_underwater(buyers=1, discount=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Utilities, daily | +1.848 | +0.56 | +2.561 | +0.34 / +0.11 | +0.40 / -0.03 | +1.9% | 0.00 | 74% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
+| 13/14 | `cdd7bc6c72` insider_underwater(buyers=1, discount=0.21) · stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 · no trend filter · sector Utilities, daily | +1.848 | +0.56 | +2.561 | +0.34 / +0.11 | +0.40 / -0.03 | +1.9% | 0.04 | 74% | 3/3 | 100% | search: deflated Sharpe >= 0.90 |
 | 13/14 | `eed17f8ff3` sector_washout_calm(drop=0.15, bounce=4, max_vol=0.5) · stop_atr=3.0, rr=None, max_bars=40 · no trend filter · S&P 1500, daily | +1.501 | +0.56 | +0.722 | +0.32 / +0.11 | +0.69 / +0.17 | +36.4% | 0.00 | 70% | 3/3 | 82% | search: deflated Sharpe >= 0.90 |
 
 ## The luck check (deflated Sharpe)
 
-- **6528 tries count.** Replaying history with no skill in any of them, the luckiest one reaches a t-statistic of **5.28** on average: that is the bar.
-- The same bar as **8886111 independent tries** would set: most tries are versions of the same few ideas and move together.
+- **6528 tries so far; 4659 of them could pass at all** (the 100 signals of the first check). Replaying history with no skill in any of those, the luckiest one reaches a t-statistic of **3.28** on average: that is the bar.
+- In round numbers, the bar that **1085 independent tries** would set.
 - A strategy is judged on the part of its weekly returns that the stocks it may trade do not explain (being invested in a rising market is not skill).
 - **0 strategies clear the bar** (deflated Sharpe >= 0.90).
-- 12 tries have no weekly returns stored: each counts as one more independent try, and cannot pass until it is scored again.
-- Highest t-statistic: 3.12, `1320c0ce23` insider_consensus(votes=3, window=10) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Utilities, daily (deflated Sharpe 0.01).
+- Highest t-statistic: 3.12, `1320c0ce23` insider_consensus(votes=3, window=10) · stop_atr=4.0, rr=None, max_bars=40 · no trend filter · sector Utilities, daily (deflated Sharpe 0.43).
 - Stocks each try was tested on: members of the day: 5915, fixed list: 601, not scored again: 12.
 - **Vault tests are on hold:** every strategy was scored again on 2026-11-12 with a corrected universe and luck check; the user looks at the result before any one-shot vault test runs
 

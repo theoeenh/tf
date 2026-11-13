@@ -18,8 +18,10 @@ Now, with the same formula and the same pass mark (0.90):
 2. the bar is MEASURED, not assumed: history is replayed many times with every try stripped of its
    average (no skill anywhere) but the weeks kept together across tries, so tries that move together
    still move together. The best t-statistic of each replay is what luck alone hands the luckiest try;
-   its average is the bar (null_max()). Every try still counts, and a new one can only raise the bar,
-   but a near-copy of an old try raises it by almost nothing;
+   its average is the bar (null_max()). A new try can only raise the bar, but a near-copy of an old
+   try raises it by almost nothing. The tries that set the bar are those that could pass at all: with
+   the 100 signals of the first check (finder.luck_scores). A try with a handful of trades can never
+   be a candidate, and its one lucky week replayed several times is not a result any strategy can show;
 3. deflated Sharpe = the chance the strategy's true Sharpe is above that bar (deflated()).
 
 effective_n() translates the bar into "as many independent tries", for the report only.
@@ -84,20 +86,25 @@ def _blocks(n: int, rng: np.random.Generator) -> np.ndarray:
 def null_max(mats: list[np.ndarray], replays: int = REPLAYS, seed: int = SEED) -> np.ndarray:
     """The best t-statistic among all the tries in each replay of a world where no try has any skill.
     mats: one (weeks x tries) matrix per data set. The tries of a data set are replayed together (same
-    weeks for all, so their overlap is kept); data sets cover different years and are replayed apart."""
+    weeks for all, so their overlap is kept); data sets cover different years and are replayed apart.
+
+    Each try's replayed average is measured against that try's own spread over the WHOLE history (a
+    fixed scale, as in Hansen's test for superior predictive ability, 2005), not against the spread of
+    the replay. The first version (2026-11-12) used the replay's own spread: a strategy whose variance
+    sits in a few extreme weeks has almost no spread in a replay that misses them, the ratio explodes,
+    and the bar came out at 100 on the real registry, more than any number of tries can explain."""
     rng = np.random.default_rng(seed)
     out = np.full(replays, -np.inf)
     for x in mats:
         x = np.asarray(x, np.float32)
         x = x - x.mean(axis=0)  # no skill: every try's average is zero
-        x = x[:, x.std(axis=0) > TINY]  # a try that never traded cannot be the luckiest
+        sd = x.std(axis=0, ddof=1)
+        x, sd = x[:, sd > TINY], sd[sd > TINY]  # a try that never traded cannot be the luckiest
         n = len(x)
         if x.shape[1] == 0 or n < 3:
             continue
         for b in range(replays):
-            s = x[_blocks(n, rng)]
-            sd = s.std(axis=0, ddof=1)
-            t = np.where(sd > TINY, s.mean(axis=0) / np.where(sd > TINY, sd, 1.0), 0.0) * math.sqrt(n)
+            t = x[_blocks(n, rng)].mean(axis=0) / sd * math.sqrt(n)
             out[b] = max(out[b], float(t.max()))
     return np.where(np.isfinite(out), out, 0.0)
 

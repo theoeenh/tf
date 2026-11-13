@@ -162,6 +162,31 @@ def test_tries_without_stored_returns_still_count_and_cannot_pass_on_the_easy_ba
     assert "search: deflated Sharpe >= 0.90" in mixed.at["old0", "failed"]
 
 
+def test_only_tries_that_could_pass_set_the_bar(tmp_path, monkeypatch):
+    """2026-11-12, the first full run: strategies with one to thirty trades set the bar. One lucky week
+    counted several times in a replay looks like a t-statistic of 5; no strategy can show that, and a
+    try with fewer than 100 signals fails the first check whatever it earned."""
+    rng = np.random.default_rng(9)
+    real = {f"i{k}": rng.normal(0, 0.01, 313) for k in range(30)}
+    one_trade = {}
+    for k in range(300):                                                # one big week each, nothing else
+        x = np.zeros(313)
+        x[rng.integers(0, 313)] = 0.05
+        one_trade[f"s{k}"] = x
+    reg = _registry(tmp_path, monkeypatch, real).assign(s_events=500)
+    F.score(reg)
+    bar = F.LUCK["bar_t"]
+    both = _registry(tmp_path / "b", monkeypatch, real | one_trade)
+    F.score(both.assign(s_events=[500] * 30 + [1] * 300))
+    assert F.LUCK["bar_t"] == pytest.approx(bar) and F.LUCK["tries"] == 330 and F.LUCK["could_pass"] == 30
+    F._bars.clear()
+    F.score(both.assign(s_events=500))                                  # had they traded enough, they would count
+    assert F.LUCK["bar_t"] > bar + 0.5 and F.LUCK["could_pass"] == 330
+    waiting = _registry(tmp_path / "c", monkeypatch, real, extra_without_returns=50)
+    F.score(waiting.assign(s_events=[500] * 30 + [500] * 20 + [1] * 30))
+    assert F.LUCK["without_returns"] == 20                              # only those that could pass raise the bar
+
+
 def test_no_returns_stored_at_all_means_the_old_formula(tmp_path, monkeypatch):
     monkeypatch.setattr(F, "OUT", tmp_path)
     F._returns.clear(), F._bars.clear(), F.LUCK.clear()
@@ -204,7 +229,7 @@ def test_a_run_stores_each_try_with_its_weekly_hedged_returns(small_world, tmp_p
     store = luck.load(tmp_path / "returns", "hourly")
     assert set(store.columns) == {c.id for c in cands} and 15 <= len(store) <= 18     # the search window's weeks
     assert reg["s_h_t"].notna().all() and F.LUCK["tries"] == 2 and F.LUCK["without_returns"] == 0
-    assert (tmp_path / "luck.json").exists() and "tries count" in (tmp_path / "report.md").read_text()
+    assert (tmp_path / "luck.json").exists() and "could pass at all" in (tmp_path / "report.md").read_text()
 
 
 def test_rescore_scores_every_old_try_again_and_loses_none(small_world, tmp_path, monkeypatch):
@@ -212,7 +237,7 @@ def test_rescore_scores_every_old_try_again_and_loses_none(small_world, tmp_path
     cands = [F.Candidate("donchian", {"n": n, "trend_ma": 100}, rule, trend=False) for n in (20, 30, 40)]
     broken = F.Candidate("no_such_family", {}, rule, trend=False)       # cannot be scored again
     old = pd.DataFrame([{"id": c.id, "label": c.label(), "family": c.family, "candidate": json.dumps(asdict(c)),
-                         "s_events": 1, "s_ic": 9.9, "s_icir": 9.9, "s_avg_r": 9.9, "s_rand_avg_r": 0.0,
+                         "s_events": 500, "s_ic": 9.9, "s_icir": 9.9, "s_avg_r": 9.9, "s_rand_avg_r": 0.0,
                          "s_return": 9.9, "s_sr_daily": 0.5, "s_n_days": 100, "s_skew": 0.0, "s_kurt": 3.0,
                          "v_ic": 9.9, "v_avg_r": 9.9, "v_return": 9.9, "months": 40} for c in cands + [broken]])
     old.to_csv(tmp_path / "registry.csv", index=False)

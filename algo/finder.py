@@ -499,36 +499,45 @@ def stored_returns(data: str) -> pd.DataFrame:
     return _returns[key]
 
 
+MIN_SIGNALS = 100  # the first check: fewer signals in the search window and a strategy cannot be judged
+
+
 def luck_scores(rows: pd.DataFrame) -> pd.DataFrame:
-    """Per try: s_dsr (the luck check) and s_h_t (t-statistic of its hedged weekly returns). The bar is
-    measured on every try of the registry that has its weekly returns stored. A try without them (scored
-    before 2026-11-12 and not scored again) still raises the bar, as one more independent try, and cannot
-    pass itself: no returns, no verdict. With no returns stored at all, the old formula applies."""
+    """Per try: s_dsr (the luck check) and s_h_t (t-statistic of its hedged weekly returns).
+
+    The bar is measured on the tries that could pass at all: those with the MIN_SIGNALS signals of the
+    first check (a rule about how often a strategy trades, not about how it did) and their weekly
+    returns stored. A try with enough signals but no stored returns (scored before 2026-11-12 and not
+    scored again) still raises the bar, as one more independent try, and cannot pass itself: no returns,
+    no verdict. With no returns stored at all, the old formula applies."""
     data = rows["candidate"].map(lambda x: json.loads(x).get("data", "hourly"))
-    stat, mats, ids = {}, [], []
+    enough = (rows["s_events"].fillna(0) >= MIN_SIGNALS) if "s_events" in rows else pd.Series(True, rows.index)
+    stat, mats, ids, stored = {}, [], [], 0
     for d in sorted(data.unique()):
         store = stored_returns(d)
         have = [i for i in rows.loc[data == d, "id"] if i in store.columns]
         if not have:
             continue
-        x = store[have].to_numpy(np.float32)
-        st = luck.stats(x)
+        stored += len(have)
+        st = luck.stats(store[have].to_numpy(np.float32))
         stat |= {i: (st["sr"][k], st["n"], st["skew"][k], st["kurt"][k], st["t"][k]) for k, i in enumerate(have)}
-        mats.append(x)
-        ids += have
+        family = [i for i in rows.loc[(data == d) & enough, "id"] if i in store.columns]
+        if family:
+            mats.append(store[family].to_numpy(np.float32))
+            ids += family
     bar = None
-    if mats:
+    if stored:
         k = luck.key(mats, ids)
         if k not in _bars:
             _bars.clear()
-            _bars[k] = luck.null_max(mats)
+            _bars[k] = luck.null_max(mats) if mats else np.zeros(1)
         bar = float(_bars[k].mean())
-        missing = int(len(rows) - len(ids))
-        if missing:  # tries whose returns are not stored still count: each as one more independent try
+        missing = int((enough & ~rows["id"].isin(stat)).sum())
+        if missing:  # tries that could pass but have no returns stored: each one more independent try
             bar = luck.expected_max(luck.effective_n(bar) + missing)
         LUCK.clear()
-        LUCK.update({"tries": int(len(rows)), "bar_t": bar, "independent_tries": luck.effective_n(bar),
-                     "without_returns": missing})
+        LUCK.update({"tries": int(len(rows)), "could_pass": int(enough.sum()), "bar_t": bar,
+                     "independent_tries": luck.effective_n(bar), "without_returns": missing})
     srs = {d: rows.loc[data == d, "s_sr_daily"].fillna(0).tolist() for d in data.unique()}
     dsr, ht = [], []
     for r, d in zip(rows.itertuples(), data):
@@ -1026,16 +1035,16 @@ def luck_lines(reg: pd.DataFrame) -> list[str]:
     if not LUCK:
         return ["No weekly returns stored yet: the old formula applies (every try counted as independent)."]
     passed = reg[reg["s_dsr"] >= 0.90] if "s_dsr" in reg else reg.iloc[:0]
-    out = [f"- **{LUCK['tries']} tries count.** Replaying history with no skill in any of them, the luckiest "
-           f"one reaches a t-statistic of **{LUCK['bar_t']:.2f}** on average: that is the bar.",
-           f"- The same bar as **{LUCK['independent_tries']:.0f} independent tries** would set: most tries are "
-           "versions of the same few ideas and move together.",
+    out = [f"- **{LUCK['tries']} tries so far; {LUCK['could_pass']} of them could pass at all** (the {MIN_SIGNALS} signals "
+           "of the first check). Replaying history with no skill in any of those, the luckiest one reaches a "
+           f"t-statistic of **{LUCK['bar_t']:.2f}** on average: that is the bar.",
+           f"- In round numbers, the bar that **{LUCK['independent_tries']:.0f} independent tries** would set.",
            "- A strategy is judged on the part of its weekly returns that the stocks it may trade do not explain "
            "(being invested in a rising market is not skill).",
            f"- **{len(passed)} strategies clear the bar** (deflated Sharpe >= 0.90)."]
     if LUCK.get("without_returns"):
-        out.append(f"- {LUCK['without_returns']} tries have no weekly returns stored: each counts as one more "
-                   "independent try, and cannot pass until it is scored again.")
+        out.append(f"- {LUCK['without_returns']} tries that could pass have no weekly returns stored: each counts as "
+                   "one more independent try, and cannot pass until it is scored again.")
     if "s_h_t" in reg and reg["s_h_t"].notna().any():
         b = reg.loc[reg["s_h_t"].idxmax()]
         out.append(f"- Highest t-statistic: {b['s_h_t']:.2f}, `{b['id']}` {str(b['label']).replace('|', '·')} "

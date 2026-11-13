@@ -75,6 +75,20 @@ def test_a_try_that_never_traded_cannot_set_the_bar_and_the_result_is_reproducib
     assert np.allclose(a, luck.null_max([x], replays=200))                # same tries, same bar, every night
 
 
+def test_a_few_extreme_weeks_do_not_blow_up_the_bar():
+    """2026-11-12, the first full run on the real registry: the bar came out at 100. A strategy whose
+    variance sits in a few extreme weeks has almost no spread in a replay that misses them; measured
+    against the replay's own spread its average looked like a t-statistic of hundreds."""
+    rng = np.random.default_rng(12)
+    calm = rng.normal(0, 0.01, (313, 60))
+    crash = rng.normal(0, 0.0002, (313, 60))                             # quiet, except three violent weeks
+    for k in range(60):
+        crash[rng.choice(313, 3, replace=False), k] = rng.normal(0, 0.08, 3)
+    bar = luck.null_max([np.hstack([calm, crash]).astype(np.float16)], replays=400).mean()
+    assert bar < luck.expected_max(120) + 1.5                            # fat tails cost a little, not a hundredfold
+    assert bar > luck.expected_max(60) - 0.3
+
+
 def test_weekly_returns_survive_the_disk_and_a_later_file_wins(tmp_path):
     weeks = pd.date_range("2017-01-06", periods=5, freq=luck.WEEK)
     a = pd.Series([0.01, -0.02, 0.0, 0.03, 0.01], weeks)

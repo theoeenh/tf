@@ -53,7 +53,10 @@ account meets the criteria above. Then small, with the repository made private f
   - **A measured luck check.** Check 5 of the 14 (deflated Sharpe, pass mark 0.90) keeps its formula and its
     pass mark. Its bar is now measured on the tries' own weekly returns instead of counting every try as
     independent, and a strategy is judged on the part of its returns its own stocks do not explain.
-  - **Every old try is scored again** on the new data. Nothing new is tried.
+  - **Every old try is scored again** on the new data. Nothing new is tried. **Result (12 November): no
+    strategy clears the luck check and none is close** (best t-statistic 3.05, bar 3.28, about 4.6 needed).
+    The rules in A, C, D and E keep their per-trade lead over random entries, but their validation
+    returns roughly halve and they show no return of their own once market exposure is taken out.
   - **Vault tests wait** (paper/finder/hold.json) until the user has seen the re-scored registry: the vault
     can be used once per strategy. Remove the file to resume the automatic path below.
   - **No new strategy families** until the review is done (the evening routine's "add 1-2 families" step

@@ -74,7 +74,8 @@ Same formula, same pass mark (deflated Sharpe of 0.90 or more). Two inputs chang
      4 weeks on average keep any short-term momentum.
    - Each replay gives the best t-statistic among all tries. The average of those is the bar.
    - Every try counts, the old hourly ones too. A new idea raises the bar. A near-copy of an old try
-     raises it by almost nothing.
+     raises it by almost nothing. *(Amended after the first run to "every try that could pass": see
+     "Two corrections" at the end.)*
    - A try whose returns are not stored counts as one more fully independent try, and cannot pass.
 
 Set in advance and not to be tuned on results: weekly returns, the benchmark above, 1,000 replays,
@@ -133,6 +134,83 @@ booked as total losses (SVB, First Republic, Signature Bank, J.C. Penney, Fronti
 - The insider strategies could not be checked here (their data is only on GitHub). The full run covers
   them.
 
-### Full run: every try scored again
+### Full run: every try scored again (12 November, finished 21:13 UTC)
 
-*(added after the run)*
+**The verdict: no strategy clears the luck check, and none is close.**
+
+- **6,516 of 6,528 tries were scored again.** The old registry counted 6,728, but 200 rows were the same
+  strategy listed twice. 12 tries (all insider_dip) could not be scored again and keep their old row;
+  they cannot pass.
+- **The bar is a t-statistic of 3.28.** 4,659 tries have the 100 signals a strategy needs to be judged at
+  all; replaying history with no skill in any of them, the luckiest reaches 3.28 on average. That is the
+  bar about 1,100 independent tries would set.
+- **The best strategy that could pass has 3.05** (a calm_union version; deflated Sharpe 0.37, pass mark
+  0.90). To pass, a strategy needs about 4.6.
+- **Taken together, the 5,915 S&P strategies look like chance.** Once the return of the stocks each may
+  trade is taken out, their t-statistics average -0.2 with a spread of 1.0: what thousands of strategies
+  with no skill would show. The best single one is at 3.1.
+- 405 strategies pass 13 of the 14 checks (370 before; only 170 are the same ones). All 405 fail the luck
+  check and nothing else.
+
+**What the real universe changed (S&P strategies, medians of all tries):**
+
+| measure | old | new | share of tries that got worse |
+|---|---|---|---|
+| average R a trade, search years | +0.11 | +0.09 | 67% |
+| average R a trade, validation years | +0.12 | +0.08 | 70% |
+| return, validation years | +3.3% | +1.6% | 68% |
+| average R minus random entries, search | +0.05 | +0.05 | 48% |
+| stability (ICIR), search | +0.24 | +0.26 | 38% |
+
+- Returns and average R fell for two tries in three. The lead over random entries on the same stocks did
+  not: that comparison had been absorbing much of the bias, as the old code comment claimed.
+- **The sector washouts lost the most:** median stability +0.58 → +0.38, lead over random entries
+  +0.27R → +0.20R. The best campaign (sector_washout_calm) went from +1.03 to +0.41.
+- **The insider ideas kept their per-trade lead over random entries** (+0.04R → +0.05R, median of 5,001
+  tries) but their returns shrank.
+
+**The rules the accounts trade:**
+
+| rule | checks passed | validation average R | validation return | t-statistic without the market | market exposure (beta) |
+|---|---|---|---|---|---|
+| C: insiders under water `3ce4f83a88` | 13 → 13 | +0.38 → +0.20 | +43% → +23% | 0.69 | 1.02 |
+| A and D: insider + low short `1591c2bcb6` | 13 → 12 | +0.20 → +0.10 | +43% → +16% | -0.07 | 0.63 |
+| E: insider clusters, Industrials `5aca4825d9` | 13 → 12 | +0.44 → +0.25 | +8.5% → +5.2% | -0.04 | 0.12 |
+
+- All three still beat random entries per trade, in search and validation.
+- Their validation returns roughly halve on the real universe.
+- **Once market exposure is taken out, none shows a return of its own in 2017-2022** (t-statistics between
+  -0.1 and +0.7). The backtests that put them in the accounts were flattered by the missing companies and
+  by being invested in a rising market.
+- A and D's rule now also fails "positive in every market regime"; E's fails "positive in 55% of months".
+
+**What this does and does not say:**
+
+- It does not say insider buying carries no information: the per-trade lead over random entries is
+  still there, for thousands of versions.
+- It says the lead is too small, at the sizes these rules trade, to stand out from luck in a portfolio's
+  weekly returns over six years. The live accounts are the test that remains.
+
+### Two corrections made after the first run, and why
+
+Written here because they were made after seeing a result. Neither changes the verdict: under every
+version below, the best strategy is far from passing.
+
+1. **The first version of the measured bar was broken.** It measured each replay's average against that
+   replay's own spread. A strategy whose variance sits in a few extreme weeks has almost no spread in a
+   replay that misses them, and the ratio explodes: on the real registry the bar came out at 100. No
+   number of tries can explain that. The fix is the standard method (Hansen 2005): each try's replayed
+   average is measured against the try's own spread over the whole history. A test now fails on the old
+   version (bar 33 on a small made-up case, where 4 is the most that makes sense).
+2. **"Every try counts" became "every try that could pass counts".** With the fix above and all 6,516
+   tries, the bar is 3.54. The tries that set it were mostly strategies with 1 to 30 trades: one lucky
+   week counted several times in a replay looks like a t-statistic of 5, which no strategy can show in
+   real data. Such tries fail the first check (at least 100 signals) whatever they earn, and that check
+   depends on how often a rule trades, not on how it did. Leaving them out gives 3.28. The 3.54 is kept
+   here so the difference is visible.
+
+One claim of mine did not hold up. I said the old check could not be passed mainly because it counted
+every try as independent. Measured, the tries' similarity lowers the bar only a little: 3.28 against
+the 3.76 that 6,500 independent tries would set. The larger fault of the old check was the other one:
+it counted market exposure as skill, and so made the best strategies look closer to passing than they
+are (the best old score was 0.64; the same strategy now scores 0.18).
