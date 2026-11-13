@@ -22,28 +22,6 @@
    "underlying": "SPY",
    "legs": [
     {
-     "symbol": "SPY261204P00710000",
-     "qty": 1,
-     "price": 3.19
-    },
-    {
-     "symbol": "SPY261204P00742000",
-     "qty": -1,
-     "price": 6.56
-    }
-   ],
-   "expiry": "2026-12-04",
-   "cost": -337.0,
-   "max_loss": 2875.0,
-   "desc": "sell 742 / buy 710 puts, 2026-12-04, credit 3.25 on width 32",
-   "opened": "2026-10-27 14:29",
-   "id": "spy_put_spread-SPY-2026-10-27"
-  },
-  {
-   "playbook": "spy_put_spread",
-   "underlying": "SPY",
-   "legs": [
-    {
      "symbol": "SPY261211P00695000",
      "qty": 1,
      "price": 4.15
@@ -932,6 +910,35 @@
    "closed": "2026-11-10 15:23",
    "why_closed": "10 days to expiry",
    "pnl": 2520.0
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261204P00710000",
+     "qty": 1,
+     "price": 3.19
+    },
+    {
+     "symbol": "SPY261204P00742000",
+     "qty": -1,
+     "price": 6.56
+    }
+   ],
+   "expiry": "2026-12-04",
+   "cost": -337.0,
+   "max_loss": 2875.0,
+   "desc": "sell 742 / buy 710 puts, 2026-12-04, credit 3.25 on width 32",
+   "opened": "2026-10-27 14:29",
+   "id": "spy_put_spread-SPY-2026-10-27",
+   "done_legs": [
+    "SPY261204P00742000",
+    "SPY261204P00710000"
+   ],
+   "closed": "2026-11-13 14:54",
+   "why_closed": "21 days to expiry",
+   "pnl": -57.0
   }
  ]
 }
