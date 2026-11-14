@@ -213,6 +213,9 @@ def roll(history: pd.DataFrame, today_members: pd.DataFrame, day: pd.Timestamp) 
     gone = is_open & ~pd.Series([k in now for k in zip(h["symbol"], h["index"])], h.index)
     h.loc[gone, "end"] = day
     sec = dict(zip(today_members["symbol"], today_members["sector"]))
+    stay = is_open & ~gone  # a member reclassified to another sector: the open spell carries the new one
+    h.loc[stay, "sector"] = [sec.get(s) if isinstance(sec.get(s), str) else old
+                             for s, old in zip(h.loc[stay, "symbol"], h.loc[stay, "sector"])]
     new = [{"symbol": s, "index": i, "start": day, "end": pd.NaT, "sector": sec.get(s, np.nan)}
            for s, i in sorted(now - held)]
     if new:
@@ -251,9 +254,11 @@ def ever() -> list[str]:
 
 
 def sectors() -> dict[str, str]:
-    """Sector of every stock ever a member (its last known one)."""
+    """Sector of every stock ever a member: its last known one, i.e. of its open spell, else of the
+    spell that ended last. (Until 2026-11-14 the spell that STARTED last won: for JKHY, LDOS and LYV
+    that was a stale small-cap spell with the sector they had before a reclassification.)"""
     def make():
-        h = history().dropna(subset=["sector"]).sort_values("start")
+        h = history().dropna(subset=["sector"]).sort_values(["end", "start"], na_position="last")
         return dict(zip(h["symbol"], h["sector"]))
     return _memo("sectors", make)
 
@@ -290,9 +295,21 @@ def segment_ever(name: str):
     return lambda a: a in keep
 
 
-def mask(name: str, symbol: str, index: pd.DatetimeIndex) -> np.ndarray:
-    """True on the days `symbol` is a member of the segment `name` (as known that day)."""
+def since(name: str, day) -> list[str]:
+    """The stocks of a segment that were members on `day` or joined after it: what an account that
+    trades the members of each day from `day` on may hold (a member that left later keeps its bars, so
+    its open trade runs to its own exit)."""
+    day = pd.Timestamp(day).to_datetime64()
+    return sorted(a for a, stays in _stays(name).items() if any(end > day for _, end in stays))
+
+
+def mask(name: str, symbol: str, index: pd.DatetimeIndex, floor=None) -> np.ndarray:
+    """True on the days `symbol` is a member of the segment `name` (as known that day). floor (the
+    trading accounts): an earlier day counts as `floor`, i.e. before it the members of that day
+    whatever the date, which is the list the accounts traded until then (their past must not change)."""
     days = index.values
+    if floor is not None:
+        days = np.maximum(days, pd.Timestamp(floor).to_datetime64())
     out = np.zeros(len(days), bool)
     for start, end in _stays(name).get(symbol, ()):
         out |= (days >= start) & (days < end)

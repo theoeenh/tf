@@ -44,6 +44,27 @@ account meets the criteria above. Then small, with the repository made private f
 
 ## Changes agreed during the freeze
 
+- **2026-11-14 (user's go on five open points: "1. Yes / 2. Agree / 3. Change the rule per idea / 4. Fix it /
+  5. fix it and make it useful for some account. Review the whole code and trading strategy, if things can
+  be improved or modified do so, no need of my permission"):**
+  - **The accounts run to 6 December as planned** (point 1). No account's rule changes.
+  - **New strategy families stay paused** (point 2): no more variants of the same insider ideas.
+  - **Bug fix in the trading accounts' runner (point 4): the members of each day.** The runner loaded
+    today's index members only. A held stock that left the index (often because it was bought out) would
+    have vanished from the replay, with no exit booked and the account's past rewritten, and a stock that
+    joined was replayed from the account's start, with trades the account never made. It had not happened
+    yet: KVUE, MSGS and ROKU left in November and no account held them.
+    - From 13 November's list on, a stock that leaves keeps its bars, gets no new entry, and its open
+      trade runs to its own exit. A stock that joins is traded from that day.
+    - A stock that stops trading (no bar for 5 sessions) is closed at its last price.
+    - A position of the last plan that the new replay neither holds nor has closed is reported on the
+      phone and in the account's status, never dropped silently.
+    - Before 13 November every account keeps the list it traded, so nothing in its past changes.
+      **Regression check on real data (14 November): A, C, D and E give the same plan, trades, equity and
+      status under the old and the new code.** Tests first; they fail on the old code.
+    - Also fixed in the membership table: a stock's sector is that of its open spell (JKHY, LDOS and LYV
+      carried the sector they had before a reclassification), and a reclassified member gets its new
+      sector at the nightly update.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.

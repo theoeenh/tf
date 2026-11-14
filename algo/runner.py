@@ -13,6 +13,16 @@ the capital. Each run:
    the replay yet): size and stop from that session's ATR, like the engine;
 4. writes orders.json in the hourly accounts' format, so algo.alpaca mirrors it (market-on-open
    orders before the open, stops at the broker, the same checks and alerts).
+
+The stocks (from 2026-11-14): the members of the strategy's segment on each day, like the research
+(wide_pit). Until then the runner loaded today's members only, whatever the day: a held stock that left
+the index (often because it was bought out) vanished from the replay with no exit booked and the past
+rewritten, and a stock that joined was replayed from the account's start, with trades the account never
+made. Now a stock that left keeps its bars, gets no new entry and its open trade runs to its own exit; a
+stock that joined is traded from that day; a stock that stopped trading is closed at its last price
+(retire). Before PIT_FROM every account keeps the list it traded then, so nothing in its past changes.
+The replay starts from scratch at each run: a position of the last plan that is neither open nor
+closed in the new one is reported (vanished), never dropped silently.
 """
 from __future__ import annotations
 
@@ -24,7 +34,7 @@ import numpy as np
 import pandas as pd
 
 from . import finder as F
-from . import wide
+from . import notify, wide, wide_pit
 from .engine import ExitRule
 from .indicators import atr
 from .paper import PAPER_DIR
@@ -32,6 +42,8 @@ from .portfolio import PortfolioConfig, Sleeve, run_portfolio
 from .system import MAX_GROSS, MAX_OPEN_RISK
 
 log = logging.getLogger(__name__)
+PIT_FROM = pd.Timestamp("2026-11-13")  # from this session on, the members of each day (before: of this day)
+GONE_AFTER = 5  # sessions without a bar: the stock stopped trading (bought out, delisted)
 INSIDER_FAMILIES = {"insider_cluster", "insider_big_buy", "insider_dip", "insider_ml", "insider_low_short",
                     "insider_after_earnings", "insider_fund", "insider_conviction", "insider_confirm", "insider_fresh", "insider_fresh_officer", "insider_fresh_wave", "insider_underwater",
                     "insider_clean", "insider_repeat",
@@ -100,6 +112,43 @@ def short_coverage(newest: pd.Timestamp | None, today: pd.Timestamp) -> tuple[bo
     return True, f"FINRA short volume through {newest.date()}"
 
 
+def universe(c: F.Candidate) -> list[str]:
+    """The stocks whose bars the account needs: the members of its segment on PIT_FROM and those that
+    joined since. One that left since is still there, so that its open trade runs to its own exit
+    (finder.signals(since=PIT_FROM) gives it no new entry)."""
+    if F.point_in_time(c.data):
+        return wide_pit.since(c.assets, PIT_FROM)
+    return [a for a in wide.members() if wide.segment(c.assets)(a)]  # no membership history: today's list
+
+
+def retire(prices: dict[str, pd.DataFrame]) -> dict[str, pd.Series]:
+    """Stocks that stopped trading: no bar on the last GONE_AFTER sessions. Each gets flat bars without
+    volume after its last real one, at what its holder was left with (wide.closing_bars: its last
+    price, or nothing after a collapse), and is blocked on them: the engine closes an open position at
+    the first one's open and opens none. Returns the blocked days per stock, for run_portfolio."""
+    if not prices:
+        return {}
+    sessions = pd.DatetimeIndex(sorted(set().union(*(df.index for df in prices.values()))))
+    out = {}
+    for a, g in list(prices.items()):
+        days = sessions[sessions > g.index[-1]]
+        if len(days) < GONE_AFTER:
+            continue
+        px = float(wide.closing_bars(g, 1)["Close"].iloc[-1])
+        tail = pd.DataFrame({"Open": px, "High": px, "Low": px, "Close": px, "Volume": 0.0}, index=days)
+        tail.index.name = g.index.name
+        prices[a] = pd.concat([g, tail])
+        out[a] = pd.Series(True, days)
+    return out
+
+
+def vanished(before: list[dict], orders: list[dict], trades: pd.DataFrame) -> list[str]:
+    """Positions of the last plan that the new replay neither holds nor has closed."""
+    was = {o["asset"] for o in before if not o.get("pending") and o.get("strategy") != "idle_cash_spy"}
+    closed = set(trades["asset"]) if len(trades) else set()
+    return sorted(was - {o["asset"] for o in orders} - closed)
+
+
 def pending_entries(c: F.Candidate, sig: dict, prices: dict, held: set, equity: float) -> list[dict]:
     """Signals on the last complete session, not in the replay yet (they fill at the next open)."""
     rule = ExitRule(**c.rule)
@@ -149,9 +198,9 @@ def update(fetch_insider: bool = True) -> dict:
     c = F.Candidate(**json.loads(cfg["candidate"]))
     start = pd.Timestamp(cfg["start"])
     now_ny = pd.Timestamp.now(tz="America/New_York").tz_localize(None)
-    universe = [a for a in wide.members() if wide.segment(c.assets)(a)]
+    stocks = universe(c)
     if fetch_insider and c.family in INSIDER_FAMILIES:
-        wide.update_insider_recent(days=10, tickers=universe, name=cfg.get("insider_file", "insider_recent"))
+        wide.update_insider_recent(days=10, tickers=stocks, name=cfg.get("insider_file", "insider_recent"))
     blocked = ""
     if c.family in INSIDER_FAMILIES:
         done_path = wide.recent_paths(cfg.get("insider_file", "insider_recent"))[1]
@@ -168,8 +217,9 @@ def update(fetch_insider: bool = True) -> dict:
             blocked = f"No new entries: {why} (the data download is catching up)."
     since = ((start - pd.Timedelta(days=int(cfg["bars_days"]))).strftime("%Y-%m-%d") if cfg.get("bars_days")
              else wide.START)
-    prices = load_bars(universe, now_ny, since)
-    sig = F.signals(c, prices)
+    prices = load_bars(stocks, now_ny, since)
+    gone = retire(prices)
+    sig = F.signals(c, prices, since=PIT_FROM)
     lo = start - pd.Timedelta(days=400)
     active = {a: s for a, s in sig.items() if (s[s.index >= lo] != 0).any()}
     sleeves = [Sleeve(a, c.family, s.reindex(prices[a].index).fillna(0).astype(int), ExitRule(**c.rule), c.short)
@@ -179,14 +229,26 @@ def update(fetch_insider: bool = True) -> dict:
     last = max(df.index[-1] for df in prices.values())
     if sleeves and last > start:
         res = run_portfolio({a: prices[a] for a in active}, sleeves, wide.costs(active), cfg_pf, start, None,
-                            close_at_end=False)
+                            close_at_end=False, blocked={a: b for a, b in gone.items() if a in active})
         equity = float(res.equity.iloc[-1])
         live = [p for p in res.open_positions if not p["shadow"]]
         trades = res.trades_df
+        if len(trades):
+            trades.loc[trades["reason"] == "event", "reason"] = "left the market"
     else:
         equity, live, trades = float(cfg["capital"]), [], pd.DataFrame()
         res = None
     orders = position_orders(live, prices)
+    plan_path, lost_path = PAPER_DIR / "orders.json", PAPER_DIR / "vanished.md"
+    lost = vanished(json.loads(plan_path.read_text()) if plan_path.exists() else [], orders, trades)
+    if lost:
+        what = (f"{', '.join(lost)}: held in the last plan, neither open nor closed in the new one (its bars "
+                f"or the data behind its entry changed). The sync sells what the plan no longer holds.")
+        log.warning(what)
+        with lost_path.open("a") as f:
+            f.write(f"- {now_ny:%Y-%m-%d %H:%M} New York: {what}\n")
+        notify.send(f"[{cfg.get('name', PAPER_DIR.name)}] a position left the plan without an exit", what,
+                    "warning", "high")
     pend = [] if blocked else pending_entries(c, sig, prices, {o["asset"] for o in orders}, equity)
     spy = []
     if cfg.get("idle_spy"):  # account A from 26 Oct 2026: the money the trades leave idle is held in SPY
@@ -201,7 +263,7 @@ def update(fetch_insider: bool = True) -> dict:
         spy = [{"asset": "SPY", "ticker": "SPY", "strategy": "idle_cash_spy", "qty": max(0.0, equity - stocks) / px,
                 "stop": None, "target": None, "mark": px, "entry": px, "r": 0.0,
                 "bar": f"{spy_df.index[-1]:%Y-%m-%d}"}]
-    (PAPER_DIR / "orders.json").write_text(json.dumps(orders + pend + spy, indent=1, default=float))
+    plan_path.write_text(json.dumps(orders + pend + spy, indent=1, default=float))
     if len(trades):
         trades.to_csv(PAPER_DIR / "trades.csv", index=False)
     lines = [f"# {cfg.get('name', PAPER_DIR.name)}", "",
@@ -217,6 +279,8 @@ def update(fetch_insider: bool = True) -> dict:
         lines += ["", "## Closed trades", ""] + [
             f"- {t.exit_date:%Y-%m-%d} {t.asset}: {t.r_multiple:+.2f}R, ${t.pnl:+,.0f} ({t.reason})"
             for t in trades.itertuples()]
+    if lost_path.exists():
+        lines += ["", "## Positions that left the plan without a recorded exit", "", lost_path.read_text().strip()]
     (PAPER_DIR / "status.md").write_text("\n".join(lines) + "\n")
     print(f"{cfg.get('name')}: equity ${equity:,.0f}, {len(orders)} open, {len(pend)} new at the next open")
     return {"orders": orders, "pending": pend, "equity": equity}

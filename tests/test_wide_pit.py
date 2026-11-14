@@ -137,3 +137,43 @@ def test_universe_return_counts_a_stock_only_while_it_is_a_member(table):
     r = P.universe_returns({"AAA": flat, "GONE": up, "LATE": up}, "all")             # LATE: not in the S&P 500
     assert r[days[1]] == pytest.approx(0.005)                           # both members: (0% + 1%) / 2
     assert r[pd.Timestamp("2020-03-02")] == pytest.approx(0.0)          # GONE has left: AAA alone
+
+
+def test_an_account_trades_the_members_of_each_day_from_its_floor_on(table):
+    """The trading accounts (runner): before the floor, the members of that day whatever the date
+    (the list they traded then); from it on, the members of each day."""
+    days = pd.DatetimeIndex(["2020-01-15", "2020-07-15", "2021-06-15"])
+    assert P.since("sp1500", "2020-02-01") == ["AAA", "GONE", "LATE"]    # GONE left after, LATE joined after
+    assert P.since("sp1500", "2020-03-01") == ["AAA", "LATE"]            # the day it left: no longer a member
+    assert list(P.mask("sp1500", "GONE", days, floor="2020-02-01")) == [True, False, False]
+    assert list(P.mask("sp1500", "LATE", days, floor="2020-02-01")) == [False, True, True]  # nothing before it joined
+    assert list(P.mask("sp1500", "LATE", days, floor="2020-07-01")) == [True, True, True]   # a member on the floor
+    assert list(P.mask("sp1500", "LATE", days)) == [False, True, True]
+
+
+def test_the_sector_is_the_one_of_the_open_spell(tmp_path, monkeypatch):
+    """JKHY, 2026-11-14: a stale small-cap spell that started after the S&P 500 one carried the sector
+    from before a reclassification, and won."""
+    h = pd.DataFrame([
+        dict(symbol="JKHY", index="sp400", start="2015-12-01", end="2019-10-01", sector="Information Technology"),
+        dict(symbol="JKHY", index="sp500", start="2018-12-01", end=None, sector="Financials"),
+        dict(symbol="JKHY", index="sp600", start="2019-10-01", end="2021-04-01", sector="Information Technology"),
+        dict(symbol="OUT", index="sp600", start="2016-01-01", end="2018-01-01", sector="Energy"),
+        dict(symbol="OUT", index="sp400", start="2017-06-01", end="2022-01-01", sector="Utilities"),
+    ])
+    path = tmp_path / "h.csv"
+    h.to_csv(path, index=False)
+    monkeypatch.setattr(P, "PATH", path)
+    P._cache.clear()
+    assert P.sectors() == {"JKHY": "Financials", "OUT": "Utilities"}  # OUT: the spell that ended last
+    assert P.since("sector:Financials", "2026-11-13") == ["JKHY"]
+    P._cache.clear()
+
+
+def test_roll_gives_a_reclassified_member_its_new_sector(table):
+    today = pd.DataFrame([dict(symbol="AAA", index="sp500", sector="Utilities"),
+                          dict(symbol="LATE", index="sp400", sector=None)])
+    h = P.roll(P.history(), today, pd.Timestamp("2026-11-12")).set_index(["symbol", "index"])
+    assert h.loc[("AAA", "sp500"), "sector"] == "Utilities"
+    assert h.loc[("LATE", "sp400"), "sector"] == "Energy"     # no sector on today's list: keep the known one
+    assert h.loc[("LATE", "sp600"), "sector"] == "Energy" and h.loc[("GONE", "sp500"), "sector"] == "Financials"

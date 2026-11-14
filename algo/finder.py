@@ -154,11 +154,12 @@ def load(include_vault: bool = False, data: str = "hourly") -> dict[str, pd.Data
     return prices
 
 
-def signals(c: Candidate, prices, pit: bool = False) -> dict[str, pd.Series]:
+def signals(c: Candidate, prices, pit: bool = False, since=None) -> dict[str, pd.Series]:
     """pit=True (the research: scoring, vault, forward test): a signal counts only on the days the stock
-    was a member of the strategy's segment, as known that day (wide_pit). pit=False: today's members,
-    whatever the day (the trading accounts' runner, which trades today's list)."""
-    pit = pit and point_in_time(c.data)
+    was a member of the strategy's segment, as known that day (wide_pit). since=day (the trading
+    accounts' runner): the same from `day` on, and before it the members of `day` whatever the date
+    (the list the accounts traded until then). Neither: today's members, whatever the day."""
+    pit = (pit or since is not None) and point_in_time(c.data)
     if pit:
         from . import wide_pit
 
@@ -190,7 +191,7 @@ def signals(c: Candidate, prices, pit: bool = False) -> dict[str, pd.Series]:
         if not c.short:
             s = s.clip(lower=0)
         if pit:
-            s = s.where(wide_pit.mask(c.assets, a, df.index) & (df["Volume"].to_numpy() > 0), 0)
+            s = s.where(wide_pit.mask(c.assets, a, df.index, floor=since) & (df["Volume"].to_numpy() > 0), 0)
         out[a] = s
     return out
 
