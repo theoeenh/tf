@@ -58,6 +58,22 @@ GDELT_GIVE_UP = 3  # assets refused in a row before the rest of this run stops a
 # asking for any other asset; GDELT refuses most requests from shared machines (HTTP 429), so only the
 # first asset (BTC) was ever refreshed and the others' tone stopped on 30 September.
 _gdelt_down = [0]
+GDELT_EVERY_HOURS = 6  # an asset is asked for at most this often, whether the last request worked or not
+
+
+def _gdelt_asked(name: str | None = None) -> dict:
+    """When each asset was last asked for (data/news/gdelt_asked.json); with `name`, record it as asked now.
+    GDELT answers slowly and its data is a day or two late: asking for every asset at every run made the
+    trading runs take 6 to 8 minutes instead of 4 (14 November 2026)."""
+    path = NEWS_DIR / "gdelt_asked.json"
+    try:
+        asked = json.loads(path.read_text()) if path.exists() else {}
+    except ValueError:
+        asked = {}
+    if name is not None:
+        asked[name] = time.time()
+        path.write_text(json.dumps(asked))
+    return asked
 
 
 def _gdelt(query: str, mode: str, start: str, end: str, attempts: int = 6) -> pd.Series:
@@ -100,6 +116,12 @@ def load_gdelt(name: str, refresh: bool = False, end: str | None = None) -> pd.D
         if recent:
             return old
         raise RuntimeError("GDELT unavailable (refused earlier in this run)")
+    if old is not None and not refresh:
+        if time.time() - _gdelt_asked().get(name, 0.0) < GDELT_EVERY_HOURS * 3600:
+            if recent:
+                return old
+            raise RuntimeError(f"GDELT asked for {name} less than {GDELT_EVERY_HOURS} hours ago")
+        _gdelt_asked(name)
     try:
         # with a cache, a short try: GDELT often rate-limits (429) shared runners
         n = 6 if old is None or refresh else 2

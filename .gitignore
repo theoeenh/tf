@@ -24,3 +24,4 @@ data/wide/pit_cache/
 data/wide/news/
 # slices of a finder re-scoring run (merged into the registry)
 paper/finder/rescore/
+data/news/gdelt_asked.json

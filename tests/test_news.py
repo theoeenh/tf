@@ -288,3 +288,44 @@ def test_a_day_without_articles_has_no_tone():
     full = news_features(pd.DataFrame({"articles": 20.0, "tone": -2.0}, index=days), days)
     assert pd.isna(f["tone_z"].iloc[-1])                             # too few real days: no tone at all
     assert f["tone_z"].iloc[-6] == full["tone_z"].iloc[-6] or (pd.isna(f["tone_z"].iloc[-6]) and pd.isna(full["tone_z"].iloc[-6]))
+
+
+def test_gdelt_is_asked_at_most_every_six_hours(tmp_path, monkeypatch):
+    """14 November 2026: once every asset was asked at every run, the trading runs took 6 to 8 minutes
+    instead of 4 (GDELT answers slowly and is paced at one request per 6 seconds). Its data is a day or
+    two late anyway and feeds no live account: one round of requests every six hours is enough,
+    whether the last one worked or not."""
+    import pandas as pd
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setattr(news, "_gdelt_down", [0])
+    old = pd.date_range("2026-09-01", "2026-09-30", freq="D", name="Date")
+    for a in ("NVDA", "TSLA"):
+        pd.DataFrame({"articles": 10.0, "tone": 0.5}, index=old).to_csv(tmp_path / f"{a}_gdelt.csv")
+    clock = [1_000_000.0]
+    monkeypatch.setattr(news.time, "time", lambda: clock[0])
+    monkeypatch.setattr(news.time, "sleep", lambda s: None)
+    asked = []
+
+    def gdelt(query, mode, start, end, attempts=6):
+        asked.append(query)
+        if query == "tesla":
+            raise RuntimeError("429")
+        return pd.Series(7.0, pd.date_range(start, "2026-11-12", freq="D"))   # GDELT is two days behind
+
+    monkeypatch.setattr(news, "_gdelt", gdelt)
+    get = lambda a: news.load_gdelt(a, end="2026-11-14")
+    assert get("NVDA").index[-1] == pd.Timestamp("2026-11-12") and asked == ["nvidia", "nvidia"]
+    import pytest
+    with pytest.raises(RuntimeError):
+        get("TSLA")                                   # refused, and its file is too old to pass as fresh
+    n = len(asked)
+    clock[0] += 3600                                  # the next runs, an hour later: nobody is asked
+    assert get("NVDA").index[-1] == pd.Timestamp("2026-11-12")
+    with pytest.raises(RuntimeError):
+        get("TSLA")
+    assert len(asked) == n
+    clock[0] += 6 * 3600                              # six hours on: asked again
+    get("NVDA")
+    assert len(asked) == n + 2
