@@ -85,6 +85,12 @@ account meets the criteria above. Then small, with the repository made private f
       the insider ideas. They are scored once the news of every S&P 1500 stock since 2015 is downloaded
       (workflow news-backfill). A family that reaches 13 of 14 is a candidate for an account at the
       6 December review; a clearly negative result on bad-news days is the bearish signal F waits for.
+  - **Alerts.** The Alpaca check alerts a new problem at once, a lasting one every 6 hours, and once when it
+    is over (12-13 November: 17 alerts in a night for one harmless leftover). What it found is kept in
+    paper/<X>/check.json and shown in each run's summary; the workflow step itself is always green.
+  - **Measured, not changed: what buying at the open costs** (paper/research/2026-11-14-fills-at-the-open.md).
+    0.054R a buy at Alpaca against the opening price, because the first quotes after 9:30 are wide; about
+    0.017R twenty minutes later. Proposed: send stock buys at the 9:50 run. Waits for the user's call.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.
