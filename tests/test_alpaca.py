@@ -157,6 +157,8 @@ def _fake_alpaca(monkeypatch, positions, open_orders, plan, cash=1e6):
     sent, alerts = [], []
     monkeypatch.setattr(alpaca, "_send", lambda o: sent.append(o) or {"id": "x"})
     monkeypatch.setattr(notify, "send", lambda *a, **k: alerts.append(a) or True)
+    record = __import__("pathlib").Path(__import__("tempfile").mkdtemp()) / "check.json"  # never the real account's
+    monkeypatch.setattr(alpaca, "_check_path", lambda: record)
 
     def request(method, path, body=None, base=None):
         if path.startswith("/v2/orders?status=open"):
@@ -935,3 +937,41 @@ def test_more_than_fifty_open_orders_are_all_read(monkeypatch):
     monkeypatch.setattr(alpaca, "request", lambda *a, **k: [orders[0]] * 500)
     with pytest.raises(alpaca.AlpacaError):                            # a full page may hide more: say so
         alpaca.open_orders()
+
+
+def test_a_lasting_problem_alerts_once_then_every_six_hours_and_once_when_it_is_over(monkeypatch, tmp_path):
+    """12-13 November 2026: a harmless leftover sent the phone the same alert at every run, 17 times in
+    one night. A problem that stays is said once, repeated every six hours, and closed by one message
+    when it is over; a new problem is said at once. What the last check found is kept in the account's
+    folder (check.json): the workflow step itself is always green."""
+    import json
+
+    import pandas as pd
+    from algo import alpaca, notify
+
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    sent = []
+    monkeypatch.setattr(notify, "send", lambda title, body, *a, **k: sent.append((title, body)) or True)
+    t0 = pd.Timestamp("2026-11-12 21:20", tz="UTC")
+    stc = ["STC: 0.5 held, only 0 covered by a stop"]
+    for k in range(12):                                             # every half hour for six hours
+        alpaca.record_check(stc, alert=True, now=t0 + pd.Timedelta(minutes=30 * k))
+    assert len(sent) == 1 and "STC" in sent[0][1]
+    alpaca.record_check(stc, alert=True, now=t0 + pd.Timedelta(hours=6))
+    assert len(sent) == 2                                           # still there: said again
+    state = json.loads((tmp_path / "check.json").read_text())
+    assert state["ok"] is False and state["problems"] == stc and state["since"].startswith("2026-11-12T21:20")
+    # the quantity moves a little from run to run: the same problem, no new alert
+    alpaca.record_check(["STC: 0.52 held, only 0 covered by a stop"], alert=True, now=t0 + pd.Timedelta(hours=6.5))
+    assert len(sent) == 2
+    # another stock joins: said at once
+    alpaca.record_check(stc + ["AMD: plan wants 5, Alpaca has 0"], alert=True, now=t0 + pd.Timedelta(hours=7))
+    assert len(sent) == 3 and "AMD" in sent[2][1]
+    alpaca.record_check([], alert=True, now=t0 + pd.Timedelta(hours=7.5))
+    assert len(sent) == 4 and "again" in sent[3][0]                 # over: one closing message
+    alpaca.record_check([], alert=True, now=t0 + pd.Timedelta(hours=8))
+    assert len(sent) == 4 and json.loads((tmp_path / "check.json").read_text())["ok"] is True
+    # a check by hand (no alert) neither alerts nor rewrites the record
+    before = (tmp_path / "check.json").read_text()
+    alpaca.record_check(stc, alert=False, now=t0 + pd.Timedelta(hours=9))
+    assert len(sent) == 4 and (tmp_path / "check.json").read_text() == before

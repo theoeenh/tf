@@ -857,12 +857,54 @@ def verify(alert: bool = False) -> list[str]:
         dust = 1.0 if any(norm(s) == sym for s in want) else MIN_NOTIONAL
         if abs(held) * px >= dust and covered < 0.98 * abs(held) and not whole_covered:
             problems.append(f"{sym}: {abs(held):g} held, only {covered:g} covered by a stop")
-    if alert and problems:
-        from . import notify
-
-        acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
-        notify.send(f"[{acct}] Alpaca does not match the plan", "; ".join(problems), "warning", "high")
+    record_check(problems, alert)
     return problems
+
+
+ALERT_EVERY_HOURS = 6  # a problem that stays is repeated on the phone this often, not at every run
+
+
+def _check_path():
+    return PAPER_DIR / "check.json"
+
+
+def record_check(problems: list[str], alert: bool, now=None) -> None:
+    """What the scheduled check found, kept in paper/<X>/check.json, and what goes to the phone: a new
+    problem at once, the same problem again only every ALERT_EVERY_HOURS, one message when it is over
+    (12-13 November 2026: one harmless leftover alerted 17 times in a night). The workflow step that
+    runs the check is always green (a problem here must not stop the run), so the record is where the
+    real result is read. A check by hand (no alert) changes nothing."""
+    if not alert:
+        return
+    import pandas as pd
+
+    from . import notify
+
+    now = pd.Timestamp(now) if now is not None else pd.Timestamp.now(tz="UTC")
+    path = _check_path()
+    try:
+        prev = json.loads(path.read_text()) if path.exists() else {}
+    except ValueError:
+        prev = {}
+    # the same problem from run to run: its stock and its kind (the quantities move a little)
+    keys = sorted(p.split(":")[0] + ("|stop" if "covered by a stop" in p else "|quantity") for p in problems)
+    same = keys == prev.get("keys")
+    alerted = prev.get("alerted")
+    acct = os.environ.get("PAPER_ACCOUNT_NAME", "")
+    if problems:
+        due = alerted is None or now - pd.Timestamp(alerted) >= pd.Timedelta(hours=ALERT_EVERY_HOURS)
+        if not same or due:
+            since = "" if not same else f" (since {pd.Timestamp(prev['since']):%d %b %H:%M} UTC)"
+            notify.send(f"[{acct}] Alpaca does not match the plan", "; ".join(problems) + since, "warning", "high")
+            alerted = now.isoformat()
+    elif alerted is not None:
+        notify.send(f"[{acct}] Alpaca matches the plan again", "Every position has its stop.", "white_check_mark")
+        alerted = None
+    state = {"ok": not problems, "problems": problems, "keys": keys,
+             "since": (prev.get("since") if same and prev.get("since") else now.isoformat()) if problems else None,
+             "alerted": alerted}
+    if state != prev:  # written when something changes, not at every run (the folder is committed)
+        path.write_text(json.dumps(state, indent=1))
 
 
 def main() -> None:
