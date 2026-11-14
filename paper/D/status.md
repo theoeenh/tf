@@ -38,7 +38,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **FUN** 167.22 shares around 11.55, stop 9.18
+- **STWD** 332.90 shares around 11.34, stop 10.15
+- **WY** 220.65 shares around 20.81, stop 19.01
 
 ## Closed trades
 
