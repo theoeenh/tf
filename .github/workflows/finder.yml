@@ -60,6 +60,13 @@ jobs:
             data/wide/short_volume_days.txt
           key: wide-data-${{ github.run_id }}
           restore-keys: wide-data-
+      # news per stock and day (workflow news-backfill downloads it; read only here). Until every month
+      # is there the news families are skipped, not scored on a partial download (algo/wide_news.py).
+      - uses: actions/cache/restore@v4
+        with:
+          path: data/wide/news
+          key: wide-news-none
+          restore-keys: wide-news-
       - name: Update the S&P 1500 research data
         continue-on-error: true
         env:

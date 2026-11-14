@@ -69,15 +69,17 @@ jobs:
       - name: Record StockTwits counts
         continue-on-error: true
         run: python -m algo.social
-      - name: Save the StockTwits counts to the repo (once a day)
+      # also the daily news tone (GDELT) as far as this job could refresh it: the morning report and the
+      # learner read the repo's copies, which had stayed at 30 September (2026-11-14)
+      - name: Save the StockTwits counts and the daily news tone to the repo (once a day)
         continue-on-error: true
         run: |
           [ "$(date -u +%H)" = "21" ] || exit 0
           git config user.name "paper-bot"
           git config user.email "paper-bot@users.noreply.github.com"
-          git add data/social
+          git add data/social data/news/*_gdelt.csv
           git diff --cached --quiet && exit 0
-          git commit -m "StockTwits counts $(date -u +'%Y-%m-%d')"
+          git commit -m "StockTwits counts and news tone $(date -u +'%Y-%m-%d')"
           for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs -q && git push -q && exit 0; git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3)); done
       - name: Alert the phone if the download failed (no account trades this run)
         if: failure()

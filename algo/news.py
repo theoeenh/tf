@@ -53,7 +53,11 @@ def _get(url: str, timeout: int = 60) -> str:
 
 
 GDELT_STALE_DAYS = 3  # how old the cached daily news may be when GDELT is down
-_gdelt_down = [False]  # set after a failure: the rest of this run uses the caches at once
+GDELT_GIVE_UP = 3  # assets refused in a row before the rest of this run stops asking
+# Assets GDELT refused in a row in this run. Until 2026-11-14 the first refusal stopped the run from
+# asking for any other asset; GDELT refuses most requests from shared machines (HTTP 429), so only the
+# first asset (BTC) was ever refreshed and the others' tone stopped on 30 September.
+_gdelt_down = [0]
 
 
 def _gdelt(query: str, mode: str, start: str, end: str, attempts: int = 6) -> pd.Series:
@@ -92,7 +96,7 @@ def load_gdelt(name: str, refresh: bool = False, end: str | None = None) -> pd.D
     q = QUERIES[name]
     recent = old is not None and not refresh and \
         old.index[-1] >= pd.Timestamp(end) - pd.Timedelta(days=GDELT_STALE_DAYS)
-    if _gdelt_down[0]:  # refused earlier in this run: don't wait on it again
+    if _gdelt_down[0] >= GDELT_GIVE_UP:  # refused several times in a row in this run: don't wait on it again
         if recent:
             return old
         raise RuntimeError("GDELT unavailable (refused earlier in this run)")
@@ -101,10 +105,11 @@ def load_gdelt(name: str, refresh: bool = False, end: str | None = None) -> pd.D
         n = 6 if old is None or refresh else 2
         df = pd.DataFrame({"articles": _gdelt(q, "timelinevolraw", start, end, n),
                            "tone": _gdelt(q, "timelinetone", start, end, n)})
+        _gdelt_down[0] = 0
     except RuntimeError:
         # Daily tone is a 7-day average used from the next day: a day or two late changes
         # little, and stopping all trading for it would cost far more. Older than that: fail.
-        _gdelt_down[0] = True
+        _gdelt_down[0] += 1
         if recent:
             log.warning("GDELT unavailable for %s: using the cache up to %s", name, old.index[-1].date())
             return old
@@ -123,7 +128,8 @@ def news_features(gd: pd.DataFrame, index: pd.DatetimeIndex) -> pd.DataFrame:
     attention_z: 3-day article count vs its last 90 days (z-score, log scale)
     """
     g = gd.sort_index().asfreq("D")
-    tone7 = g["tone"].rolling(7, min_periods=4).mean()
+    # a day GDELT has no article for has no tone (it answers 0 and 0, its own outages included)
+    tone7 = g["tone"].where(g["articles"] > 0).rolling(7, min_periods=4).mean()
     tone_z = (tone7 - tone7.rolling(180, min_periods=60).mean()) / tone7.rolling(180, min_periods=60).std()
     vol = np.log1p(g["articles"].fillna(0)).rolling(3, min_periods=2).mean()
     att_z = (vol - vol.rolling(90, min_periods=30).mean()) / vol.rolling(90, min_periods=30).std()

@@ -1610,6 +1610,75 @@ def insider_fund(prices: dict, buyers: int = 2, feature: str = "f_sue", min_rank
     return {a: (s * (rank[a].reindex(s.index) >= min_rank)).astype(int) for a, s in sig.items()}
 
 
+# ------------------------------------------------------------------ news (Alpaca / Benzinga, algo.wide_news)
+# Three ideas written down on 2026-11-14, before any of them was scored on the S&P 1500:
+# - a big drop nobody wrote about reverses (Chan 2003, "Stock price reaction to news and no-news": moves
+#   without news reverse, moves with news do not);
+# - a big drop on bad headlines, outside earnings, is overdone and reverses (the sign the 22 assets of
+#   the hourly system showed: after a bad-headline day the next days were slightly better than usual);
+# - a big rise on good headlines, outside earnings, keeps drifting (the classic drift after news).
+# Earnings days are left out of the last two: the reaction to earnings has its own families.
+
+def _news_frame(prices: dict):
+    """Per stock: its news per bar, its daily return in units of its usual move (the 60 sessions
+    before), and the bars a news rule may fire on: inside the downloaded days, the stock covered by
+    the news at all (an article in the 250 sessions before: without that, no news is no data)."""
+    from . import wide_news
+
+    by, first, last = wide_news.by_stock(prices)
+    for a, df in prices.items():
+        w = by[a]
+        ret = df["Close"].pct_change()
+        move = ret / ret.rolling(60, min_periods=40).std().shift(1)
+        covered = w["n"].rolling(250, min_periods=1).sum().shift(1).fillna(0) > 0
+        ok = covered.to_numpy() & (df.index >= first) & (df.index <= last)
+        yield a, df, w, move, ok
+
+
+def _not_earnings(a: str, index: pd.DatetimeIndex, e: pd.DataFrame) -> np.ndarray:
+    """False on a stock's earnings reaction sessions (the release day and the session after it)."""
+    out = np.ones(len(index), bool)
+    for p in np.unique(index.searchsorted(pd.DatetimeIndex(e.loc[e["ticker"] == a, "day"]), side="left")):
+        out[p:p + 2] = False
+    return out
+
+
+def news_quiet_drop(prices: dict, drop: float = 2.0, quiet: int = 3) -> dict:
+    """Buy at the close of a day a stock falls at least `drop` times its usual daily move while no
+    article about the company appeared in the last `quiet` sessions, that day included."""
+    out = {}
+    for a, df, w, move, ok in _news_frame(prices):
+        silent = w["n"].rolling(quiet, min_periods=1).sum() == 0
+        out[a] = ((move <= -drop) & silent & ok).astype(int)
+    return out
+
+
+def news_bad_day(prices: dict, drop: float = 2.0, articles: int = 2) -> dict:
+    """Buy at the close of a day a stock falls at least `drop` times its usual daily move on at least
+    `articles` articles about the company, more of them bad than good; not on its earnings."""
+    from . import wide
+
+    e = wide.load_earnings()
+    out = {}
+    for a, df, w, move, ok in _news_frame(prices):
+        bad = (w["n"] >= articles) & (w["neg"] > w["pos"])
+        out[a] = ((move <= -drop) & bad & ok & _not_earnings(a, df.index, e)).astype(int)
+    return out
+
+
+def news_good_day(prices: dict, rise: float = 2.0, articles: int = 2) -> dict:
+    """Buy at the close of a day a stock rises at least `rise` times its usual daily move on at least
+    `articles` articles about the company, more of them good than bad; not on its earnings."""
+    from . import wide
+
+    e = wide.load_earnings()
+    out = {}
+    for a, df, w, move, ok in _news_frame(prices):
+        good = (w["n"] >= articles) & (w["pos"] > w["neg"])
+        out[a] = ((move >= rise) & good & ok & _not_earnings(a, df.index, e)).astype(int)
+    return out
+
+
 WIDE_FAMILIES = {
     "insider_cluster": (insider_cluster, {"buyers": [2, 3], "days": [30, 90]}),
     "insider_big_buy": (insider_big_buy, {"min_value": [100_000, 500_000], "officer": [True, False]}),
@@ -1889,4 +1958,13 @@ WIDE_FAMILIES = {
     "insider_ml": (insider_ml, {"model": ["ridge", "gbm"], "keep": [0.5, 0.3]},
                    {"rules": {"hold 60 days": dict(stop_atr=4.0, rr=None, max_bars=60)}, "segments": ["sp1500"],
                     "trend": False}),
+    # news (2026-11-14, user's go: "fix it and make it useful for some account"): three ideas written down
+    # before scoring, few versions each (every one counts as a try). Skipped until the news is downloaded.
+    "news_quiet_drop": (news_quiet_drop, {"drop": [2.0, 3.0], "quiet": [3, 10]},
+                        {"rules": ["hold 5 days", "hold 10 days"], "segments": ["sp1500"], "trend": False}),
+    "news_bad_day": (news_bad_day, {"drop": [2.0, 3.0], "articles": [1, 3]},
+                     {"rules": ["hold 5 days", "hold 10 days"], "segments": ["sp1500"], "trend": False}),
+    "news_good_day": (news_good_day, {"rise": [2.0, 3.0], "articles": [1, 3]},
+                      {"rules": ["hold 20 days", "trailing 3 ATR, out in 60 days"], "segments": ["sp1500"],
+                       "trend": False}),
 }

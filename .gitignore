@@ -21,5 +21,6 @@ data/wide/short_volume.csv.gz
 data/wide/short_volume_days.txt
 # Wikipedia pages downloaded once to build the index-membership history
 data/wide/pit_cache/
+data/wide/news/
 # slices of a finder re-scoring run (merged into the registry)
 paper/finder/rescore/

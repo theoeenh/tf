@@ -219,3 +219,72 @@ def test_refresh_earnings_keeps_report_dates_that_have_come(monkeypatch, tmp_pat
     monkeypatch.setitem(sys.modules, "yfinance", types.SimpleNamespace(Ticker=Ticker))
     news.refresh_earnings(["AAA"])
     assert news.earnings_dates("AAA") == [d.tz_localize(None) for d in (old, today, moved_est)]
+
+
+def test_one_refusal_does_not_freeze_the_other_assets(tmp_path, monkeypatch):
+    """Until 2026-11-14 the first refusal marked GDELT as down for the rest of the run: only the first
+    asset (BTC) was ever refreshed, and the others' daily tone stopped on 30 September."""
+    import pandas as pd
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setattr(news, "_gdelt_down", [0])
+    monkeypatch.setattr(news, "fomc_dates", lambda refresh=False: [])
+    monkeypatch.setattr(news, "jobs_report_dates", lambda: [])
+    old = pd.date_range("2026-09-01", "2026-09-30", freq="D", name="Date")
+    assets = ["BTC", "ETH", "NVDA", "TSLA"]
+    for a in assets + ["MACRO"]:
+        pd.DataFrame({"articles": 10.0, "tone": 0.5}, index=old).to_csv(tmp_path / f"{a}_gdelt.csv")
+    asked = []
+
+    def gdelt(query, mode, start, end, attempts=6):
+        asked.append(query)
+        if query == "ethereum":
+            raise RuntimeError("GDELT unavailable for ethereum")
+        return pd.Series(7.0, pd.date_range(start, end, freq="D"))
+
+    monkeypatch.setattr(news, "_gdelt", gdelt)
+    out = news.load_all(assets, strict=True)["gdelt"]
+    today = pd.Timestamp.utcnow().tz_localize(None).normalize()
+    assert out["ETH"].index[-1] == old[-1]                                     # refused: its old file
+    assert all(out[a].index[-1] == today for a in ("BTC", "NVDA", "TSLA", "MACRO"))  # the others went on
+    assert "nvidia" in asked and "tesla" in asked
+
+
+def test_gdelt_is_left_alone_after_three_refusals_in_a_row(tmp_path, monkeypatch):
+    import pandas as pd
+    from algo import news
+
+    monkeypatch.setattr(news, "NEWS_DIR", tmp_path)
+    monkeypatch.setattr(news, "_gdelt_down", [0])
+    monkeypatch.setattr(news, "fomc_dates", lambda refresh=False: [])
+    monkeypatch.setattr(news, "jobs_report_dates", lambda: [])
+    old = pd.date_range("2026-09-01", "2026-09-30", freq="D", name="Date")
+    assets = ["BTC", "ETH", "SOL", "NVDA", "TSLA"]
+    for a in assets + ["MACRO"]:
+        pd.DataFrame({"articles": 10.0, "tone": 0.5}, index=old).to_csv(tmp_path / f"{a}_gdelt.csv")
+    asked = []
+
+    def down(query, *a, **k):
+        asked.append(query)
+        raise RuntimeError("429")
+
+    monkeypatch.setattr(news, "_gdelt", down)
+    out = news.load_all(assets, strict=True)["gdelt"]
+    assert asked == ["bitcoin", "ethereum", '"solana" crypto']  # three refusals: no more waiting this run
+    assert all(len(out[a]) == len(old) for a in assets + ["MACRO"])
+
+
+def test_a_day_without_articles_has_no_tone():
+    """GDELT answers 0 articles and tone 0 for a day it has nothing on (its own outages included): that
+    is a missing day, not a neutral one."""
+    import pandas as pd
+    from algo.news import news_features
+
+    days = pd.date_range("2025-01-01", periods=300, freq="D")
+    g = pd.DataFrame({"articles": 20.0, "tone": -2.0}, index=days)
+    g.iloc[-7:, :] = 0.0                                             # a week of nothing
+    f = news_features(g, days)
+    full = news_features(pd.DataFrame({"articles": 20.0, "tone": -2.0}, index=days), days)
+    assert pd.isna(f["tone_z"].iloc[-1])                             # too few real days: no tone at all
+    assert f["tone_z"].iloc[-6] == full["tone_z"].iloc[-6] or (pd.isna(f["tone_z"].iloc[-6]) and pd.isna(full["tone_z"].iloc[-6]))

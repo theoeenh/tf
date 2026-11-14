@@ -75,6 +75,16 @@ account meets the criteria above. Then small, with the repository made private f
     of different families 0.20; at 0.5 they are about 25 ideas. No vault test has ever run, so nothing in
     the past changes. **The hold on vault tests is lifted** (paper/finder/hold.json removed): the automatic
     path runs again, under the new rule. Today no strategy clears the luck check, so no test is due.
+  - **News (point 5).** Evidence, the fix and the test: paper/research/2026-11-14-news.md.
+    - The daily news tone (GDELT) had been frozen since 30 September by a bug: fixed. No live account read
+      it after 9 November.
+    - On the data in hand (18,000 to 20,000 asset-days) news did not predict the next day, so **no account
+      gets a news rule today**.
+    - **Three news families enter the finder**, written down before any result, 24 tries: the one exception
+      to the pause on new families, because they are a new source of information, not another version of
+      the insider ideas. They are scored once the news of every S&P 1500 stock since 2015 is downloaded
+      (workflow news-backfill). A family that reaches 13 of 14 is a candidate for an account at the
+      6 December review; a clearly negative result on bad-news days is the bearish signal F waits for.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.
