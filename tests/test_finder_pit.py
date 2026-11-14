@@ -276,3 +276,69 @@ def test_vault_tests_wait_while_a_hold_is_set(tmp_path, monkeypatch):
         "result": "FAIL", "return": 0.0, "avg_r": 0.0, "icir": 0.0, "search_icir": 0.0})
     F.promote()
     assert called[:2] == ["alert", "vault"]
+
+
+# ------------------------------------------------------------------ one vault test per idea (2026-11-14)
+
+@pytest.fixture
+def ideas(tmp_path, monkeypatch):
+    """Five strategies that pass every check. a1 and a2: two versions of family famA (a2 scores better on
+    the search data). twin: another family, but its weekly returns move with a2's. b1 and late: families
+    of their own with returns of their own."""
+    from algo import forward, luck, notify
+
+    rng = np.random.default_rng(3)
+    weeks = pd.date_range("2020-01-03", periods=200, freq="W-FRI")
+    base = {k: rng.normal(0, 0.01, 200) for k in ("a", "b", "late")}
+    weekly = {"a1": base["a"] + rng.normal(0, 0.004, 200), "a2": base["a"], "b1": base["b"], "late": base["late"],
+              "twin": base["a"] + rng.normal(0, 0.006, 200)}
+    luck.save(tmp_path / "returns", "hourly", "t", {k: pd.Series(v, weeks) for k, v in weekly.items()})
+    fam = {"a1": "famA", "a2": "famA", "b1": "famB", "twin": "famT", "late": "famL"}
+    cand = lambda f: json.dumps(asdict(F.Candidate(f, {}, dict(F.RULES["target 2R"]))))
+    reg = pd.DataFrame({"id": list(fam), "label": list(fam), "family": list(fam.values()),
+                        "candidate": [cand(f) for f in fam.values()], "gates_passed": len(F.GATES),
+                        "s_dsr": [0.91, 0.99, 0.95, 0.97, 0.93], "s_icir": 1.0})
+    monkeypatch.setattr(F, "OUT", tmp_path)
+    monkeypatch.setattr(F, "registry", lambda: reg)
+    monkeypatch.setattr(F, "score", lambda r: r)
+    F._returns.clear()
+    seen = {"vault": [], "alerts": []}
+    monkeypatch.setattr(notify, "send", lambda title, *a, **k: seen["alerts"].append(title) or True)
+    monkeypatch.setattr(forward, "start", lambda i: None)
+
+    def fake_vault(cid):  # what the real one writes, without the backtest
+        log_path = tmp_path / "vault_log.json"
+        used = json.loads(log_path.read_text()) if log_path.exists() else {}
+        used[cid] = {"date": "2026-11-14", "label": cid, "family": fam[cid], "result": "FAIL", "return": 0.0,
+                     "avg_r": 0.0, "ic": 0.0, "icir": 0.0, "search_icir": 0.0}
+        log_path.write_text(json.dumps(used))
+        seen["vault"].append(cid)
+        return used[cid]
+
+    seen["fake_vault"], seen["reg"] = fake_vault, reg
+    yield seen
+    F._returns.clear()
+
+
+def test_an_idea_gets_one_vault_test_taken_by_its_best_version(ideas, monkeypatch):
+    """Until 2026-11-14 every version that passed the checks took its own vault test: an idea with
+    twenty passing versions looked at the sealed data twenty times."""
+    monkeypatch.setattr(F, "vault", ideas["fake_vault"])
+    reg = ideas["reg"]
+    monkeypatch.setattr(F, "registry", lambda: reg[reg["id"] != "late"])
+    F.promote()
+    assert ideas["vault"] == ["a2", "b1"]  # best on the search data first; a1 and twin are a2's idea
+    assert len(ideas["alerts"]) == 4       # an alert and a result for each of the two tests, none for the others
+    monkeypatch.setattr(F, "registry", lambda: reg)
+    F.promote()                            # the next night: the idea stays closed, a new one is tested
+    assert ideas["vault"] == ["a2", "b1", "late"]
+
+
+def test_the_vault_refuses_a_second_version_of_an_idea_asked_by_hand(ideas):
+    (F.OUT / "vault_log.json").write_text(json.dumps({"a2": {
+        "date": "2026-11-14", "label": "a2", "family": "famA", "result": "FAIL", "return": 0.0, "avg_r": 0.0,
+        "ic": 0.0, "icir": 0.0, "search_icir": 0.0}}))
+    for cid in ("a1", "twin"):  # the same family; the same returns under another name
+        with pytest.raises(SystemExit, match="same idea as a2"):
+            F.vault(cid)
+    assert F.same_idea("b1", ideas["reg"], json.loads((F.OUT / "vault_log.json").read_text())) is None

@@ -15,8 +15,11 @@ the path below.
 ## A strategy that passes all 14 checks
 
 1. Phone alert at once ("a strategy passed all 14 checks").
-2. Its one vault test runs in the same nightly job (data from July 2025 never used for any choice); a second
-   alert gives the result.
+2. Its idea's one vault test runs in the same nightly job (data from July 2025 never used for any choice); a
+   second alert gives the result. **One test per idea, not per version (from 14 November 2026):** every
+   version of a family is one idea, and so is a strategy of another family whose weekly returns move with a
+   tested one's (correlation 0.5 or more). The best version on the search data takes the test; pass or
+   fail, no other version of that idea gets another look at the vault.
 3. If it passes: 6 weeks of forward paper trading on new data only (paper/forward/).
 4. Then the user decides whether it takes over account D (today: an early test of a 13/14 candidate).
 
@@ -65,6 +68,13 @@ account meets the criteria above. Then small, with the repository made private f
     - Also fixed in the membership table: a stock's sector is that of its open spell (JKHY, LDOS and LYV
       carried the sector they had before a reclassification), and a reclassified member gets its new
       sector at the nightly update.
+  - **One vault test per idea (point 3).** The rule was one test per strategy, and the registry holds dozens
+    of versions of each idea: an idea with twenty passing versions would have looked at the sealed data
+    twenty times. Now one test per idea (section "A strategy that passes all 14 checks"). On the 432
+    strategies at 13 checks or more, versions of one family correlate 0.70 at the median and strategies
+    of different families 0.20; at 0.5 they are about 25 ideas. No vault test has ever run, so nothing in
+    the past changes. **The hold on vault tests is lifted** (paper/finder/hold.json removed): the automatic
+    path runs again, under the new rule. Today no strategy clears the luck check, so no test is due.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.
@@ -79,7 +89,8 @@ account meets the criteria above. Then small, with the repository made private f
     The rules in A, C, D and E keep their per-trade lead over random entries, but their validation
     returns roughly halve and they show no return of their own once market exposure is taken out.
   - **Vault tests wait** (paper/finder/hold.json) until the user has seen the re-scored registry: the vault
-    can be used once per strategy. Remove the file to resume the automatic path below.
+    can be used once per strategy. Remove the file to resume the automatic path below. *(Lifted on
+    14 November, with the rule changed to one test per idea: entry above.)*
   - **No new strategy families** until the review is done (the evening routine's "add 1-2 families" step
     is skipped; the finder section of the daily report stays).
 - **2026-11-09 (user's go: "strategy C doesn't work; add another best strategy from the finder even if it

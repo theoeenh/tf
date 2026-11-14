@@ -3,7 +3,7 @@
     python -m algo.finder grid            # score the built-in families over a parameter grid
     python -m algo.finder loop --rounds 3 # grid of untried families, then rounds of improved children
     python -m algo.finder report          # rewrite paper/finder/report.md from the registry
-    python -m algo.finder vault <id>      # the ONE vault test of a candidate that passed every gate
+    python -m algo.finder vault <id>      # the ONE vault test of an idea, by a candidate that passed every gate
 
 1. Locked periods (hourly bars, 2023 -> now):
    - search     2023-01-11 -> 2024-12-31   iterate here as much as wanted
@@ -800,7 +800,43 @@ def loop(rounds: int = 3, parents: int = 12, per_round: int = 48) -> pd.DataFram
     return reg
 
 
-# ------------------------------------------------------------------ vault (once per candidate)
+# ------------------------------------------------------------------ vault (once per idea)
+
+SAME_IDEA = 0.5  # weekly returns in the search period that move together this much: one idea, two names
+
+
+def same_idea(cid: str, reg: pd.DataFrame, used: dict) -> str | None:
+    """The strategy that already took the one vault test of `cid`'s idea, or None.
+
+    The vault is one stretch of unseen data: every test on it is a look, and a version that fails
+    followed by its neighbour that passes proves nothing. Until 2026-11-14 the rule was one test per
+    STRATEGY, and the registry holds dozens of versions of each idea (other parameters, exits, sectors).
+    Now one test per IDEA:
+    - every version of a family is the same idea;
+    - so is a strategy of another family whose weekly returns in the search period move with a tested
+      one's (correlation SAME_IDEA or more): the same rule with one more filter, under another name.
+      Measured on the 432 strategies at 13 checks or more (14 Nov 2026): versions of one family
+      correlate 0.70 at the median, strategies of different families 0.20.
+    The version that takes the test is the best on the search data among those ready (promote); a
+    later, better version of a tested idea does not get another look."""
+    tested = [k for k, v in used.items() if k != cid and v.get("result") in ("PASS", "FAIL")]
+    row = reg[reg["id"] == cid]
+    if not tested or row.empty:
+        return None
+    row = row.iloc[0]
+    if "family" in reg:
+        family = dict(zip(reg["id"], reg["family"]))
+        for k in tested:
+            if (used[k].get("family") or family.get(k)) == row["family"]:
+                return k
+    if "candidate" in reg:
+        store = stored_returns(json.loads(row["candidate"]).get("data", "hourly"))
+        if cid in store.columns and store[cid].std() > 0:
+            for k in tested:
+                if k in store.columns and store[k].std() > 0 and store[cid].corr(store[k]) >= SAME_IDEA:
+                    return k
+    return None
+
 
 def vault(cid: str) -> dict:
     reg = score(registry())
@@ -813,6 +849,10 @@ def vault(cid: str) -> dict:
     used = json.loads(log_path.read_text()) if log_path.exists() else {}
     if cid in used:
         raise SystemExit(f"{cid} already had its vault test on {used[cid]['date']}: {used[cid]['result']}")
+    twin = same_idea(cid, reg, used)
+    if twin:
+        raise SystemExit(f"{cid} is the same idea as {twin} ({used[twin]['label']}), which took the idea's one "
+                         f"vault test on {used[twin]['date']}: {used[twin]['result']}")
     c = Candidate(**json.loads(row.iloc[0]["candidate"]))
     prices = load(include_vault=True, data=c.data)
     sig = signals(c, prices, pit=True)
@@ -826,7 +866,8 @@ def vault(cid: str) -> dict:
     # an overfit strategy keeps some edge but loses its consistency: the ICIR must hold at least half
     ok = (st["return"] > 0 and st["avg_r"] > np.nanmean([r["avg_r"] for r in rnd]) and ic.mean() > 0
           and np.nan_to_num(icir, nan=-9) >= 0.5 * s_icir)
-    used[cid] = {"date": str(pd.Timestamp.now().date()), "label": c.label(), "result": "PASS" if ok else "FAIL",
+    used[cid] = {"date": str(pd.Timestamp.now().date()), "label": c.label(), "family": c.family,
+                 "result": "PASS" if ok else "FAIL",
                  "return": st["return"], "avg_r": st["avg_r"], "ic": float(ic.mean()), "icir": icir,
                  "search_icir": s_icir}
     log_path.write_text(json.dumps(used, indent=1, default=float))
@@ -943,26 +984,34 @@ def merge(other: str) -> int:
 
 
 def promote() -> list[dict]:
-    """Every strategy that passed all the gates takes its one vault test (the user's standing go,
-    2026-10-05); one that passes it starts forward paper trading (algo.forward). Phone alerts both."""
+    """Every idea with a strategy that passed all the gates takes its one vault test (the user's
+    standing go, 2026-10-05; one per idea, not per version, since 2026-11-14: same_idea); a strategy
+    that passes it starts forward paper trading (algo.forward). Phone alerts both. Among the versions
+    ready the same night, the best on the search data (the luck check's score) speaks for its idea."""
     from . import forward, notify
 
     reg = score(registry())
     used = json.loads((OUT / "vault_log.json").read_text()) if (OUT / "vault_log.json").exists() else {}
     out = []
     hold = OUT / "hold.json"
-    if hold.exists():  # the vault can be used once per strategy: no test while a person has asked to look first
+    if hold.exists():  # the vault can be used once per idea: no test while a person has asked to look first
         ready = reg[(reg["gates_passed"] == len(GATES)) & ~reg["id"].isin(used)]
         log.warning("vault tests on hold (%s): %d strategies waiting", json.loads(hold.read_text()).get("why", ""), len(ready))
         return out
-    for r in reg[reg["gates_passed"] == len(GATES)].itertuples():
-        if r.id in used:
+    ready = reg[(reg["gates_passed"] == len(GATES)) & ~reg["id"].isin(used)]
+    if "s_dsr" in ready:
+        ready = ready.sort_values("s_dsr", ascending=False, kind="stable")
+    for r in ready.itertuples():
+        twin = same_idea(r.id, reg, used)
+        if twin:
+            log.info("%s is the same idea as %s, which took the idea's vault test: no second test", r.id, twin)
             continue
         # the user wants to know at once (2026-10-11), before the vault test runs
         notify.send(f"finder: a strategy passed all {len(GATES)} checks",
                     f"{r.label}. Its one vault test runs now; the result follows in a second alert.",
                     "rotating_light", "urgent")
         res = vault(r.id)
+        used[r.id] = {"label": r.label, "family": getattr(r, "family", None)} | res  # closes its idea for the rest
         out.append(res | {"id": r.id})
         msg = (f"{r.label}: vault (data from {VAULT_START}, never seen) return {res['return']:+.1%}, "
                f"avg {res['avg_r']:+.2f}R, ICIR {res['icir']:+.2f} vs {res['search_icir']:+.2f} in the search.")
@@ -985,7 +1034,8 @@ def report(reg: pd.DataFrame) -> Path:
           f"{VALIDATION[1][:10]}. S&P 500 daily: search {PERIODS['daily500'][0][0]} → {PERIODS['daily500'][0][1][:10]}, "
           f"validation {PERIODS['daily500'][1][0]} → {PERIODS['daily500'][1][1][:10]}. Both: "
           f"vault from {VAULT_START} (sealed). {len(GATES)} gates; only a candidate passing all of them may "
-          "take its one vault test.", "",
+          "take the vault test, and each idea gets one (all the versions of a family, and any strategy "
+          f"whose weekly returns correlate {SAME_IDEA:.1f} or more with a tested one).", "",
           "| gates | strategy | IC search | ICIR | IC valid. | avg R s / random | avg R v / random | "
           "return v | DSR | months + | regimes + | breadth | first failed gate |",
           "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -1022,7 +1072,7 @@ def report(reg: pd.DataFrame) -> Path:
     md += ["", "## Why strategies fail (all attempts)", ""] + [f"- {k}: {v} of {n}" for k, v in fails.items()]
     log_path = OUT / "vault_log.json"
     if log_path.exists():
-        md += ["", "## Vault tests (one per strategy, final)", ""]
+        md += ["", "## Vault tests (one per idea, final)", ""]
         md += [f"- `{k}` {v['label']}: **{v['result']}** (return {v['return']:+.1%}, avg R {v['avg_r']:+.2f}, "
                f"IC {v['ic']:+.3f}, ICIR {v.get('icir', float('nan')):+.2f} vs {v.get('search_icir', float('nan')):+.2f} "
                f"in the search) on {v['date']}" for k, v in json.loads(log_path.read_text()).items()]
