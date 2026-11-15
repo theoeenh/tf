@@ -85,6 +85,10 @@ account meets the criteria above. Then small, with the repository made private f
       the insider ideas. They are scored once the news of every S&P 1500 stock since 2015 is downloaded
       (workflow news-backfill). A family that reaches 13 of 14 is a candidate for an account at the
       6 December review; a clearly negative result on bad-news days is the bearish signal F waits for.
+    - **Result (15 November): none of the three works.** Best 9 of 14; all 24 versions have a negative
+      t-statistic once the market is taken out. Big drops are followed by a small bounce that stops and
+      costs more than eat; good-news jumps are followed by a lag, not a drift; no bearish signal for F.
+      News stays out of every account.
   - **Alerts.** The Alpaca check alerts a new problem at once, a lasting one every 6 hours, and once when it
     is over (12-13 November: 17 alerts in a night for one harmless leftover). What it found is kept in
     paper/<X>/check.json and shown in each run's summary; the workflow step itself is always green.
