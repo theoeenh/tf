@@ -40,7 +40,7 @@ backtests do. The opening price is set by the opening auction. Orders sent into 
 exactly that price, but Alpaca's paper simulator let such orders expire unfilled on 26 October, so the
 accounts use plain market orders since then.
 
-## Proposed change (not made)
+## Proposed change (made on 16 November 2026, the user's go)
 
 Send stock buys 15 to 20 minutes after the open (the 9:50 New York run) instead of queueing them before
 it. Sales and stops unchanged.

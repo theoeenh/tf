@@ -92,9 +92,15 @@ account meets the criteria above. Then small, with the repository made private f
   - **Alerts.** The Alpaca check alerts a new problem at once, a lasting one every 6 hours, and once when it
     is over (12-13 November: 17 alerts in a night for one harmless leftover). What it found is kept in
     paper/<X>/check.json and shown in each run's summary; the workflow step itself is always green.
-  - **Measured, not changed: what buying at the open costs** (paper/research/2026-11-14-fills-at-the-open.md).
-    0.054R a buy at Alpaca against the opening price, because the first quotes after 9:30 are wide; about
-    0.017R twenty minutes later. Proposed: send stock buys at the 9:50 run. Waits for the user's call.
+  - **What buying at the open costs** (paper/research/2026-11-14-fills-at-the-open.md): 0.054R a buy at
+    Alpaca against the opening price, because the first quotes after 9:30 are wide; about 0.017R twenty
+    minutes later.
+- **2026-11-16 (user's go: "Yes move the buy for Monday"):** from Monday 16 November, **stock buys wait until
+  15 minutes after the open** (the 9:50 New York run) in every stock account. Sales, stops and short
+  covers go out as before; crypto is unchanged. Only when Alpaca's orders go out changes: the paper
+  accounts, their rules and their records do not. The fill-vs-paper gap in the reports keeps measuring
+  against the opening price, so the effect shows there. A buy whose stop the price reaches before 9:45
+  is not bought (the existing rule for trades already over).
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.

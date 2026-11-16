@@ -271,6 +271,42 @@ def at_the_open(orders: list[dict]) -> list[dict]:
             else o | {"time_in_force": "day", "note": (o["note"] + " at the open").strip()} for o in orders]
 
 
+# Stock buys wait this long after the open (from 16 November 2026, the user's go): market buys queued before the
+# open filled in the first minutes, against very wide quotes (LKFN 6%, IOSP 2.5%): 0.054R a buy against the
+# opening price over 30 buys, 0.017R twenty minutes later (paper/research/2026-11-14-fills-at-the-open.md).
+# Sales and stops are not delayed: an exit goes out at once.
+BUY_AFTER_OPEN_MIN = 15
+
+
+def buys_wait(clock: dict | None) -> bool:
+    """Do stock buys wait for later? Yes while the market is closed and in the first BUY_AFTER_OPEN_MIN
+    minutes of the session. Without a clock (it could not be read), or without its time: no, as before."""
+    if not clock:
+        return False
+    if not clock.get("is_open"):
+        return True
+    ts = clock.get("timestamp")
+    if not ts:
+        return False
+    import datetime as dt
+    import re
+    from zoneinfo import ZoneInfo
+
+    now = dt.datetime.fromisoformat(re.sub(r"(\.\d{6})\d+", r"\1", ts)).astimezone(ZoneInfo("America/New_York"))
+    opened = now.replace(hour=9, minute=30, second=0, microsecond=0)
+    return (now - opened).total_seconds() < 60 * BUY_AFTER_OPEN_MIN
+
+
+def hold_buys(orders: list[dict], have: dict[str, float]) -> tuple[list[dict], list[dict]]:
+    """(orders that go now, buys that wait): a buy that opens or adds to a long stock position waits; a sale,
+    a buy that covers a short and crypto (24/7, no opening rush) go at once."""
+    go, later = [], []
+    for o in orders:
+        long_up = o["side"] == "buy" and "/" not in o["symbol"] and have.get(o["symbol"], 0.0) >= 0
+        (later if long_up else go).append(o)
+    return go, later
+
+
 ORDER_PAGE = 500  # the most orders Alpaca returns in one answer (its default is 50)
 
 
@@ -604,6 +640,8 @@ def already_queued(trades: list[dict], prices: dict[str, float]) -> bool:
         todo = plan(wanted(live, seen), have, {s: live.get(s, 0.0) for s in have} | dict(prices))
         if auction:
             todo = at_the_open(todo)
+        if buys_wait(clock):  # always, the market being closed: buys are never queued for the open
+            todo = hold_buys(todo, have)[0]
         alive = [t for t in trades if not through_stop(t, live, seen)]
         protective = []
         for sym, q in sorted(have.items()):
@@ -685,11 +723,22 @@ def _trade_and_protect(send: bool, trades: list[dict], prices: dict[str, float])
               f"the last bar (live {live0.get(sym)}, range {seen0.get(sym)}): over, not bought back")
     trades = [t for t in trades if not through_stop(t, live0, seen0)]
     todo = plan(wanted(live0, seen0), have, prices)
+    clock = None
     try:
-        if opening_auction(request("GET", "/v2/clock")):
+        clock = request("GET", "/v2/clock")
+        if opening_auction(clock):
             todo = at_the_open(todo)
     except (AlpacaError, KeyError, ValueError) as e:
         print(f"Market clock unavailable ({e}); normal orders.")
+    later = []
+    try:
+        if buys_wait(clock):
+            todo, later = hold_buys(todo, have)
+    except (KeyError, ValueError) as e:
+        print(f"Market time unreadable ({e}); buys go out now.")
+    for o in later:
+        print(f"{o['side'].upper():4s} {o['qty']:>12,.6f} {o['symbol']:8s} market {o['note']}  -> waits until "
+              f"{BUY_AFTER_OPEN_MIN} minutes after the open (the first quotes are wide)")
     sent, errors = {}, []
     todo = sorted(todo, key=lambda o: o["side"] != "sell")  # sells first: they free the cash buys need
     for o in todo:
@@ -814,6 +863,10 @@ def verify(alert: bool = False) -> list[str]:
             elif x is o and x.get("type") in ("market", "limit") and not o.get("order_class"):
                 pending[norm(x["symbol"])] = pending.get(norm(x["symbol"]), 0.0) + sign * q
     prices = last_prices()
+    try:  # buys the sync holds back until after the open are not missing (on any doubt: strict)
+        waiting = buys_wait(request("GET", "/v2/clock"))
+    except Exception:  # noqa: BLE001
+        waiting = False
     # held but not in the plan (any more): the plan has no price for it, so the market's (as sync does)
     stray = sorted(s for s in have if not any(norm(x) == norm(s) for x in want))
     try:
@@ -839,9 +892,14 @@ def verify(alert: bool = False) -> list[str]:
         px = prices.get(next((s for s in want if norm(s) == sym), sym), 0.0) or spot.get(sym, 0.0) or 100.0
         short_of_cash = (sym in crypto and h < w and cash is not None
                          and (w - h) * px > CASH_BUFFER * cash - MIN_NOTIONAL)
+        held_now = sum(q for s, q in have.items() if norm(s) == sym)
+        gap = abs(w - h) * px > max(MIN_ADJUST_USD, MIN_ADJUST * abs(w) * px)  # same tolerance as plan()
         if short_of_cash:  # crypto cannot use margin: smaller than the plan when the cash is in stocks
             print(f"{sym}: plan wants {w:g}, Alpaca has {h:g} (crypto needs cash: ${cash:,.0f} left)")
-        elif abs(w - h) * px > max(MIN_ADJUST_USD, MIN_ADJUST * abs(w) * px):  # same tolerance as plan()
+        elif gap and waiting and sym not in crypto and w > h and held_now >= 0:
+            print(f"{sym}: plan wants {w:g}, Alpaca has {h:g}: the buy waits until {BUY_AFTER_OPEN_MIN} minutes "
+                  f"after the open")
+        elif gap:
             problems.append(f"{sym}: plan wants {w:g}, Alpaca has {h:g}")
         held = sum(q for s, q in have.items() if norm(s) == sym)
         # an exit decided after the close is a market order queued for the next open: those shares
