@@ -95,6 +95,11 @@ account meets the criteria above. Then small, with the repository made private f
   - **What buying at the open costs** (paper/research/2026-11-14-fills-at-the-open.md): 0.054R a buy at
     Alpaca against the opening price, because the first quotes after 9:30 are wide; about 0.017R twenty
     minutes later.
+- **2026-11-16, privacy fix:** the SEC asks for a contact in each request, and the code's contact is the
+  user's email. It is now sent only from the GitHub Actions workflows the user set up (or wherever SEC_CONTACT
+  is set). The morning routine's research update, run in the assistant's container, had been sending it to
+  the SEC when it refreshed the research book's insider filings; there it now uses the cached filings. Nothing
+  changes on GitHub, so the accounts' insider downloads are unaffected.
 - **2026-11-16 (user's go: "Yes move the buy for Monday"):** from Monday 16 November, **stock buys wait until
   15 minutes after the open** (the 9:50 New York run) in every stock account. Sales, stops and short
   covers go out as before; crypto is unchanged. Only when Alpaca's orders go out changes: the paper

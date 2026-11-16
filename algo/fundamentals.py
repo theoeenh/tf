@@ -137,10 +137,11 @@ def update(zip_path=None) -> pd.DataFrame:
         import tempfile
         import urllib.request
 
-        from .insider import UA
+        from .insider import sec_headers
 
+        headers = sec_headers()  # the user's contact: from GitHub Actions only (or SEC_CONTACT)
         tmp = tempfile.NamedTemporaryFile(suffix=".zip", delete=False)
-        with urllib.request.urlopen(urllib.request.Request(URL, headers=UA), timeout=60) as r, tmp:
+        with urllib.request.urlopen(urllib.request.Request(URL, headers=headers), timeout=60) as r, tmp:
             shutil.copyfileobj(r, tmp, 1 << 20)
         zip_path = tmp.name
         log.info("companyfacts.zip downloaded")

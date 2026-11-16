@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 import urllib.request
@@ -36,14 +37,27 @@ _last = [0.0]
 EXTRA_CIKS = {"XOM": [34088]}  # filed under its former registrant until mid-2026
 
 
+def sec_headers() -> dict:
+    """The User-Agent for the SEC, which asks for a contact. UA's contact is the user's own: it is sent
+    only from the GitHub Actions workflows the user set up, or wherever SEC_CONTACT is set; anywhere else
+    (the assistant's container, 2026-11-16) nothing goes to the SEC and the cached filings are used."""
+    contact = os.environ.get("SEC_CONTACT")
+    if contact:
+        return {"User-Agent": f"tf-research {contact}"}
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return UA
+    raise OSError("SEC downloads run on GitHub Actions only (no SEC_CONTACT set here): cached filings used")
+
+
 def _get(url: str) -> bytes:
+    headers = sec_headers()
     wait = 0.15 - (time.time() - _last[0])  # SEC limit: 10 requests a second
     if wait > 0:
         time.sleep(wait)
     _last[0] = time.time()
     for attempt in range(4):
         try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30) as r:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
                 return r.read()
         except OSError as exc:
             if attempt == 3:
