@@ -1,0 +1,186 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [],
+  "reasoning": "Nothing in the brief gives an edge over 1-20 days. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days, so headlines alone are not a reason for a view."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "NVDA earnings Tue 17 Nov (after the close): can gap the price either way"
+  ],
+  "reasoning": "Down 25% in a month on its chief executive's exit and tighter chip rules, with earnings tomorrow. The report can gap the price either way, and a stock that fell on bad headlines did not keep falling on average in our test: no view, but a gap risk."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "NVDA earnings Tue 17 Nov: chip stocks tend to move with it"
+  ],
+  "reasoning": "Falling premarket on tighter US chip rules after a strong week (+18-19%). NVDA reports tomorrow and chip stocks often move with it: a gap risk, not an edge."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "NVDA earnings Tue 17 Nov: chip stocks tend to move with it"
+  ],
+  "reasoning": "Falling premarket on tighter US chip rules after a strong week (+18-19%). NVDA reports tomorrow and chip stocks often move with it: a gap risk, not an edge."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 3,
+  "key_events": [
+   "NVDA earnings Tue 17 Nov (a large index weight)"
+  ],
+  "reasoning": "Futures lower on weakness in AI-linked stocks; NVDA's report tomorrow can move the index. No edge in either direction from the brief."
+ }
+]
