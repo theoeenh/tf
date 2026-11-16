@@ -199,6 +199,47 @@ def bar_range(symbols) -> dict[str, tuple[float, float]]:
         if not d.get("next_page_token"):
             break
         params["page_token"] = d["next_page_token"]
+    # Alpaca's own fills: a stop or target that filled is proof the price got there, whatever the minute
+    # bars show (2026-11-16: THRM's stop filled at 15:07 UTC; IEX had no THRM bar, its last IEX trade was
+    # above the stop, and the next run would have bought THRM back)
+    for sym, (lo, hi) in filled_exits(starts).items():
+        o = out.get(sym, (lo, hi))
+        out[sym] = (min(o[0], lo), max(o[1], hi))
+    return out
+
+
+def filled_exits(starts: dict) -> dict[str, tuple[float, float]]:
+    """(lowest, highest) level of the stop and target orders Alpaca filled for each stock since its start:
+    a sell stop at 28.55 that filled means the price fell to 28.55. Never raises (the minute bars still
+    count on their own)."""
+    from datetime import datetime
+
+    if not starts:
+        return {}
+    since = min(starts.values())
+    try:
+        closed = request("GET", f"/v2/orders?status=closed&after={since:%Y-%m-%dT%H:%M:%SZ}&limit={ORDER_PAGE}"
+                                "&nested=true&direction=desc")
+    except Exception:  # noqa: BLE001
+        return {}
+    out: dict[str, tuple[float, float]] = {}
+    for o in closed or []:
+        for x in [o] + list(o.get("legs") or []):
+            sym = str(x.get("symbol", "")).replace("/", "")
+            if x.get("status") != "filled" or sym not in starts:
+                continue
+            filled_at = str(x.get("filled_at") or "")
+            if filled_at and datetime.fromisoformat(filled_at.replace("Z", "+00:00")[:32]) < starts[sym]:
+                continue
+            if x.get("type") in ("stop", "stop_limit", "trailing_stop"):
+                lvl = [float(v) for v in (x.get("stop_price"), x.get("filled_avg_price")) if v]
+            elif x.get("type") == "limit" and (o.get("order_class") or x is not o):  # an OCO's target leg
+                lvl = [float(v) for v in (x.get("limit_price"), x.get("filled_avg_price")) if v]
+            else:
+                continue  # market orders (entries, exits decided by the plan) say nothing about a stop
+            if lvl:
+                lo, hi = out.get(sym, (min(lvl), max(lvl)))
+                out[sym] = (min(lo, *lvl), max(hi, *lvl))
     return out
 
 

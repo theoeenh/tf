@@ -13,3 +13,18 @@ def no_membership_history(request, tmp_path, monkeypatch):
         return
     monkeypatch.setattr(wide_pit, "PATH", tmp_path / "no_members_history.csv")
     wide_pit._cache.clear()
+
+
+@pytest.fixture(autouse=True)
+def no_alpaca_order_history(request, monkeypatch):
+    """bar_range reads Alpaca's filled stops (alpaca.filled_exits): never the real account in a test."""
+    from algo import alpaca
+
+    if "real_filled_exits" in request.fixturenames:
+        return
+    monkeypatch.setattr(alpaca, "filled_exits", lambda starts: {})
+
+
+@pytest.fixture
+def real_filled_exits():
+    """Ask for this to test alpaca.filled_exits itself (with a fake request)."""

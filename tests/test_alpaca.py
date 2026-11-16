@@ -1108,3 +1108,36 @@ def test_a_buy_queued_by_an_older_run_is_cancelled_before_the_open(monkeypatch, 
     monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None:
                         _clock("09:05", is_open=False) if p == "/v2/clock" else state["orders"])
     assert not alpaca.already_queued(trades, {"WY": 23.0})        # cancelled and sent again, without it
+
+
+def test_a_stop_alpaca_filled_ends_the_trade_even_without_minute_bars(monkeypatch, tmp_path, real_filled_exits):
+    """2026-11-16 15:07 UTC: THRM's stop (28.55) filled at Alpaca. IEX, the free feed, had no THRM minute
+    bar and its last IEX trade (29.08) was above the stop, so the 15:20 run would have bought THRM back.
+    Alpaca's own filled stop is the proof the price got there."""
+    import json
+
+    from algo import alpaca
+
+    trades = [{"asset": "THRM", "strategy": "insider_low_short", "qty": 70.613176, "stop": 28.6024, "target": None,
+               "bar": "2026-11-13"}]
+    (tmp_path / "orders.json").write_text(json.dumps(trades))
+    monkeypatch.setattr(alpaca, "PAPER_DIR", tmp_path)
+    monkeypatch.setitem(alpaca.SYMBOLS, "THRM", "THRM")
+    monkeypatch.setattr(alpaca, "get_data", lambda path, params: {"bars": {}})        # no IEX bar
+    closed = [{"symbol": "THRM", "side": "sell", "type": "stop", "status": "filled", "qty": "70",
+               "stop_price": "28.55", "filled_avg_price": "28.44", "filled_at": "2026-11-16T15:07:38Z", "legs": None},
+              {"symbol": "THRM", "side": "sell", "type": "stop", "status": "canceled", "qty": "70",
+               "stop_price": "20.0", "filled_at": None, "legs": None},                   # never filled: no proof
+              {"symbol": "THRM", "side": "buy", "type": "market", "status": "filled", "qty": "70",
+               "filled_avg_price": "27.0", "filled_at": "2026-11-16T14:53:00Z", "legs": None}]  # an entry: no proof
+    monkeypatch.setattr(alpaca, "request", lambda m, p, b=None, base=None: closed if "status=closed" in p else [])
+    seen = alpaca.bar_range(["THRM"])
+    assert seen == {"THRM": (28.44, 28.55)}
+    assert alpaca.through_stop(trades[0], {"THRM": 29.08}, seen)
+    assert alpaca.wanted({"THRM": 29.08}, seen) == {}                                 # not bought back
+    # a stop filled before the trade's last bar belongs to an earlier trade
+    closed[0]["filled_at"] = "2026-11-13T15:00:00Z"
+    assert alpaca.bar_range(["THRM"]) == {}
+    monkeypatch.setattr(alpaca, "request", lambda *a, **k: (_ for _ in ()).throw(alpaca.AlpacaError("down")))
+    assert alpaca.filled_exits({"THRM": __import__("datetime").datetime(2026, 11, 14,
+                                                                       tzinfo=__import__("datetime").timezone.utc)}) == {}
