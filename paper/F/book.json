@@ -165,6 +165,28 @@
    "desc": "BKR Dec 18 2026 45 Call, delta +0.71",
    "opened": "2026-11-10 16:24",
    "id": "long_call-BKR-2026-11-10"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261231P00676000",
+     "qty": 1,
+     "price": 4.79
+    },
+    {
+     "symbol": "SPY261231P00707000",
+     "qty": -1,
+     "price": 8.7
+    }
+   ],
+   "expiry": "2026-12-31",
+   "cost": -390.9999999999999,
+   "max_loss": 2709.0,
+   "desc": "sell 707 / buy 676 puts, 2026-12-31, credit 3.91 on width 31",
+   "opened": "2026-11-17 14:54",
+   "id": "spy_put_spread-SPY-2026-11-17"
   }
  ],
  "closed": [
