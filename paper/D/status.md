@@ -22,7 +22,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 - **FUN** 167.11 shares, entry 11.64, stop 9.27, now 11.61 (-0.01R)
 - **HBAN** 430.71 shares, entry 15.96, stop 15.06, now 15.63 (-0.35R)
 - **IBKR** 42.00 shares, entry 77.73, stop 72.56, now 78.43 (+0.07R)
-- **IOSP** 44.28 shares, entry 80.05, stop 72.07, now 79.17 (-0.10R)
+- **IOSP** 44.82 shares, entry 79.10, stop 71.22, now 78.23 (-0.10R)
 - **LKFN** 81.64 shares, entry 62.29, stop 57.93, now 62.11 (-0.04R)
 - **LKQ** 136.21 shares, entry 20.25, stop 18.33, now 19.27 (-0.34R)
 - **LSCC** 19.27 shares, entry 102.00, stop 99.28, now 108.17 (+0.30R)
@@ -39,7 +39,10 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **CNH** 230.10 shares around 11.46, stop 9.77
+- **CTVA** 193.49 shares around 9.04, stop 7.03
+- **HL** 155.52 shares around 12.22, stop 9.71
+- **KTOS** 55.19 shares around 31.66, stop 24.60
 
 ## Closed trades
 
