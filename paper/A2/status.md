@@ -22,7 +22,7 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **FUN** 159.36 shares, entry 11.64, stop 9.27, now 11.61 (-0.01R)
 - **HBAN** 408.81 shares, entry 15.96, stop 15.06, now 15.63 (-0.35R)
 - **IBKR** 40.01 shares, entry 77.73, stop 72.56, now 78.43 (+0.07R)
-- **IOSP** 42.29 shares, entry 80.05, stop 72.07, now 79.17 (-0.10R)
+- **IOSP** 42.81 shares, entry 79.10, stop 71.22, now 78.23 (-0.10R)
 - **LKFN** 77.98 shares, entry 62.29, stop 57.93, now 62.11 (-0.04R)
 - **LKQ** 129.76 shares, entry 20.25, stop 18.33, now 19.27 (-0.34R)
 - **LSCC** 18.40 shares, entry 102.00, stop 99.28, now 108.17 (+0.30R)
@@ -39,7 +39,10 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 
 ## New signals (bought at the next open)
 
-None.
+- **CNH** 219.32 shares around 11.46, stop 9.77
+- **CTVA** 184.43 shares around 9.04, stop 7.03
+- **HL** 148.23 shares around 12.22, stop 9.71
+- **KTOS** 52.60 shares around 31.66, stop 24.60
 
 ## Closed trades
 
