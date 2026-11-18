@@ -33,7 +33,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 - **NVT** 14.39 shares, entry 120.20, stop 95.10, now 109.89 (-0.37R)
 - **PEP** 48.93 shares, entry 130.94, stop 136.78, now 141.87 (+1.34R)
 - **SANM** 9.86 shares, entry 157.19, stop 119.88, now 157.57 (+0.01R)
-- **SHEN** 255.68 shares, entry 9.73, stop 9.08, now 9.74 (+0.00R)
+- **SHEN** 255.68 shares, entry 9.73, stop 9.07, now 9.74 (+0.00R)
 - **SMCI** 53.09 shares, entry 29.63, stop 23.09, now 24.37 (-0.70R)
 - **STWD** 332.64 shares, entry 11.76, stop 10.57, now 11.28 (-0.40R)
 - **SYY** 58.59 shares, entry 75.11, stop 72.61, now 77.92 (+0.42R)
