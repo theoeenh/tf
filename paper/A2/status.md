@@ -32,7 +32,7 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **NTRS** 32.08 shares, entry 171.66, stop 166.30, now 171.56 (-0.01R)
 - **NVT** 13.74 shares, entry 120.20, stop 95.10, now 109.89 (-0.37R)
 - **SANM** 9.42 shares, entry 157.19, stop 119.88, now 157.57 (+0.01R)
-- **SHEN** 244.15 shares, entry 9.73, stop 9.08, now 9.74 (+0.00R)
+- **SHEN** 244.15 shares, entry 9.73, stop 9.07, now 9.74 (+0.00R)
 - **SMCI** 50.67 shares, entry 29.63, stop 23.09, now 24.37 (-0.70R)
 - **STWD** 317.21 shares, entry 11.76, stop 10.57, now 11.28 (-0.40R)
 - **SYY** 55.95 shares, entry 75.11, stop 72.61, now 77.92 (+0.42R)

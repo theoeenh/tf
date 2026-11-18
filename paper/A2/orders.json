@@ -304,7 +304,7 @@
   "ticker": "SHEN",
   "strategy": "insider_low_short",
   "qty": 244.14569904334277,
-  "stop": 9.077591689513357,
+  "stop": 9.071637204091308,
   "target": null,
   "mark": 9.74,
   "entry": 9.734580000000001,
