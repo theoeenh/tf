@@ -372,6 +372,32 @@
   "bar": "2026-11-17"
  },
  {
+  "asset": "ETN",
+  "ticker": "ETN",
+  "strategy": "insider_low_short",
+  "qty": 6.728577756598551,
+  "stop": 282.9458349065446,
+  "target": null,
+  "mark": 337.11,
+  "entry": 337.11,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-17"
+ },
+ {
+  "asset": "SANM",
+  "ticker": "SANM",
+  "strategy": "insider_low_short",
+  "qty": 9.419620089203496,
+  "stop": 113.97971387367565,
+  "target": null,
+  "mark": 152.67,
+  "entry": 152.67,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-17"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",

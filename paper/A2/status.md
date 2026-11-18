@@ -42,7 +42,8 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 
 ## New signals (bought at the next open)
 
-None.
+- **ETN** 6.73 shares around 337.11, stop 282.95
+- **SANM** 9.42 shares around 152.67, stop 113.98
 
 ## Closed trades
 
