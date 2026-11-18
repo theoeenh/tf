@@ -42,7 +42,8 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **ETN** 7.04 shares around 337.11, stop 282.95
+- **SANM** 9.86 shares around 152.67, stop 113.98
 
 ## Closed trades
 
