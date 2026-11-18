@@ -186,7 +186,6 @@ BIO,Health Care,sp400
 BJ,Consumer Staples,sp400
 BJRI,Consumer Discretionary,sp600
 BKE,Consumer Discretionary,sp600
-BKH,Utilities,sp400
 BKNG,Consumer Discretionary,sp500
 BKR,Energy,sp500
 BKU,Financials,sp600
@@ -675,6 +674,7 @@ HWC,Financials,sp400
 HWKN,Materials,sp600
 HWM,Industrials,sp500
 HXL,Industrials,sp400
+HZN,Utilities,sp400
 HZO,Consumer Discretionary,sp600
 IART,Health Care,sp600
 IBKR,Financials,sp500

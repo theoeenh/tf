@@ -360,7 +360,7 @@ BJ,sp400,2020-11-01,,Consumer Staples
 BJRI,sp600,2018-09-01,,Consumer Discretionary
 BK,sp500,2015-12-01,2026-06-01,Financials
 BKE,sp600,2018-09-01,,Consumer Discretionary
-BKH,sp400,2015-12-01,,Utilities
+BKH,sp400,2015-12-01,2026-11-18,Utilities
 BKNG,sp500,2018-03-01,,Consumer Discretionary
 BKR,sp500,2019-11-01,,Energy
 BKS,sp600,2018-09-01,2021-04-01,Consumer Discretionary
@@ -1379,6 +1379,7 @@ HWM,sp500,2020-04-01,,Industrials
 HXL,sp400,2021-01-01,,Industrials
 HYH,sp400,2015-12-01,2018-11-01,Health Care
 HYH,sp600,2018-12-01,2021-04-01,Health Care
+HZN,sp400,2026-11-18,,Utilities
 HZO,sp600,2018-09-01,,Consumer Discretionary
 IAA,sp400,2021-01-01,2023-04-01,Industrials
 IAC,sp600,2024-06-01,2026-07-01,Communication Services
