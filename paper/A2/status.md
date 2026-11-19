@@ -27,7 +27,7 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **IOSP** 42.81 shares, entry 79.10, stop 71.79, now 78.86 (-0.03R)
 - **KTOS** 52.56 shares, entry 31.74, stop 24.92, now 30.24 (-0.21R)
 - **LKFN** 77.98 shares, entry 62.29, stop 58.10, now 60.74 (-0.32R)
-- **LKQ** 129.76 shares, entry 20.25, stop 18.37, now 19.10 (-0.39R)
+- **LKQ** 131.71 shares, entry 19.93, stop 18.08, now 18.80 (-0.39R)
 - **LSCC** 18.40 shares, entry 102.00, stop 99.93, now 111.61 (+0.46R)
 - **NTRS** 32.08 shares, entry 171.66, stop 166.30, now 171.56 (-0.01R)
 - **NVT** 13.74 shares, entry 120.20, stop 95.10, now 109.89 (-0.37R)
