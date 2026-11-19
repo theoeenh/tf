@@ -1,7 +1,7 @@
 # D – Insider + low short (early test)
 
 Strategy: `1591c2bcb6` insider_low_short(buyers=1, max_rank=0.3) | stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 | no trend filter | S&P 1500, daily
-Started 2026-10-12 with $100,000. Data through 2026-11-18. **Equity $94,784** (-5.22%).
+Started 2026-10-12 with $100,000. Data through 2026-11-18. **Equity $94,785** (-5.22%).
 
 Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT graduated: it fails only the luck check): buy an S&P 1500 stock the day an insider buys it in the open market (first purchase in 90 days) while short sellers are not betting against it (20-day short share of off-exchange volume, FINRA, in the lowest 30% of the S&P 1500). Stop 3 ATR trailing, out after 60 sessions, 0.4% of equity at risk per trade. About 230 trades a year in the backtest (search avg +0.14R, validation +0.20R). User's go 2026-10-10; a finder graduate would take this account over.
 
@@ -27,13 +27,13 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 - **IOSP** 44.82 shares, entry 79.10, stop 71.79, now 78.86 (-0.03R)
 - **KTOS** 55.14 shares, entry 31.74, stop 24.92, now 30.24 (-0.21R)
 - **LKFN** 81.64 shares, entry 62.29, stop 58.10, now 60.74 (-0.32R)
-- **LKQ** 136.21 shares, entry 20.25, stop 18.37, now 19.10 (-0.39R)
+- **LKQ** 138.25 shares, entry 19.93, stop 18.08, now 18.80 (-0.39R)
 - **LSCC** 19.27 shares, entry 102.00, stop 99.93, now 111.61 (+0.46R)
 - **NTRS** 34.09 shares, entry 171.66, stop 166.30, now 171.56 (-0.01R)
 - **NVT** 14.39 shares, entry 120.20, stop 95.10, now 109.89 (-0.37R)
 - **PEP** 48.93 shares, entry 130.94, stop 136.78, now 141.87 (+1.34R)
 - **SANM** 9.86 shares, entry 157.19, stop 119.88, now 157.57 (+0.01R)
-- **SHEN** 255.68 shares, entry 9.73, stop 9.07, now 9.74 (+0.00R)
+- **SHEN** 255.69 shares, entry 9.73, stop 9.07, now 9.74 (+0.00R)
 - **SMCI** 53.09 shares, entry 29.63, stop 23.09, now 24.37 (-0.70R)
 - **STWD** 332.64 shares, entry 11.76, stop 10.57, now 11.28 (-0.40R)
 - **SYY** 58.59 shares, entry 75.11, stop 72.61, now 77.92 (+0.42R)
