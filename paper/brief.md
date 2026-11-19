@@ -1,4 +1,4 @@
-# Daily brief — Wednesday 18 November 2026
+# Daily brief — Thursday 19 November 2026
 
 ## Coming up in the next 7 days
 
@@ -8,70 +8,70 @@
 
 - AAPL: 30%
 - MSFT: 24%
-- AMZN: 21%
+- AMZN: 20%
 - TXN: 17%
 - AMD: 8%
 
 ## Assets
 
-### BTC — 64,893.95 (2026-11-17)
-1 week -9.0%, 1 month -19.7%; below its 200-day average; ADX 36.
+### BTC — 62,987.27 (2026-11-18)
+1 week -7.7%, 1 month -22.5%; below its 200-day average; ADX 38.
 Signals for the next open: none.
-News (GDELT, to 2026-11-14): tone -1.2σ vs usual, coverage -0.8σ.
+News (GDELT, to 2026-11-15): tone +1.1σ vs usual, coverage -0.2σ.
 Headlines:
-- Analyst Warns Strategy’s Stock Could Fall More Than 75% (Wed, 18 Nov 2026)
-- Stock Market Today: Dow Wavers As Fed Official Calls For Larger Hike; Nvidia Shares Jump On Earnings (Live Coverage) (Wed, 18 Nov 2026)
-- Prediction: This Cryptocurrency Will Outperform Bitcoin in 2027 (Wed, 18 Nov 2026)
-- Olenox October Bitcoin Production Climbs to Three-Month High as Uptime and Hashrate Advance (Wed, 18 Nov 2026)
-- Strategy Stock to $23? Analyst Warns of 76% Slide as Firm Sells MSTR to Buy Back STRC (Wed, 18 Nov 2026)
+- Stock Market Today: Dow Rises As Walmart Falls On Earnings; Anthropic IPO Set To Soar 25% (Live Coverage) (Thu, 19 Nov 2026)
+- What You Actually Own When You Buy GameStop Stock (Thu, 19 Nov 2026)
+- Wall Street Bought Bitcoin Near $80,000. Now $2.9 Billion In ETF Outflows Is Testing The Market. (Thu, 19 Nov 2026)
+- Bitcoin Open Interest Drops 20% as Ethereum and Solana Slide Further (Thu, 19 Nov 2026)
+- Anthropic's Stock Market Debut Lifts Wall Street Futures Premarket Thursday (Thu, 19 Nov 2026)
 
-### ETH — 1,822.96 (2026-11-17)
-1 week -9.6%, 1 month -22.4%; below its 200-day average; ADX 36.
+### ETH — 1,774.75 (2026-11-18)
+1 week -7.9%, 1 month -24.7%; below its 200-day average; ADX 37.
 Signals for the next open: none.
 News (GDELT, to 2026-10-29): tone -0.5σ vs usual, coverage -1.6σ.
 Headlines:
-- Vitalik Buterin Just Gave Ethereum Investors a Wake-Up Call. Here’s Why It Could Be Time to Sell. (Wed, 18 Nov 2026)
-- New Yorkers can now borrow cash without credit checks (Wed, 18 Nov 2026)
-- Nvidia’s earnings call names two former crypto miners (Wed, 18 Nov 2026)
-- Crypto Market Today, Nov. 17: A Warning Sign Not Seen Since 2022 Is Flashing Across Cryptocurrency Markets (Tue, 17 Nov 2026)
-- Brothers who baited ethereum MEV bots for $25 million acquitted of wire fraud (Tue, 17 Nov 2026)
+- /C O R R E C T I O N - Chainlink/ (Thu, 19 Nov 2026)
+- Bitcoin Open Interest Drops 20% as Ethereum and Solana Slide Further (Thu, 19 Nov 2026)
+- This "Unstoppable" Cryptocurrency Is Ready to Deliver Massive Gains in 2027 (Thu, 19 Nov 2026)
+- Not Bitcoin. Not Ethereum. This Could Be the Best Cryptocurrency to Hold During the Next 5 Years. (Thu, 19 Nov 2026)
+- Binance Hacker Moves Another $248M of Ethereum as the Exchange Pockets $6.5B Court Order (Thu, 19 Nov 2026)
 
-### SOL — 75.11 (2026-11-17)
-1 week -8.0%, 1 month -25.8%; below its 200-day average; ADX 47.
+### SOL — 73.62 (2026-11-18)
+1 week -5.7%, 1 month -28.0%; below its 200-day average; ADX 48.
 Signals for the next open: none.
 News (GDELT, to 2026-10-29): tone +1.3σ vs usual, coverage -1.5σ.
 Headlines:
-- Coinbase Global Expands Crypto Loans (Wed, 18 Nov 2026)
-- Prediction: This Cryptocurrency Will Outperform Bitcoin in 2027 (Wed, 18 Nov 2026)
-- AI Will Make the Next 12 Months 'a Slaughterhouse' for Crypto Security: Anchorage Exec (Wed, 18 Nov 2026)
-- Did Avalanche’s New NYSE Deal Just Make Solana and XRP Irrelevant? (Wed, 18 Nov 2026)
-- New Yorkers can now borrow cash without credit checks (Wed, 18 Nov 2026)
+- Bitcoin Open Interest Drops 20% as Ethereum and Solana Slide Further (Thu, 19 Nov 2026)
+- Institutions Holding ETH, SOL or HYPE Can Now Borrow Up to Five Years at a $4 Billion Lender (Thu, 19 Nov 2026)
+- Crypto asset manager's stock jumps 13% after full Ethereum sale (Wed, 18 Nov 2026)
+- Crypto Market Today, Nov. 18: Bitcoin's 12% Weekly Plunge Has Triggered a Rare Signal With a Surprising History (Wed, 18 Nov 2026)
+- CoinShares Posts $39.6M Q3 Profit, Sells Ether and Half Its Solana Holdings to Fund $40M Buyback (Wed, 18 Nov 2026)
 
-### NVDA — 155.46 (2026-11-17)
-1 week -8.0%, 1 month -28.4%; below its 200-day average; ADX 45.
+### NVDA — 150.96 (2026-11-18)
+1 week -13.1%, 1 month -30.3%; below its 200-day average; ADX 47.
 Signals for the next open: none.
 News (GDELT, to 2026-11-13): tone -3.8σ vs usual, coverage +0.8σ.
 Headlines:
-- Nvidia's AI Financing Guarantees Hit $118 Billion. Kress Clarifies When They Take Effect. (Wed, 18 Nov 2026)
-- Josh Brown Says the Nvidia Dip Worth Buying May Not Be in Nvidia at All (Wed, 18 Nov 2026)
-- Stock Market Today: Nvidia Earnings Are Driving the Market, but Uncertainty Still Reigns (Wed, 18 Nov 2026)
-- Barclays spots cracks in AI trade, turns bullish on U.S. Quality (Wed, 18 Nov 2026)
-- TeraWulf Rises 6%, Cipher Digital Gains 5% After NVIDIA’s Record Quarter; IREN Climbs 4% (Wed, 18 Nov 2026)
+- Nvidia interim CEO says 'we've got this' amid leadership transition (Thu, 19 Nov 2026)
+- Nvidia, AMD, Micron stocks lead chip sector higher amid Anthropic IPO optimism (Thu, 19 Nov 2026)
+- Credo Sinks 8% in a Week, Marvell 8%, as Bessent Calls for a Nvidia “Dramatic Shakeup.” Time to Buy? (Thu, 19 Nov 2026)
+- Applied Materials Sinks 7% in a Week, but Customers Want Its Tools “As Fast as We Can Get Them” (Thu, 19 Nov 2026)
+- 3 Reasons I Own More Disney Than Nvidia Stock Right Now (Thu, 19 Nov 2026)
 
-### TSLA — 380.11 (2026-11-17)
-1 week +0.1%, 1 month +3.3%; below its 200-day average; ADX 12.
+### TSLA — 383.72 (2026-11-18)
+1 week -1.8%, 1 month +2.7%; above its 200-day average; ADX 12.
 Signals for the next open: none.
 News (GDELT, to 2026-11-12): tone -1.1σ vs usual, coverage -0.9σ.
 Headlines:
-- Bad News For Tesla, As Waymo Gets Pulled Off The Road (Wed, 18 Nov 2026)
-- IONNA and Automaker Partners Prove Network Scale with Multiple Cross-Country Road Trips (Wed, 18 Nov 2026)
-- 3 Founder Led Stocks With Revenue Growth Up To 20% (Wed, 18 Nov 2026)
-- Elon Musk Makes Major Tesla Production Shift After Cybertruck Sales Collapse (Wed, 18 Nov 2026)
-- State Street Consumer Discretionary (XLY) Sells Amazon and Tesla on Monday (Wed, 18 Nov 2026)
+- Elon Musk's Latest Calls For Tesla-SpaceX Merger; Explains Pay Package (Thu, 19 Nov 2026)
+- 4 Stocks Analysts and Hedge Funds Surprisingly Prefer Over Tesla (Thu, 19 Nov 2026)
+- Tesla's China Business Sends Investors Two Very Different Signals (Thu, 19 Nov 2026)
+- Elon Musk Reportedly Says Tesla Will Continue To Increase Production In China – TSLA Stock Rises Premarket (Thu, 19 Nov 2026)
+- Market Chatter: Tesla to Continue Boosting Production at China Factory (Thu, 19 Nov 2026)
 
-### GOLD — 352.48 (2026-11-17)
-1 week -4.6%, 1 month -7.2%; below its 200-day average; ADX 21.
-Signals for the next open: none.
+### GOLD — 341.19 (2026-11-18)
+1 week -6.6%, 1 month -9.7%; below its 200-day average; ADX 23.
+Signals for the next open: donchian_trend SELL.
 News (GDELT, to 2026-11-13): tone +3.8σ vs usual, coverage -0.5σ.
 Headlines:
 - Defiance Goes Mad ‘Maxx’ on Single-Stock ETFs (Mon, 09 Nov 2026)
@@ -80,9 +80,9 @@ Headlines:
 - Ray Dalio Keeps Telling Investors to Hold Gold. Gold Just Lost 28% From Its Record. Here’s His Rule for a 66-Year-Old With $800,000 in an IRA and $2,800 a Month in Social Security (Sat, 14 Nov 2026)
 - What $10,000 in Silver on Jan. 1 Is Worth Today (Thu, 12 Nov 2026)
 
-### SILVER — 42.64 (2026-11-17)
-1 week -8.3%, 1 month -17.3%; below its 200-day average; ADX 31.
-Signals for the next open: none.
+### SILVER — 40.70 (2026-11-18)
+1 week -12.8%, 1 month -21.9%; below its 200-day average; ADX 32.
+Signals for the next open: donchian_trend SELL.
 News (GDELT, to 2026-11-10): tone +0.0σ vs usual, coverage -1.1σ.
 Headlines:
 - Is the iShares Silver Trust a Buy After Falling Nearly 60% From Its High? (Wed, 11 Nov 2026)
@@ -91,149 +91,149 @@ Headlines:
 - Silver Crashes 61% From All-Time High: One Wall Street Bull Sees A Buy Signal, Another Critic Says Wait (Tue, 17 Nov 2026)
 - Gold, Silver In Spotlight After GLD Hits 52-Week Low, SLV Sinks To 11-Month Low – Peter Brandt Sees Signs Of A Potential Bottom (Fri, 30 Oct 2026)
 
-### AAPL — 351.91 (2026-11-17)
-1 week +1.1%, 1 month +2.7%; above its 200-day average; ADX 18.
+### AAPL — 352.45 (2026-11-18)
+1 week -0.8%, 1 month +3.9%; above its 200-day average; ADX 18.
 Signals for the next open: none.
 Headlines:
-- Apple Is the Only Magnificent Seven Stock Near a Record (Wed, 18 Nov 2026)
-- Apple Outage Adds to a Week of US Tech Failures (Wed, 18 Nov 2026)
-- Apple Reveals Cause of Major Outage That Disrupted iCloud and Apple Pay (Wed, 18 Nov 2026)
-- What ProShares Ultra QQQ 2x Shares (QLD) Bought: Apple Leads on Nov. 16 (Wed, 18 Nov 2026)
-- What Invesco NASDAQ 100 ETF (QQQM) Bought: Apple Leads on Nov. 16 (Wed, 18 Nov 2026)
+- Jamf Brings Apple Device Management and Security Apps to CrowdStrike Falcon Foundry (Thu, 19 Nov 2026)
+- Why Microsoft’s Stickier Revenue Gives It the Edge Over Apple Heading Into 2027 (Thu, 19 Nov 2026)
+- Apple Became a Top Buffett Holding for a Reason. I'd Buy It With $1,000 Now. (Thu, 19 Nov 2026)
+- How Investors May Respond To Apple (AAPL) Service Outages (Thu, 19 Nov 2026)
+- Can Apple Grow Cash Flow 17% a Year? That’s What Its Record Price Implies (Thu, 19 Nov 2026)
 
-### MSFT — 506.24 (2026-11-17)
-1 week -5.0%, 1 month -5.1%; above its 200-day average; ADX 18.
+### MSFT — 508.29 (2026-11-18)
+1 week -2.5%, 1 month -4.4%; above its 200-day average; ADX 19.
+Signals for the next open: none.
+Headlines:
+- IDEMIA Public Security to Bring Mobile Driver's License Verification to the Microsoft Entra Verified ID Ecosystem (Thu, 19 Nov 2026)
+- MongoDB Atlas for Government Achieves FedRAMP® Class D (High) Certification, Adds Support for Microsoft Azure Government (Thu, 19 Nov 2026)
+- InstaLILY Launches Lily for Sales on Microsoft Dynamics 365, Where Sellers and AI Agents Work Together in Shared Rooms (Thu, 19 Nov 2026)
+- Why Microsoft’s Stickier Revenue Gives It the Edge Over Apple Heading Into 2027 (Thu, 19 Nov 2026)
+- Profound brings your AI Marketer into Microsoft Teams and Microsoft 365 (Thu, 19 Nov 2026)
+
+### AMZN — 267.74 (2026-11-18)
+1 week +0.6%, 1 month +1.9%; above its 200-day average; ADX 11.
+Signals for the next open: none.
+Headlines:
+- GTA VI: Why the 13-year wait could be worth $8 billion (Thu, 19 Nov 2026)
+- Anthropic’s IPO Drew Nearly $500 Billion in Orders for $81 Billion of Stock (Thu, 19 Nov 2026)
+- Billionaire Stanley Druckenmiller’s New AI Warning and Top 5 Stock Picks (Thu, 19 Nov 2026)
+- Despite Oracle Falling 40% Year-to-Date This Wall Street Analyst Predicts 250% Returns Within a Year (Thu, 19 Nov 2026)
+- Top Third-Party Logistics (3PL) Companies in the US for 2026 (Thu, 19 Nov 2026)
+
+### META — 616.38 (2026-11-18)
+1 week -2.0%, 1 month -11.2%; below its 200-day average; ADX 23.
+Signals for the next open: none.
+Headlines:
+- Shareholder Lawsuits Stall Meta's Class C Share Plan (Thu, 19 Nov 2026)
+- Market Chatter: Meta Platforms Suspends Plan to Issue Non-Voting Shares (Thu, 19 Nov 2026)
+- Meta’s $225 Billion AI Spending Forecast Comes With a Cash-Flow Question (Wed, 18 Nov 2026)
+- Stemtech Corporation Partners with Fitness Icon Tony Little to Launch Stemtech Biosciences Digital Campaign (Thu, 19 Nov 2026)
+- AMD Has Ripped 130% in a Year. Lisa Su Sees Growth “Accelerate Further.” Is It Too Late to Buy? (Thu, 19 Nov 2026)
+
+### GOOGL — 282.44 (2026-11-18)
+1 week -3.8%, 1 month -17.0%; below its 200-day average; ADX 26.
+Signals for the next open: none.
+Headlines:
+- Anthropic’s IPO Drew Nearly $500 Billion in Orders for $81 Billion of Stock (Thu, 19 Nov 2026)
+- Q&A: An AI Lab Prices Above Its Range and Debuts on Nasdaq Today (Thu, 19 Nov 2026)
+- One AI Catalyst Could Change This Stock’s Entire 2030 Forecast (Thu, 19 Nov 2026)
+- From AI Models to Factory Floors: U.S.-Korea Industrial AI at Stanford (Thu, 19 Nov 2026)
+- Google's New Gemini 4 Neon Joins Gemini 4 Argon at the Top of the DualEntry Accounting AI (Thu, 19 Nov 2026)
+
+### AMD — 530.14 (2026-11-18)
+1 week -4.1%, 1 month -0.9%; above its 200-day average; ADX 18.
+Signals for the next open: none.
+Headlines:
+- Nvidia, AMD, Micron stocks lead chip sector higher amid Anthropic IPO optimism (Thu, 19 Nov 2026)
+- Why AMD's AI Progress Could Make Sense Through ETFs (Thu, 19 Nov 2026)
+- OpenAI Says Its AI Improved AMD’s Best Chip Design by Up to 14% (Thu, 19 Nov 2026)
+- Why Did David Tepper Exit AMD and Open a $172M Oracle Position? Here’s What May Have Driven the Shift (Thu, 19 Nov 2026)
+- Advanced Micro Devices (AMD) Closes $8.2 Billion World Labs Acquisition (Thu, 19 Nov 2026)
+
+### AVGO — 354.05 (2026-11-18)
+1 week +2.6%, 1 month +5.9%; below its 200-day average; ADX 20.
+Signals for the next open: none.
+Headlines:
+- One AI Catalyst Could Change This Stock’s Entire 2030 Forecast (Thu, 19 Nov 2026)
+- Broadcom, Nvidia, and Micron Could Be Setting Up for a Massive AI Rally Before Year End (Thu, 19 Nov 2026)
+- Is Broadcom “a Momentum Stock Wearing a Value Costume”? Its December 9 Report Will Tell (Thu, 19 Nov 2026)
+- iShares A.I. Innovation and Tech Active ETF (BAI) Adds AMD and Broadcom on Nov. 17 (Thu, 19 Nov 2026)
+- Nvidia, AMD, Micron stocks lead chip sector higher amid Anthropic IPO optimism (Thu, 19 Nov 2026)
+
+### NFLX — 59.82 (2026-11-18)
+1 week -7.3%, 1 month -12.9%; below its 200-day average; ADX 25.
+Signals for the next open: none.
+Headlines:
+- GTA VI: Why the 13-year wait could be worth $8 billion (Thu, 19 Nov 2026)
+- Disney CEO Calls Netflix Licensing Deal a ‘Smart Bet,’ Says In-House AI Cuts Film Rendering Compute Needs by 30% (Thu, 19 Nov 2026)
+- What Are Netflix Stock Bears Missing? (Thu, 19 Nov 2026)
+- Netflix Is 48% Below Its High While Guiding to Record Revenue of $51.1 Billion, Up 13%, for 2026 (Thu, 19 Nov 2026)
+- Josh Brown Says Netflix Trades at 16 Times Next Year’s Earnings After a 50% Drop. Is It a Buy? (Wed, 18 Nov 2026)
+
+### JPM — 324.11 (2026-11-18)
+1 week -5.6%, 1 month -3.3%; above its 200-day average; ADX 16.
 Signals for the next open: rsi2_reversion BUY.
 Headlines:
-- Tech outages are disrupting everything. Are humans to blame? (Wed, 18 Nov 2026)
-- Market Chatter: Microsoft in Advanced Talks to Sell Cloud Services to ByteDance for $500 Million (Wed, 18 Nov 2026)
-- TD SYNNEX Brings Destination AI™ for SMBs to Microsoft Partners to Help Turn AI Opportunities into Scalable Practices (Wed, 18 Nov 2026)
-- NiCE Unites AI and Human Agents with Microsoft on One Connected Customer Service Stack (Wed, 18 Nov 2026)
-- Conga Brings Its Commerce Suite to Microsoft Marketplace, Integrated with Dynamics 365 and Copilot (Wed, 18 Nov 2026)
+- JPMorgan Sees 15% Upside in Home Depot. Here’s How It Gets to $390 (Thu, 19 Nov 2026)
+- JPMorgan Chase faces fresh scrutiny after banking disruption (Thu, 19 Nov 2026)
+- iQIYI (IQ) Stock Sees Fair Value Cut After Analysts Lower Targets (Thu, 19 Nov 2026)
+- Fed Chair Kevin Warsh Vowed to Hit the Fed's 2% Inflation Target After October's Rate Hold, Even as JPMorgan Warns Democratic Control of the Senate Could Make Him a One-Term Chair. Here's Why That Political Risk Matters for Markets. (Thu, 19 Nov 2026)
+- JPMorgan taps 20-year company veteran Bregje de Best as its next CFO (Wed, 18 Nov 2026)
 
-### AMZN — 257.89 (2026-11-17)
-1 week -4.8%, 1 month -1.7%; above its 200-day average; ADX 12.
-Signals for the next open: none.
-Headlines:
-- Brandmovers Launches RetailerConnect™ to Bring Receiptless Rewards to Brand Loyalty and Promotions (Wed, 18 Nov 2026)
-- GUTSI Engages PLTFRM for Online Supplement Rollout (Wed, 18 Nov 2026)
-- GB News launches British-only rival to Amazon (Wed, 18 Nov 2026)
-- Airbnb vs. Shopify: Which Consumer Stock Is a Better Buy for 2027? (Wed, 18 Nov 2026)
-- EasyPost, the Leading Shipping AI and API Platform for Modern Commerce, to Go Public on Nasdaq Through Business Combination with American Drive Acquisition Company (Wed, 18 Nov 2026)
-
-### META — 618.87 (2026-11-17)
-1 week -3.5%, 1 month -12.3%; below its 200-day average; ADX 23.
-Signals for the next open: none.
-Headlines:
-- Loblaw becomes first Canadian retailer to bring AI-powered shopping to Meta's Muse (Wed, 18 Nov 2026)
-- First Trust NASDAQ-100 Tech (QTEC) Sells $5.0 Million More Applovin on Nov. 16 (Wed, 18 Nov 2026)
-- Capital Group Growth (CGGR) Buys $56.4 Million More Cloudflare on Nov. 16 (Wed, 18 Nov 2026)
-- ETFs Are Buying Meta Platforms (META) on Monday (Wed, 18 Nov 2026)
-- The Zacks Analyst Blog Highlights Meta, Amazon's, Microsoft's and Alphabet's (Wed, 18 Nov 2026)
-
-### GOOGL — 280.20 (2026-11-17)
-1 week -2.5%, 1 month -18.6%; below its 200-day average; ADX 26.
-Signals for the next open: none.
-Headlines:
-- Hackers are utilizing this AI tool to test their cyberattacks (Wed, 18 Nov 2026)
-- TeraWulf Rises 6%, Cipher Digital Gains 5% After NVIDIA’s Record Quarter; IREN Climbs 4% (Wed, 18 Nov 2026)
-- Docusign vs. Fastly: Which Technology Stock Is a Better Buy for 2027? (Wed, 18 Nov 2026)
-- Bad News For Tesla, As Waymo Gets Pulled Off The Road (Wed, 18 Nov 2026)
-- Alteryx Introduces VURA Governance Experience to Help Enterprises Validate AI Outputs and Automate Operations with Greater Trust and Reliability (Wed, 18 Nov 2026)
-
-### AMD — 503.41 (2026-11-17)
-1 week -2.3%, 1 month -6.4%; above its 200-day average; ADX 18.
-Signals for the next open: none.
-Headlines:
-- Josh Brown Says the Nvidia Dip Worth Buying May Not Be in Nvidia at All (Wed, 18 Nov 2026)
-- Supermicro Ships First All-Flash Storage Servers, Delivering PCIe Gen 6 Performance and Broad Software-Defined Storage Support for AI Training and Inference (Wed, 18 Nov 2026)
-- Why Is Advanced Micro Devices Stock Rising Today? (Wed, 18 Nov 2026)
-- AI Chips Update - Unlocking AI Potential Through Supercomputing Partnerships (Wed, 18 Nov 2026)
-- Do You Even Have An AMD Tax Loss? (Wed, 18 Nov 2026)
-
-### AVGO — 341.60 (2026-11-17)
-1 week +2.9%, 1 month +2.1%; below its 200-day average; ADX 21.
-Signals for the next open: none.
-Headlines:
-- Broadcom Has a $27 Billion Advantage Over Taiwan Semiconductor as Your Portfolio’s AI Anchor (Wed, 18 Nov 2026)
-- Is Broadcom Stock Increasing Your Market Risk? (Wed, 18 Nov 2026)
-- Broadcom Stock Has Another Growth Driver. Here’s Where I See It Going in 2027 (Wed, 18 Nov 2026)
-- Why Is Broadcom Stock Rising Today? (Wed, 18 Nov 2026)
-- Broadcom Plummeted 20% Over 6 Months: This Respected Tech and Hardware Research Firm is Confident 110% Returns Materialize (Wed, 18 Nov 2026)
-
-### NFLX — 59.68 (2026-11-17)
-1 week -5.7%, 1 month -14.6%; below its 200-day average; ADX 24.
-Signals for the next open: donchian_trend SELL.
-Headlines:
-- Netflix Just Hit a 52-Week Low. Where’s the Bottom? (Wed, 18 Nov 2026)
-- Disney Weighs a Free Disney+ Tier. Netflix’s $8.99 Ad Plan Has a Big Problem (Wed, 18 Nov 2026)
-- Why Did ASTS, NFLX, RCAT Stocks Plunge To 52-Week Lows Today? (Wed, 18 Nov 2026)
-- Ibotta Appoints Kamelia Aryafar to Board of Directors (Tue, 17 Nov 2026)
-- The internet was built for Netflix streaming down to your couch. AT&T’s COO says AI agents are flipping it the other way (Tue, 17 Nov 2026)
-
-### JPM — 329.96 (2026-11-17)
-1 week -3.5%, 1 month -1.1%; above its 200-day average; ADX 16.
+### XOM — 160.58 (2026-11-18)
+1 week -3.1%, 1 month -9.1%; above its 200-day average; ADX 27.
 Signals for the next open: rsi2_reversion BUY.
 Headlines:
-- Bank Shows Trump’s Tax Details as 15 Million of Its Files Leak (Wed, 18 Nov 2026)
-- JPMorgan Names New CFO: Is Jamie Dimon's Succession Plan Taking Shape? (Wed, 18 Nov 2026)
-- Major US banks hit by disruptions as Chase resolves software bug (Wed, 18 Nov 2026)
-- As tech crashes mount, how can banks respond? (Tue, 17 Nov 2026)
-- JPMorgan’s CFO plans exit, company names internal successor (Tue, 17 Nov 2026)
-
-### XOM — 167.21 (2026-11-17)
-1 week +2.3%, 1 month -5.6%; above its 200-day average; ADX 26.
-Signals for the next open: none.
-Headlines:
+- How XOM's Strong Balance Sheet Helps Manage Oil Market Volatility (Thu, 19 Nov 2026)
+- ETFs Are Buying ExxonMobil (XOM) on Nov. 17 (Thu, 19 Nov 2026)
+- ExxonMobil (XOM) Just Achieved Something 95% of S&P 500 (GSPC) Members Haven't Done (Wed, 18 Nov 2026)
+- Is Exxon Mobil Stock a Good Fit For Your Portfolio Risk? (Wed, 18 Nov 2026)
 - State Street Energy Select SPDR (XLE) Sells $149.9 Million of Exxon on Monday (Wed, 18 Nov 2026)
-- SBM Offshore wins FPSO contracts from ExxonMobil for Longtail project (Wed, 18 Nov 2026)
-- The Bet Behind ExxonMobil's Rally (Tue, 17 Nov 2026)
-- ExxonMobil makes a bold $3 billion move to clean up its balance sheet (Tue, 17 Nov 2026)
-- 4 High-Yield Energy Stocks That Pay Roth IRA Investors Tax-Free Income (Tue, 17 Nov 2026)
 
-### COIN — 115.02 (2026-11-17)
-1 week -12.9%, 1 month -31.7%; below its 200-day average; ADX 36.
+### COIN — 110.51 (2026-11-18)
+1 week -18.9%, 1 month -35.3%; below its 200-day average; ADX 37.
 Signals for the next open: donchian_trend SELL.
 Headlines:
-- Should You Buy Coinbase Stock Now Or Wait? (Wed, 18 Nov 2026)
-- Crypto Stocks Rebound As Nvidia’s Earnings Beat Lifts Risk Appetite — Why COIN, CRCL, NXXT Are Moving Today (Wed, 18 Nov 2026)
-- New Yorkers can now borrow cash without credit checks (Wed, 18 Nov 2026)
-- OKX-ICE Tokenized Stocks Lean on 6 Crypto Firms: Will Wall Street Ever Follow? (Wed, 18 Nov 2026)
-- Coinbase Exec Says AI IPOs Pulling Money From Bitcoin Is ‘A Reasonable Argument’ As Anthropic Debut Nears (Wed, 18 Nov 2026)
+- Why Tristan Thompson backed Anthropic early and is still bullish (Thu, 19 Nov 2026)
+- What is Pearl's FP8 Upgrade? (Wed, 18 Nov 2026)
+- Coinbase AI blocks $4.7 million deepfake Elon Musk crypto scam (Wed, 18 Nov 2026)
+- Elon Musk deepfake nearly costs coinbase users $4.7 million (Wed, 18 Nov 2026)
+- Coinbase expands crypto-backed loans to New York, now reaching all 50 states (Wed, 18 Nov 2026)
 
-### QQQ — 656.95 (2026-11-17)
-1 week -2.6%, 1 month -8.5%; below its 200-day average; ADX 31.
+### QQQ — 659.51 (2026-11-18)
+1 week -4.5%, 1 month -8.1%; below its 200-day average; ADX 31.
 Signals for the next open: none.
 Headlines:
-- Exchange-Traded Funds Higher, Equity Futures Mixed Pre-Bell Wednesday Amid Nvidia Earnings, Upcoming Fed Meeting Minutes (Wed, 18 Nov 2026)
-- Invesco QQQ (QQQ) Buys $23.2 Million More Apple on Nov. 16 (Wed, 18 Nov 2026)
-- The Nasdaq-100 Is Doing Something It Did Only in 2000 and 2018. Here’s What Happened Next Both Times (Wed, 18 Nov 2026)
-- Exchange-Traded Funds Fall as US Equities Drop After Midday (Tue, 17 Nov 2026)
-- Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Tuesday as Investors Await Nvidia Earnings (Tue, 17 Nov 2026)
+- Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday Ahead of Anthropic Stock Market Debut (Thu, 19 Nov 2026)
+- Five Straight Losses, One Divergence: Where the Major Indexes Stand Now (Thu, 19 Nov 2026)
+- Invesco QQQ (QQQ) Sells Apple and Microsoft on Nov. 17 (Thu, 19 Nov 2026)
+- ETFs Are Net Sellers of Applied Materials (AMAT) on Nov. 17 (Thu, 19 Nov 2026)
+- ETF Activity: QQQ Outflows Lead Fund Moves on Nov. 17 (Thu, 19 Nov 2026)
 
-### IWM — 269.05 (2026-11-17)
-1 week -4.1%, 1 month -0.8%; below its 200-day average; ADX 19.
-Signals for the next open: donchian_trend SELL.
+### IWM — 270.12 (2026-11-18)
+1 week -4.6%, 1 month -2.1%; below its 200-day average; ADX 19.
+Signals for the next open: none.
 Headlines:
 - Are These 6 Small-Cap ETFs Worth a Look Right Now? (Tue, 10 Nov 2026)
 - Is Webull the Best Trading App for Dead Customers? After a $4.2M Finra Fine, the Company Can Neither Confirm Nor Deny. (Thu, 05 Nov 2026)
-- What iShares Russell 2000 Index Fund (IWM) Bought: First Advantage Leads on Nov. 16 (Wed, 18 Nov 2026)
-- Stock Market Today: Nasdaq-100 Sinks 1% as Nvidia Faces Its First Earnings Without Jensen Huang (Mon, 16 Nov 2026)
-- iShares Russell 2000 (IWM) Buys $56.7 Million More Teekay Tankers on Thursday (Mon, 16 Nov 2026)
+- Stock Market Today: Anthropic IPO Revives the AI Trade, but Fear Is Growing (Thu, 19 Nov 2026)
+- Five Straight Losses, One Divergence: Where the Major Indexes Stand Now (Thu, 19 Nov 2026)
+- iShares Russell 2000 (IWM) Buys $1.4 Million More Glaukos on Tuesday (Thu, 19 Nov 2026)
 
-### TLT — 79.55 (2026-11-17)
-1 week -1.6%, 1 month +0.5%; below its 200-day average; ADX 18.
+### TLT — 80.22 (2026-11-18)
+1 week -0.9%, 1 month +0.5%; below its 200-day average; ADX 17.
 Signals for the next open: none.
 Headlines:
 - Which Long-Term Bond ETF Is the Better Buy: State Street’s SPLB or iShares’ TLT? (Wed, 11 Nov 2026)
-- Wall Street Is Already Bracing for a 2027 Debt Ceiling Fight (Thu, 05 Nov 2026)
+- AGG Lost Money Over 5 Years. Is 60/40 Broken? (Thu, 19 Nov 2026)
+- Treasuries rally for a third day as stocks slip and oil falls (Wed, 18 Nov 2026)
+- Two More Days Above 5% and Treasury Yields Tie 2007’s Run (Wed, 18 Nov 2026)
 - Traders Now See a 95% Chance the Fed Hikes Rates in December (Wed, 18 Nov 2026)
-- When SPY Falls 10%, Do Treasury Bonds Still Help? (Wed, 18 Nov 2026)
-- How Much Do You Really Need Invested to Replace a $210,000 Salary With Dividends? (Tue, 17 Nov 2026)
 
-### USO — 140.24 (2026-11-17)
-1 week -0.9%, 1 month -12.8%; above its 200-day average; ADX 29.
-Signals for the next open: none.
+### USO — 136.11 (2026-11-18)
+1 week -3.8%, 1 month -15.3%; above its 200-day average; ADX 30.
+Signals for the next open: rsi2_reversion BUY.
 Headlines:
 - Sector Update: Energy Stocks Advance Premarket Tuesday (Tue, 17 Nov 2026)
 - ETFs Poised to Benefit as Oil Prices Retreat in a Month (Mon, 16 Nov 2026)
@@ -243,14 +243,14 @@ Headlines:
 
 ## Paper account
 
-Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-11-18 14:22 UTC.
+Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~20% yearly volatility). Updated 2026-11-19 14:22 UTC.
 
-**Equity $85,985** (-14.02%) · max drawdown -15.2% · 70 closed trades · 2 open
+**Equity $85,905** (-14.09%) · max drawdown -15.2% · 70 closed trades · 1 open
 
 
 ## AI analyst track record
 
-34 scored views: right 35% of the time, average -0.23 ATR in the called direction.
+38 scored views: right 42% of the time, average +0.26 ATR in the called direction.
 
 | Asset | Views | Right | Avg ATR in called direction |
 |---|---:|---:|---:|
@@ -259,12 +259,12 @@ Started 2026-09-30 19:00:00 UTC with $100,000; risk 0.40% per trade (sized for ~
 | BTC | 5 | 20% | -0.53 |
 | COIN | 1 | 0% | -0.92 |
 | ETH | 2 | 50% | -0.24 |
-| GOLD | 1 | 0% | -0.27 |
+| GOLD | 3 | 67% | +3.20 |
 | META | 1 | 0% | -0.74 |
 | MSFT | 3 | 67% | +0.42 |
 | NFLX | 2 | 0% | -1.49 |
 | NVDA | 2 | 50% | -0.31 |
-| SILVER | 3 | 100% | +1.97 |
+| SILVER | 5 | 100% | +2.74 |
 | SOL | 2 | 50% | +0.02 |
 | TLT | 1 | 0% | -3.16 |
 | TSLA | 3 | 0% | -1.87 |
@@ -281,7 +281,7 @@ market picture give an edge over the next 1–20 trading days. Rules:
 - Flag scheduled events that could gap the price (earnings, Fed decision, jobs report).
 - Explain your reasoning in 1–3 sentences a finance student can check later.
 
-Write a JSON list to `paper/ai_views/2026-11-18.json`, one object per asset:
+Write a JSON list to `paper/ai_views/2026-11-19.json`, one object per asset:
 `{"asset": "NVDA", "bias": -2..2, "confidence": 0..1, "horizon_days": 1..20,
   "key_events": ["..."], "reasoning": "..."}`
 Then run `python -m pytest -q tests/test_analyst.py` to check the file parses.
