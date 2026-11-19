@@ -277,6 +277,7 @@ CHRD,Energy,sp400
 CHRW,Industrials,sp500
 CHTR,Communication Services,sp500
 CHWY,Consumer Discretionary,sp400
+CHYM,Financials,sp400
 CI,Health Care,sp500
 CIEN,Information Technology,sp500
 CINF,Financials,sp500
@@ -972,7 +973,6 @@ NVR,Consumer Discretionary,sp500
 NVST,Health Care,sp400
 NVT,Industrials,sp400
 NWBI,Financials,sp600
-NWE,Utilities,sp400
 NWL,Consumer Discretionary,sp600
 NWN,Utilities,sp600
 NWS,Communication Services,sp500

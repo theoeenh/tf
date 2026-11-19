@@ -549,6 +549,7 @@ CHTR,sp500,2016-10-01,,Communication Services
 CHUY,sp600,2018-09-01,2024-11-01,Consumer Discretionary
 CHWY,sp400,2024-12-01,,Consumer Discretionary
 CHX,sp400,2021-01-01,2025-08-01,Energy
+CHYM,sp400,2026-11-19,,Financials
 CI,sp500,2015-12-01,,Health Care
 CIEN,sp400,2015-12-01,2026-03-01,Information Technology
 CIEN,sp500,2026-03-01,,Information Technology
@@ -1981,7 +1982,7 @@ NVRI,sp600,2023-12-01,2026-07-01,Industrials
 NVST,sp400,2021-05-01,,Health Care
 NVT,sp400,2018-06-01,,Industrials
 NWBI,sp600,2018-09-01,,Financials
-NWE,sp400,2017-01-01,,Utilities
+NWE,sp400,2017-01-01,2026-11-19,Utilities
 NWL,sp500,2015-12-01,2023-10-01,Consumer Discretionary
 NWL,sp600,2023-10-01,,Consumer Discretionary
 NWN,sp600,2018-09-01,,Utilities
