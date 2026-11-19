@@ -11,4 +11,4 @@ Early test of the finder's best candidate (13/14 checks, NOT graduated: it fails
 
 ## New signals (bought at the next open)
 
-None.
+- **BA** 31.02 shares around 162.91, stop 150.03

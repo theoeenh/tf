@@ -10,5 +10,18 @@
   "entry": 24.005955,
   "r": -0.38658141057324413,
   "bar": "2026-11-18"
+ },
+ {
+  "asset": "BA",
+  "ticker": "BA",
+  "strategy": "insider_cluster",
+  "qty": 31.01943217024928,
+  "stop": 150.03480410398498,
+  "target": null,
+  "mark": 162.91,
+  "entry": 162.91,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-18"
  }
 ]
