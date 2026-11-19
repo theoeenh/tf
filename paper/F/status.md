@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-11-19 18:23 UTC. **Equity $88,436** (-11.56% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-19 18:53 UTC. **Equity $88,689** (-11.31% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 7 | $-1,900 | $-1,981 | 2 / 7 |
+| long_call | 3 | 7 | $-1,900 | $-1,833 | 2 / 7 |
 | long_put | 0 | 6 | $-1,046 | $+0 | 2 / 6 |
-| bull_put_spread | 3 | 10 | $-6,466 | $-2,488 | 2 / 10 |
+| bull_put_spread | 3 | 10 | $-6,466 | $-2,517 | 2 / 10 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
-| spy_put_spread | 3 | 2 | $-548 | $-1,409 | 0 / 2 |
+| spy_put_spread | 3 | 2 | $-548 | $-1,411 | 0 / 2 |
 
 ## Open positions
 
@@ -26,22 +26,22 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $-2,688; at the quotes' mid they are worth $-1,666 (difference $-1,022).
+Alpaca values the positions at $-2,437; at the quotes' mid they are worth $-1,463 (difference $-974).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $1,910 | $1,980 | ok |
-| BA261211C00170000 | 2 | $378 | $399 | ok |
-| BA261218P00160000 | 3 | $1,620 | $1,676 | ok |
-| BA261218P00170000 | -3 | $-3,480 | $-3,434 | ok |
-| BKR261218C00045000 | 6 | $1,920 | $1,974 | ok |
-| CAT261218P00500000 | 1 | $1,275 | $1,312 | ok |
-| CAT261218P00530000 | -1 | $-2,360 | $-2,300 | ok |
-| SPY261211P00695000 | 1 | $854 | $868 | ok |
-| SPY261211P00725000 | -1 | $-1,791 | $-1,801 | ok |
-| SPY261224P00690000 | 1 | $1,044 | $1,064 | ok |
-| SPY261224P00720000 | -1 | $-1,928 | $-1,910 | ok |
-| SPY261231P00676000 | 1 | $896 | $915 | ok |
-| SPY261231P00707000 | -1 | $-1,596 | $-1,606 | ok |
-| SYY261218P00072500 | 13 | $260 | $722 | Alpaca's price far from the quotes |
-| SYY261218P00075000 | -13 | $-1,690 | $-1,528 | ok |
+| AAPL261218C00335000 | 1 | $1,985 | $2,045 | ok |
+| BA261211C00170000 | 2 | $400 | $426 | ok |
+| BA261218P00160000 | 3 | $1,545 | $1,576 | ok |
+| BA261218P00170000 | -3 | $-3,375 | $-3,279 | ok |
+| BKR261218C00045000 | 6 | $1,920 | $2,022 | ok |
+| CAT261218P00500000 | 1 | $1,265 | $1,265 | ok |
+| CAT261218P00530000 | -1 | $-2,310 | $-2,324 | ok |
+| SPY261211P00695000 | 1 | $841 | $850 | ok |
+| SPY261211P00725000 | -1 | $-1,770 | $-1,765 | ok |
+| SPY261224P00690000 | 1 | $1,030 | $1,024 | ok |
+| SPY261224P00720000 | -1 | $-1,908 | $-1,875 | ok |
+| SPY261231P00676000 | 1 | $884 | $888 | ok |
+| SPY261231P00707000 | -1 | $-1,579 | $-1,570 | ok |
+| SYY261218P00072500 | 13 | $260 | $748 | Alpaca's price far from the quotes |
+| SYY261218P00075000 | -13 | $-1,625 | $-1,495 | ok |
