@@ -1,12 +1,12 @@
 # F – Options
 
-Updated 2026-11-19 12:22 UTC. **Equity $90,075** (-9.92% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-19 12:53 UTC. **Equity $90,000** (-10.00% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 7 | $-1,900 | $-1,588 | 2 / 7 |
+| long_call | 3 | 7 | $-1,900 | $-1,669 | 2 / 7 |
 | long_put | 0 | 6 | $-1,046 | $+0 | 2 / 6 |
 | bull_put_spread | 3 | 10 | $-6,466 | $-1,981 | 2 / 10 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
@@ -26,11 +26,11 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $-1,049; at the quotes' mid they are worth $24 (difference $-1,072).
+Alpaca values the positions at $-1,124; at the quotes' mid they are worth $83 (difference $-1,207).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $2,230 | $2,264 | ok |
+| AAPL261218C00335000 | 1 | $2,155 | $2,324 | ok |
 | BA261211C00170000 | 2 | $504 | $552 | ok |
 | BA261218P00160000 | 3 | $1,335 | $1,379 | ok |
 | BA261218P00170000 | -3 | $-3,045 | $-2,938 | ok |
