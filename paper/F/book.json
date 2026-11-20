@@ -18,32 +18,6 @@
    "id": "long_call-AAPL-2026-10-20"
   },
   {
-   "playbook": "spy_put_spread",
-   "underlying": "SPY",
-   "legs": [
-    {
-     "symbol": "SPY261211P00695000",
-     "qty": 1,
-     "price": 4.15
-    },
-    {
-     "symbol": "SPY261211P00725000",
-     "qty": -1,
-     "price": 7.71
-    }
-   ],
-   "expiry": "2026-12-11",
-   "cost": -355.99999999999994,
-   "max_loss": 2653.0,
-   "desc": "sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30",
-   "opened": "2026-11-03 15:05",
-   "id": "spy_put_spread-SPY-2026-11-03",
-   "done_legs": [
-    "SPY261211P00725000"
-   ],
-   "partial": -2101.0
-  },
-  {
    "playbook": "bull_put_spread",
    "underlying": "CAT",
    "source": "D",
@@ -974,6 +948,36 @@
    "closed": "2026-11-20 15:24",
    "why_closed": "account D closed the stock",
    "pnl": -1187.9999999999993
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261211P00695000",
+     "qty": 1,
+     "price": 4.15
+    },
+    {
+     "symbol": "SPY261211P00725000",
+     "qty": -1,
+     "price": 7.71
+    }
+   ],
+   "expiry": "2026-12-11",
+   "cost": -355.99999999999994,
+   "max_loss": 2653.0,
+   "desc": "sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30",
+   "opened": "2026-11-03 15:05",
+   "id": "spy_put_spread-SPY-2026-11-03",
+   "done_legs": [
+    "SPY261211P00725000",
+    "SPY261211P00695000"
+   ],
+   "partial": -2101.0,
+   "closed": "2026-11-20 15:57",
+   "why_closed": "21 days to expiry",
+   "pnl": -483.00000000000006
   }
  ]
 }
