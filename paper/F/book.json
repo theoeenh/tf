@@ -41,25 +41,6 @@
    "id": "bull_put_spread-CAT-2026-11-05"
   },
   {
-   "playbook": "long_call",
-   "underlying": "BA",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "BA261211C00170000",
-     "qty": 2,
-     "price": 9.45
-    }
-   ],
-   "expiry": "2026-12-11",
-   "cost": 1889.9999999999998,
-   "max_loss": 1896.0,
-   "desc": "BA Dec 11 2026 170 Call, delta +0.60",
-   "opened": "2026-11-06 16:58",
-   "id": "long_call-BA-2026-11-06",
-   "partial": 0.0
-  },
-  {
    "playbook": "bull_put_spread",
    "underlying": "SYY",
    "source": "D",
@@ -143,6 +124,47 @@
    "desc": "sell 707 / buy 676 puts, 2026-12-31, credit 3.91 on width 31",
    "opened": "2026-11-17 14:54",
    "id": "spy_put_spread-SPY-2026-11-17"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "IBKR",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "IBKR270115C00070000",
+     "qty": 3,
+     "price": 7.7
+    }
+   ],
+   "expiry": "2027-01-15",
+   "cost": 2310.0,
+   "max_loss": 2352.0,
+   "desc": "IBKR Jan 15 2027 70 Call, delta +0.63",
+   "opened": "2026-11-20 16:24",
+   "id": "long_call-IBKR-2026-11-20"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "ETN",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "ETN270115P00260000",
+     "qty": 1,
+     "price": 6.6
+    },
+    {
+     "symbol": "ETN270115P00290000",
+     "qty": -1,
+     "price": 12.7
+    }
+   ],
+   "expiry": "2027-01-15",
+   "cost": -610.0,
+   "max_loss": 2408.0,
+   "desc": "sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30",
+   "opened": "2026-11-20 16:24",
+   "id": "bull_put_spread-ETN-2026-11-20"
   }
  ],
  "closed": [
@@ -978,6 +1000,31 @@
    "closed": "2026-11-20 15:57",
    "why_closed": "21 days to expiry",
    "pnl": -483.00000000000006
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "BA",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "BA261211C00170000",
+     "qty": 2,
+     "price": 9.45
+    }
+   ],
+   "expiry": "2026-12-11",
+   "cost": 1889.9999999999998,
+   "max_loss": 1896.0,
+   "desc": "BA Dec 11 2026 170 Call, delta +0.60",
+   "opened": "2026-11-06 16:58",
+   "id": "long_call-BA-2026-11-06",
+   "partial": 0.0,
+   "done_legs": [
+    "BA261211C00170000"
+   ],
+   "closed": "2026-11-20 16:23",
+   "why_closed": "account D closed the stock",
+   "pnl": -1507.9999999999998
   }
  ]
 }

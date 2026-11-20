@@ -282,3 +282,7 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-20 15:57:31,spy_put_spread,SPY,SPY261211P00695000,sell,1,1,12.62,filled,"close: 21 days to expiry"
 2026-11-20 15:57:56,long_call,BA,BA261211C00170000,sell,2,0,,canceled,"close: account D closed the stock"
 2026-11-20 15:58:24,bull_put_spread,ETN,ETN270115P00270000,buy,1,0,,canceled,"open: sell 290 / buy 270 puts, 2027-01-15, credit 4.12 on width 20"
+2026-11-20 16:23:58,long_call,BA,BA261211C00170000,sell,2,2,1.91,filled,"close: account D closed the stock"
+2026-11-20 16:24:03,long_call,IBKR,IBKR270115C00070000,buy,3,3,7.7,filled,"open: IBKR Jan 15 2027 70 Call, delta +0.63"
+2026-11-20 16:24:06,bull_put_spread,ETN,ETN270115P00260000,buy,1,1,6.6,filled,"open: sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30"
+2026-11-20 16:24:08,bull_put_spread,ETN,ETN270115P00290000,sell,1,1,12.7,filled,"open: sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30"
