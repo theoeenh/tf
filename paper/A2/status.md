@@ -35,11 +35,11 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **SYY** 55.95 shares, entry 75.11, stop 72.80, now 77.15 (+0.30R)
 - **WCC** 6.51 shares, entry 319.31, stop 276.19, now 307.17 (-0.21R)
 - **WY** 209.95 shares, entry 21.03, stop 19.26, now 19.54 (-0.83R)
-- **SPY** (idle cash) 18.94 shares, now 715.87
+- **SPY** (idle cash) 10.52 shares, now 715.87
 
 ## New signals (bought at the next open)
 
-None.
+- **PLD** 48.89 shares around 123.36, stop 116.07
 
 ## Closed trades
 

@@ -336,10 +336,23 @@
   "bar": "2026-11-19"
  },
  {
+  "asset": "PLD",
+  "ticker": "PLD",
+  "strategy": "insider_low_short",
+  "qty": 48.88804281944528,
+  "stop": 116.06532014655522,
+  "target": null,
+  "mark": 123.36,
+  "entry": 123.36,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-19"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 18.941219154425553,
+  "qty": 10.51674409302227,
   "stop": null,
   "target": null,
   "mark": 715.87,
