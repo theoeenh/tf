@@ -45,33 +45,6 @@
   },
   {
    "playbook": "bull_put_spread",
-   "underlying": "BA",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "BA261218P00160000",
-     "qty": 3,
-     "price": 1.96
-    },
-    {
-     "symbol": "BA261218P00170000",
-     "qty": -3,
-     "price": 3.9
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": -582.0,
-   "max_loss": 2427.0,
-   "desc": "sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10",
-   "opened": "2026-11-04 14:59",
-   "id": "bull_put_spread-BA-2026-11-04",
-   "done_legs": [
-    "BA261218P00170000"
-   ],
-   "partial": -3029.9999999999995
-  },
-  {
-   "playbook": "bull_put_spread",
    "underlying": "CAT",
    "source": "D",
    "legs": [
@@ -970,6 +943,37 @@
    "closed": "2026-11-13 14:54",
    "why_closed": "21 days to expiry",
    "pnl": -57.0
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "BA",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "BA261218P00160000",
+     "qty": 3,
+     "price": 1.96
+    },
+    {
+     "symbol": "BA261218P00170000",
+     "qty": -3,
+     "price": 3.9
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -582.0,
+   "max_loss": 2427.0,
+   "desc": "sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10",
+   "opened": "2026-11-04 14:59",
+   "id": "bull_put_spread-BA-2026-11-04",
+   "done_legs": [
+    "BA261218P00170000",
+    "BA261218P00160000"
+   ],
+   "partial": -3029.9999999999995,
+   "closed": "2026-11-20 15:24",
+   "why_closed": "account D closed the stock",
+   "pnl": -1187.9999999999993
   }
  ]
 }
