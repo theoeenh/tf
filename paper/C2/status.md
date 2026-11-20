@@ -11,5 +11,5 @@ From 9 Nov 2026 (user's go 2026-11-09; until then C traded the hourly ML system,
 
 ## New signals (bought at the next open)
 
-- **ENPH** 57.98 shares around 19.62, stop 13.53
+- **ENPH** 57.98 shares around 19.63, stop 13.54
 - **FMC** 220.88 shares around 3.89, stop 2.29

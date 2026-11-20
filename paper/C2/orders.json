@@ -16,10 +16,10 @@
   "ticker": "ENPH",
   "strategy": "insider_underwater",
   "qty": 57.984005302610754,
-  "stop": 13.532817615533437,
+  "stop": 13.542817615533435,
   "target": null,
-  "mark": 19.62,
-  "entry": 19.62,
+  "mark": 19.63,
+  "entry": 19.63,
   "r": 0.0,
   "pending": true,
   "bar": "2026-11-20"
