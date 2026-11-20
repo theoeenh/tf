@@ -37,7 +37,11 @@
    "max_loss": 2653.0,
    "desc": "sell 725 / buy 695 puts, 2026-12-11, credit 3.47 on width 30",
    "opened": "2026-11-03 15:05",
-   "id": "spy_put_spread-SPY-2026-11-03"
+   "id": "spy_put_spread-SPY-2026-11-03",
+   "done_legs": [
+    "SPY261211P00725000"
+   ],
+   "partial": -2101.0
   },
   {
    "playbook": "bull_put_spread",
@@ -60,7 +64,11 @@
    "max_loss": 2427.0,
    "desc": "sell 170 / buy 160 puts, 2026-12-18, credit 1.91 on width 10",
    "opened": "2026-11-04 14:59",
-   "id": "bull_put_spread-BA-2026-11-04"
+   "id": "bull_put_spread-BA-2026-11-04",
+   "done_legs": [
+    "BA261218P00170000"
+   ],
+   "partial": -3029.9999999999995
   },
   {
    "playbook": "bull_put_spread",
@@ -101,7 +109,8 @@
    "max_loss": 1896.0,
    "desc": "BA Dec 11 2026 170 Call, delta +0.60",
    "opened": "2026-11-06 16:58",
-   "id": "long_call-BA-2026-11-06"
+   "id": "long_call-BA-2026-11-06",
+   "partial": 0.0
   },
   {
    "playbook": "bull_put_spread",

@@ -271,3 +271,8 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-17 14:39:38,spy_put_spread,SPY,SPY261231P00674000,sell,1,1,4.76,filled,"unwind"
 2026-11-17 14:53:56,spy_put_spread,SPY,SPY261231P00676000,buy,1,1,4.79,filled,"open: sell 707 / buy 676 puts, 2026-12-31, credit 3.91 on width 31"
 2026-11-17 14:54:10,spy_put_spread,SPY,SPY261231P00707000,sell,1,1,8.7,filled,"open: sell 707 / buy 676 puts, 2026-12-31, credit 3.91 on width 31"
+2026-11-20 14:53:36,spy_put_spread,SPY,SPY261211P00725000,buy,1,1,21.01,filled,"close: 21 days to expiry"
+2026-11-20 14:53:59,spy_put_spread,SPY,SPY261211P00695000,sell,1,0,,canceled,"close: 21 days to expiry"
+2026-11-20 14:54:02,bull_put_spread,BA,BA261218P00170000,buy,3,3,10.1,filled,"close: account D closed the stock"
+2026-11-20 14:54:24,bull_put_spread,BA,BA261218P00160000,sell,3,0,,canceled,"close: account D closed the stock"
+2026-11-20 14:54:47,long_call,BA,BA261211C00170000,sell,2,0,,canceled,"close: account D closed the stock"
