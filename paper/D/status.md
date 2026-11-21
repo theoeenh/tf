@@ -33,7 +33,9 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **ELV** 8.00 shares around 394.48, stop 349.10
+- **TJX** 28.63 shares around 139.62, stop 126.94
+- **WMB** 52.86 shares around 64.31, stop 57.44
 
 ## Closed trades
 

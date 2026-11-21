@@ -274,5 +274,44 @@
   "entry": 21.03051,
   "r": -0.8023014118279466,
   "bar": "2026-11-20"
+ },
+ {
+  "asset": "ELV",
+  "ticker": "ELV",
+  "strategy": "insider_low_short",
+  "qty": 7.99825148105507,
+  "stop": 349.0989541928724,
+  "target": null,
+  "mark": 394.48,
+  "entry": 394.48,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-20"
+ },
+ {
+  "asset": "TJX",
+  "ticker": "TJX",
+  "strategy": "insider_low_short",
+  "qty": 28.63047384340337,
+  "stop": 126.94228398230591,
+  "target": null,
+  "mark": 139.62,
+  "entry": 139.62,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-20"
+ },
+ {
+  "asset": "WMB",
+  "ticker": "WMB",
+  "strategy": "insider_low_short",
+  "qty": 52.85784746054497,
+  "stop": 57.44311013828893,
+  "target": null,
+  "mark": 64.31,
+  "entry": 64.31,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-20"
  }
 ]
