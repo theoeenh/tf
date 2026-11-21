@@ -1,117 +1,117 @@
 {
- "date": "2026-11-19",
+ "date": "2026-11-20",
  "trained_on": 20000,
- "auc_recent": 0.5780589433121263,
+ "auc_recent": 0.5786629603071416,
  "r_by_quintile": [
-  -0.09,
-  -0.228,
-  -0.148,
-  -0.146,
-  -0.049
+  -0.13,
+  -0.198,
+  -0.157,
+  -0.105,
+  -0.078
  ],
  "importance": [
   [
    "is_opening_range",
-   0.0538
+   0.0553
   ],
   [
    "sleeve_trades",
-   0.0028
+   0.0034
   ],
   [
-   "adx",
-   0.002
-  ],
-  [
-   "is_donchian_trend",
-   0.0012
-  ],
-  [
-   "is_vwap_reversion",
-   0.0011
+   "strategy_recent_r",
+   0.0018
   ],
   [
    "ret5",
-   0.0011
+   0.0015
   ],
   [
-   "vol_rank",
-   0.0011
+   "adx",
+   0.0014
   ],
   [
    "is_crypto",
-   0.0008
+   0.0013
+  ],
+  [
+   "is_vwap_reversion",
+   0.0013
   ],
   [
    "ret20",
-   0.0007
+   0.0011
   ],
   [
-   "rsi14",
+   "is_donchian_trend",
+   0.0008
+  ],
+  [
+   "vol_rank",
    0.0007
   ]
  ],
  "view": {
   "strategy": {
-   "donchian_trend": 0.288,
-   "opening_range": 0.441,
+   "donchian_trend": 0.291,
+   "opening_range": 0.442,
    "rsi2_reversion": 0.283,
-   "squeeze_breakout": 0.299,
-   "vwap_reversion": 0.326
+   "squeeze_breakout": 0.3,
+   "vwap_reversion": 0.322
   },
   "asset_class": {
-   "crypto": 0.283,
-   "etf": 0.389,
-   "metal": 0.371,
-   "stock": 0.381
+   "crypto": 0.284,
+   "etf": 0.386,
+   "metal": 0.374,
+   "stock": 0.383
   },
   "hour": {
-   "0": 0.312,
-   "1": 0.323,
-   "2": 0.253,
-   "3": 0.267,
-   "4": 0.285,
-   "5": 0.325,
-   "6": 0.279,
-   "7": 0.321,
-   "9": 0.273,
-   "10": 0.27,
-   "11": 0.295,
-   "12": 0.299,
-   "13": 0.336,
-   "14": 0.34,
+   "0": 0.304,
+   "1": 0.317,
+   "2": 0.256,
+   "3": 0.261,
+   "4": 0.282,
+   "5": 0.318,
+   "6": 0.271,
+   "7": 0.31,
+   "9": 0.276,
+   "10": 0.271,
+   "11": 0.292,
+   "12": 0.294,
+   "13": 0.337,
+   "14": 0.345,
    "15": 0.286,
    "16": 0.387,
-   "17": 0.425,
+   "17": 0.426,
    "18": 0.421,
-   "19": 0.402,
-   "20": 0.374,
-   "21": 0.328,
-   "22": 0.273,
-   "23": 0.297
+   "19": 0.406,
+   "20": 0.377,
+   "21": 0.326,
+   "22": 0.292,
+   "23": 0.304
   }
  },
- "new_trades": 9,
+ "new_trades": 16,
  "new_trades_by_strategy": [
   {
    "strategy": "donchian_trend",
-   "size": 1,
-   "mean": 1.977
+   "size": 2,
+   "mean": 1.981
   },
   {
    "strategy": "opening_range",
-   "size": 3,
-   "mean": 1.152
+   "size": 8,
+   "mean": 0.762
+  },
+  {
+   "strategy": "rsi2_reversion",
+   "size": 4,
+   "mean": 0.42
   },
   {
    "strategy": "squeeze_breakout",
-   "size": 4,
-   "mean": -0.654
-  },
-  {
-   "strategy": "vwap_reversion",
-   "size": 1,
-   "mean": -0.152
+   "size": 2,
+   "mean": -1.006
   }
  ]
 }
