@@ -1,8 +1,8 @@
 {
- "tries": 8397,
- "could_pass": 6223,
- "bar_t": 3.332534592628479,
- "independent_tries": 1316.581552755521,
+ "tries": 8577,
+ "could_pass": 6375,
+ "bar_t": 3.337973080635071,
+ "independent_tries": 1342.553000346276,
  "without_returns": 0,
  "cleared": 0
 }
