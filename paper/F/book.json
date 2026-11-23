@@ -19,29 +19,6 @@
   },
   {
    "playbook": "bull_put_spread",
-   "underlying": "CAT",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "CAT261218P00500000",
-     "qty": 1,
-     "price": 10.5
-    },
-    {
-     "symbol": "CAT261218P00530000",
-     "qty": -1,
-     "price": 16.55
-    }
-   ],
-   "expiry": "2026-12-18",
-   "cost": -605.0,
-   "max_loss": 2423.0,
-   "desc": "sell 530 / buy 500 puts, 2026-12-18, credit 5.77 on width 30",
-   "opened": "2026-11-05 16:58",
-   "id": "bull_put_spread-CAT-2026-11-05"
-  },
-  {
-   "playbook": "bull_put_spread",
    "underlying": "SYY",
    "source": "D",
    "legs": [
@@ -141,7 +118,8 @@
    "max_loss": 2352.0,
    "desc": "IBKR Jan 15 2027 70 Call, delta +0.63",
    "opened": "2026-11-20 16:24",
-   "id": "long_call-IBKR-2026-11-20"
+   "id": "long_call-IBKR-2026-11-20",
+   "partial": 0.0
   },
   {
    "playbook": "bull_put_spread",
@@ -1025,6 +1003,36 @@
    "closed": "2026-11-20 16:23",
    "why_closed": "account D closed the stock",
    "pnl": -1507.9999999999998
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "CAT",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "CAT261218P00500000",
+     "qty": 1,
+     "price": 10.5
+    },
+    {
+     "symbol": "CAT261218P00530000",
+     "qty": -1,
+     "price": 16.55
+    }
+   ],
+   "expiry": "2026-12-18",
+   "cost": -605.0,
+   "max_loss": 2423.0,
+   "desc": "sell 530 / buy 500 puts, 2026-12-18, credit 5.77 on width 30",
+   "opened": "2026-11-05 16:58",
+   "id": "bull_put_spread-CAT-2026-11-05",
+   "done_legs": [
+    "CAT261218P00530000",
+    "CAT261218P00500000"
+   ],
+   "closed": "2026-11-23 14:53",
+   "why_closed": "account D closed the stock",
+   "pnl": -435.0
   }
  ]
 }

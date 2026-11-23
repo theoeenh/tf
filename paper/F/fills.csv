@@ -286,3 +286,6 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-20 16:24:03,long_call,IBKR,IBKR270115C00070000,buy,3,3,7.7,filled,"open: IBKR Jan 15 2027 70 Call, delta +0.63"
 2026-11-20 16:24:06,bull_put_spread,ETN,ETN270115P00260000,buy,1,1,6.6,filled,"open: sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30"
 2026-11-20 16:24:08,bull_put_spread,ETN,ETN270115P00290000,sell,1,1,12.7,filled,"open: sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30"
+2026-11-23 14:53:32,bull_put_spread,CAT,CAT261218P00530000,buy,1,1,21.25,filled,"close: account D closed the stock"
+2026-11-23 14:53:34,bull_put_spread,CAT,CAT261218P00500000,sell,1,1,10.85,filled,"close: account D closed the stock"
+2026-11-23 14:53:58,long_call,IBKR,IBKR270115C00070000,sell,3,0,,canceled,"close: account D closed the stock"
