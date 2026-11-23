@@ -290,3 +290,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-23 14:53:34,bull_put_spread,CAT,CAT261218P00500000,sell,1,1,10.85,filled,"close: account D closed the stock"
 2026-11-23 14:53:58,long_call,IBKR,IBKR270115C00070000,sell,3,0,,canceled,"close: account D closed the stock"
 2026-11-23 15:24:32,long_call,IBKR,IBKR270115C00070000,sell,3,0,,canceled,"close: account D closed the stock"
+2026-11-23 15:53:41,long_call,IBKR,IBKR270115C00070000,sell,3,3,8.9,filled,"close: account D closed the stock"
+2026-11-23 15:54:06,long_call,ELV,ELV270115C00380000,buy,1,0,,canceled,"open: ELV Jan 15 2027 380 Call, delta +0.61"

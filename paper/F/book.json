@@ -103,25 +103,6 @@
    "id": "spy_put_spread-SPY-2026-11-17"
   },
   {
-   "playbook": "long_call",
-   "underlying": "IBKR",
-   "source": "D",
-   "legs": [
-    {
-     "symbol": "IBKR270115C00070000",
-     "qty": 3,
-     "price": 7.7
-    }
-   ],
-   "expiry": "2027-01-15",
-   "cost": 2310.0,
-   "max_loss": 2352.0,
-   "desc": "IBKR Jan 15 2027 70 Call, delta +0.63",
-   "opened": "2026-11-20 16:24",
-   "id": "long_call-IBKR-2026-11-20",
-   "partial": 0.0
-  },
-  {
    "playbook": "bull_put_spread",
    "underlying": "ETN",
    "source": "D",
@@ -1033,6 +1014,31 @@
    "closed": "2026-11-23 14:53",
    "why_closed": "account D closed the stock",
    "pnl": -435.0
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "IBKR",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "IBKR270115C00070000",
+     "qty": 3,
+     "price": 7.7
+    }
+   ],
+   "expiry": "2027-01-15",
+   "cost": 2310.0,
+   "max_loss": 2352.0,
+   "desc": "IBKR Jan 15 2027 70 Call, delta +0.63",
+   "opened": "2026-11-20 16:24",
+   "id": "long_call-IBKR-2026-11-20",
+   "partial": 0.0,
+   "done_legs": [
+    "IBKR270115C00070000"
+   ],
+   "closed": "2026-11-23 15:53",
+   "why_closed": "account D closed the stock",
+   "pnl": 360.00000000000045
   }
  ]
 }
