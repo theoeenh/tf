@@ -178,19 +178,37 @@ def position_orders(live: list[dict], prices: dict[str, pd.DataFrame]) -> list[d
              "r": p.get("unrealised_r", 0.0), "bar": f"{prices[p['asset']].index[-1]:%Y-%m-%d}"} for p in live]
 
 
-def with_idle_spy(book_eq: pd.Series, gross: pd.Series, spy: pd.Series, capital: float) -> pd.Series:
+def with_idle_spy(book_eq: pd.Series, gross: pd.Series, spy: pd.Series, capital: float,
+                  bought: pd.Series | None = None) -> pd.Series:
     """Equity of the book with the money its trades leave idle held in SPY (reports/2026-10-20-insider-spy):
-    each day SPY's weight is 1 minus the book's gross exposure at the previous close (never below 0),
-    1 bp per unit of SPY traded. Daily, from the book's first day."""
+    each day SPY's weight is 1 minus the book's gross exposure at the previous close, minus what the book
+    bought at that day's open (`bought`, see bought_at_open: the plan keeps that cash out of SPY overnight, and
+    from the open it is in the stocks), never below 0; 1 bp per unit of SPY traded. Daily, from the book's
+    first day. (Until 2026-11-23 the open's buys were left in SPY too: their cash counted twice that day.)"""
     if not len(book_eq):
         return pd.Series(dtype=float)
     eq = book_eq.groupby(book_eq.index.normalize()).last()
     g = gross.groupby(gross.index.normalize()).last().reindex(eq.index).ffill().fillna(0)
+    b = (bought.groupby(bought.index.normalize()).sum().reindex(eq.index).fillna(0) if bought is not None
+         else pd.Series(0.0, eq.index))
     r_book = eq.pct_change().fillna(0)
     r_spy = spy.reindex(eq.index).ffill().pct_change().fillna(0)
-    w = (1 - g.shift(1)).clip(lower=0).fillna(1.0)
+    w = (1 - g.shift(1).fillna(0) - b).clip(lower=0)
     cost = (w.diff().abs() * 1e-4).fillna(0)
     return capital * (1 + r_book + w * r_spy - cost).cumprod()
+
+
+def bought_at_open(book_eq: pd.Series, trades: pd.DataFrame, still_open: list[dict]) -> pd.Series:
+    """Per day: what the book bought at that day's open (closed trades and positions still open, not the
+    shadow ones), as a share of its equity at the previous close."""
+    eq = book_eq.groupby(book_eq.index.normalize()).last()
+    rows = [(pd.Timestamp(t.entry_date).normalize(), abs(t.qty) * t.entry) for t in trades.itertuples()] if len(
+        trades) else []
+    rows += [(pd.Timestamp(p["entry_time"]).normalize(), abs(p["qty"]) * p["entry"]) for p in still_open
+             if not p.get("shadow")]
+    spent = (pd.DataFrame(rows, columns=["day", "usd"]).groupby("day")["usd"].sum() if rows
+             else pd.Series(dtype=float)).reindex(eq.index).fillna(0.0)
+    return spent / eq.shift(1).fillna(eq.iloc[0])
 
 
 def update(fetch_insider: bool = True) -> dict:
@@ -253,8 +271,9 @@ def update(fetch_insider: bool = True) -> dict:
     spy = []
     if cfg.get("idle_spy"):  # account A from 26 Oct 2026: the money the trades leave idle is held in SPY
         spy_df = load_bars(["SPY"], now_ny, since)["SPY"]
-        comb = (with_idle_spy(res.equity, res.gross, spy_df["Close"], float(cfg["capital"])) if res is not None
-                else pd.Series(dtype=float))
+        comb = (with_idle_spy(res.equity, res.gross, spy_df["Close"], float(cfg["capital"]),
+                              bought=bought_at_open(res.equity, res.trades_df, res.open_positions))
+                if res is not None else pd.Series(dtype=float))
         if len(comb):
             comb.rename("equity").rename_axis("Date").to_csv(PAPER_DIR / "equity.csv", date_format="%Y-%m-%d")
         equity = float(comb.iloc[-1]) if len(comb) else float(cfg["capital"])

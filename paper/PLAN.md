@@ -106,6 +106,17 @@ account meets the criteria above. Then small, with the repository made private f
   accounts, their rules and their records do not. The fill-vs-paper gap in the reports keeps measuring
   against the opening price, so the effect shows there. A buy whose stop the price reaches before 9:45
   is not bought (the existing rule for trades already over).
+- **2026-11-23, bug fix in account A's record (idle cash in SPY):** on a day A buys stocks at the open, its
+  equity line kept the cash for those buys in SPY for the whole day (SPY's weight came from the previous
+  close's exposure only), while the plan and Alpaca keep that cash out of SPY and in the new stocks: the
+  cash counted twice. Found on 23 Nov (SPY +4.7%): A's paper equity was $803 above Alpaca's, about $460 of it
+  from this. Now the day's SPY weight also leaves out what was bought at that day's open
+  (`runner.bought_at_open`, tests in tests/test_runner.py). **Effect:** A's recorded equity since 23 Oct is
+  recomputed, $326 lower on 23 Nov ($88,581 instead of $88,907); the stock orders are unchanged (checked
+  by re-running A both ways); the SPY holding is sized from the corrected equity (26.72 shares instead of
+  27.17). The rest of the gap to Alpaca is real: cash freed by stops reaches SPY the next morning at 9:50,
+  and fills differ from the paper's prices (about -2R so far). The research behind A
+  (reports/2026-10-20-insider-spy) used the same formula: re-checked in paper/research/2026-11-23-idle-spy.md.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.

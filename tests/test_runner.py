@@ -104,6 +104,33 @@ def test_idle_cash_follows_spy_by_the_book_s_unused_share():
     assert abs(eq.iloc[3] / eq.iloc[2] - (1 + 0.5 * (515.15 / 510.05 - 1))) < 1e-9  # weight from the day before
 
 
+def test_cash_set_aside_for_the_open_s_buys_is_not_also_in_spy():
+    """2026-11-23: the plan keeps the cash for the next open's buys out of SPY (orders.json), but the equity line
+    gave SPY that cash's weight for the whole day, on top of the stocks bought with it: on a +4.7% day A's paper
+    equity was ~$460 above Alpaca's for this alone. The SPY weight on a day leaves out what was bought at its open."""
+    days = pd.bdate_range("2026-11-19", periods=3)
+    book = pd.Series([100_000.0, 100_000.0, 102_000.0], days)  # the new stocks earn the book +2% on day 3
+    gross = pd.Series([0.8, 0.8, 1.0], days)                   # 20% of the book bought at day 3's open
+    spy = pd.Series([700.0, 690.0, 722.0], days)
+    bought = pd.Series([0.0, 0.0, 0.2], days)
+    eq = RN.with_idle_spy(book, gross, spy, 100_000.0, bought=bought)
+    assert abs(eq.iloc[2] / eq.iloc[1] - (1 + 0.02 + 0.0 * (722 / 690 - 1) - 0.2 * 1e-4)) < 1e-9
+    old = RN.with_idle_spy(book, gross, spy, 100_000.0)          # without it: 20% in SPY and in the stocks
+    assert old.iloc[2] - eq.iloc[2] > 900
+
+
+def test_the_open_s_buys_are_read_from_the_book_s_trades():
+    days = pd.bdate_range("2026-11-19", periods=3)
+    book = pd.Series([100_000.0, 95_000.0, 96_000.0], days)
+    trades = pd.DataFrame({"entry_date": [days[1], days[2]], "qty": [10.0, 5.0], "entry": [500.0, 380.0]})
+    still_open = [{"entry_time": days[2], "qty": 2.0, "entry": 1_000.0, "shadow": False},
+                  {"entry_time": days[2], "qty": 99.0, "entry": 1_000.0, "shadow": True}]  # not the account's
+    b = RN.bought_at_open(book, trades, still_open)
+    assert b.iloc[0] == 0.0
+    assert abs(b.iloc[1] - 5_000 / 100_000) < 1e-12                 # as a share of the previous close's equity
+    assert abs(b.iloc[2] - (5 * 380 + 2 * 1_000) / 95_000) < 1e-12
+
+
 # ------------------------------------------------------------------ the members of each day (2026-11-14)
 
 import pytest
