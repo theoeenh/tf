@@ -292,3 +292,7 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-23 15:24:32,long_call,IBKR,IBKR270115C00070000,sell,3,0,,canceled,"close: account D closed the stock"
 2026-11-23 15:53:41,long_call,IBKR,IBKR270115C00070000,sell,3,3,8.9,filled,"close: account D closed the stock"
 2026-11-23 15:54:06,long_call,ELV,ELV270115C00380000,buy,1,0,,canceled,"open: ELV Jan 15 2027 380 Call, delta +0.61"
+2026-11-23 16:23:52,long_call,FUN,FUN270115C00010000,buy,14,0,,canceled,"open: FUN Jan 15 2027 10 Call, delta +0.72"
+2026-11-23 16:23:55,bull_put_spread,TJX,TJX270115P00130000,buy,6,6,1.8,filled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.11 on width 5"
+2026-11-23 16:24:18,bull_put_spread,TJX,TJX270115P00135000,sell,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.11 on width 5"
+2026-11-23 16:24:40,bull_put_spread,TJX,TJX270115P00130000,sell,6,6,1.65,filled,"unwind"
