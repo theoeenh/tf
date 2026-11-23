@@ -291,7 +291,7 @@
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 27.166700254642315,
+  "qty": 26.71547151187533,
   "stop": null,
   "target": null,
   "mark": 722.29,
