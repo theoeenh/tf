@@ -124,6 +124,24 @@
    "desc": "sell 290 / buy 260 puts, 2027-01-15, credit 5.92 on width 30",
    "opened": "2026-11-20 16:24",
    "id": "bull_put_spread-ETN-2026-11-20"
+  },
+  {
+   "playbook": "long_call",
+   "underlying": "FUN",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "FUN270115C00010000",
+     "qty": 14,
+     "price": 1.85
+    }
+   ],
+   "expiry": "2027-01-15",
+   "cost": 2590.0,
+   "max_loss": 2618.0,
+   "desc": "FUN Jan 15 2027 10 Call, delta +0.69",
+   "opened": "2026-11-23 16:53",
+   "id": "long_call-FUN-2026-11-23"
   }
  ],
  "closed": [
