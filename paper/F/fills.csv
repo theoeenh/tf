@@ -302,3 +302,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-23 17:53:59,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.14 on width 5"
 2026-11-23 18:24:05,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.01 on width 5"
 2026-11-23 18:53:47,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.11 on width 5"
+2026-11-23 19:57:24,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.18 on width 5"
