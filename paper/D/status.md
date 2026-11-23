@@ -1,7 +1,7 @@
 # D – Insider + low short (early test)
 
 Strategy: `1591c2bcb6` insider_low_short(buyers=1, max_rank=0.3) | stop_atr=3.0, rr=None, trail_atr=3.0, max_bars=60 | no trend filter | S&P 1500, daily
-Started 2026-10-12 with $100,000. Data through 2026-11-20. **Equity $90,742** (-9.26%).
+Started 2026-10-12 with $100,000. Data through 2026-11-20. **Equity $90,741** (-9.26%).
 
 Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT graduated: it fails only the luck check): buy an S&P 1500 stock the day an insider buys it in the open market (first purchase in 90 days) while short sellers are not betting against it (20-day short share of off-exchange volume, FINRA, in the lowest 30% of the S&P 1500). Stop 3 ATR trailing, out after 60 sessions, 0.4% of equity at risk per trade. About 230 trades a year in the backtest (search avg +0.14R, validation +0.20R). User's go 2026-10-10; a finder graduate would take this account over.
 
@@ -16,7 +16,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 - **ETN** 7.04 shares, entry 337.80, stop 285.95, now 311.33 (-0.49R)
 - **FICO** 2.79 shares, entry 705.05, stop 619.42, now 694.31 (-0.08R)
 - **FUN** 167.11 shares, entry 11.64, stop 9.40, now 11.06 (-0.24R)
-- **HL** 155.45 shares, entry 12.49, stop 10.03, now 10.52 (-0.79R)
+- **HL** 155.83 shares, entry 12.49, stop 10.04, now 10.52 (-0.79R)
 - **IOSP** 44.82 shares, entry 79.10, stop 71.99, now 75.56 (-0.40R)
 - **KTOS** 55.14 shares, entry 31.74, stop 24.97, now 26.89 (-0.69R)
 - **LKFN** 81.64 shares, entry 62.29, stop 58.10, now 59.56 (-0.56R)
