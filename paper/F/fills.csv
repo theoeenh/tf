@@ -299,3 +299,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-23 16:53:42,long_call,FUN,FUN270115C00010000,buy,14,14,1.85,filled,"open: FUN Jan 15 2027 10 Call, delta +0.69"
 2026-11-23 16:54:07,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.15 on width 5"
 2026-11-23 17:23:42,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.04 on width 5"
+2026-11-23 17:53:59,bull_put_spread,TJX,TJX270115P00130000,buy,6,0,,canceled,"open: sell 135 / buy 130 puts, 2027-01-15, credit 1.14 on width 5"
