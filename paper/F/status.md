@@ -1,16 +1,16 @@
 # F – Options
 
-Updated 2026-11-23 17:53 UTC. **Equity $89,049** (-10.95% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
+Updated 2026-11-23 18:24 UTC. **Equity $89,249** (-10.75% since start). From 20 Oct: one SPY put spread a week (selling insurance on the S&P 500), plus calls and put spreads on account D's insider signals. Bearish playbooks paused (no tested bearish signal); positions opened before keep their own exit rules.
 
 Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from account D.
 
 | playbook | open | closed | realised P&L | open P&L | wins / closed |
 |---|---|---|---|---|---|
-| long_call | 3 | 9 | $-3,048 | $-1,425 | 3 / 9 |
+| long_call | 3 | 9 | $-3,048 | $-1,310 | 3 / 9 |
 | long_put | 0 | 6 | $-1,046 | $+0 | 2 / 6 |
-| bull_put_spread | 2 | 12 | $-8,089 | $+275 | 2 / 12 |
+| bull_put_spread | 2 | 12 | $-8,089 | $+241 | 2 / 12 |
 | bear_call_spread | 0 | 6 | $-317 | $+0 | 4 / 6 |
-| spy_put_spread | 2 | 3 | $-1,031 | $-740 | 0 / 3 |
+| spy_put_spread | 2 | 3 | $-1,031 | $-642 | 0 / 3 |
 
 ## Open positions
 
@@ -24,18 +24,18 @@ Active playbooks: spy_put_spread, long_call, bull_put_spread; stock signals from
 
 ## Alpaca vs book
 
-Alpaca values the positions at $2,922; at the quotes' mid they are worth $3,574 (difference $-652).
+Alpaca values the positions at $3,102; at the quotes' mid they are worth $3,778 (difference $-676).
 
 | leg | Alpaca qty | Alpaca value | value at mid | check |
 |---|---|---|---|---|
-| AAPL261218C00335000 | 1 | $1,860 | $1,895 | ok |
-| BKR261218C00045000 | 6 | $1,470 | $1,608 | ok |
-| ETN270115P00260000 | 1 | $300 | $362 | ok |
-| ETN270115P00290000 | -1 | $-830 | $-798 | ok |
-| FUN270115C00010000 | 14 | $2,100 | $2,275 | ok |
-| SPY261224P00690000 | 1 | $971 | $986 | ok |
-| SPY261224P00720000 | -1 | $-1,818 | $-1,826 | ok |
-| SPY261231P00676000 | 1 | $840 | $858 | ok |
-| SPY261231P00707000 | -1 | $-1,516 | $-1,494 | ok |
-| SYY261218P00072500 | 13 | $325 | $384 | ok |
-| SYY261218P00075000 | -13 | $-780 | $-676 | ok |
+| AAPL261218C00335000 | 1 | $1,935 | $1,988 | ok |
+| BKR261218C00045000 | 6 | $1,500 | $1,590 | ok |
+| ETN270115P00260000 | 1 | $280 | $352 | ok |
+| ETN270115P00290000 | -1 | $-730 | $-707 | ok |
+| FUN270115C00010000 | 14 | $2,100 | $2,282 | ok |
+| SPY261224P00690000 | 1 | $840 | $856 | ok |
+| SPY261224P00720000 | -1 | $-1,620 | $-1,610 | ok |
+| SPY261231P00676000 | 1 | $726 | $737 | ok |
+| SPY261231P00707000 | -1 | $-1,344 | $-1,352 | ok |
+| SYY261218P00072500 | 13 | $195 | $292 | ok |
+| SYY261218P00075000 | -13 | $-780 | $-650 | ok |
