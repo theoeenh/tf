@@ -142,6 +142,28 @@
    "desc": "FUN Jan 15 2027 10 Call, delta +0.69",
    "opened": "2026-11-23 16:53",
    "id": "long_call-FUN-2026-11-23"
+  },
+  {
+   "playbook": "spy_put_spread",
+   "underlying": "SPY",
+   "legs": [
+    {
+     "symbol": "SPY261231P00649000",
+     "qty": 1,
+     "price": 5.96
+    },
+    {
+     "symbol": "SPY261231P00679000",
+     "qty": -1,
+     "price": 10.2
+    }
+   ],
+   "expiry": "2026-12-31",
+   "cost": -423.9999999999999,
+   "max_loss": 2604.0,
+   "desc": "sell 679 / buy 649 puts, 2026-12-31, credit 3.96 on width 30",
+   "opened": "2026-11-24 15:23",
+   "id": "spy_put_spread-SPY-2026-11-24"
   }
  ],
  "closed": [
