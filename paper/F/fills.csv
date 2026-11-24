@@ -310,3 +310,4 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-24 15:23:20,spy_put_spread,SPY,SPY261231P00649000,buy,1,1,5.96,filled,"open: sell 679 / buy 649 puts, 2026-12-31, credit 3.96 on width 30"
 2026-11-24 15:23:22,spy_put_spread,SPY,SPY261231P00679000,sell,1,1,10.2,filled,"open: sell 679 / buy 649 puts, 2026-12-31, credit 3.96 on width 30"
 2026-11-24 15:54:16,bull_put_spread,COHR,COHR270115P00165000,buy,3,0,,canceled,"open: sell 175 / buy 165 puts, 2027-01-15, credit 2.99 on width 10"
+2026-11-24 16:24:18,bull_put_spread,ELV,ELV270115P00360000,buy,3,0,,canceled,"open: sell 370 / buy 360 puts, 2027-01-15, credit 1.76 on width 10"
