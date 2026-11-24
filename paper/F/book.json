@@ -164,6 +164,29 @@
    "desc": "sell 679 / buy 649 puts, 2026-12-31, credit 3.96 on width 30",
    "opened": "2026-11-24 15:23",
    "id": "spy_put_spread-SPY-2026-11-24"
+  },
+  {
+   "playbook": "bull_put_spread",
+   "underlying": "COHR",
+   "source": "D",
+   "legs": [
+    {
+     "symbol": "COHR270115P00165000",
+     "qty": 3,
+     "price": 14.4
+    },
+    {
+     "symbol": "COHR270115P00175000",
+     "qty": -3,
+     "price": 16.7
+    }
+   ],
+   "expiry": "2027-01-15",
+   "cost": -689.9999999999991,
+   "max_loss": 2382.0,
+   "desc": "sell 175 / buy 165 puts, 2027-01-15, credit 2.06 on width 10",
+   "opened": "2026-11-24 17:23",
+   "id": "bull_put_spread-COHR-2026-11-24"
   }
  ],
  "closed": [

@@ -312,3 +312,5 @@ time,playbook,underlying,symbol,side,qty,filled_qty,avg_price,status,why
 2026-11-24 15:54:16,bull_put_spread,COHR,COHR270115P00165000,buy,3,0,,canceled,"open: sell 175 / buy 165 puts, 2027-01-15, credit 2.99 on width 10"
 2026-11-24 16:24:18,bull_put_spread,ELV,ELV270115P00360000,buy,3,0,,canceled,"open: sell 370 / buy 360 puts, 2027-01-15, credit 1.76 on width 10"
 2026-11-24 16:55:36,bull_put_spread,COHR,COHR270115P00165000,buy,3,0,,canceled,"open: sell 175 / buy 165 puts, 2027-01-15, credit 2.03 on width 10"
+2026-11-24 17:23:37,bull_put_spread,COHR,COHR270115P00165000,buy,3,3,14.4,filled,"open: sell 175 / buy 165 puts, 2027-01-15, credit 2.06 on width 10"
+2026-11-24 17:23:39,bull_put_spread,COHR,COHR270115P00175000,sell,3,3,16.7,filled,"open: sell 175 / buy 165 puts, 2027-01-15, credit 2.06 on width 10"
