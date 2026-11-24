@@ -22,5 +22,18 @@
   "entry": 24.005955,
   "r": -0.22196061215886195,
   "bar": "2026-11-23"
+ },
+ {
+  "asset": "ETN",
+  "ticker": "ETN",
+  "strategy": "insider_cluster",
+  "qty": 8.51420609552519,
+  "stop": 289.4232192308313,
+  "target": null,
+  "mark": 336.34,
+  "entry": 336.34,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-23"
  }
 ]

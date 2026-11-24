@@ -12,4 +12,4 @@ Early test of the finder's best candidate (13/14 checks, NOT graduated: it fails
 
 ## New signals (bought at the next open)
 
-None.
+- **ETN** 8.51 shares around 336.34, stop 289.42
