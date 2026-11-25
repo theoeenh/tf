@@ -1,4 +1,4 @@
-# Leaderboard – 2026-11-24 14:31 UTC
+# Leaderboard – 2026-11-25 14:26 UTC
 
 All versions paper-traded side by side since 2026-09-30 19:00:00 UTC (1h bars), same bars, same $100,000 and 0.40% risk per trade. The live account trades **long + trend + blackout + ML**. Early days are noise: look for a version that stays ahead for weeks, and that beats the random-entry twins.
 
@@ -6,27 +6,27 @@ All versions paper-traded side by side since 2026-09-30 19:00:00 UTC (1h bars), 
 
 | version | return | max_dd | trades | win_rate | avg_r | open | skipped |
 |---|---|---|---|---|---|---|---|
-| L/S + news + trend | +3.47% | -11.05% | 129 | 28% | -0.05 | 18 | 215 |
-| long/short | -2.66% | -14.77% | 332 | 31% | -0.05 | 25 | 0 |
-| long/short + learner + news | -5.91% | -10.22% | 142 | 26% | -0.19 | 11 | 343 |
-| long/short + learner | -8.77% | -14.71% | 185 | 29% | -0.11 | 15 | 294 |
+| L/S + news + trend | +5.53% | -11.05% | 129 | 28% | -0.05 | 21 | 217 |
+| long/short | -0.14% | -14.77% | 335 | 31% | -0.06 | 28 | 0 |
+| long/short + learner + news | -5.18% | -10.22% | 141 | 26% | -0.17 | 14 | 348 |
+| long/short + learner | -7.14% | -14.71% | 185 | 29% | -0.11 | 18 | 298 |
+| L/S + news + trend + blackout | -7.97% | -10.70% | 117 | 25% | -0.30 | 18 | 272 |
 | long + trend + blackout + ML + brake 10% | -9.56% | -10.41% | 47 | 13% | -0.62 | 0 | 45 |
-| L/S + news + trend + blackout | -9.85% | -10.70% | 116 | 25% | -0.29 | 14 | 272 |
-| L/S + trend + blackout + intraday + ML | -12.31% | -14.96% | 117 | 29% | -0.28 | 2 | 569 |
-| long + trend + blackout + ML + insider | -13.90% | -14.47% | 62 | 15% | -0.67 | 1 | 75 |
-| long + trend + blackout + intraday + ML + insider | -13.93% | -15.73% | 89 | 24% | -0.44 | 1 | 128 |
-| long + trend + blackout + ML | -14.58% | -15.55% | 64 | 14% | -0.66 | 1 | 70 |
+| L/S + trend + blackout + intraday + ML | -12.74% | -15.64% | 115 | 28% | -0.30 | 2 | 578 |
+| long + trend + blackout + intraday + ML + insider | -13.43% | -15.39% | 87 | 23% | -0.44 | 1 | 131 |
+| long + trend + blackout + ML + insider | -13.70% | -14.47% | 62 | 15% | -0.67 | 1 | 75 |
+| long + trend + blackout + ML | -14.38% | -15.55% | 64 | 14% | -0.66 | 1 | 70 |
+| L/S + news + ML | -14.73% | -15.57% | 85 | 21% | -0.47 | 2 | 400 |
+| L/S + news + trend + blackout + ML | -14.85% | -16.60% | 91 | 23% | -0.44 | 2 | 301 |
 | long + trend + blackout + ML + global | -14.85% | -15.63% | 70 | 16% | -0.64 | 0 | 65 |
-| L/S + news + ML | -14.90% | -15.57% | 85 | 21% | -0.47 | 1 | 396 |
-| L/S + news + trend + blackout + ML | -15.16% | -16.60% | 91 | 23% | -0.44 | 2 | 299 |
-| long + trend + blackout + intraday + ML + global | -15.22% | -16.72% | 87 | 26% | -0.48 | 0 | 132 |
-| L/S + news + trend + blackout + ML sizing | -15.56% | -17.33% | 83 | 24% | -0.46 | 2 | 299 |
-| L/S + news + blackout | -17.26% | -17.82% | 134 | 25% | -0.39 | 14 | 402 |
-| long + trend + blackout + intraday + ML | -17.68% | -19.12% | 87 | 21% | -0.58 | 1 | 134 |
-| long only + learner | -25.11% | -25.26% | 102 | 11% | -0.74 | 2 | 94 |
-| random entries, long/short (avg of 5) | -26.08% | -27.33% | 666 | 34% | -0.21 | 0 | 0 |
-| long only | -28.42% | -30.03% | 165 | 13% | -0.72 | 5 | 0 |
-| random entries, long only (avg of 5) | -39.25% | -45.50% | 401 | 19% | -0.64 | 0 | 0 |
+| long + trend + blackout + intraday + ML + global | -14.88% | -16.38% | 86 | 27% | -0.48 | 0 | 134 |
+| L/S + news + trend + blackout + ML sizing | -15.09% | -17.32% | 83 | 24% | -0.46 | 2 | 301 |
+| L/S + news + blackout | -16.64% | -18.06% | 134 | 25% | -0.39 | 18 | 406 |
+| long + trend + blackout + intraday + ML | -17.21% | -18.79% | 85 | 20% | -0.58 | 1 | 137 |
+| long only + learner | -25.05% | -25.26% | 102 | 11% | -0.74 | 2 | 95 |
+| random entries, long/short (avg of 5) | -28.23% | -28.53% | 694 | 34% | -0.22 | 0 | 0 |
+| long only | -28.56% | -30.03% | 166 | 13% | -0.73 | 5 | 0 |
+| random entries, long only (avg of 5) | -38.58% | -42.75% | 398 | 18% | -0.64 | 0 | 0 |
 
 ## Strategy leaderboard (long + trend + blackout + ML)
 
@@ -71,17 +71,17 @@ Sum of R (1R = the planned loss) per strategy and asset. *Skipped* = trades the 
 | squeeze_breakout | USO | +0.00 | -0.05 | -0.20 | 2 | 0% | -0.10 | 1 | +0.28 |
 | rsi2_reversion | AAPL | +0.00 | -0.21 | -1.31 | 4 | 25% | -0.33 | 1 | +0.22 |
 | donchian_trend | TSLA | +0.00 | -1.01 | -2.40 | 2 | 0% | -1.20 | 1 | +0.62 |
-| rsi2_reversion | MSFT | -1.01 | -1.01 | -2.51 | 3 | 0% | -0.84 | 2 | +0.84 |
+| rsi2_reversion | MSFT | +0.00 | -1.01 | -2.51 | 3 | 0% | -0.84 | 2 | +0.84 |
 | donchian_trend | MSFT | +0.00 | -1.01 | +0.97 | 2 | 50% | +0.49 | 1 | -1.02 |
 | rsi2_reversion | XOM | +0.00 | -1.01 | +1.97 | 2 | 50% | +0.98 | 3 | +0.75 |
 | rsi2_reversion | IWM | +0.00 | -1.01 | -1.01 | 1 | 0% | -1.01 | 1 | -1.01 |
 | squeeze_breakout | JPM | +0.00 | -1.02 | -1.02 | 1 | 0% | -1.02 | 0 | – |
+| donchian_trend | AAPL | +0.00 | -1.02 | -3.16 | 3 | 0% | -1.05 | 1 | -1.93 |
 | rsi2_reversion | USO | +0.00 | -1.12 | -1.12 | 1 | 0% | -1.12 | 3 | +0.86 |
-| donchian_trend | AAPL | +0.00 | -2.14 | -3.16 | 3 | 0% | -1.05 | 1 | -1.93 |
 | donchian_trend | USO | +0.00 | -2.41 | -0.42 | 3 | 67% | -0.14 | 1 | -1.01 |
 | rsi2_reversion | TSLA | +0.00 | -2.46 | -4.49 | 4 | 0% | -1.12 | 3 | -0.64 |
 | donchian_trend | TLT | +0.00 | -2.67 | -2.67 | 2 | 0% | -1.34 | 1 | -0.23 |
-| rsi2_reversion | JPM | -1.23 | -3.90 | -3.90 | 3 | 0% | -1.30 | 2 | +1.82 |
+| rsi2_reversion | JPM | +0.00 | -3.90 | -3.90 | 3 | 0% | -1.30 | 2 | +1.82 |
 
 ## ML learner, out of sample
 
