@@ -288,10 +288,23 @@
   "bar": "2026-11-24"
  },
  {
+  "asset": "ALG",
+  "ticker": "ALG",
+  "strategy": "insider_low_short",
+  "qty": 22.131538546083203,
+  "stop": 117.70424409488949,
+  "target": null,
+  "mark": 133.75,
+  "entry": 133.75,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-24"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 26.714302801677718,
+  "qty": 22.596084041363536,
   "stop": null,
   "target": null,
   "mark": 718.78,
