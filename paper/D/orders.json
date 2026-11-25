@@ -298,5 +298,18 @@
   "entry": 21.03051,
   "r": -0.45698838010076126,
   "bar": "2026-11-24"
+ },
+ {
+  "asset": "ALG",
+  "ticker": "ALG",
+  "strategy": "insider_low_short",
+  "qty": 23.171379906394005,
+  "stop": 117.70424409489512,
+  "target": null,
+  "mark": 133.75,
+  "entry": 133.75,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-24"
  }
 ]
