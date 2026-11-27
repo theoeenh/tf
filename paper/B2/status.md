@@ -1,14 +1,14 @@
 # B – Trend + momentum (asset classes)
 
-Started 2026-10-26 with $95,110. Data through 2026-11-25. **Equity $89,692** (-5.70%).
+Started 2026-10-26 with $95,110. Data through 2026-11-27. **Equity $90,360** (-4.99%).
 
 From 26 Oct 2026 (user's go 2026-10-24; until then B traded the hourly ML system with a brake and caps, now in paper/B/): at each month's last close, rank 8 asset-class ETFs (SPY, EFA, EEM, TLT, IEF, GLD, DBC, VNQ) by 12-month return and hold the top 3, a third each, only those above their 10-month average (else SHY, the cash stand-in); bought at the next open, no stops. Market data only. Backtest 2007-2026: 8.7% a year, Sharpe 0.73, worst fall -17%, vs SPY 11.1%, 0.63, -55%: reports/2026-10-20-trend-momentum/. Starts with B's paper equity at the switch.
 
 ## Holdings
 
-- **DBC** (commodities) 960.14 shares, now 29.27, bought at 33.75 (-13.3%)
-- **EFA** (developed stocks ex-US) 303.55 shares, now 99.18, bought at 103.69 (-4.3%)
-- **SHY** (short Treasuries (cash)) 386.41 shares, now 81.64, bought at 81.45 (+0.2%)
+- **DBC** (commodities) 960.14 shares, now 29.55, bought at 33.75 (-12.4%)
+- **EFA** (developed stocks ex-US) 303.55 shares, now 100.52, bought at 103.69 (-3.1%)
+- **SHY** (short Treasuries (cash)) 386.41 shares, now 81.62, bought at 81.45 (+0.2%)
 
 ## Decision of 2026-10-30 (12-month return, 10-month average)
 
