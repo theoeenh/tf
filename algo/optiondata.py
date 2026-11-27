@@ -162,8 +162,14 @@ def spots(symbols: list[str]) -> dict[str, float]:
     return out
 
 
-def due(now_ny: pd.Timestamp, is_open: bool, recorded: set[str]) -> bool:
-    return is_open and now_ny.hour >= FROM_HOUR and now_ny.date().isoformat() not in recorded
+def due(now_ny: pd.Timestamp, is_open: bool, recorded: set[str], close: pd.Timestamp | None = None) -> bool:
+    """Once a day, in the last hour of the session: from 15:00 New York, or from an hour before the session's own
+    close when the clock gives it (half days close at 13:00; until 2026-11-27 their record was missed)."""
+    if not is_open or now_ny.date().isoformat() in recorded:
+        return False
+    if close is not None and close.date() == now_ny.date():
+        return now_ny >= close - pd.Timedelta(hours=1)
+    return now_ny.hour >= FROM_HOUR
 
 
 def recorded_days() -> set[str]:
@@ -172,8 +178,10 @@ def recorded_days() -> set[str]:
 
 def record(force: bool = False) -> None:
     now_ny = pd.Timestamp.now(tz="America/New_York")
-    if not force and not due(now_ny, bool(request("GET", "/v2/clock").get("is_open")), recorded_days()):
-        print("Option record: not due (once a day, from 15:00 New York while the market is open).")
+    clock = request("GET", "/v2/clock")
+    close = pd.Timestamp(clock["next_close"]).tz_convert("America/New_York") if clock.get("next_close") else None
+    if not force and not due(now_ny, bool(clock.get("is_open")), recorded_days(), close):
+        print("Option record: not due (once a day, in the session's last hour while the market is open).")
         return
     today = now_ny.tz_localize(None).normalize()
     unds = underlyings()

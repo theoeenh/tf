@@ -117,6 +117,11 @@ account meets the criteria above. Then small, with the repository made private f
   27.17). The rest of the gap to Alpaca is real: cash freed by stops reaches SPY the next morning at 9:50,
   and fills differ from the paper's prices (about -2R so far). The research behind A
   (reports/2026-10-20-insider-spy) used the same formula: re-checked in paper/research/2026-11-23-idle-spy.md.
+- **2026-11-27, bug fix in F's option record:** the daily record of the option market (algo/optiondata.py) is
+  taken in the last hour of the session, which it took to mean "from 15:00 New York". On the half day after
+  Thanksgiving the market closed at 13:00, so the record never came due and 27 Nov is missing. The last hour is
+  now counted from the session's own close (Alpaca's clock), so half days (24 Dec) are recorded from 12:00.
+  Normal days are unchanged. F's trading is not affected; only the record the learner and the reports use.
 - **2026-11-12 (user's go: "Fix both please", after a review of where the project stands):** two faults in
   the strategy finder are fixed. Research only: no account's rule changes. Method, limits and results:
   paper/research/2026-11-12-finder-review.md.

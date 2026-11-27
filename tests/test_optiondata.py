@@ -46,6 +46,18 @@ def test_due_once_a_day_in_the_last_hour():
     assert not D.due(at(15), False, set())
 
 
+def test_on_a_half_day_the_record_is_taken_in_the_last_hour_before_the_early_close():
+    """2026-11-27 (day after Thanksgiving, close at 13:00): the record waited for 15:00, when the market was
+    already shut, and the day was lost. The last hour is now counted from the session's own close."""
+    at = lambda h: pd.Timestamp(f"2026-11-27 {h}:20", tz="America/New_York")  # noqa: E731
+    early = pd.Timestamp("2026-11-27 13:00", tz="America/New_York")
+    assert not D.due(at(11), True, set(), close=early)
+    assert D.due(at(12), True, set(), close=early)
+    normal = pd.Timestamp("2026-11-30 16:00", tz="America/New_York")
+    on = lambda h: pd.Timestamp(f"2026-11-30 {h}:20", tz="America/New_York")  # noqa: E731
+    assert not D.due(on(14), True, set(), close=normal) and D.due(on(15), True, set(), close=normal)
+
+
 def test_underlyings_are_the_traded_stocks_without_crypto_plus_spy():
     u = D.underlyings()
     assert "SPY" in u and "GLD" in u and not any("/" in s for s in u)
