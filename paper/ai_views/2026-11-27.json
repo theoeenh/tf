@@ -1,0 +1,222 @@
+[
+ {
+  "asset": "BTC",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "ETH",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "SOL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "NVDA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "TSLA",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "GOLD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "SILVER",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "AAPL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "MSFT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "AMZN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "META",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "GOOGL",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "AMD",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "AVGO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "NFLX",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "JPM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "XOM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "COIN",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "QQQ",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "IWM",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "TLT",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ },
+ {
+  "asset": "USO",
+  "bias": 0,
+  "confidence": 0.0,
+  "horizon_days": 5,
+  "key_events": [
+   "US jobs report, Fri 4 Dec (approx.)"
+  ],
+  "reasoning": "No view. The only scheduled event in the brief is the US jobs report on Friday 4 Dec, which can gap prices either way; nothing in the brief says which way. Our 15 Nov test on the S&P 1500 found that headline tone does not predict the next days."
+ }
+]
