@@ -31,11 +31,11 @@ From 26 Oct 2026 (user's go 2026-10-24; until then A traded the hourly ML system
 - **TJX** 27.40 shares, entry 140.85, stop 133.49, now 143.77 (+0.23R)
 - **WMB** 50.56 shares, entry 65.86, stop 60.52, now 67.13 (+0.18R)
 - **WY** 209.95 shares, entry 21.03, stop 19.31, now 20.83 (-0.11R)
-- **SPY** (idle cash) 25.11 shares, now 728.32
+- **SPY** (idle cash) 23.15 shares, now 728.32
 
 ## New signals (bought at the next open)
 
-None.
+- **IESC** 8.02 shares around 178.64, stop 133.40
 
 ## Closed trades
 

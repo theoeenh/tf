@@ -288,10 +288,23 @@
   "bar": "2026-11-27"
  },
  {
+  "asset": "IESC",
+  "ticker": "IESC",
+  "strategy": "insider_low_short",
+  "qty": 8.022504185242617,
+  "stop": 133.40299062731293,
+  "target": null,
+  "mark": 178.64,
+  "entry": 178.64,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-27"
+ },
+ {
   "asset": "SPY",
   "ticker": "SPY",
   "strategy": "idle_cash_spy",
-  "qty": 25.11498384997171,
+  "qty": 23.14724968414936,
   "stop": null,
   "target": null,
   "mark": 728.32,
