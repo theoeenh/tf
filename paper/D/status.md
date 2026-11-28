@@ -35,7 +35,7 @@ Early test of the finder's most active 13/14 candidate (`1591c2bcb6`, NOT gradua
 
 ## New signals (bought at the next open)
 
-None.
+- **IESC** 8.41 shares around 178.64, stop 133.40
 
 ## Closed trades
 

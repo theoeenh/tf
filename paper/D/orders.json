@@ -298,5 +298,18 @@
   "entry": 21.03051,
   "r": -0.11167534837357786,
   "bar": "2026-11-27"
+ },
+ {
+  "asset": "IESC",
+  "ticker": "IESC",
+  "strategy": "insider_low_short",
+  "qty": 8.40796267752238,
+  "stop": 133.40299062732606,
+  "target": null,
+  "mark": 178.64,
+  "entry": 178.64,
+  "r": 0.0,
+  "pending": true,
+  "bar": "2026-11-27"
  }
 ]
